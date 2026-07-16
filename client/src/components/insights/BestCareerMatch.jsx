@@ -14,7 +14,7 @@ export default function BestCareerMatch() {
   ];
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-white/5 bg-white/[0.02] p-6 backdrop-blur-md relative overflow-hidden">
+    <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md relative overflow-hidden">
       
       {/* Background Glow */}
       <div className="absolute top-0 left-0 w-64 h-64 bg-emerald-500/10 blur-[100px] pointer-events-none rounded-full" />
@@ -22,8 +22,8 @@ export default function BestCareerMatch() {
       <div className="grid gap-8 sm:grid-cols-2 flex-1 relative z-10">
         
         {/* Left Side: Best Match */}
-        <div className="flex flex-col border-r border-white/5 pr-6">
-          <h3 className="mb-6 text-[11px] font-semibold text-gray-400 flex items-center gap-1.5">
+        <div className="flex flex-col border-r border-slate-200 dark:border-white/5 pr-6">
+          <h3 className="mb-6 text-[11px] font-semibold text-slate-500 dark:text-gray-400 flex items-center gap-1.5">
             Your Best Career Match <Info className="h-3 w-3" />
           </h3>
           
@@ -47,15 +47,15 @@ export default function BestCareerMatch() {
                 />
               </svg>
               <div className="absolute flex flex-col items-center justify-center">
-                <span className="text-2xl font-black text-white leading-none">{matchScore}%</span>
-                <span className="text-[10px] font-bold text-gray-400 mt-1">Match</span>
+                <span className="text-2xl font-black text-slate-900 dark:text-white leading-none">{matchScore}%</span>
+                <span className="text-[10px] font-bold text-slate-500 dark:text-gray-400 mt-1">Match</span>
               </div>
             </div>
 
             {/* Title & Description */}
             <div>
               <h2 className="text-xl font-bold text-violet-300 mb-2">Full Stack Developer</h2>
-              <p className="text-[11px] leading-relaxed text-gray-400 mb-4">
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-gray-400 mb-4">
                 Strong match based on your skills, experience, and career goals.
               </p>
               
@@ -66,7 +66,7 @@ export default function BestCareerMatch() {
                     {skill}
                   </span>
                 ))}
-                <span className="rounded-md px-2 py-1 text-[9px] font-medium text-gray-400">
+                <span className="rounded-md px-2 py-1 text-[9px] font-medium text-slate-500 dark:text-gray-400">
                   +3 more
                 </span>
               </div>
@@ -80,15 +80,15 @@ export default function BestCareerMatch() {
 
         {/* Right Side: Other Matches */}
         <div className="flex flex-col">
-          <h3 className="mb-6 text-[11px] font-semibold text-gray-400">Other Top Matches</h3>
+          <h3 className="mb-6 text-[11px] font-semibold text-slate-500 dark:text-gray-400">Other Top Matches</h3>
           <div className="flex-1 flex flex-col justify-between">
             {OTHER_MATCHES.map((match, idx) => (
               <div key={idx} className="flex flex-col mb-4 last:mb-0">
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[11px] font-semibold text-gray-300">{match.name}</span>
-                  <span className="text-[11px] font-bold text-white">{match.percent}%</span>
+                  <span className="text-[11px] font-semibold text-slate-600 dark:text-gray-300">{match.name}</span>
+                  <span className="text-[11px] font-bold text-slate-900 dark:text-white">{match.percent}%</span>
                 </div>
-                <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/5">
+                <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-white/5">
                   <div 
                     className={`h-full rounded-full ${match.color}`} 
                     style={{ width: `${match.percent}%` }} 

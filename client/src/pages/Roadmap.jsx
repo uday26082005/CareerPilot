@@ -12,10 +12,10 @@ export default function Roadmap() {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
             Your Personalized Roadmap <Sparkles className="h-5 w-5 text-violet-400" />
           </h1>
-          <p className="mt-1 text-sm text-gray-400">
+          <p className="mt-1 text-sm text-slate-500 dark:text-gray-400">
             Step-by-step plan to get you job-ready as a Full Stack Developer
           </p>
         </div>

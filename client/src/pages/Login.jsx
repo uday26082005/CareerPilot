@@ -51,7 +51,7 @@ export default function Login() {
         className="mb-5 text-center"
       >
         <h1 className="mb-1 text-2xl font-black md:text-3xl">Welcome back</h1>
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-slate-500 dark:text-gray-400">
           Log in to continue your journey
         </p>
       </motion.div>
@@ -78,12 +78,12 @@ export default function Login() {
         />
 
         <div className="flex items-center justify-between mt-2">
-          <label className="flex items-center gap-2 text-sm text-gray-400 cursor-pointer">
+          <label className="flex items-center gap-2 text-sm text-slate-500 dark:text-gray-400 cursor-pointer">
             <input
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              className="h-4 w-4 rounded border-white/20 bg-white/5 accent-violet-500"
+              className="h-4 w-4 rounded border-slate-300 dark:border-white/20 bg-slate-100 dark:bg-white/5 accent-violet-500"
             />
             <span>Remember me</span>
           </label>
@@ -97,7 +97,7 @@ export default function Login() {
           disabled={loading}
           whileHover={{ scale: 1.02, boxShadow: "0px 0px 35px rgba(139,92,246,.55)" }}
           whileTap={{ scale: 0.98 }}
-          className="mt-4 group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-3 font-semibold text-white transition-opacity disabled:opacity-60"
+          className="mt-4 group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-3 font-semibold text-slate-900 dark:text-white transition-opacity disabled:opacity-60"
         >
           {loading ? "Logging in..." : "Log In"}
           {!loading && (
@@ -107,14 +107,14 @@ export default function Login() {
       </form>
 
       <div className="my-5 flex items-center gap-4">
-        <div className="h-px flex-1 bg-white/10" />
-        <span className="text-xs text-gray-500">or continue with</span>
-        <div className="h-px flex-1 bg-white/10" />
+        <div className="h-px flex-1 bg-slate-200 dark:bg-white/10" />
+        <span className="text-xs text-slate-400 dark:text-gray-500">or continue with</span>
+        <div className="h-px flex-1 bg-slate-200 dark:bg-white/10" />
       </div>
 
       <SocialAuthButtons />
 
-      <p className="mt-5 text-center text-sm text-gray-400">
+      <p className="mt-5 text-center text-sm text-slate-500 dark:text-gray-400">
         Don't have an account?{" "}
         <Link to="/signup" className="font-medium text-violet-300 hover:underline">
           Sign up

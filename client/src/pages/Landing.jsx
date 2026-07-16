@@ -7,7 +7,7 @@ import HowItWorks from "../components/landing/HowItWorks";
 
 export default function Landing() {
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-[#060816] text-white">
+    <main className="relative min-h-screen overflow-x-hidden bg-slate-50 dark:bg-[#060816] text-slate-900 dark:text-white">
 
       {/* Background */}
 
@@ -63,7 +63,7 @@ export default function Landing() {
 
       <footer
         id="contact"
-        className="border-t border-white/10 py-10"
+        className="border-t border-slate-200 dark:border-white/10 py-10"
       >
 
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-6 md:flex-row">
@@ -82,7 +82,7 @@ export default function Landing() {
 
             </h2>
 
-            <p className="mt-2 text-gray-400">
+            <p className="mt-2 text-slate-500 dark:text-gray-400">
 
               Your AI-powered placement companion.
 
@@ -90,7 +90,7 @@ export default function Landing() {
 
           </div>
 
-          <div className="flex gap-8 text-gray-400">
+          <div className="flex gap-8 text-slate-500 dark:text-gray-400">
 
             <a
               href="#features"
@@ -117,7 +117,7 @@ export default function Landing() {
 
         </div>
 
-        <p className="mt-8 text-center text-sm text-gray-500">
+        <p className="mt-8 text-center text-sm text-slate-400 dark:text-gray-500">
 
           © 2026 CareerPilot AI. All Rights Reserved.
 

@@ -5,7 +5,7 @@ export default function ProgressChart({ data }) {
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="rounded-lg border border-white/10 bg-[#0a0c1a] p-3 shadow-xl">
+        <div className="rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0a0c1a] p-3 shadow-xl">
           <p className="text-sm font-bold text-violet-400">{`Score: ${payload[0].value}`}</p>
         </div>
       );
@@ -14,10 +14,10 @@ export default function ProgressChart({ data }) {
   };
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-white/5 bg-white/[0.02] p-6 backdrop-blur-md">
+    <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
       <div className="mb-6 flex items-center justify-between">
-        <h3 className="text-lg font-bold text-white">Your Progress</h3>
-        <button className="flex items-center gap-2 rounded-lg bg-white/5 px-3 py-1.5 text-sm font-medium text-gray-300 transition-colors hover:bg-white/10 hover:text-white">
+        <h3 className="text-lg font-bold text-slate-900 dark:text-white">Your Progress</h3>
+        <button className="flex items-center gap-2 rounded-lg bg-slate-100 dark:bg-white/5 px-3 py-1.5 text-sm font-medium text-slate-600 dark:text-gray-300 transition-colors hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:text-white">
           This Week <ChevronDown className="h-4 w-4" />
         </button>
       </div>

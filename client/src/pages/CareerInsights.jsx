@@ -14,14 +14,14 @@ export default function CareerInsights() {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
             Career Insights <BarChart3 className="h-6 w-6 text-violet-400" />
           </h1>
-          <p className="mt-1 text-sm text-gray-400">
+          <p className="mt-1 text-sm text-slate-500 dark:text-gray-400">
             Discover personalized career opportunities, market trends and actionable insights to achieve your goals.
           </p>
         </div>
-        <button className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-white/10">
+        <button className="flex items-center gap-2 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 px-4 py-2 text-xs font-bold text-slate-900 dark:text-white transition-colors hover:bg-slate-200 dark:hover:bg-white/10">
           <Download className="h-4 w-4" /> Download Report
         </button>
       </div>

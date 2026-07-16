@@ -23,10 +23,10 @@ export default function LeaderboardTable() {
   };
 
   return (
-    <div className="rounded-2xl border border-white/5 bg-white/[0.02] backdrop-blur-md overflow-hidden">
+    <div className="rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] backdrop-blur-md overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm text-gray-300">
-          <thead className="border-b border-white/5 bg-white/[0.01] text-xs text-gray-500">
+        <table className="w-full text-left text-sm text-slate-600 dark:text-gray-300">
+          <thead className="border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/[0.01] text-xs text-slate-400 dark:text-gray-500">
             <tr>
               <th className="px-6 py-4 font-medium">Rank</th>
               <th className="px-6 py-4 font-medium">User</th>
@@ -38,14 +38,14 @@ export default function LeaderboardTable() {
           </thead>
           <tbody className="divide-y divide-white/5">
             {TABLE_DATA.map((row) => (
-              <tr key={row.rank} className="transition-colors hover:bg-white/[0.02]">
+              <tr key={row.rank} className="transition-colors hover:bg-white dark:bg-white/[0.02]">
                 <td className="px-6 py-4">
-                  <span className="font-bold text-white">{row.rank}</span>
+                  <span className="font-bold text-slate-900 dark:text-white">{row.rank}</span>
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <img src={row.avatar} alt={row.name} className="h-8 w-8 rounded-full border border-white/10" />
-                    <span className="font-medium text-white">{row.name}</span>
+                    <img src={row.avatar} alt={row.name} className="h-8 w-8 rounded-full border border-slate-200 dark:border-white/10" />
+                    <span className="font-medium text-slate-900 dark:text-white">{row.name}</span>
                   </div>
                 </td>
                 <td className="px-6 py-4">
@@ -62,7 +62,7 @@ export default function LeaderboardTable() {
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-1.5">
                     <Flame className="h-4 w-4 text-orange-500 fill-orange-500" />
-                    <span className="font-bold text-white">{row.streak} days</span>
+                    <span className="font-bold text-slate-900 dark:text-white">{row.streak} days</span>
                   </div>
                 </td>
               </tr>

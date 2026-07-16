@@ -30,7 +30,7 @@ export default function Navbar() {
           animate={{ y: 0, opacity: 1 }}
           whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.08)", boxShadow: "0 10px 40px rgba(139, 92, 246, 0.15)" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-2xl shadow-[0_4px_30px_rgba(0,0,0,0.1)] transition-colors duration-300"
+          className="rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 backdrop-blur-2xl shadow-[0_4px_30px_rgba(0,0,0,0.1)] transition-colors duration-300"
         >
 
           <div className="flex h-16 items-center justify-between px-6">
@@ -47,7 +47,7 @@ export default function Navbar() {
                 transition={{ duration: 0.2 }}
                 className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-purple-700 shadow-[0_0_25px_rgba(139,92,246,.45)]"
               >
-                <Bot className="h-6 w-6 text-white" />
+                <Bot className="h-6 w-6 text-slate-900 dark:text-white" />
               </motion.div>
 
               <div>
@@ -73,7 +73,7 @@ export default function Navbar() {
                 <a
                   key={link.name}
                   href={link.href}
-                  className="group relative text-[17px] font-medium text-gray-300 transition hover:text-white"
+                  className="group relative text-[17px] font-medium text-slate-600 dark:text-gray-300 transition hover:text-slate-900 dark:text-white"
                 >
                   {link.name}
 
@@ -91,7 +91,7 @@ export default function Navbar() {
 
               <a
                 href="/login"
-                className="rounded-xl border border-violet-500/40 px-6 py-3 text-[16px] font-semibold text-white transition-all duration-300 hover:border-violet-400 hover:bg-violet-600 hover:shadow-[0_0_25px_rgba(139,92,246,.45)]"
+                className="rounded-xl border border-violet-500/40 px-6 py-3 text-[16px] font-semibold text-slate-900 dark:text-white transition-all duration-300 hover:border-violet-400 hover:bg-violet-600 hover:shadow-[0_0_25px_rgba(139,92,246,.45)]"
               >
                 Login
               </a>
@@ -102,7 +102,7 @@ export default function Navbar() {
 
             <button
               onClick={() => setOpen(!open)}
-              className="text-white md:hidden"
+              className="text-slate-900 dark:text-white md:hidden"
             >
               {open ? <X size={28} /> : <Menu size={28} />}
             </button>
@@ -134,7 +134,7 @@ export default function Navbar() {
                 className="overflow-hidden md:hidden"
               >
 
-                <div className="space-y-5 border-t border-white/10 px-6 py-6">
+                <div className="space-y-5 border-t border-slate-200 dark:border-white/10 px-6 py-6">
 
                   {links.map((link) => (
 
@@ -142,7 +142,7 @@ export default function Navbar() {
                       key={link.name}
                       href={link.href}
                       onClick={() => setOpen(false)}
-                      className="block text-gray-300 transition hover:text-violet-400"
+                      className="block text-slate-600 dark:text-gray-300 transition hover:text-violet-400"
                     >
                       {link.name}
                     </a>
@@ -151,7 +151,7 @@ export default function Navbar() {
 
                   <a
                     href="/login"
-                    className="mt-2 block rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-3 text-center font-semibold text-white"
+                    className="mt-2 block rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-3 text-center font-semibold text-slate-900 dark:text-white"
                   >
                     Login
                   </a>

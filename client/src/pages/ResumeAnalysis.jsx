@@ -15,16 +15,16 @@ export default function ResumeAnalysis() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">AI Resume Analysis</h1>
-          <p className="mt-1 text-sm text-gray-400">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">AI Resume Analysis</h1>
+          <p className="mt-1 text-sm text-slate-500 dark:text-gray-400">
             Get AI-powered insights to improve your resume and stand out to recruiters.
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10">
+          <button className="flex items-center gap-2 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 px-4 py-2 text-sm font-medium text-slate-900 dark:text-white transition-colors hover:bg-slate-200 dark:hover:bg-white/10">
             <RefreshCcw className="h-4 w-4" /> Re-analyze
           </button>
-          <button className="flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-violet-500 shadow-lg shadow-violet-500/20">
+          <button className="flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-slate-900 dark:text-white transition-colors hover:bg-violet-500 shadow-lg shadow-violet-500/20">
             <Upload className="h-4 w-4" /> Upload New Resume
           </button>
         </div>

@@ -49,7 +49,7 @@ export default function OnboardingLayout({ currentStep, children }) {
   const activeInfo = INFO_CARDS[currentStep] || INFO_CARDS[1];
 
   return (
-    <div className="relative flex min-h-screen flex-col bg-[#060816] text-white overflow-hidden">
+    <div className="relative flex min-h-screen flex-col bg-slate-50 dark:bg-[#060816] text-slate-900 dark:text-white overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 -z-50 overflow-hidden pointer-events-none">
         <motion.div
@@ -76,7 +76,7 @@ export default function OnboardingLayout({ currentStep, children }) {
         </div>
 
         <div className="flex items-center gap-4">
-          <button className="flex items-center gap-2 text-sm text-gray-300 hover:text-white transition-colors">
+          <button className="flex items-center gap-2 text-sm text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:text-white transition-colors">
             <HelpCircle className="h-4 w-4" />
             <span className="hidden sm:inline">Need help?</span>
           </button>
@@ -97,12 +97,12 @@ export default function OnboardingLayout({ currentStep, children }) {
         <div className="flex w-full flex-col gap-6 md:w-72 lg:w-80 shrink-0">
           
           {/* Progress Container */}
-          <div className="rounded-[24px] border border-white/5 bg-white/[0.02] p-6 backdrop-blur-md">
+          <div className="rounded-[24px] border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
             <div className="mb-4 flex items-center justify-between text-sm font-medium">
               <span className="text-violet-300">Onboarding Progress</span>
-              <span className="text-gray-400">Step {currentStep} of 6</span>
+              <span className="text-slate-500 dark:text-gray-400">Step {currentStep} of 6</span>
             </div>
-            <div className="h-2 w-full rounded-full bg-white/10">
+            <div className="h-2 w-full rounded-full bg-slate-200 dark:bg-white/10">
               <motion.div
                 className="h-full rounded-full bg-violet-500 shadow-[0_0_15px_rgba(139,92,246,0.6)]"
                 initial={{ width: 0 }}
@@ -122,7 +122,7 @@ export default function OnboardingLayout({ currentStep, children }) {
                   <div key={step.id} className="relative flex min-h-[64px] group">
                     {/* Dashed Line */}
                     {!isLast && (
-                      <div className="absolute left-[15px] top-8 bottom-[-8px] w-px border-l-2 border-dashed border-white/10 group-last:hidden" />
+                      <div className="absolute left-[15px] top-8 bottom-[-8px] w-px border-l-2 border-dashed border-slate-200 dark:border-white/10 group-last:hidden" />
                     )}
 
                     {/* Step Number / Checkmark */}
@@ -130,8 +130,8 @@ export default function OnboardingLayout({ currentStep, children }) {
                       <div
                         className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold transition-colors duration-300 ${
                           isActive || isCompleted
-                            ? "bg-violet-600 text-white shadow-[0_0_15px_rgba(139,92,246,0.4)]"
-                            : "bg-white/5 text-gray-500"
+                            ? "bg-violet-600 text-slate-900 dark:text-white shadow-[0_0_15px_rgba(139,92,246,0.4)]"
+                            : "bg-slate-100 dark:bg-white/5 text-slate-400 dark:text-gray-500"
                         }`}
                       >
                         {isCompleted ? <Check className="h-4 w-4" /> : step.id}
@@ -151,16 +151,16 @@ export default function OnboardingLayout({ currentStep, children }) {
                               ? "bg-violet-500/20 text-violet-300"
                               : isCompleted
                               ? "text-violet-400"
-                              : "text-gray-500"
+                              : "text-slate-400 dark:text-gray-500"
                           }`}
                         >
                           <step.icon className="h-5 w-5" />
                         </div>
                         <div>
-                          <h4 className={`text-sm font-bold ${isActive || isCompleted ? "text-white" : "text-gray-400"}`}>
+                          <h4 className={`text-sm font-bold ${isActive || isCompleted ? "text-slate-900 dark:text-white" : "text-slate-500 dark:text-gray-400"}`}>
                             {step.title}
                           </h4>
-                          <p className={`text-xs ${isActive ? "text-gray-300" : "text-gray-600"}`}>
+                          <p className={`text-xs ${isActive ? "text-slate-600 dark:text-gray-300" : "text-gray-600"}`}>
                             {step.desc}
                           </p>
                         </div>
@@ -173,13 +173,13 @@ export default function OnboardingLayout({ currentStep, children }) {
           </div>
 
           {/* Dynamic Info Card */}
-          <div className="mt-auto rounded-[24px] border border-white/5 bg-white/[0.02] p-5 backdrop-blur-md flex gap-3 items-start">
+          <div className="mt-auto rounded-[24px] border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-5 backdrop-blur-md flex gap-3 items-start">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/10 shrink-0">
               <activeInfo.icon className="h-4 w-4 text-violet-400" />
             </div>
             <div>
               <h5 className="text-sm font-bold text-violet-300 mb-1">{activeInfo.title}</h5>
-              <p className="text-xs text-gray-400 leading-relaxed">
+              <p className="text-xs text-slate-500 dark:text-gray-400 leading-relaxed">
                 {activeInfo.desc}
               </p>
             </div>
@@ -188,7 +188,7 @@ export default function OnboardingLayout({ currentStep, children }) {
 
         {/* Content Area */}
         <div className="flex-1 flex flex-col">
-          <div className="rounded-[32px] border border-white/5 bg-white/[0.02] p-6 shadow-[0_20px_60px_rgba(0,0,0,.35)] backdrop-blur-md md:p-10 flex-1">
+          <div className="rounded-[32px] border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 shadow-[0_20px_60px_rgba(0,0,0,.35)] backdrop-blur-md md:p-10 flex-1">
             {children}
           </div>
         </div>

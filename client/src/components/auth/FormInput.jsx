@@ -17,7 +17,7 @@ export default function FormInput({
         <input
           type={type}
           placeholder={placeholder}
-          className={`w-full rounded-xl border border-white/10 bg-white/[0.04] py-2.5 text-sm text-white placeholder-gray-500 backdrop-blur-xl outline-none transition-all focus:border-violet-500/50 focus:bg-white/[0.06] ${
+          className={`w-full rounded-xl border border-slate-200 dark:border-white/10 bg-white/[0.04] py-2.5 text-sm text-slate-900 dark:text-white placeholder-gray-500 backdrop-blur-xl outline-none transition-all focus:border-violet-500/50 focus:bg-white/[0.06] ${
             Icon ? "pl-12" : "pl-4"
           } ${rightElement ? "pr-12" : "pr-4"}`}
           {...props}
@@ -26,7 +26,7 @@ export default function FormInput({
           <div className="absolute right-4 top-1/2 -translate-y-1/2">{rightElement}</div>
         )}
       </div>
-      {helperText && <p className="mt-2 text-xs text-gray-500">{helperText}</p>}
+      {helperText && <p className="mt-2 text-xs text-slate-400 dark:text-gray-500">{helperText}</p>}
     </div>
   );
 }

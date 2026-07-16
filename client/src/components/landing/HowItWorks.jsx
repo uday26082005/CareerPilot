@@ -160,7 +160,7 @@ viewport={{
 once:true
 }}
 
-className="mx-auto mt-5 max-w-3xl text-center text-base leading-8 text-gray-400">
+className="mx-auto mt-5 max-w-3xl text-center text-base leading-8 text-slate-500 dark:text-gray-400">
 
 CareerPilot guides you from resume analysis to interview preparation
 through an intelligent AI-powered workflow.
@@ -213,7 +213,7 @@ className="relative flex flex-col gap-5 md:flex-row">
 
               <div className="relative z-10 flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-purple-700 shadow-[0_0_30px_rgba(139,92,246,.35)]">
 
-                <Icon className="h-7 w-7 text-white" />
+                <Icon className="h-7 w-7 text-slate-900 dark:text-white" />
 
                 <span className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white text-sm font-bold text-violet-700">
 
@@ -232,7 +232,7 @@ className="relative flex flex-col gap-5 md:flex-row">
                   scale: 1.01,
                 }}
 
-                className="flex-1 rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl transition-all duration-300 hover:border-violet-500/40 hover:shadow-[0_15px_40px_rgba(139,92,246,.15)]"
+                className="flex-1 rounded-3xl border border-slate-200 dark:border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl transition-all duration-300 hover:border-violet-500/40 hover:shadow-[0_15px_40px_rgba(139,92,246,.15)]"
 
               >
 
@@ -242,7 +242,7 @@ className="relative flex flex-col gap-5 md:flex-row">
 
                 </h3>
 
-                <p className="mt-3 leading-7 text-gray-400">
+                <p className="mt-3 leading-7 text-slate-500 dark:text-gray-400">
 
                   {step.description}
 
@@ -282,7 +282,7 @@ className="relative flex flex-col gap-5 md:flex-row">
         delay: 0.2,
       }}
 
-      className="mx-auto mt-16 max-w-5xl rounded-3xl border border-white/10 bg-gradient-to-r from-violet-600/10 via-[#15182b] to-purple-600/10 p-8 backdrop-blur-xl"
+      className="mx-auto mt-16 max-w-5xl rounded-3xl border border-slate-200 dark:border-white/10 bg-gradient-to-r from-violet-600/10 via-[#15182b] to-purple-600/10 p-8 backdrop-blur-xl"
 
     >
 
@@ -296,7 +296,7 @@ className="relative flex flex-col gap-5 md:flex-row">
 
           </h3>
 
-          <p className="mt-3 max-w-2xl leading-7 text-gray-400">
+          <p className="mt-3 max-w-2xl leading-7 text-slate-500 dark:text-gray-400">
 
             CareerPilot AI helps you move from resume building to placement success through one structured, AI-powered workflow.
 
@@ -316,7 +316,7 @@ className="relative flex flex-col gap-5 md:flex-row">
             scale: 0.97,
           }}
 
-          className="rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 px-8 py-4 font-semibold text-white shadow-[0_0_30px_rgba(139,92,246,.35)]"
+          className="rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 px-8 py-4 font-semibold text-slate-900 dark:text-white shadow-[0_0_30px_rgba(139,92,246,.35)]"
 
         >
 

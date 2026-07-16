@@ -11,8 +11,8 @@ const SKILLS = [
 
 export default function PrioritySkills() {
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-white/5 bg-white/[0.02] p-6 backdrop-blur-md">
-      <h3 className="mb-6 text-sm font-semibold text-gray-400 flex items-center gap-2">
+    <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
+      <h3 className="mb-6 text-sm font-semibold text-slate-500 dark:text-gray-400 flex items-center gap-2">
         Priority Skills to Learn <Info className="h-3 w-3" />
       </h3>
       
@@ -21,14 +21,14 @@ export default function PrioritySkills() {
           <div key={idx} className="flex items-center gap-4">
             
             {/* Icon Mockup */}
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/5 bg-white/[0.02] text-sm font-black text-gray-300">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] text-sm font-black text-slate-600 dark:text-gray-300">
               {skill.icon}
             </div>
             
             {/* Name & Bar */}
             <div className="flex-1">
-              <span className="text-xs font-bold text-white mb-1.5 block">{skill.name}</span>
-              <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/5">
+              <span className="text-xs font-bold text-slate-900 dark:text-white mb-1.5 block">{skill.name}</span>
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-white/5">
                 <div 
                   className="h-full rounded-full bg-violet-600" 
                   style={{ width: `${skill.progress}%` }} 
@@ -38,7 +38,7 @@ export default function PrioritySkills() {
 
             {/* Gap & Priority */}
             <div className="flex items-center gap-3 shrink-0 w-24 justify-end">
-              <span className="text-[10px] font-bold text-gray-400">{skill.val}</span>
+              <span className="text-[10px] font-bold text-slate-500 dark:text-gray-400">{skill.val}</span>
               <span className={`rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider ${skill.badgeColor}`}>
                 {skill.badge}
               </span>
@@ -48,7 +48,7 @@ export default function PrioritySkills() {
         ))}
       </div>
 
-      <div className="mt-6 pt-4 border-t border-white/5">
+      <div className="mt-6 pt-4 border-t border-slate-200 dark:border-white/5">
         <Link to="/learning-plan" className="flex items-center gap-2 text-xs font-medium text-violet-400 transition-colors hover:text-violet-300">
           View Learning Plan <ArrowRight className="h-3 w-3" />
         </Link>

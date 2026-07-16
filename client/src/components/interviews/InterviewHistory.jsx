@@ -71,11 +71,11 @@ export default function InterviewHistory() {
   };
 
   return (
-    <div className="flex flex-col rounded-2xl border border-white/5 bg-white/[0.02] p-6 backdrop-blur-md">
-      <h3 className="mb-6 text-sm font-semibold text-gray-400">Your Interview History</h3>
+    <div className="flex flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
+      <h3 className="mb-6 text-sm font-semibold text-slate-500 dark:text-gray-400">Your Interview History</h3>
       
       {/* Table Header */}
-      <div className="mb-4 grid grid-cols-12 gap-4 border-b border-white/5 pb-2 text-[11px] font-semibold uppercase tracking-wider text-gray-500">
+      <div className="mb-4 grid grid-cols-12 gap-4 border-b border-slate-200 dark:border-white/5 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-gray-500">
         <div className="col-span-4">Role</div>
         <div className="col-span-2">Type</div>
         <div className="col-span-2">Date</div>
@@ -87,7 +87,7 @@ export default function InterviewHistory() {
       {/* Table Rows */}
       <div className="flex flex-col gap-4">
         {HISTORY.map((row, idx) => (
-          <div key={idx} className="group grid grid-cols-12 items-center gap-4 cursor-pointer transition-colors hover:bg-white/[0.02] rounded-xl -mx-2 px-2 py-2">
+          <div key={idx} className="group grid grid-cols-12 items-center gap-4 cursor-pointer transition-colors hover:bg-white dark:bg-white/[0.02] rounded-xl -mx-2 px-2 py-2">
             
             {/* Role & Icon */}
             <div className="col-span-4 flex items-center gap-3">
@@ -95,8 +95,8 @@ export default function InterviewHistory() {
                 <row.icon className="h-5 w-5" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-white group-hover:text-violet-300 transition-colors truncate">{row.role}</h4>
-                <p className="text-[11px] text-gray-400 truncate">{row.desc}</p>
+                <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-violet-300 transition-colors truncate">{row.role}</h4>
+                <p className="text-[11px] text-slate-500 dark:text-gray-400 truncate">{row.desc}</p>
               </div>
             </div>
 
@@ -109,8 +109,8 @@ export default function InterviewHistory() {
 
             {/* Date */}
             <div className="col-span-2">
-              <p className="text-xs text-white">{row.date}</p>
-              <p className="text-[10px] text-gray-500">{row.time}</p>
+              <p className="text-xs text-slate-900 dark:text-white">{row.date}</p>
+              <p className="text-[10px] text-slate-400 dark:text-gray-500">{row.time}</p>
             </div>
 
             {/* Score */}
@@ -125,14 +125,14 @@ export default function InterviewHistory() {
 
             {/* Action */}
             <div className="col-span-1 flex justify-end">
-              <ChevronRight className="h-4 w-4 text-gray-600 transition-transform group-hover:translate-x-1 group-hover:text-white" />
+              <ChevronRight className="h-4 w-4 text-gray-600 transition-transform group-hover:translate-x-1 group-hover:text-slate-900 dark:text-white" />
             </div>
           </div>
         ))}
       </div>
 
       {/* Footer */}
-      <div className="mt-6 pt-4 border-t border-white/5">
+      <div className="mt-6 pt-4 border-t border-slate-200 dark:border-white/5">
         <Link to="/history" className="flex items-center gap-2 text-sm font-medium text-violet-400 transition-colors hover:text-violet-300">
           View All Interviews <ArrowRight className="h-4 w-4" />
         </Link>

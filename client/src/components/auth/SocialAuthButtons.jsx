@@ -5,7 +5,7 @@ import LinkedinIcon from "./LinkedinIcon";
 
 const buttons = [
   { label: "Continue with Google", icon: <GoogleIcon /> },
-  { label: "Continue with GitHub", icon: <GithubIcon className="h-5 w-5 text-white" /> },
+  { label: "Continue with GitHub", icon: <GithubIcon className="h-5 w-5 text-slate-900 dark:text-white" /> },
   { label: "Continue with LinkedIn", icon: <LinkedinIcon className="h-5 w-5 text-[#0A66C2]" /> },
 ];
 
@@ -19,7 +19,7 @@ export default function SocialAuthButtons() {
           aria-label={b.label}
           whileHover={{ y: -4, scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 backdrop-blur-xl transition-colors hover:border-violet-500/40 hover:bg-white/10"
+          className="flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 backdrop-blur-xl transition-colors hover:border-violet-500/40 hover:bg-slate-200 dark:hover:bg-white/10"
         >
           {b.icon}
         </motion.button>

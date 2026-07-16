@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function AuthLayout({ backLink, children, aboveCard, belowCard }) {
   return (
-    <div className="relative flex min-h-screen flex-col overflow-hidden bg-[#060816] text-white">
+    <div className="relative flex min-h-screen flex-col overflow-hidden bg-slate-50 dark:bg-[#060816] text-slate-900 dark:text-white">
       {/* Animated Background */}
       <div className="fixed inset-0 -z-50 overflow-hidden">
         <motion.div
@@ -51,7 +51,7 @@ export default function AuthLayout({ backLink, children, aboveCard, belowCard })
         {backLink && (
           <Link
             to={backLink.href}
-            className="flex items-center gap-2 text-sm text-gray-400 transition hover:text-white"
+            className="flex items-center gap-2 text-sm text-slate-500 dark:text-gray-400 transition hover:text-slate-900 dark:text-white"
           >
             <ArrowLeft className="h-4 w-4" />
             {backLink.text}
@@ -74,7 +74,7 @@ export default function AuthLayout({ backLink, children, aboveCard, belowCard })
           className="relative w-full max-w-md"
         >
           <div className="absolute inset-0 -z-10 rounded-[36px] bg-violet-600/20 blur-[100px]" />
-          <div className="rounded-[32px] border border-white/10 bg-white/[0.04] p-5 md:p-6 shadow-[0_20px_60px_rgba(0,0,0,.35)] backdrop-blur-xl">
+          <div className="rounded-[32px] border border-slate-200 dark:border-white/10 bg-white/[0.04] p-5 md:p-6 shadow-[0_20px_60px_rgba(0,0,0,.35)] backdrop-blur-xl">
             {children}
           </div>
         </motion.div>

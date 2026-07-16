@@ -6,8 +6,8 @@ export default function ATSCompatibility() {
   const strokeDashoffset = circumference - (score / 100) * circumference;
 
   return (
-    <div className="flex h-full flex-col items-center justify-between rounded-2xl border border-white/5 bg-white/[0.02] p-6 text-center backdrop-blur-md">
-      <h3 className="mb-2 w-full text-left text-sm font-semibold text-gray-400">ATS Compatibility</h3>
+    <div className="flex h-full flex-col items-center justify-between rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 text-center backdrop-blur-md">
+      <h3 className="mb-2 w-full text-left text-sm font-semibold text-slate-500 dark:text-gray-400">ATS Compatibility</h3>
       
       {/* Circular Gauge */}
       <div className="relative mt-2 flex h-32 w-32 items-center justify-center shrink-0">
@@ -28,16 +28,16 @@ export default function ATSCompatibility() {
         </svg>
         
         <div className="absolute flex flex-col items-center justify-center">
-          <span className="text-3xl font-black text-white">{score}%</span>
+          <span className="text-3xl font-black text-slate-900 dark:text-white">{score}%</span>
           <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">High Match</span>
         </div>
       </div>
 
-      <p className="mt-4 text-xs text-gray-400 leading-relaxed px-4">
+      <p className="mt-4 text-xs text-slate-500 dark:text-gray-400 leading-relaxed px-4">
         Great! Your resume is highly optimized for ATS systems.
       </p>
 
-      <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/10">
+      <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 py-2.5 text-sm font-medium text-slate-900 dark:text-white transition-colors hover:bg-slate-200 dark:hover:bg-white/10">
         <FileText className="h-4 w-4" /> View ATS Report
       </button>
     </div>

@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 export default function SkillsBreakdown() {
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-white/5 bg-white/[0.02] p-6 backdrop-blur-md">
-      <h3 className="mb-6 text-sm font-semibold text-gray-400">Skills Breakdown</h3>
+    <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
+      <h3 className="mb-6 text-sm font-semibold text-slate-500 dark:text-gray-400">Skills Breakdown</h3>
       
       <div className="flex-1 space-y-6">
         
@@ -13,8 +13,8 @@ export default function SkillsBreakdown() {
           <div className="flex items-start gap-3 mb-2">
             <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
             <div>
-              <h4 className="text-xs font-bold text-white">Strong Skills</h4>
-              <p className="text-[10px] text-gray-500">You have a good command on these skills.</p>
+              <h4 className="text-xs font-bold text-slate-900 dark:text-white">Strong Skills</h4>
+              <p className="text-[10px] text-slate-400 dark:text-gray-500">You have a good command on these skills.</p>
             </div>
           </div>
           <div className="flex flex-wrap gap-2 pl-7">
@@ -31,8 +31,8 @@ export default function SkillsBreakdown() {
           <div className="flex items-start gap-3 mb-2">
             <AlertCircle className="h-4 w-4 text-orange-500 shrink-0 mt-0.5" />
             <div>
-              <h4 className="text-xs font-bold text-white">Intermediate Skills</h4>
-              <p className="text-[10px] text-gray-500">You have basic knowledge. Improve further.</p>
+              <h4 className="text-xs font-bold text-slate-900 dark:text-white">Intermediate Skills</h4>
+              <p className="text-[10px] text-slate-400 dark:text-gray-500">You have basic knowledge. Improve further.</p>
             </div>
           </div>
           <div className="flex flex-wrap gap-2 pl-7">
@@ -49,8 +49,8 @@ export default function SkillsBreakdown() {
           <div className="flex items-start gap-3 mb-2">
             <XCircle className="h-4 w-4 text-red-500 shrink-0 mt-0.5" />
             <div>
-              <h4 className="text-xs font-bold text-white">Missing Skills</h4>
-              <p className="text-[10px] text-gray-500">These are important for the target role.</p>
+              <h4 className="text-xs font-bold text-slate-900 dark:text-white">Missing Skills</h4>
+              <p className="text-[10px] text-slate-400 dark:text-gray-500">These are important for the target role.</p>
             </div>
           </div>
           <div className="flex flex-wrap gap-2 pl-7">
@@ -64,7 +64,7 @@ export default function SkillsBreakdown() {
 
       </div>
 
-      <div className="mt-6 pt-4 border-t border-white/5">
+      <div className="mt-6 pt-4 border-t border-slate-200 dark:border-white/5">
         <Link to="/skills" className="flex items-center gap-2 text-xs font-medium text-violet-400 transition-colors hover:text-violet-300">
           View All Skills <ArrowRight className="h-3 w-3" />
         </Link>

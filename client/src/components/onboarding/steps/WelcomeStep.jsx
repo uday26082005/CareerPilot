@@ -49,31 +49,31 @@ export default function WelcomeStep({ onNext }) {
       className="flex h-full flex-col"
     >
       <div className="mb-8">
-        <h2 className="mb-2 text-sm font-semibold text-gray-400">Welcome to</h2>
+        <h2 className="mb-2 text-sm font-semibold text-slate-500 dark:text-gray-400">Welcome to</h2>
         <h1 className="mb-4 text-4xl font-black tracking-tight">
           CareerPilot <span className="text-violet-400">AI</span>
         </h1>
-        <p className="mb-4 text-lg font-medium text-white">
+        <p className="mb-4 text-lg font-medium text-slate-900 dark:text-white">
           👋 Hi there! We're excited to have you on board.
         </p>
-        <p className="max-w-2xl text-sm text-gray-400 leading-relaxed">
+        <p className="max-w-2xl text-sm text-slate-500 dark:text-gray-400 leading-relaxed">
           CareerPilot AI is your personal career companion that helps you analyze, plan, and accelerate your career journey with the power of artificial intelligence.
         </p>
       </div>
 
-      <h3 className="mb-4 text-lg font-bold text-white">What you can do with CareerPilot AI</h3>
+      <h3 className="mb-4 text-lg font-bold text-slate-900 dark:text-white">What you can do with CareerPilot AI</h3>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-8">
         {FEATURES.map((feature, idx) => (
           <div
             key={idx}
-            className="rounded-2xl border border-white/5 bg-white/[0.02] p-5 transition-colors hover:bg-white/[0.04]"
+            className="rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-5 transition-colors hover:bg-white/[0.04]"
           >
             <div className={`mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${feature.color} shadow-lg`}>
-              <feature.icon className="h-5 w-5 text-white" />
+              <feature.icon className="h-5 w-5 text-slate-900 dark:text-white" />
             </div>
-            <h4 className="mb-2 text-sm font-bold text-white">{feature.title}</h4>
-            <p className="text-xs text-gray-400 leading-relaxed">{feature.desc}</p>
+            <h4 className="mb-2 text-sm font-bold text-slate-900 dark:text-white">{feature.title}</h4>
+            <p className="text-xs text-slate-500 dark:text-gray-400 leading-relaxed">{feature.desc}</p>
           </div>
         ))}
       </div>
@@ -83,11 +83,11 @@ export default function WelcomeStep({ onNext }) {
           onClick={onNext}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-4 font-bold text-white shadow-[0_0_30px_rgba(139,92,246,.3)] transition-all hover:shadow-[0_0_40px_rgba(139,92,246,.5)]"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-4 font-bold text-slate-900 dark:text-white shadow-[0_0_30px_rgba(139,92,246,.3)] transition-all hover:shadow-[0_0_40px_rgba(139,92,246,.5)]"
         >
           Let's Get Started <ArrowRight className="h-5 w-5" />
         </motion.button>
-        <p className="text-xs text-gray-500">Takes less than 2 minutes</p>
+        <p className="text-xs text-slate-400 dark:text-gray-500">Takes less than 2 minutes</p>
       </div>
     </motion.div>
   );

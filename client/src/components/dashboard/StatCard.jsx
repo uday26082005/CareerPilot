@@ -12,16 +12,16 @@ export default function StatCard({
   chartColor
 }) {
   return (
-    <div className="flex flex-col justify-between rounded-2xl border border-white/5 bg-white/[0.02] p-5 backdrop-blur-md transition-all hover:bg-white/[0.04] hover:border-white/10">
+    <div className="flex flex-col justify-between rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-5 backdrop-blur-md transition-all hover:bg-white/[0.04] hover:border-slate-200 dark:border-white/10">
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-4">
           <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${iconBgColor}`}>
             <Icon className={`h-6 w-6 ${iconColor}`} />
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-gray-400">{title}</h3>
+            <h3 className="text-sm font-semibold text-slate-500 dark:text-gray-400">{title}</h3>
             <div className="mt-1 flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-white">{value}</span>
+              <span className="text-2xl font-bold text-slate-900 dark:text-white">{value}</span>
               <span className={`text-xs font-medium ${subtitleColor}`}>
                 {subtitle}
               </span>

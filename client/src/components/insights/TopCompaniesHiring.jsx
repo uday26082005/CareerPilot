@@ -11,10 +11,10 @@ export default function TopCompaniesHiring() {
   ];
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-white/5 bg-white/[0.02] p-6 backdrop-blur-md">
+    <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
       
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-[11px] font-semibold text-gray-400">Top Companies Hiring</h3>
+        <h3 className="text-[11px] font-semibold text-slate-500 dark:text-gray-400">Top Companies Hiring</h3>
         <Link to="#" className="flex items-center gap-1.5 text-[10px] font-medium text-violet-400 hover:text-violet-300 transition-colors">
           View All <ArrowRight className="h-3 w-3" />
         </Link>
@@ -24,7 +24,7 @@ export default function TopCompaniesHiring() {
         {COMPANIES.map((company, idx) => (
           <div key={idx} className="flex flex-col items-center justify-center px-2 text-center">
             
-            <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 ${company.color}`}>
+            <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 dark:bg-white/5 ${company.color}`}>
               {company.name === 'Microsoft' ? (
                 <div className="grid grid-cols-2 gap-0.5 w-4 h-4">
                    <div className="bg-red-500 rounded-sm"></div>
@@ -35,7 +35,7 @@ export default function TopCompaniesHiring() {
               ) : company.name === 'Google' ? (
                 <span className="font-black text-lg text-blue-500">G</span>
               ) : company.name === 'Amazon' ? (
-                <span className="font-bold text-lg text-white">a</span>
+                <span className="font-bold text-lg text-slate-900 dark:text-white">a</span>
               ) : company.name === 'TCS' ? (
                 <span className="font-bold text-sm text-red-500">tcs</span>
               ) : (
@@ -43,10 +43,10 @@ export default function TopCompaniesHiring() {
               )}
             </div>
             
-            <h4 className="text-[11px] font-bold text-white mb-1">{company.name}</h4>
+            <h4 className="text-[11px] font-bold text-slate-900 dark:text-white mb-1">{company.name}</h4>
             <span className={`text-[9px] font-bold mb-2 ${company.demandColor}`}>{company.demand}</span>
-            <span className="text-[9px] text-gray-400 mb-1">{company.salary}</span>
-            <span className="text-[9px] text-gray-500">{company.openings}</span>
+            <span className="text-[9px] text-slate-500 dark:text-gray-400 mb-1">{company.salary}</span>
+            <span className="text-[9px] text-slate-400 dark:text-gray-500">{company.openings}</span>
 
           </div>
         ))}

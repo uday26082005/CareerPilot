@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 export default function LearningRecommendations() {
   return (
-    <div className="flex flex-col rounded-2xl border border-white/5 bg-white/[0.02] p-6 backdrop-blur-md h-full">
-      <h3 className="mb-6 text-sm font-semibold text-white">Learning Recommendations</h3>
+    <div className="flex flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md h-full">
+      <h3 className="mb-6 text-sm font-semibold text-slate-900 dark:text-white">Learning Recommendations</h3>
       
       <div className="grid gap-6 sm:grid-cols-3 flex-1">
         
@@ -19,14 +19,14 @@ export default function LearningRecommendations() {
               { title: "Node.js & Express - Bootcamp", sub: "Udemy", icon: MonitorPlay },
               { title: "AWS Cloud Practitioner", sub: "AWS Training", icon: Box }
             ].map((item, i) => (
-              <div key={i} className="flex items-center justify-between gap-3 rounded-xl border border-white/5 bg-white/[0.01] p-3 transition-colors hover:bg-white/[0.03]">
+              <div key={i} className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/[0.01] p-3 transition-colors hover:bg-white/80 dark:bg-white/[0.03]">
                 <div className="flex items-center gap-3">
                   <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400">
                     <item.icon className="h-4 w-4" />
                   </div>
                   <div>
-                    <h5 className="text-[11px] font-bold text-white leading-tight">{item.title}</h5>
-                    <p className="text-[9px] text-gray-400">{item.sub}</p>
+                    <h5 className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">{item.title}</h5>
+                    <p className="text-[9px] text-slate-500 dark:text-gray-400">{item.sub}</p>
                   </div>
                 </div>
                 <span className="rounded-full border border-emerald-500/30 px-1.5 py-0.5 text-[9px] font-bold text-emerald-400">Beginner</span>
@@ -39,7 +39,7 @@ export default function LearningRecommendations() {
         </div>
 
         {/* Column 2: Projects */}
-        <div className="flex flex-col border-t sm:border-t-0 sm:border-l border-white/5 pt-4 sm:pt-0 sm:pl-6">
+        <div className="flex flex-col border-t sm:border-t-0 sm:border-l border-slate-200 dark:border-white/5 pt-4 sm:pt-0 sm:pl-6">
           <h4 className="mb-4 flex items-center gap-2 text-xs font-bold text-blue-400">
             <Code className="h-4 w-4" /> Recommended Projects
           </h4>
@@ -49,13 +49,13 @@ export default function LearningRecommendations() {
               { title: "E-commerce Website", sub: "MERN Stack, Stripe Integration", icon: MonitorPlay },
               { title: "Real-time Chat Application", sub: "Socket.io, Express, React", icon: MessageSquare }
             ].map((item, i) => (
-              <div key={i} className="flex items-center gap-3 rounded-xl border border-white/5 bg-white/[0.01] p-3 transition-colors hover:bg-white/[0.03]">
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/5 text-gray-300">
+              <div key={i} className="flex items-center gap-3 rounded-xl border border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/[0.01] p-3 transition-colors hover:bg-white/80 dark:bg-white/[0.03]">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-gray-300">
                   <item.icon className="h-4 w-4" />
                 </div>
                 <div>
-                  <h5 className="text-[11px] font-bold text-white leading-tight">{item.title}</h5>
-                  <p className="text-[9px] text-gray-400">{item.sub}</p>
+                  <h5 className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">{item.title}</h5>
+                  <p className="text-[9px] text-slate-500 dark:text-gray-400">{item.sub}</p>
                 </div>
               </div>
             ))}
@@ -66,7 +66,7 @@ export default function LearningRecommendations() {
         </div>
 
         {/* Column 3: Practice */}
-        <div className="flex flex-col border-t sm:border-t-0 sm:border-l border-white/5 pt-4 sm:pt-0 sm:pl-6">
+        <div className="flex flex-col border-t sm:border-t-0 sm:border-l border-slate-200 dark:border-white/5 pt-4 sm:pt-0 sm:pl-6">
           <h4 className="mb-4 flex items-center gap-2 text-xs font-bold text-emerald-400">
             <HelpCircle className="h-4 w-4" /> Practice Questions
           </h4>
@@ -76,13 +76,13 @@ export default function LearningRecommendations() {
               { title: "Frontend Development", sub: "80+ Questions", icon: HelpCircle },
               { title: "System Design Basics", sub: "50+ Questions", icon: HelpCircle }
             ].map((item, i) => (
-              <div key={i} className="flex items-center gap-3 rounded-xl border border-white/5 bg-white/[0.01] p-3 transition-colors hover:bg-white/[0.03]">
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/5 text-gray-300">
+              <div key={i} className="flex items-center gap-3 rounded-xl border border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/[0.01] p-3 transition-colors hover:bg-white/80 dark:bg-white/[0.03]">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-gray-300">
                   <item.icon className="h-4 w-4" />
                 </div>
                 <div>
-                  <h5 className="text-[11px] font-bold text-white leading-tight">{item.title}</h5>
-                  <p className="text-[9px] text-gray-400">{item.sub}</p>
+                  <h5 className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">{item.title}</h5>
+                  <p className="text-[9px] text-slate-500 dark:text-gray-400">{item.sub}</p>
                 </div>
               </div>
             ))}

@@ -59,7 +59,7 @@ export default function Register() {
         className="mb-3 text-center"
       >
         <h1 className="mb-1 text-2xl font-black md:text-3xl">Create your account</h1>
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-slate-500 dark:text-gray-400">
           Join CareerPilot AI and start your journey towards career success.
         </p>
       </motion.div>
@@ -113,7 +113,7 @@ export default function Register() {
           disabled={loading}
           whileHover={{ scale: 1.02, boxShadow: "0px 0px 35px rgba(139,92,246,.55)" }}
           whileTap={{ scale: 0.98 }}
-          className="group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-3 font-semibold text-white transition-opacity disabled:opacity-60"
+          className="group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-3 font-semibold text-slate-900 dark:text-white transition-opacity disabled:opacity-60"
         >
           {loading ? "Creating account..." : "Create Account"}
           {!loading && (
@@ -123,14 +123,14 @@ export default function Register() {
       </form>
 
       <div className="my-3 flex items-center gap-4">
-        <div className="h-px flex-1 bg-white/10" />
-        <span className="text-xs text-gray-500">or sign up with</span>
-        <div className="h-px flex-1 bg-white/10" />
+        <div className="h-px flex-1 bg-slate-200 dark:bg-white/10" />
+        <span className="text-xs text-slate-400 dark:text-gray-500">or sign up with</span>
+        <div className="h-px flex-1 bg-slate-200 dark:bg-white/10" />
       </div>
 
       <SocialAuthButtons />
 
-      <p className="mt-3 text-center text-sm text-gray-400">
+      <p className="mt-3 text-center text-sm text-slate-500 dark:text-gray-400">
         Already have an account?{" "}
         <Link to="/login" className="font-medium text-violet-300 hover:underline">
           Log in

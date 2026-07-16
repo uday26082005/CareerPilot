@@ -40,7 +40,7 @@ export default function Hero() {
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-                            className="mt-0 text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight text-white"
+                            className="mt-0 text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight text-slate-900 dark:text-white"
                         >
                             Build Your <br />
                             Dream Career <br />
@@ -53,7 +53,7 @@ export default function Hero() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.7, delay: 0.35, ease: "easeOut" }}
-                            className="mt-4 text-lg sm:text-xl leading-relaxed text-gray-400"
+                            className="mt-4 text-lg sm:text-xl leading-relaxed text-slate-500 dark:text-gray-400"
                         >
                             CareerPilot AI analyzes your resume, identifies missing skills, creates a personalized learning roadmap, and conducts AI mock interviews to get you placement ready.
                         </motion.p>
@@ -75,7 +75,7 @@ export default function Hero() {
 
                             <a
                                 href="#features"
-                                className="inline-flex items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-8 py-4 font-semibold text-white backdrop-blur-xl transition-all hover:bg-white/10 hover:border-white/20 w-full sm:w-auto"
+                                className="inline-flex items-center justify-center rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 px-8 py-4 font-semibold text-slate-900 dark:text-white backdrop-blur-xl transition-all hover:bg-slate-200 dark:hover:bg-white/10 hover:border-slate-300 dark:border-white/20 w-full sm:w-auto"
                             >
                                 Explore Features
                             </a>
@@ -91,12 +91,12 @@ export default function Hero() {
                             {features.map(({ icon: Icon, text }) => (
                                 <div
                                     key={text}
-                                    className="flex items-center gap-3.5 rounded-2xl border border-white/5 bg-white/[0.02] px-5 py-4 backdrop-blur-md transition-all hover:border-violet-500/30 hover:bg-white/[0.05]"
+                                    className="flex items-center gap-3.5 rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] px-5 py-4 backdrop-blur-md transition-all hover:border-violet-500/30 hover:bg-slate-50 dark:hover:bg-white/[0.05]"
                                 >
-                                    <div className="rounded-xl bg-violet-500/10 p-2.5 text-violet-400">
+                                    <div className="rounded-xl bg-violet-100 dark:bg-violet-500/10 p-2.5 text-violet-600 dark:text-violet-400">
                                         <Icon className="h-6 w-6" />
                                     </div>
-                                    <span className="text-[15px] font-semibold text-gray-200">
+                                    <span className="text-[15px] font-semibold text-slate-700 dark:text-gray-200">
                                         {text}
                                     </span>
                                 </div>

@@ -9,8 +9,8 @@ export default function MockInterviews() {
     <div className="flex flex-col gap-6 pb-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-white">Mock Interviews</h1>
-        <p className="mt-1 text-sm text-gray-400">
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Mock Interviews</h1>
+        <p className="mt-1 text-sm text-slate-500 dark:text-gray-400">
           Practice real interview scenarios, get AI feedback and improve your confidence.
         </p>
       </div>

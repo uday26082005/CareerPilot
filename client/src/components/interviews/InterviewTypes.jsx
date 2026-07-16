@@ -56,7 +56,7 @@ const TYPES = [
 export default function InterviewTypes() {
   return (
     <div className="flex flex-col">
-      <h3 className="mb-4 text-sm font-semibold text-gray-400">Choose Interview Type</h3>
+      <h3 className="mb-4 text-sm font-semibold text-slate-500 dark:text-gray-400">Choose Interview Type</h3>
       
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {TYPES.map((type, idx) => (
@@ -65,15 +65,15 @@ export default function InterviewTypes() {
             className={`flex cursor-pointer flex-col justify-between rounded-xl p-5 transition-all ${
               type.active 
                 ? "border border-violet-500 bg-violet-900/10 shadow-[0_0_20px_rgba(139,92,246,0.15)] scale-[1.02]" 
-                : "border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10"
+                : "border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] hover:bg-white/[0.04] hover:border-slate-200 dark:border-white/10"
             }`}
           >
             <div>
               <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl ${type.iconBg} ${type.iconColor}`}>
                 <type.icon className="h-6 w-6" />
               </div>
-              <h4 className="text-sm font-bold text-white mb-1">{type.title}</h4>
-              <p className="text-[11px] text-gray-400 leading-relaxed mb-6">{type.desc}</p>
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-1">{type.title}</h4>
+              <p className="text-[11px] text-slate-500 dark:text-gray-400 leading-relaxed mb-6">{type.desc}</p>
             </div>
             
             <div className={`w-fit rounded-full border px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider ${type.badgeColor}`}>

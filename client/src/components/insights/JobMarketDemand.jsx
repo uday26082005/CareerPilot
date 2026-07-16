@@ -11,10 +11,10 @@ export default function JobMarketDemand() {
   ];
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-white/5 bg-white/[0.02] p-6 backdrop-blur-md">
+    <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
       
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-[11px] font-semibold text-gray-400 flex items-center gap-1.5">
+        <h3 className="text-[11px] font-semibold text-slate-500 dark:text-gray-400 flex items-center gap-1.5">
           Job Market Demand <Info className="h-3 w-3" />
         </h3>
         <Link to="#" className="flex items-center gap-1.5 text-[10px] font-medium text-violet-400 hover:text-violet-300 transition-colors">
@@ -30,9 +30,9 @@ export default function JobMarketDemand() {
               <item.icon className="h-4 w-4" />
             </div>
             
-            <span className="w-32 shrink-0 text-[11px] font-medium text-gray-300">{item.role}</span>
+            <span className="w-32 shrink-0 text-[11px] font-medium text-slate-600 dark:text-gray-300">{item.role}</span>
             
-            <div className="flex-1 h-1.5 overflow-hidden rounded-full bg-white/5">
+            <div className="flex-1 h-1.5 overflow-hidden rounded-full bg-slate-100 dark:bg-white/5">
               <div 
                 className={`h-full rounded-full ${item.barColor}`} 
                 style={{ width: `${item.percent}%` }} 
@@ -41,7 +41,7 @@ export default function JobMarketDemand() {
 
             <div className="flex items-center justify-end w-20 shrink-0 gap-3">
               <span className={`text-[10px] font-medium ${item.labelColor}`}>{item.label}</span>
-              <span className="text-[11px] font-bold text-white w-7 text-right">{item.percent}%</span>
+              <span className="text-[11px] font-bold text-slate-900 dark:text-white w-7 text-right">{item.percent}%</span>
             </div>
 
           </div>

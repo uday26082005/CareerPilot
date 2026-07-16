@@ -4,8 +4,8 @@ export default function OverallScore() {
   const strokeDashoffset = circumference - (score / 100) * circumference;
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-white/5 bg-white/[0.02] p-6 backdrop-blur-md">
-      <h3 className="mb-4 text-sm font-semibold text-gray-400">Overall Resume Score</h3>
+    <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
+      <h3 className="mb-4 text-sm font-semibold text-slate-500 dark:text-gray-400">Overall Resume Score</h3>
       
       <div className="flex items-center gap-6">
         {/* Circular Gauge */}
@@ -42,15 +42,15 @@ export default function OverallScore() {
           </svg>
           
           <div className="absolute flex flex-col items-center justify-center">
-            <span className="text-3xl font-black text-white">{score}</span>
-            <span className="text-[10px] font-bold text-gray-400">/100</span>
+            <span className="text-3xl font-black text-slate-900 dark:text-white">{score}</span>
+            <span className="text-[10px] font-bold text-slate-500 dark:text-gray-400">/100</span>
           </div>
         </div>
 
         {/* Text Details */}
         <div>
-          <h2 className="text-xl font-bold text-white mb-2">Excellent! 🎉</h2>
-          <p className="text-xs text-gray-400 leading-relaxed">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Excellent! 🎉</h2>
+          <p className="text-xs text-slate-500 dark:text-gray-400 leading-relaxed">
             Your resume is strong and well-structured. Address a few improvements to make it even better.
           </p>
         </div>

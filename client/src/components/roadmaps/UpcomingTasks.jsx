@@ -9,9 +9,9 @@ export default function UpcomingTasks() {
   ];
 
   return (
-    <div className="flex flex-col rounded-2xl border border-white/5 bg-[#0a0c1a] p-5 shadow-lg">
+    <div className="flex flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-[#0a0c1a] p-5 shadow-lg">
       <div className="flex items-center justify-between mb-5">
-        <h3 className="text-[11px] font-bold text-gray-300">Upcoming Tasks</h3>
+        <h3 className="text-[11px] font-bold text-slate-600 dark:text-gray-300">Upcoming Tasks</h3>
         <Link to="#" className="text-[10px] font-medium text-violet-400 hover:text-violet-300 transition-colors">
           View All
         </Link>
@@ -19,17 +19,17 @@ export default function UpcomingTasks() {
 
       <div className="flex flex-col space-y-3">
         {TASKS.map((task, idx) => (
-          <div key={idx} className="flex items-center justify-between gap-3 rounded-xl border border-white/5 bg-white/[0.01] p-3 hover:bg-white/[0.03] transition-colors">
+          <div key={idx} className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/[0.01] p-3 hover:bg-white/80 dark:bg-white/[0.03] transition-colors">
             <div className="flex items-center gap-3">
-              <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/5 ${task.iconColor}`}>
+              <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-white/5 ${task.iconColor}`}>
                 <task.icon className="h-4 w-4" />
               </div>
               <div>
-                <h4 className="text-[11px] font-bold text-white mb-0.5">{task.title}</h4>
-                <p className="text-[9px] text-gray-500">{task.cat}</p>
+                <h4 className="text-[11px] font-bold text-slate-900 dark:text-white mb-0.5">{task.title}</h4>
+                <p className="text-[9px] text-slate-400 dark:text-gray-500">{task.cat}</p>
               </div>
             </div>
-            <button className={`rounded-md border px-2 py-1 text-[9px] font-semibold transition-colors ${task.statusColor} hover:bg-white/5`}>
+            <button className={`rounded-md border px-2 py-1 text-[9px] font-semibold transition-colors ${task.statusColor} hover:bg-slate-100 dark:hover:bg-white/5`}>
               {task.status}
             </button>
           </div>

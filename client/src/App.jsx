@@ -15,11 +15,13 @@ import CareerInsights from "./pages/CareerInsights";
 import Roadmap from "./pages/Roadmap";
 import Settings from "./pages/Settings";
 import AppLayout from "./components/layout/AppLayout";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Landing />} />
+    <ThemeProvider>
+      <Routes>
+        <Route path="/" element={<Landing />} />
       <Route path="/signup" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -35,8 +37,9 @@ function App() {
       <Route path="/leaderboard" element={<AppLayout><Leaderboard /></AppLayout>} />
       <Route path="/career-insights" element={<AppLayout><CareerInsights /></AppLayout>} />
       <Route path="/roadmaps" element={<AppLayout><Roadmap /></AppLayout>} />
-      <Route path="/settings" element={<AppLayout><Settings /></AppLayout>} />
-    </Routes>
+        <Route path="/settings" element={<AppLayout><Settings /></AppLayout>} />
+      </Routes>
+    </ThemeProvider>
   );
 }
 

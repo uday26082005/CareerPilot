@@ -11,7 +11,7 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
     >
       <div className="mb-8">
         <h1 className="mb-2 text-3xl font-black">Resume Upload</h1>
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-slate-500 dark:text-gray-400">
           Upload your resume to help us analyze your skills, experience, and qualifications to provide better recommendations.
         </p>
       </div>
@@ -25,23 +25,23 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
             <CloudUpload className="h-8 w-8" />
           </div>
           
-          <h3 className="mb-2 text-lg font-bold text-white">Drag & drop your resume here</h3>
-          <p className="mb-4 text-xs font-medium text-gray-500 uppercase">or</p>
+          <h3 className="mb-2 text-lg font-bold text-slate-900 dark:text-white">Drag & drop your resume here</h3>
+          <p className="mb-4 text-xs font-medium text-slate-400 dark:text-gray-500 uppercase">or</p>
           
-          <button className="rounded-lg bg-violet-600 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-violet-500 shadow-lg shadow-violet-500/25">
+          <button className="rounded-lg bg-violet-600 px-6 py-2.5 text-sm font-semibold text-slate-900 dark:text-white transition-colors hover:bg-violet-500 shadow-lg shadow-violet-500/25">
             Browse Files
           </button>
           
-          <p className="mt-4 text-xs text-gray-400">Supports PDF, DOCX (Max 10MB)</p>
+          <p className="mt-4 text-xs text-slate-500 dark:text-gray-400">Supports PDF, DOCX (Max 10MB)</p>
         </div>
 
         {/* Tips Section */}
-        <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-6">
+        <div className="rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6">
           <div className="mb-4 flex items-center gap-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-yellow-500/10">
               <Lightbulb className="h-4 w-4 text-yellow-400" />
             </div>
-            <h4 className="font-bold text-white">Tips for a great upload</h4>
+            <h4 className="font-bold text-slate-900 dark:text-white">Tips for a great upload</h4>
           </div>
           
           <div className="grid gap-3 sm:grid-cols-2">
@@ -53,17 +53,17 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
             ].map((tip, idx) => (
               <div key={idx} className="flex items-start gap-2">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-violet-400" />
-                <span className="text-sm text-gray-300">{tip}</span>
+                <span className="text-sm text-slate-600 dark:text-gray-300">{tip}</span>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      <div className="mt-8 flex items-center justify-between border-t border-white/5 pt-6">
+      <div className="mt-8 flex items-center justify-between border-t border-slate-200 dark:border-white/5 pt-6">
         <button
           onClick={onPrev}
-          className="flex items-center gap-2 text-sm font-medium text-gray-400 transition-colors hover:text-white"
+          className="flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-gray-400 transition-colors hover:text-slate-900 dark:text-white"
         >
           <ArrowLeft className="h-4 w-4" /> Back
         </button>
@@ -71,7 +71,7 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
           onClick={onNext}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-violet-500"
+          className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-semibold text-slate-900 dark:text-white transition-colors hover:bg-violet-500"
         >
           Save & Continue <ArrowRight className="h-4 w-4" />
         </motion.button>

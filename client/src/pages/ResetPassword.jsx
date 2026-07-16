@@ -66,7 +66,7 @@ export default function ResetPassword() {
       <h1 className="mb-1 text-2xl font-black md:text-3xl">
         Reset Your <span className="text-violet-400">Password</span>
       </h1>
-      <p className="mx-auto max-w-sm text-sm text-gray-400">
+      <p className="mx-auto max-w-sm text-sm text-slate-500 dark:text-gray-400">
         Enter your new password below. Make sure it's strong and secure.
       </p>
     </motion.div>
@@ -79,7 +79,7 @@ export default function ResetPassword() {
       transition={{ delay: 0.3, duration: 0.6 }}
       className="space-y-4 text-center"
     >
-      <p className="text-sm text-gray-400">
+      <p className="text-sm text-slate-500 dark:text-gray-400">
         Remember your old password?{" "}
         <Link to="/login" className="font-medium text-violet-400 hover:underline">
           Back to Login
@@ -87,10 +87,10 @@ export default function ResetPassword() {
       </p>
       
       <div>
-        <div className="mb-1 flex items-center justify-center gap-2 text-sm font-medium text-white">
+        <div className="mb-1 flex items-center justify-center gap-2 text-sm font-medium text-slate-900 dark:text-white">
           <ShieldCheck className="h-4 w-4" /> Your data is safe with us.
         </div>
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-slate-400 dark:text-gray-500">
           We never share your information with anyone.
         </p>
       </div>
@@ -102,9 +102,9 @@ export default function ResetPassword() {
       {checked ? (
         <CheckCircle className="h-4 w-4 text-emerald-400" />
       ) : (
-        <Circle className="h-4 w-4 text-white/20" />
+        <Circle className="h-4 w-4 text-slate-900 dark:text-white/20" />
       )}
-      <span className={checked ? "text-gray-300" : "text-gray-500"}>{text}</span>
+      <span className={checked ? "text-slate-600 dark:text-gray-300" : "text-slate-400 dark:text-gray-500"}>{text}</span>
     </div>
   );
 
@@ -124,8 +124,8 @@ export default function ResetPassword() {
 
           <div className="mt-2">
             <div className="mb-2 flex items-center justify-between text-xs">
-              <span className="text-gray-400">Password strength:</span>
-              <span className={`font-medium ${password.length === 0 ? "text-gray-500" : strengthColor}`}>
+              <span className="text-slate-500 dark:text-gray-400">Password strength:</span>
+              <span className={`font-medium ${password.length === 0 ? "text-slate-400 dark:text-gray-500" : strengthColor}`}>
                 {password.length === 0 ? "None" : strengthLabel}
               </span>
             </div>
@@ -134,7 +134,7 @@ export default function ResetPassword() {
                 <div
                   key={index}
                   className={`h-1 flex-1 rounded-full transition-colors duration-300 ${
-                    index <= filledBars ? barColor : "bg-white/10"
+                    index <= filledBars ? barColor : "bg-slate-200 dark:bg-white/10"
                   }`}
                 />
               ))}
@@ -165,7 +165,7 @@ export default function ResetPassword() {
             disabled={loading}
             whileHover={{ scale: 1.02, boxShadow: "0px 0px 35px rgba(139,92,246,.55)" }}
             whileTap={{ scale: 0.98 }}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-3 font-semibold text-white transition-opacity disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-3 font-semibold text-slate-900 dark:text-white transition-opacity disabled:opacity-60"
           >
             <Lock className="h-4 w-4" />
             {loading ? "Resetting..." : "Reset Password"}

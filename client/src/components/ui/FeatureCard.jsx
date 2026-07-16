@@ -28,7 +28,7 @@ export default function FeatureCard({
         y: -12,
         scale: 1.02,
       }}
-      className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl transition-all duration-300 hover:border-violet-500/40 hover:shadow-[0_20px_60px_rgba(139,92,246,.18)]"
+      className="group relative overflow-hidden rounded-3xl border border-slate-200 dark:border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl transition-all duration-300 hover:border-violet-500/40 hover:shadow-[0_20px_60px_rgba(139,92,246,.18)]"
     >
       {/* Background Glow */}
 
@@ -43,7 +43,7 @@ export default function FeatureCard({
         }}
         className="mb-7 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-purple-700 shadow-[0_0_30px_rgba(139,92,246,.35)]"
       >
-        <Icon className="h-8 w-8 text-white" />
+        <Icon className="h-8 w-8 text-slate-900 dark:text-white" />
       </motion.div>
 
       {/* Title */}
@@ -54,7 +54,7 @@ export default function FeatureCard({
 
       {/* Description */}
 
-      <p className="leading-8 text-gray-400">
+      <p className="leading-8 text-slate-500 dark:text-gray-400">
         {description}
       </p>
 
