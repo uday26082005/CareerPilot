@@ -2,7 +2,7 @@ import { Bot, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
-export default function AuthLayout({ backLink, children }) {
+export default function AuthLayout({ backLink, children, aboveCard, belowCard }) {
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden bg-[#060816] text-white">
       {/* Animated Background */}
@@ -34,7 +34,7 @@ export default function AuthLayout({ backLink, children }) {
         initial={{ y: -30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="relative z-10 flex items-center justify-between px-6 py-8 md:px-10"
+        className="relative z-10 flex items-center justify-between px-6 py-4 md:px-10"
       >
         <Link to="/" className="flex items-center gap-3">
           <motion.div
@@ -59,29 +59,33 @@ export default function AuthLayout({ backLink, children }) {
         )}
       </motion.header>
 
-      {/* Card */}
-      <main className="relative z-10 flex flex-1 items-center justify-center px-6 py-10">
+      {/* Main Content */}
+      <main className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 py-4">
+        {aboveCard && (
+          <div className="w-full max-w-md mb-3">
+            {aboveCard}
+          </div>
+        )}
+        
         <motion.div
           initial={{ opacity: 0, y: 30, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="relative w-full max-w-xl"
+          className="relative w-full max-w-md"
         >
           <div className="absolute inset-0 -z-10 rounded-[36px] bg-violet-600/20 blur-[100px]" />
-          <div className="rounded-[32px] border border-white/10 bg-white/[0.04] p-10 shadow-[0_20px_60px_rgba(0,0,0,.35)] backdrop-blur-xl">
+          <div className="rounded-[32px] border border-white/10 bg-white/[0.04] p-5 md:p-6 shadow-[0_20px_60px_rgba(0,0,0,.35)] backdrop-blur-xl">
             {children}
           </div>
         </motion.div>
-      </main>
 
-      {/* Footer */}
-      <footer className="relative z-10 px-6 py-8 text-center text-xs text-gray-500">
-        © {new Date().getFullYear()} CareerPilot AI. All rights reserved.
-        <span className="mx-2">|</span>
-        <Link to="/privacy" className="hover:text-gray-300">Privacy Policy</Link>
-        <span className="mx-2">|</span>
-        <Link to="/terms" className="hover:text-gray-300">Terms of Service</Link>
-      </footer>
+        {belowCard && (
+          <div className="w-full max-w-md mt-3">
+            {belowCard}
+          </div>
+        )}
+      </main>
     </div>
   );
 }
+
