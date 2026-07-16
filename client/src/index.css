@@ -29,20 +29,22 @@ body{
 /* Scrollbar */
 
 ::-webkit-scrollbar{
-  width:8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track{
-  background:#090b18;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(10px);
 }
 
 ::-webkit-scrollbar-thumb{
-  background:#6d4cff;
-  border-radius:20px;
+  background: rgba(139, 92, 246, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
 }
 
 ::-webkit-scrollbar-thumb:hover{
-  background:#8b5cf6;
+  background: rgba(139, 92, 246, 0.6);
 }
 
 /* Animated Gradient Background */

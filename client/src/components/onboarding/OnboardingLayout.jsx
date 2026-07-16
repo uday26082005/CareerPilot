@@ -3,50 +3,15 @@ import { Link } from "react-router-dom";
 import { Bot, HelpCircle, LogOut, User, UploadCloud, Link as LinkIcon, Target, Shield, Check } from "lucide-react";
 
 const STEPS = [
-  { id: 1, title: "Welcome", desc: "Let's get you started", icon: Check },
-  { id: 2, title: "Profile Setup", desc: "Tell us about yourself", icon: User },
-  { id: 3, title: "Resume Upload", desc: "Upload your resume", icon: UploadCloud },
-  { id: 4, title: "Connect Accounts", desc: "Connect GitHub & LinkedIn", icon: LinkIcon },
-  { id: 5, title: "Target Role", desc: "Select your target role", icon: Target },
-  { id: 6, title: "You're All Set!", desc: "Ready to explore", icon: Shield },
+  { id: 1, title: "Profile Setup", desc: "Tell us about yourself", icon: User },
+  { id: 2, title: "Resume Upload", desc: "Upload your resume", icon: UploadCloud },
+  { id: 3, title: "Connect Accounts", desc: "Connect GitHub & LinkedIn", icon: LinkIcon },
+  { id: 4, title: "Target Role", desc: "Select your target role", icon: Target },
+  { id: 5, title: "You're All Set!", desc: "Ready to explore", icon: Shield },
 ];
-
-const INFO_CARDS = {
-  1: {
-    title: "100% Secure",
-    desc: "Your data is safe with us and will never be shared.",
-    icon: Shield,
-  },
-  2: {
-    title: "Why do we need this?",
-    desc: "This helps us personalize your experience and provide better recommendations.",
-    icon: Bot, 
-  },
-  3: {
-    title: "Your Data is Safe",
-    desc: "We ensure your data is secure and never shared with anyone.",
-    icon: Shield,
-  },
-  4: {
-    title: "Your Data is Safe",
-    desc: "We ensure your data is secure and never shared with anyone.",
-    icon: Shield,
-  },
-  5: {
-    title: "Your Data is Safe",
-    desc: "We ensure your data is secure and never shared with anyone.",
-    icon: Shield,
-  },
-  6: {
-    title: "Your Data is Safe",
-    desc: "We ensure your data is secure and never shared with anyone.",
-    icon: Shield,
-  },
-};
 
 export default function OnboardingLayout({ currentStep, children }) {
   const progressPercentage = ((currentStep) / STEPS.length) * 100;
-  const activeInfo = INFO_CARDS[currentStep] || INFO_CARDS[1];
 
   return (
     <div className="relative flex min-h-screen flex-col bg-slate-50 dark:bg-[#060816] text-slate-900 dark:text-white overflow-hidden">
@@ -67,8 +32,8 @@ export default function OnboardingLayout({ currentStep, children }) {
       {/* Header */}
       <header className="relative z-10 flex items-center justify-between px-6 py-4 md:px-10">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-purple-700 shadow-[0_0_30px_rgba(139,92,246,.3)]">
-            <Bot className="h-5 w-5" />
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_4px_20px_rgba(139,92,246,0.2)] transition-transform duration-300 hover:rotate-6 hover:scale-105">
+            <img src="/logo.jpg" alt="CareerPilot Logo" className="h-9 w-9 rounded-lg mix-blend-lighten" />
           </div>
           <h1 className="text-xl font-extrabold tracking-tight">
             CareerPilot<span className="text-violet-400"> AI</span>
@@ -76,10 +41,6 @@ export default function OnboardingLayout({ currentStep, children }) {
         </div>
 
         <div className="flex items-center gap-4">
-          <button className="flex items-center gap-2 text-sm text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:text-white transition-colors">
-            <HelpCircle className="h-4 w-4" />
-            <span className="hidden sm:inline">Need help?</span>
-          </button>
           <Link
             to="/login"
             className="flex items-center gap-2 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm text-red-400 transition-colors hover:bg-red-500/20"
@@ -91,16 +52,16 @@ export default function OnboardingLayout({ currentStep, children }) {
       </header>
 
       {/* Main Layout */}
-      <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-6 py-4 md:flex-row md:py-8 lg:px-10">
+      <main className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-1 flex-col gap-8 px-6 py-4 md:flex-row md:py-8 lg:px-10">
         
         {/* Sidebar Navigation */}
         <div className="flex w-full flex-col gap-6 md:w-72 lg:w-80 shrink-0">
           
           {/* Progress Container */}
           <div className="rounded-[24px] border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
-            <div className="mb-4 flex items-center justify-between text-sm font-medium">
+            <div className="mb-4 flex items-center justify-between text-base font-medium">
               <span className="text-violet-300">Onboarding Progress</span>
-              <span className="text-slate-500 dark:text-gray-400">Step {currentStep} of 6</span>
+              <span className="text-slate-500 dark:text-gray-400">Step {currentStep} of 5</span>
             </div>
             <div className="h-2 w-full rounded-full bg-slate-200 dark:bg-white/10">
               <motion.div
@@ -141,7 +102,7 @@ export default function OnboardingLayout({ currentStep, children }) {
                     {/* Step Card */}
                     <div className="pb-6 w-full -mt-2">
                       <div
-                        className={`flex items-center gap-4 rounded-xl p-3 transition-colors duration-300 ${
+                        className={`flex items-center gap-4 rounded-xl p-4 transition-colors duration-300 ${
                           isActive ? "bg-violet-500/10 border border-violet-500/20" : "bg-transparent"
                         }`}
                       >
@@ -157,10 +118,10 @@ export default function OnboardingLayout({ currentStep, children }) {
                           <step.icon className="h-5 w-5" />
                         </div>
                         <div>
-                          <h4 className={`text-sm font-bold ${isActive || isCompleted ? "text-slate-900 dark:text-white" : "text-slate-500 dark:text-gray-400"}`}>
+                          <h4 className={`text-base font-bold ${isActive || isCompleted ? "text-slate-900 dark:text-white" : "text-slate-500 dark:text-gray-400"}`}>
                             {step.title}
                           </h4>
-                          <p className={`text-xs ${isActive ? "text-slate-600 dark:text-gray-300" : "text-gray-600"}`}>
+                          <p className={`text-sm ${isActive ? "text-slate-600 dark:text-gray-300" : "text-gray-600"}`}>
                             {step.desc}
                           </p>
                         </div>
@@ -169,19 +130,6 @@ export default function OnboardingLayout({ currentStep, children }) {
                   </div>
                 );
               })}
-            </div>
-          </div>
-
-          {/* Dynamic Info Card */}
-          <div className="mt-auto rounded-[24px] border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-5 backdrop-blur-md flex gap-3 items-start">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/10 shrink-0">
-              <activeInfo.icon className="h-4 w-4 text-violet-400" />
-            </div>
-            <div>
-              <h5 className="text-sm font-bold text-violet-300 mb-1">{activeInfo.title}</h5>
-              <p className="text-xs text-slate-500 dark:text-gray-400 leading-relaxed">
-                {activeInfo.desc}
-              </p>
             </div>
           </div>
         </div>

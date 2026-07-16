@@ -174,70 +174,8 @@ export default function FeaturesSection() {
           ))}
 
         </div>
-                {/* Bottom CTA */}
 
-        <motion.div
-          initial={{
-            opacity: 0,
-            y: 25,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            delay: 0.2,
-          }}
-          viewport={{
-            once: true,
-          }}
-          className="mt-14 overflow-hidden rounded-3xl border border-slate-200 dark:border-white/10 bg-gradient-to-r from-violet-100 via-[#1a1a2e] to-violet-100 dark:from-violet-600/10 dark:via-[#15182b] dark:to-purple-600/10 p-8 backdrop-blur-xl lg:p-10"
-        >
-          <div className="flex flex-col items-center justify-between gap-8 lg:flex-row">
-
-            <div className="max-w-2xl">
-
-              <h3 className="text-3xl font-bold leading-tight text-slate-900 dark:text-white">
-
-                Everything You Need
-                <br />
-
-                <span className="text-violet-400">
-
-                  To Become Placement Ready
-
-                </span>
-
-              </h3>
-
-              <p className="mt-4 leading-8 text-slate-500 dark:text-gray-400">
-
-                Resume optimization, AI interview preparation,
-                coding practice, personalized roadmaps and
-                continuous progress tracking — all in one platform.
-
-              </p>
-
-            </div>
-
-            <motion.a
-              whileHover={{
-                scale: 1.05,
-              }}
-              whileTap={{
-                scale: 0.97,
-              }}
-              href="/signup"
-              className="rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 px-8 py-4 font-semibold shadow-[0_0_30px_rgba(139,92,246,.35)] transition"
-            >
-              Start Free
-            </motion.a>
-
-          </div>
-        </motion.div>
-
-      </div>
-
+        </div>
     </section>
   );
 }

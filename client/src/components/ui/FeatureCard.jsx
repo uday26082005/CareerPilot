@@ -8,7 +8,8 @@ export default function FeatureCard({
   index = 0,
 }) {
   return (
-    <motion.div
+    <motion.a
+      href="/signup"
       initial={{
         opacity: 0,
         y: 40,
@@ -58,24 +59,9 @@ export default function FeatureCard({
         {description}
       </p>
 
-      {/* Footer */}
-
-      <motion.div
-        whileHover={{
-          x: 5,
-        }}
-        className="mt-8 flex items-center gap-2 text-sm font-semibold text-violet-400"
-      >
-        Learn More
-
-        <ArrowUpRight
-          size={18}
-        />
-      </motion.div>
-
       {/* Border */}
 
       <div className="absolute inset-0 rounded-3xl border border-transparent transition-all duration-300 group-hover:border-violet-500/20" />
-    </motion.div>
+    </motion.a>
   );
 }

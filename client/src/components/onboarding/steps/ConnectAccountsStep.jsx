@@ -1,17 +1,33 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Check, Lock } from "lucide-react";
+import toast from "react-hot-toast";
 import GithubIcon from "../../auth/GithubIcon";
 import LinkedinIcon from "../../auth/LinkedinIcon";
 
 export default function ConnectAccountsStep({ onNext, onPrev }) {
-  const checkItem = (text) => (
-    <div className="flex items-center gap-2">
-      <div className="flex h-4 w-4 items-center justify-center rounded-full bg-violet-500/20">
-        <Check className="h-3 w-3 text-violet-400" />
-      </div>
-      <span className="text-sm text-slate-600 dark:text-gray-300">{text}</span>
-    </div>
-  );
+  const [githubConnected, setGithubConnected] = useState(false);
+  const [linkedinConnected, setLinkedinConnected] = useState(false);
+
+  const handleGithubConnect = () => {
+    if (githubConnected) return;
+    const loadingToast = toast.loading("Connecting to GitHub...");
+    setTimeout(() => {
+      toast.dismiss(loadingToast);
+      setGithubConnected(true);
+      toast.success("GitHub account connected successfully!");
+    }, 1200);
+  };
+
+  const handleLinkedinConnect = () => {
+    if (linkedinConnected) return;
+    const loadingToast = toast.loading("Connecting to LinkedIn...");
+    setTimeout(() => {
+      toast.dismiss(loadingToast);
+      setLinkedinConnected(true);
+      toast.success("LinkedIn account connected successfully!");
+    }, 1200);
+  };
 
   return (
     <motion.div
@@ -37,20 +53,23 @@ export default function ConnectAccountsStep({ onNext, onPrev }) {
               </div>
               <h3 className="text-xl font-bold text-slate-900 dark:text-white">Connect GitHub</h3>
             </div>
-            <button className="flex items-center rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-slate-900 dark:text-white transition-colors hover:bg-violet-500 shadow-lg shadow-violet-500/20">
-              <GithubIcon className="h-4 w-4 mr-2" /> Connect GitHub
+            <button 
+              onClick={handleGithubConnect}
+              disabled={githubConnected}
+              className={`flex items-center rounded-lg px-4 py-2 text-sm font-semibold transition-colors shadow-lg ${
+                githubConnected 
+                  ? "bg-green-500/20 text-green-500 border border-green-500/30" 
+                  : "bg-violet-600 text-slate-900 dark:text-white hover:bg-violet-500 shadow-violet-500/20"
+              }`}
+            >
+              {githubConnected ? <Check className="h-4 w-4 mr-2 text-green-500" /> : <GithubIcon className="h-4 w-4 mr-2" />} 
+              {githubConnected ? "Connected" : "Connect GitHub"}
             </button>
           </div>
           
-          <p className="mb-4 text-sm text-slate-500 dark:text-gray-400">
+          <p className="text-sm text-slate-500 dark:text-gray-400">
             Analyze your repositories, contributions, and coding activity to showcase your technical skills.
           </p>
-          
-          <div className="flex flex-col gap-2">
-            {checkItem("Project insights")}
-            {checkItem("Skill improvement tips")}
-            {checkItem("Better job matches")}
-          </div>
         </div>
 
         {/* LinkedIn Card */}
@@ -62,33 +81,23 @@ export default function ConnectAccountsStep({ onNext, onPrev }) {
               </div>
               <h3 className="text-xl font-bold text-slate-900 dark:text-white">Connect LinkedIn</h3>
             </div>
-            <button className="flex items-center rounded-lg bg-[#0A66C2] px-4 py-2 text-sm font-semibold text-slate-900 dark:text-white transition-colors hover:bg-[#004182] shadow-lg shadow-blue-500/20">
-              <LinkedinIcon className="h-4 w-4 mr-2 text-slate-900 dark:text-white" /> Connect LinkedIn
+            <button 
+              onClick={handleLinkedinConnect}
+              disabled={linkedinConnected}
+              className={`flex items-center rounded-lg px-4 py-2 text-sm font-semibold transition-colors shadow-lg ${
+                linkedinConnected 
+                  ? "bg-green-500/20 text-green-500 border border-green-500/30" 
+                  : "bg-[#0A66C2] text-slate-900 dark:text-white hover:bg-[#004182] shadow-blue-500/20"
+              }`}
+            >
+              {linkedinConnected ? <Check className="h-4 w-4 mr-2 text-green-500" /> : <LinkedinIcon className="h-4 w-4 mr-2 text-slate-900 dark:text-white" />} 
+              {linkedinConnected ? "Connected" : "Connect LinkedIn"}
             </button>
           </div>
           
-          <p className="mb-4 text-sm text-slate-500 dark:text-gray-400">
+          <p className="text-sm text-slate-500 dark:text-gray-400">
             Import your profile, experience, and network to get better career insights and opportunities.
           </p>
-          
-          <div className="flex flex-col gap-2">
-            {checkItem("Profile insights")}
-            {checkItem("Network recommendations")}
-            {checkItem("Job opportunities")}
-          </div>
-        </div>
-
-        {/* Privacy Note */}
-        <div className="mt-6 rounded-2xl border border-violet-500/20 bg-violet-500/5 p-4 flex gap-4 items-start">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-500/20">
-            <Lock className="h-4 w-4 text-violet-400" />
-          </div>
-          <div>
-            <h4 className="mb-1 text-sm font-bold text-violet-300">We respect your privacy</h4>
-            <p className="text-xs text-slate-500 dark:text-gray-400 leading-relaxed">
-              We only access the information required to provide you with the best experience. You can disconnect anytime.
-            </p>
-          </div>
         </div>
       </div>
 
@@ -105,7 +114,7 @@ export default function ConnectAccountsStep({ onNext, onPrev }) {
           whileTap={{ scale: 0.98 }}
           className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-semibold text-slate-900 dark:text-white transition-colors hover:bg-violet-500"
         >
-          Save & Continue <ArrowRight className="h-4 w-4" />
+          Save & Continue <ArrowRight className="h-5 w-5" />
         </motion.button>
       </div>
     </motion.div>

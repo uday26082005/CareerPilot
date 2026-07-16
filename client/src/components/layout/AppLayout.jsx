@@ -55,8 +55,8 @@ export default function AppLayout({ children }) {
         {/* Logo */}
         <div className="flex h-20 items-center px-6">
           <Link to="/" className="group flex items-center gap-3 transition-transform duration-300 hover:scale-105">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-purple-700 shadow-[0_0_20px_rgba(139,92,246,.3)] group-hover:shadow-[0_0_25px_rgba(139,92,246,.5)] transition-shadow duration-300">
-              <Bot className="h-5 w-5 text-slate-900 dark:text-white transition-transform duration-500 group-hover:rotate-12" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_4px_20px_rgba(139,92,246,0.2)] transition-transform duration-500 group-hover:rotate-12">
+              <img src="/logo.jpg" alt="CareerPilot Logo" className="h-8 w-8 rounded-lg mix-blend-lighten" />
             </div>
             <h1 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white transition-colors duration-300 group-hover:text-violet-100">
               CareerPilot<span className="text-violet-400"> AI</span>

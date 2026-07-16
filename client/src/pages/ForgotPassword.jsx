@@ -18,41 +18,14 @@ export default function ForgotPassword() {
     setTimeout(() => setLoading(false), 1000);
   };
 
-  const aboveCard = (
-    <motion.div
-      initial={{ opacity: 0, y: 15 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.1, duration: 0.6 }}
-      className="text-center"
-    >
-      <h1 className="mb-1 text-2xl font-black md:text-3xl">
-        Forgot <span className="text-violet-400">Password?</span>
-      </h1>
-      <p className="mx-auto max-w-sm text-sm text-slate-500 dark:text-gray-400">
-        No worries! Enter your registered email address and we'll send you a link to reset your password.
-      </p>
-      
-      {/* Illustration */}
-      <div className="mt-4 mb-2 flex justify-center">
-        <div className="relative">
-          <div className="absolute inset-0 rounded-full bg-violet-600/30 blur-[40px]" />
-          <div className="relative flex h-20 w-28 flex-col items-center justify-center rounded-2xl bg-gradient-to-b from-violet-400 to-violet-600 shadow-xl shadow-violet-500/20">
-            <Mail className="absolute h-10 w-10 text-slate-900 dark:text-white/90" strokeWidth={1} />
-            <div className="relative z-10 mt-4 rounded-lg bg-white p-1.5 shadow-lg">
-              <Lock className="h-4 w-4 text-violet-600" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
+  const aboveCard = null;
 
   const belowCard = (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3, duration: 0.6 }}
-      className="space-y-4 text-center"
+      className="text-center mt-2"
     >
       <p className="text-sm text-slate-500 dark:text-gray-400">
         Remember your password?{" "}
@@ -60,20 +33,11 @@ export default function ForgotPassword() {
           Back to Login
         </Link>
       </p>
-      
-      <div>
-        <div className="mb-1 flex items-center justify-center gap-2 text-sm font-medium text-slate-900 dark:text-white">
-          <ShieldCheck className="h-4 w-4" /> Your data is safe with us.
-        </div>
-        <p className="text-xs text-slate-400 dark:text-gray-500">
-          We never share your information with anyone.
-        </p>
-      </div>
     </motion.div>
   );
 
   return (
-    <AuthLayout backLink={{ text: "Back to Login", href: "/login" }} aboveCard={aboveCard} belowCard={belowCard}>
+    <AuthLayout aboveCard={aboveCard} belowCard={belowCard}>
       <div className="mb-4 flex items-center gap-4">
         <div className="rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 p-3">
           <Mail className="h-6 w-6 text-violet-400" />
@@ -106,22 +70,6 @@ export default function ForgotPassword() {
           {loading ? "Sending..." : "Send Reset Link"}
         </motion.button>
       </form>
-
-      <div className="my-3 flex items-center gap-4">
-        <div className="h-px flex-1 bg-slate-200 dark:bg-white/10" />
-        <span className="text-xs text-slate-400 dark:text-gray-500 uppercase">OR</span>
-        <div className="h-px flex-1 bg-slate-200 dark:bg-white/10" />
-      </div>
-
-      <motion.button
-        type="button"
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 py-3 font-semibold text-slate-900 dark:text-white transition-colors hover:bg-slate-200 dark:hover:bg-white/10"
-      >
-        <GoogleIcon />
-        Use another account
-      </motion.button>
     </AuthLayout>
   );
 }

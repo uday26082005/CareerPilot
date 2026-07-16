@@ -11,7 +11,7 @@ import {
     ArrowRight,
 } from "lucide-react";
 
-import heroImage from "../../assets/hero-crossroads.jpg";
+import heroImage from "../../assets/hero-crossroads.jpeg";
 
 const features = [
     { icon: ScanLine, text: "Resume Analysis" },

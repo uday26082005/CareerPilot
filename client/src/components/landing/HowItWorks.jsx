@@ -172,8 +172,7 @@ through an intelligent AI-powered workflow.
 <div className="relative mx-auto mt-16 max-w-5xl">
 
 {/* Line */}
-
-<div className="absolute left-8 top-0 hidden h-full w-[4px] rounded-full bg-gradient-to-b from-violet-500 to-purple-700 md:block"/>
+<div className="absolute left-8 top-0 hidden h-[calc(100%-80px)] w-[4px] rounded-full bg-gradient-to-b from-violet-500 to-purple-700 md:block"/>
 
 <div className="space-y-8">
 
@@ -260,73 +259,7 @@ className="relative flex flex-col gap-5 md:flex-row">
 
     </div>
 
-    {/* Bottom CTA */}
-
-    <motion.div
-
-      initial={{
-        opacity: 0,
-        y: 25,
-      }}
-
-      whileInView={{
-        opacity: 1,
-        y: 0,
-      }}
-
-      viewport={{
-        once: true,
-      }}
-
-      transition={{
-        delay: 0.2,
-      }}
-
-      className="mx-auto mt-16 max-w-5xl rounded-3xl border border-slate-200 dark:border-white/10 bg-gradient-to-r from-violet-600/10 via-[#15182b] to-purple-600/10 p-8 backdrop-blur-xl"
-
-    >
-
-      <div className="flex flex-col items-center justify-between gap-8 lg:flex-row">
-
-        <div>
-
-          <h3 className="text-3xl font-bold">
-
-            Start Your Career Journey Today
-
-          </h3>
-
-          <p className="mt-3 max-w-2xl leading-7 text-slate-500 dark:text-gray-400">
-
-            CareerPilot AI helps you move from resume building to placement success through one structured, AI-powered workflow.
-
-          </p>
-
-        </div>
-
-        <motion.a
-
-          href="/signup"
-
-          whileHover={{
-            scale: 1.05,
-          }}
-
-          whileTap={{
-            scale: 0.97,
-          }}
-
-          className="rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 px-8 py-4 font-semibold text-slate-900 dark:text-white shadow-[0_0_30px_rgba(139,92,246,.35)]"
-
-        >
-
-          Get Started
-
-        </motion.a>
-
-      </div>
-
-    </motion.div>
+    {/* Bottom CTA Removed */}
 
   </div>
 

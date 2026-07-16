@@ -61,68 +61,28 @@ export default function Landing() {
 
       {/* Footer */}
 
-      <footer
-        id="contact"
-        className="border-t border-slate-200 dark:border-white/10 py-10"
-      >
+      <footer className="border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#070914] py-8">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-slate-500 dark:text-gray-400">
+            {/* Left: Brand */}
+            <div className="flex-1 flex justify-start">
+              <h2 className="text-xl font-black text-slate-900 dark:text-white">
+                CareerPilot<span className="text-violet-400"> AI</span>
+              </h2>
+            </div>
+            
+            {/* Middle: Copyright */}
+            <div className="flex-1 text-center">
+              <p>© 2026 CareerPilot AI. All Rights Reserved.</p>
+            </div>
 
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-6 md:flex-row">
-
-          <div>
-
-            <h2 className="text-3xl font-black">
-
-              CareerPilot
-
-              <span className="text-violet-400">
-
-                AI
-
-              </span>
-
-            </h2>
-
-            <p className="mt-2 text-slate-500 dark:text-gray-400">
-
-              Your AI-powered placement companion.
-
-            </p>
-
+            {/* Right: Contact */}
+            <div className="flex-1 flex flex-col items-center md:items-end text-center md:text-right">
+              <a href="mailto:velhella.raga@gmail.com" className="transition hover:text-violet-400">velhella.raga@gmail.com</a>
+              <span>+91-8008855138, +91-7989428396</span>
+            </div>
           </div>
-
-          <div className="flex gap-8 text-slate-500 dark:text-gray-400">
-
-            <a
-              href="#features"
-              className="transition hover:text-violet-400"
-            >
-              Features
-            </a>
-
-            <a
-              href="#how-it-works"
-              className="transition hover:text-violet-400"
-            >
-              How It Works
-            </a>
-
-            <a
-              href="/login"
-              className="transition hover:text-violet-400"
-            >
-              Login
-            </a>
-
-          </div>
-
         </div>
-
-        <p className="mt-8 text-center text-sm text-slate-400 dark:text-gray-500">
-
-          © 2026 CareerPilot AI. All Rights Reserved.
-
-        </p>
-
       </footer>
 
     </main>

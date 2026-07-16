@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bot, Menu, X } from "lucide-react";
+import { Bot, Menu, X, Sun, Moon } from "lucide-react";
+import { useTheme } from "../../contexts/ThemeContext";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const { isDark, toggleTheme } = useTheme();
 
   const links = [
     {
@@ -28,9 +30,9 @@ export default function Navbar() {
         <motion.nav
           initial={{ y: -60, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.08)", boxShadow: "0 10px 40px rgba(139, 92, 246, 0.15)" }}
+          whileHover={{ boxShadow: "0 10px 40px rgba(139, 92, 246, 0.15)" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 backdrop-blur-2xl shadow-[0_4px_30px_rgba(0,0,0,0.1)] transition-colors duration-300"
+          className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-white/5 backdrop-blur-2xl shadow-[0_4px_30px_rgba(0,0,0,0.1)] transition-all duration-300 hover:bg-white dark:hover:bg-white/10"
         >
 
           <div className="flex h-16 items-center justify-between px-6">
@@ -45,9 +47,8 @@ export default function Navbar() {
                   scale: 1.08,
                 }}
                 transition={{ duration: 0.2 }}
-                className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-purple-700 shadow-[0_0_25px_rgba(139,92,246,.45)]"
-              >
-                <Bot className="h-6 w-6 text-slate-900 dark:text-white" />
+                className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_4px_20px_rgba(139,92,246,0.2)]">
+                <img src="/logo.jpg" alt="CareerPilot Logo" className="h-9 w-9 rounded-lg mix-blend-lighten" />
               </motion.div>
 
               <div>
@@ -88,24 +89,36 @@ export default function Navbar() {
             {/* Right Side */}
 
             <div className="hidden items-center gap-4 md:flex">
-
+              <button
+                onClick={toggleTheme}
+                className="flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/5 text-slate-600 dark:text-gray-300 transition-all hover:bg-white dark:hover:bg-white/10 hover:shadow-lg"
+              >
+                {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              </button>
               <a
                 href="/login"
                 className="rounded-xl border border-violet-500/40 px-6 py-3 text-[16px] font-semibold text-slate-900 dark:text-white transition-all duration-300 hover:border-violet-400 hover:bg-violet-600 hover:shadow-[0_0_25px_rgba(139,92,246,.45)]"
               >
                 Login
               </a>
-
             </div>
 
             {/* Mobile Button */}
 
-            <button
-              onClick={() => setOpen(!open)}
-              className="text-slate-900 dark:text-white md:hidden"
-            >
-              {open ? <X size={28} /> : <Menu size={28} />}
-            </button>
+            <div className="flex items-center gap-3 md:hidden">
+              <button
+                onClick={toggleTheme}
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/5 text-slate-600 dark:text-gray-300 transition-colors"
+              >
+                {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              </button>
+              <button
+                onClick={() => setOpen(!open)}
+                className="text-slate-900 dark:text-white"
+              >
+                {open ? <X size={28} /> : <Menu size={28} />}
+              </button>
+            </div>
 
           </div>
 
