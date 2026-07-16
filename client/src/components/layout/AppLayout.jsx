@@ -3,18 +3,19 @@ import { Link, useLocation } from "react-router-dom";
 import { 
   Bot, Home, FileText, Mic, BarChart2, Map, PieChart, 
   Trophy, Sparkles, LogOut, Bell, Settings, Moon, Sun, 
-  Maximize, Plus 
+  Maximize, Plus, ArrowRight
 } from "lucide-react";
 
 const SIDEBAR_LINKS = [
   { name: "Dashboard", path: "/dashboard", icon: Home },
   { name: "AI Resume Analysis", path: "/resume-analysis", icon: FileText },
   { name: "Mock Interviews", path: "/mock-interviews", icon: Mic },
-  { name: "Skill Gap Analysis", path: "/skill-gap", icon: BarChart2 },
+  { name: "Skill Gap Analysis", path: "/skill-gap-analysis", icon: BarChart2 },
   { name: "Roadmaps", path: "/roadmaps", icon: Map },
   { name: "Career Insights", path: "/career-insights", icon: PieChart },
   { name: "Leaderboard", path: "/leaderboard", icon: Trophy },
   { name: "AskAI", path: "/ask-ai", icon: Sparkles },
+  { name: "Settings", path: "/settings", icon: Settings },
 ];
 
 export default function AppLayout({ children }) {
@@ -59,6 +60,20 @@ export default function AppLayout({ children }) {
           })}
         </nav>
 
+        {/* Promo Box */}
+        <div className="mx-4 mb-4 mt-2 rounded-xl border border-violet-500/20 bg-violet-500/5 p-4">
+          <div className="mb-2 flex items-center gap-2">
+            <Trophy className="h-4 w-4 text-violet-400" />
+            <h3 className="text-[11px] font-bold text-violet-300">Top Performer</h3>
+          </div>
+          <p className="mb-3 text-[10px] leading-relaxed text-gray-400">
+            Keep learning and climb the leaderboard!
+          </p>
+          <Link to="/leaderboard" className="flex items-center gap-1.5 text-[10px] font-medium text-violet-400 hover:text-violet-300">
+            View My Progress <ArrowRight className="h-3 w-3" />
+          </Link>
+        </div>
+
         {/* Logout */}
         <div className="p-4 border-t border-white/5">
           <Link
@@ -95,9 +110,9 @@ export default function AppLayout({ children }) {
                 <Bell className="h-5 w-5" />
                 <span className="absolute right-2 top-2 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-violet-500 text-[9px] font-bold text-white">3</span>
               </button>
-              <button className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-gray-400 transition-colors hover:bg-white/10 hover:text-white">
+              <Link to="/settings" className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-gray-400 transition-colors hover:bg-white/10 hover:text-white">
                 <Settings className="h-5 w-5" />
-              </button>
+              </Link>
               <div className="flex items-center rounded-full bg-white/5 p-1">
                 <button 
                   onClick={() => setIsDark(true)}

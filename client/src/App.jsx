@@ -7,6 +7,13 @@ import ResetPassword from "./pages/ResetPassword";
 import Onboarding from "./pages/Onboarding";
 import Dashboard from "./pages/Dashboard";
 import ResumeAnalysis from "./pages/ResumeAnalysis";
+import MockInterviews from "./pages/MockInterviews";
+import SkillGapAnalysis from "./pages/SkillGapAnalysis";
+import AskAI from "./pages/AskAI";
+import Leaderboard from "./pages/Leaderboard";
+import CareerInsights from "./pages/CareerInsights";
+import Roadmap from "./pages/Roadmap";
+import Settings from "./pages/Settings";
 import AppLayout from "./components/layout/AppLayout";
 
 function App() {
@@ -22,6 +29,13 @@ function App() {
       {/* Protected Routes (AppLayout handles Sidebar/Header) */}
       <Route path="/dashboard" element={<AppLayout><Dashboard /></AppLayout>} />
       <Route path="/resume-analysis" element={<AppLayout><ResumeAnalysis /></AppLayout>} />
+      <Route path="/mock-interviews" element={<AppLayout><MockInterviews /></AppLayout>} />
+      <Route path="/skill-gap-analysis" element={<AppLayout><SkillGapAnalysis /></AppLayout>} />
+      <Route path="/ask-ai" element={<AppLayout><AskAI /></AppLayout>} />
+      <Route path="/leaderboard" element={<AppLayout><Leaderboard /></AppLayout>} />
+      <Route path="/career-insights" element={<AppLayout><CareerInsights /></AppLayout>} />
+      <Route path="/roadmaps" element={<AppLayout><Roadmap /></AppLayout>} />
+      <Route path="/settings" element={<AppLayout><Settings /></AppLayout>} />
     </Routes>
   );
 }
