@@ -24,12 +24,6 @@ export default function RecommendedKeywords() {
           </span>
         ))}
       </div>
-
-      <div className="mt-4 pt-4 border-t border-slate-200 dark:border-white/5">
-        <Link to="/keywords" className="flex items-center gap-2 text-sm font-medium text-violet-400 transition-colors hover:text-violet-300">
-          View All Keywords <ArrowRight className="h-4 w-4" />
-        </Link>
-      </div>
     </div>
   );
 }

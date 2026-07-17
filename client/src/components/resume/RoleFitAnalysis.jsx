@@ -22,10 +22,6 @@ export default function RoleFitAnalysis() {
               You're a good fit for this role. Focus on highlighted areas to improve your match further.
             </p>
           </div>
-          
-          <button className="mt-6 flex w-fit items-center gap-2 rounded-lg border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm font-medium text-violet-400 transition-colors hover:bg-violet-500/20">
-            View Role Fit Details <ArrowRight className="h-4 w-4" />
-          </button>
         </div>
 
         {/* Middle: Gauge */}
@@ -72,11 +68,6 @@ export default function RoleFitAnalysis() {
         </div>
       </div>
 
-      {/* Footer Banner */}
-      <div className="flex items-center gap-2 px-2 py-1">
-        <Lock className="h-3 w-3 text-slate-400 dark:text-gray-500" />
-        <span className="text-[11px] text-slate-400 dark:text-gray-500">Your data is secure and confidential. We never share your resume with anyone.</span>
-      </div>
     </div>
   );
 }

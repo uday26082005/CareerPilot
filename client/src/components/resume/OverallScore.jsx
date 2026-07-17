@@ -49,7 +49,7 @@ export default function OverallScore() {
 
         {/* Text Details */}
         <div>
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Excellent! 🎉</h2>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Excellent!</h2>
           <p className="text-xs text-slate-500 dark:text-gray-400 leading-relaxed">
             Your resume is strong and well-structured. Address a few improvements to make it even better.
           </p>

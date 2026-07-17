@@ -23,20 +23,6 @@ export default function TopStrengths() {
         ))}
       </div>
 
-      {/* Decorative Shield Graphic */}
-      <div className="absolute right-[-20px] bottom-[-20px] z-0 opacity-20 pointer-events-none">
-        <svg width="150" height="150" viewBox="0 0 24 24" fill="none" stroke="url(#shieldGradient)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-          <defs>
-            <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#8b5cf6" />
-              <stop offset="100%" stopColor="#3b82f6" />
-            </linearGradient>
-          </defs>
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="url(#shieldGradient)" />
-          <path d="M12 8v4" stroke="white" strokeWidth="2" />
-          <path d="M12 16h.01" stroke="white" strokeWidth="2" />
-        </svg>
-      </div>
     </div>
   );
 }

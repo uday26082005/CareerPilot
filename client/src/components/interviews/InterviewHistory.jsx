@@ -53,6 +53,19 @@ const HISTORY = [
     stars: 3.5,
     icon: Building,
     iconBg: "bg-violet-500/10 text-violet-400"
+  },
+  {
+    role: "Backend Developer",
+    desc: "System Design Interview",
+    type: "Technical",
+    typeColor: "text-blue-400 border-blue-500/30 bg-blue-500/10",
+    date: "May 10, 2025",
+    time: "09:00 AM",
+    score: "75%",
+    scoreColor: "text-emerald-400",
+    stars: 4,
+    icon: Code,
+    iconBg: "bg-blue-500/10 text-blue-400"
   }
 ];
 
@@ -71,68 +84,48 @@ export default function InterviewHistory() {
   };
 
   return (
-    <div className="flex flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
-      <h3 className="mb-6 text-sm font-semibold text-slate-500 dark:text-gray-400">Your Interview History</h3>
+    <div className="flex flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-5 backdrop-blur-md">
+      <h3 className="mb-4 text-base font-semibold text-slate-500 dark:text-gray-400">Your Interview History</h3>
       
       {/* Table Header */}
-      <div className="mb-4 grid grid-cols-12 gap-4 border-b border-slate-200 dark:border-white/5 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-gray-500">
-        <div className="col-span-4">Role</div>
-        <div className="col-span-2">Type</div>
-        <div className="col-span-2">Date</div>
-        <div className="col-span-1">Score</div>
-        <div className="col-span-2">Performance</div>
-        <div className="col-span-1"></div>
+      <div className="mb-3 grid grid-cols-12 gap-4 border-b border-slate-200 dark:border-white/5 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-gray-500">
+        <div className="col-span-7">Role</div>
+        <div className="col-span-3">Date</div>
+        <div className="col-span-2">Score</div>
       </div>
 
       {/* Table Rows */}
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
         {HISTORY.map((row, idx) => (
-          <div key={idx} className="group grid grid-cols-12 items-center gap-4 cursor-pointer transition-colors hover:bg-white dark:bg-white/[0.02] rounded-xl -mx-2 px-2 py-2">
+          <div key={idx} className="group grid grid-cols-12 items-center gap-4 cursor-pointer transition-colors hover:bg-white dark:bg-white/[0.02] rounded-xl -mx-2 px-2 py-1.5">
             
             {/* Role & Icon */}
-            <div className="col-span-4 flex items-center gap-3">
+            <div className="col-span-7 flex items-center gap-3">
               <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${row.iconBg}`}>
                 <row.icon className="h-5 w-5" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-violet-300 transition-colors truncate">{row.role}</h4>
-                <p className="text-[11px] text-slate-500 dark:text-gray-400 truncate">{row.desc}</p>
+                <h4 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-violet-300 transition-colors truncate">{row.role}</h4>
+                <p className="text-sm text-slate-500 dark:text-gray-400 truncate">{row.desc}</p>
               </div>
             </div>
 
-            {/* Type */}
-            <div className="col-span-2">
-              <span className={`rounded-md border px-2 py-1 text-[10px] font-semibold ${row.typeColor}`}>
-                {row.type}
-              </span>
-            </div>
-
             {/* Date */}
-            <div className="col-span-2">
-              <p className="text-xs text-slate-900 dark:text-white">{row.date}</p>
-              <p className="text-[10px] text-slate-400 dark:text-gray-500">{row.time}</p>
+            <div className="col-span-3">
+              <p className="text-sm text-slate-900 dark:text-white">{row.date}</p>
+              <p className="text-xs text-slate-400 dark:text-gray-500">{row.time}</p>
             </div>
 
             {/* Score */}
-            <div className="col-span-1">
-              <span className={`text-sm font-bold ${row.scoreColor}`}>{row.score}</span>
-            </div>
-
-            {/* Performance */}
             <div className="col-span-2">
-              {renderStars(row.stars)}
-            </div>
-
-            {/* Action */}
-            <div className="col-span-1 flex justify-end">
-              <ChevronRight className="h-4 w-4 text-gray-600 transition-transform group-hover:translate-x-1 group-hover:text-slate-900 dark:text-white" />
+              <span className={`text-base font-bold ${row.scoreColor}`}>{row.score}</span>
             </div>
           </div>
         ))}
       </div>
 
       {/* Footer */}
-      <div className="mt-6 pt-4 border-t border-slate-200 dark:border-white/5">
+      <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/5">
         <Link to="/history" className="flex items-center gap-2 text-sm font-medium text-violet-400 transition-colors hover:text-violet-300">
           View All Interviews <ArrowRight className="h-4 w-4" />
         </Link>

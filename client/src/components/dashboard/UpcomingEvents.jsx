@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Calendar, CheckCircle, Briefcase, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import CalendarModal from "./CalendarModal";
 
 export default function UpcomingEvents({ events }) {
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
   const getIcon = (type) => {
     switch (type) {
       case "interview": return <Calendar className="h-5 w-5 text-violet-400" />;
@@ -43,10 +46,19 @@ export default function UpcomingEvents({ events }) {
       </div>
 
       <div className="mt-4 pt-4 border-t border-slate-200 dark:border-white/5">
-        <Link to="/calendar" className="flex items-center gap-2 text-sm font-medium text-violet-400 transition-colors hover:text-violet-300">
+        <button 
+          onClick={() => setIsCalendarOpen(true)}
+          className="flex items-center gap-2 text-sm font-medium text-violet-400 transition-colors hover:text-violet-300"
+        >
           View Calendar <ArrowRight className="h-4 w-4" />
-        </Link>
+        </button>
       </div>
+
+      <CalendarModal 
+        isOpen={isCalendarOpen} 
+        onClose={() => setIsCalendarOpen(false)} 
+        events={events} 
+      />
     </div>
   );
 }

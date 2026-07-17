@@ -1,5 +1,4 @@
 import { RefreshCcw, Upload } from "lucide-react";
-import FileStatusCard from "../components/resume/FileStatusCard";
 import OverallScore from "../components/resume/OverallScore";
 import TopStrengths from "../components/resume/TopStrengths";
 import SectionScores from "../components/resume/SectionScores";
@@ -30,17 +29,16 @@ export default function ResumeAnalysis() {
         </div>
       </div>
 
-      {/* Top Row: File, Score, Strengths */}
+      {/* Top Row: Score, ATS, Strengths */}
       <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-1"><FileStatusCard /></div>
         <div className="lg:col-span-1"><OverallScore /></div>
+        <div className="lg:col-span-1"><ATSCompatibility /></div>
         <div className="lg:col-span-1"><TopStrengths /></div>
       </div>
 
-      {/* Middle Row: Sections, ATS, Suggestions */}
-      <div className="grid gap-6 lg:grid-cols-3">
+      {/* Middle Row: Sections, Suggestions */}
+      <div className="grid gap-6 lg:grid-cols-2">
         <div className="lg:col-span-1"><SectionScores /></div>
-        <div className="lg:col-span-1"><ATSCompatibility /></div>
         <div className="lg:col-span-1"><KeySuggestions /></div>
       </div>
 

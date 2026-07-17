@@ -31,7 +31,7 @@ const SUGGESTIONS = [
 export default function KeySuggestions() {
   return (
     <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
-      <h3 className="mb-4 text-sm font-semibold text-slate-500 dark:text-gray-400 flex items-center gap-2">
+      <h3 className="mb-4 text-base font-semibold text-slate-500 dark:text-gray-400 flex items-center gap-2">
         <Lightbulb className="h-4 w-4 text-violet-400" /> Key Suggestions
       </h3>
       
@@ -45,19 +45,11 @@ export default function KeySuggestions() {
             
             {/* Text */}
             <div className="flex-1">
-              <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-violet-300 transition-colors">{item.title}</h4>
-              <p className="mt-0.5 text-[11px] text-slate-500 dark:text-gray-400">{item.desc}</p>
+              <h4 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-violet-300 transition-colors">{item.title}</h4>
+              <p className="mt-0.5 text-sm text-slate-500 dark:text-gray-400">{item.desc}</p>
             </div>
-            
-            <ChevronRight className="h-4 w-4 text-gray-600 transition-transform group-hover:translate-x-1 group-hover:text-violet-400 shrink-0" />
           </div>
         ))}
-      </div>
-
-      <div className="mt-4 pt-4 border-t border-slate-200 dark:border-white/5">
-        <Link to="/suggestions" className="flex items-center gap-2 text-sm font-medium text-violet-400 transition-colors hover:text-violet-300">
-          View All Suggestions <ArrowRight className="h-4 w-4" />
-        </Link>
       </div>
     </div>
   );

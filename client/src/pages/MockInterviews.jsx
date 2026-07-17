@@ -16,11 +16,11 @@ export default function MockInterviews() {
       </div>
 
       {/* Top Row: Hero and Progress */}
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2">
+      <div className="grid gap-6 lg:grid-cols-5">
+        <div className="lg:col-span-3">
           <HeroBanner />
         </div>
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-2">
           <InterviewProgress />
         </div>
       </div>
@@ -31,11 +31,11 @@ export default function MockInterviews() {
       </div>
 
       {/* Bottom Row: History and Tips */}
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2">
+      <div className="grid gap-6 lg:grid-cols-5">
+        <div className="lg:col-span-3">
           <InterviewHistory />
         </div>
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-2">
           <InterviewTips />
         </div>
       </div>

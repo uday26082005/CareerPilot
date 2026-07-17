@@ -40,25 +40,15 @@ const TYPES = [
     badge: "Company Focused",
     badgeColor: "text-orange-400 border-orange-500/30",
     active: false
-  },
-  {
-    title: "Custom Interview",
-    desc: "Create your own interview with specific topics",
-    icon: Star,
-    iconColor: "text-violet-400",
-    iconBg: "bg-violet-500/10",
-    badge: "Fully Customized",
-    badgeColor: "text-violet-400 border-violet-500/30",
-    active: false
   }
 ];
 
 export default function InterviewTypes() {
   return (
     <div className="flex flex-col">
-      <h3 className="mb-4 text-sm font-semibold text-slate-500 dark:text-gray-400">Choose Interview Type</h3>
+      <h3 className="mb-4 text-base font-semibold text-slate-500 dark:text-gray-400">Choose Interview Type</h3>
       
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {TYPES.map((type, idx) => (
           <div 
             key={idx} 
@@ -72,8 +62,8 @@ export default function InterviewTypes() {
               <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl ${type.iconBg} ${type.iconColor}`}>
                 <type.icon className="h-6 w-6" />
               </div>
-              <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-1">{type.title}</h4>
-              <p className="text-[11px] text-slate-500 dark:text-gray-400 leading-relaxed mb-6">{type.desc}</p>
+              <h4 className="text-base font-bold text-slate-900 dark:text-white mb-1">{type.title}</h4>
+              <p className="text-sm text-slate-500 dark:text-gray-400 leading-relaxed mb-6">{type.desc}</p>
             </div>
             
             <div className={`w-fit rounded-full border px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider ${type.badgeColor}`}>

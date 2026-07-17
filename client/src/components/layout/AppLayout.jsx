@@ -4,7 +4,7 @@ import { useTheme } from "../../contexts/ThemeContext";
 import { 
   Bot, Home, FileText, Mic, BarChart2, Map, PieChart, 
   Trophy, Sparkles, LogOut, Bell, Settings, Moon, Sun, 
-  Maximize, Minimize, Plus, ArrowRight
+  Maximize, Minimize, Plus, ArrowRight, Menu
 } from "lucide-react";
 
 const SIDEBAR_LINKS = [
@@ -23,6 +23,7 @@ export default function AppLayout({ children }) {
   const location = useLocation();
   const { isDark, toggleTheme } = useTheme();
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -51,63 +52,57 @@ export default function AppLayout({ children }) {
       <div className="absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-blue-600/10 blur-[120px] pointer-events-none" />
 
       {/* Sidebar */}
-      <aside className="relative z-10 flex h-full w-64 flex-col border-r border-slate-200 dark:border-white/10 bg-white/80 dark:bg-white/[0.03] backdrop-blur-2xl shadow-xl dark:shadow-[4px_0_24px_rgba(0,0,0,0.2)] transition-all duration-500">
-        {/* Logo */}
-        <div className="flex h-20 items-center px-6">
-          <Link to="/" className="group flex items-center gap-3 transition-transform duration-300 hover:scale-105">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_4px_20px_rgba(139,92,246,0.2)] transition-transform duration-500 group-hover:rotate-12">
-              <img src="/logo.jpg" alt="CareerPilot Logo" className="h-8 w-8 rounded-lg mix-blend-lighten" />
-            </div>
-            <h1 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white transition-colors duration-300 group-hover:text-violet-100">
-              CareerPilot<span className="text-violet-400"> AI</span>
-            </h1>
-          </Link>
-        </div>
-
-        {/* Navigation */}
-        <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-4">
-          {SIDEBAR_LINKS.map((link) => {
-            const isActive = location.pathname === link.path;
-            return (
-              <Link
-                key={link.name}
-                to={link.path}
-                className={`group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 hover:translate-x-1 ${
-                  isActive 
-                    ? "bg-violet-100 text-violet-600 dark:bg-violet-600/20 dark:text-violet-300 shadow-none dark:shadow-[0_0_15px_rgba(139,92,246,0.15)] border border-violet-200 dark:border-transparent" 
-                    : "text-slate-500 dark:text-gray-400 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white"
-                }`}
-              >
-                <link.icon className={`h-5 w-5 transition-transform duration-300 group-hover:scale-110 ${isActive ? "text-violet-500 dark:text-violet-400" : ""}`} />
-                {link.name}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Promo Box */}
-        <div className="mx-4 mb-4 mt-2 rounded-xl border border-violet-200 dark:border-violet-500/20 bg-[#f5f3ff] dark:bg-violet-500/5 p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-violet-100 dark:hover:bg-violet-500/10 hover:shadow-sm dark:hover:shadow-[0_4px_20px_rgba(139,92,246,0.1)]">
-          <div className="mb-2 flex items-center gap-2">
-            <Trophy className="h-4 w-4 text-violet-500 dark:text-violet-400" />
-            <h3 className="text-[11px] font-bold text-violet-600 dark:text-violet-300">Top Performer</h3>
+      <aside className={`relative z-10 flex h-full flex-col border-r border-slate-200 dark:border-white/10 bg-white/80 dark:bg-white/[0.03] backdrop-blur-2xl shadow-xl dark:shadow-[4px_0_24px_rgba(0,0,0,0.2)] transition-all duration-300 ease-in-out overflow-hidden ${isSidebarOpen ? 'w-64' : 'w-20'}`}>
+        <div className="flex h-full w-64 flex-col">
+          {/* Logo */}
+          <div className="flex h-20 items-center px-5">
+            <Link to="/" className="group flex items-center gap-3 transition-transform duration-300 hover:scale-105" title={!isSidebarOpen ? "CareerPilot AI" : ""}>
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_4px_20px_rgba(139,92,246,0.2)] transition-transform duration-500 group-hover:rotate-12">
+                <img src="/logo.jpg" alt="CareerPilot Logo" className="h-8 w-8 rounded-lg mix-blend-lighten" />
+              </div>
+              <h1 className={`text-xl font-extrabold tracking-tight text-slate-900 dark:text-white transition-opacity duration-300 group-hover:text-violet-100 ${isSidebarOpen ? 'opacity-100' : 'opacity-0'}`}>
+                CareerPilot<span className="text-violet-400"> AI</span>
+              </h1>
+            </Link>
           </div>
-          <p className="mb-3 text-[10px] leading-relaxed text-slate-500 dark:text-gray-400">
-            Keep learning and climb the leaderboard!
-          </p>
-          <Link to="/leaderboard" className="flex items-center gap-1.5 text-[10px] font-medium text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300">
-            View My Progress <ArrowRight className="h-3 w-3" />
-          </Link>
-        </div>
 
-        {/* Logout */}
-        <div className="p-4 border-t border-slate-200 dark:border-white/5">
-          <Link
-            to="/login"
-            className="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-500 dark:text-gray-400 transition-all duration-300 hover:translate-x-1 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-500 dark:hover:text-red-400"
-          >
-            <LogOut className="h-5 w-5 text-red-500 dark:text-red-400 transition-transform duration-300 group-hover:scale-110" />
-            Logout
-          </Link>
+          {/* Navigation */}
+          <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-4">
+            {SIDEBAR_LINKS.map((link) => {
+              const isActive = location.pathname === link.path;
+              return (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  className={`group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 hover:translate-x-1 ${
+                    isActive 
+                      ? "bg-violet-100 text-violet-600 dark:bg-violet-600/20 dark:text-violet-300 shadow-none dark:shadow-[0_0_15px_rgba(139,92,246,0.15)] border border-violet-200 dark:border-transparent" 
+                      : "text-slate-500 dark:text-gray-400 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white"
+                  }`}
+                  title={!isSidebarOpen ? link.name : ""}
+                >
+                  <link.icon className={`h-5 w-5 shrink-0 transition-transform duration-300 group-hover:scale-110 ${isActive ? "text-violet-500 dark:text-violet-400" : ""}`} />
+                  <span className={`whitespace-nowrap transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100' : 'opacity-0'}`}>
+                    {link.name}
+                  </span>
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Logout */}
+          <div className="p-4 border-t border-slate-200 dark:border-white/5">
+            <Link
+              to="/login"
+              className={`group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-500 dark:text-gray-400 transition-all duration-300 hover:translate-x-1 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-500 dark:hover:text-red-400`}
+              title={!isSidebarOpen ? "Logout" : ""}
+            >
+              <LogOut className="h-5 w-5 shrink-0 text-red-500 dark:text-red-400 transition-transform duration-300 group-hover:scale-110" />
+              <span className={`whitespace-nowrap transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100' : 'opacity-0'}`}>
+                Logout
+              </span>
+            </Link>
+          </div>
         </div>
       </aside>
 
@@ -117,14 +112,22 @@ export default function AppLayout({ children }) {
         {/* Top Header */}
         <header className="flex h-24 shrink-0 items-center justify-between border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-[#060816]/80 px-8 backdrop-blur-md">
           
-          {/* Greetings */}
-          <div>
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              Good evening, Uday! <span className="text-2xl">👋</span>
-            </h2>
-            <p className="mt-1 text-sm text-slate-500 dark:text-gray-400">
-              Let's make today a step closer to your dream career.
-            </p>
+          <div className="flex items-center gap-6">
+            {/* Sidebar Toggle */}
+            <button 
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)} 
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:text-white"
+              title={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+            
+            {/* Greetings */}
+            <div>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                Good evening, Uday!
+              </h2>
+            </div>
           </div>
 
           {/* Right Actions */}
@@ -138,20 +141,12 @@ export default function AppLayout({ children }) {
               <Link to="/settings" className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:text-white">
                 <Settings className="h-5 w-5" />
               </Link>
-              <div className="flex items-center rounded-full bg-slate-100 dark:bg-white/5 p-1">
-                <button 
-                  onClick={toggleTheme}
-                  className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${isDark ? 'bg-violet-600/30 text-violet-400' : 'text-slate-500 hover:text-slate-900 dark:text-gray-500 dark:hover:text-white'}`}
-                >
-                  <Moon className="h-4 w-4" />
-                </button>
-                <button 
-                  onClick={toggleTheme}
-                  className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${!isDark ? 'bg-violet-600/30 text-violet-400' : 'text-slate-500 hover:text-slate-900 dark:text-gray-500 dark:hover:text-white'}`}
-                >
-                  <Sun className="h-4 w-4" />
-                </button>
-              </div>
+              <button 
+                onClick={toggleTheme}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:text-white"
+              >
+                {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              </button>
               <button onClick={toggleFullscreen} className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:text-white">
                 {isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
               </button>

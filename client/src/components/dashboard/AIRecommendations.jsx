@@ -28,9 +28,6 @@ export default function AIRecommendations({ recommendations }) {
         <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-violet-400" /> AI Recommendations
         </h3>
-        <Link to="/recommendations" className="flex items-center gap-2 text-sm font-medium text-violet-400 transition-colors hover:text-violet-300">
-          View All <ArrowRight className="h-4 w-4" />
-        </Link>
       </div>
 
       <div className="flex-1 space-y-3">

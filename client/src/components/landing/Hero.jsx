@@ -24,12 +24,12 @@ const features = [
 
 export default function Hero() {
     return (
-        <section className="relative overflow-hidden pt-[135px] pb-8">
+        <section className="relative overflow-hidden pt-[110px] pb-8">
             {/* Background glowing orb for text */}
             <div className="absolute top-1/2 left-0 h-[600px] w-[600px] -translate-y-1/2 rounded-full bg-violet-600/10 blur-[150px] pointer-events-none" />
 
             <div className="mx-auto w-[94%] max-w-7xl flex items-center justify-between px-6 relative z-10">
-                <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-16 lg:gap-24 w-full">
+                <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-8 lg:gap-16 w-full">
                     
                     {/* LEFT SIDE - Content */}
                     <div className="flex flex-col justify-center max-w-2xl">
@@ -40,7 +40,7 @@ export default function Hero() {
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-                            className="mt-0 text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight text-slate-900 dark:text-white"
+                            className="mt-0 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.15] tracking-tight text-slate-900 dark:text-white"
                         >
                             Build Your <br />
                             Dream Career <br />
@@ -53,7 +53,7 @@ export default function Hero() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.7, delay: 0.35, ease: "easeOut" }}
-                            className="mt-4 text-lg sm:text-xl leading-relaxed text-slate-500 dark:text-gray-400"
+                            className="mt-3 text-base sm:text-lg leading-relaxed text-slate-500 dark:text-gray-400"
                         >
                             CareerPilot AI analyzes your resume, identifies missing skills, creates a personalized learning roadmap, and conducts AI mock interviews to get you placement ready.
                         </motion.p>
@@ -63,7 +63,7 @@ export default function Hero() {
                             initial={{ opacity: 0, y: 25 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.7, delay: 0.5, ease: "easeOut" }}
-                            className="mt-6 flex flex-col sm:flex-row items-center gap-5"
+                            className="mt-5 flex flex-col sm:flex-row items-center gap-4"
                         >
                             <a
                                 href="/signup"
@@ -86,17 +86,17 @@ export default function Hero() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.7, delay: 0.65, ease: "easeOut" }}
-                            className="mt-8 grid grid-cols-2 sm:grid-cols-3 gap-3"
+                            className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-3"
                         >
                             {features.map(({ icon: Icon, text }) => (
                                 <div
                                     key={text}
-                                    className="flex items-center gap-3.5 rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] px-5 py-4 backdrop-blur-md transition-all hover:border-violet-500/30 hover:bg-slate-50 dark:hover:bg-white/[0.05]"
+                                    className="flex items-center gap-3 rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] px-4 py-3 backdrop-blur-md transition-all hover:border-violet-500/30 hover:bg-slate-50 dark:hover:bg-white/[0.05]"
                                 >
-                                    <div className="rounded-xl bg-violet-100 dark:bg-violet-500/10 p-2.5 text-violet-600 dark:text-violet-400">
-                                        <Icon className="h-6 w-6" />
+                                    <div className="rounded-lg bg-violet-100 dark:bg-violet-500/10 p-2 text-violet-600 dark:text-violet-400">
+                                        <Icon className="h-5 w-5" />
                                     </div>
-                                    <span className="text-[15px] font-semibold text-slate-700 dark:text-gray-200">
+                                    <span className="text-sm font-semibold text-slate-700 dark:text-gray-200">
                                         {text}
                                     </span>
                                 </div>
@@ -112,14 +112,14 @@ export default function Hero() {
                         className="relative flex justify-center items-center lg:justify-end"
                     >
                         {/* Glowing backdrop for image */}
-                        <div className="absolute inset-0 max-w-[500px] max-h-[500px] m-auto rounded-full bg-violet-600/20 blur-[120px] pointer-events-none" />
+                        <div className="absolute inset-0 max-w-[420px] max-h-[420px] m-auto rounded-full bg-violet-600/20 blur-[120px] pointer-events-none" />
                         
                         <motion.img
                             animate={{ y: [-10, 10, -10] }}
                             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                             src={heroImage}
                             alt="AI Career Mentor"
-                            className="relative z-10 w-full max-w-[500px] object-cover rounded-3xl shadow-[0_0_60px_rgba(139,92,246,0.15)] mix-blend-screen"
+                            className="relative z-10 w-full max-w-[420px] object-cover rounded-3xl shadow-[0_0_60px_rgba(139,92,246,0.15)] mix-blend-screen"
                             style={{ filter: 'brightness(1.1) contrast(1.1)' }}
                         />
                     </motion.div>
