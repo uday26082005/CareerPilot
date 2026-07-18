@@ -14,14 +14,14 @@ const DATA = [
 export default function SkillRadarChart() {
   return (
     <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
-      <h3 className="mb-4 text-sm font-semibold text-slate-500 dark:text-gray-400">Skill Comparison</h3>
+      <h3 className="mb-0 text-base font-semibold text-slate-500 dark:text-gray-400">Skill Comparison</h3>
       
-      <div className="h-[300px] w-full">
+      <div className="h-[280px] w-full flex-1">
         <ResponsiveContainer width="100%" height="100%">
           <RadarChart cx="50%" cy="50%" outerRadius="70%" data={DATA}>
             <PolarGrid stroke="#ffffff20" />
-            <PolarAngleAxis dataKey="subject" tick={{ fill: '#9ca3af', fontSize: 10 }} />
-            <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fill: '#6b7280', fontSize: 10 }} stroke="#ffffff20" />
+            <PolarAngleAxis dataKey="subject" tick={{ fill: '#9ca3af', fontSize: 12 }} />
+            <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fill: '#6b7280', fontSize: 12 }} stroke="#ffffff20" />
             
             <Radar
               name="Your Skills"
@@ -39,11 +39,11 @@ export default function SkillRadarChart() {
             />
             
             <Legend 
-              wrapperStyle={{ fontSize: '11px', paddingTop: '10px', color: '#9ca3af' }} 
+              wrapperStyle={{ fontSize: '13px', paddingTop: '10px', color: '#9ca3af' }} 
               iconType="plainline"
             />
             <Tooltip
-              contentStyle={{ backgroundColor: '#0f172a', borderColor: '#ffffff10', borderRadius: '8px', fontSize: '12px' }}
+              contentStyle={{ backgroundColor: '#0f172a', borderColor: '#ffffff10', borderRadius: '8px', fontSize: '13px' }}
               itemStyle={{ color: '#fff' }}
             />
           </RadarChart>

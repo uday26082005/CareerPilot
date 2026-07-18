@@ -4,7 +4,7 @@ import { useTheme } from "../../contexts/ThemeContext";
 import { 
   Bot, Home, FileText, Mic, BarChart2, Map, PieChart, 
   Trophy, Sparkles, LogOut, Bell, Settings, Moon, Sun, 
-  Maximize, Minimize, Plus, ArrowRight, Menu
+  Maximize, Minimize, Plus, ArrowRight, Menu, Target
 } from "lucide-react";
 
 const SIDEBAR_LINKS = [
@@ -14,9 +14,8 @@ const SIDEBAR_LINKS = [
   { name: "Skill Gap Analysis", path: "/skill-gap-analysis", icon: BarChart2 },
   { name: "Roadmaps", path: "/roadmaps", icon: Map },
   { name: "Career Insights", path: "/career-insights", icon: PieChart },
-  { name: "Leaderboard", path: "/leaderboard", icon: Trophy },
+  { name: "Practice", path: "/practice", icon: Target },
   { name: "AskAI", path: "/ask-ai", icon: Sparkles },
-  { name: "Settings", path: "/settings", icon: Settings },
 ];
 
 export default function AppLayout({ children }) {
@@ -46,13 +45,13 @@ export default function AppLayout({ children }) {
   };
 
   return (
-    <div className="relative flex h-screen w-full bg-slate-50 dark:bg-[#060816] text-slate-900 dark:text-white overflow-hidden">
+    <div className="relative flex h-screen w-full bg-slate-50 dark:bg-[#060816] text-slate-900 dark:text-white overflow-hidden print:h-auto print:overflow-visible">
       {/* Ambient Background Glows for Glassmorphism effect */}
       <div className="absolute top-[-10%] left-[-5%] w-96 h-96 bg-violet-600/15 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-blue-600/10 blur-[120px] pointer-events-none" />
 
       {/* Sidebar */}
-      <aside className={`relative z-10 flex h-full flex-col border-r border-slate-200 dark:border-white/10 bg-white/80 dark:bg-white/[0.03] backdrop-blur-2xl shadow-xl dark:shadow-[4px_0_24px_rgba(0,0,0,0.2)] transition-all duration-300 ease-in-out overflow-hidden ${isSidebarOpen ? 'w-64' : 'w-20'}`}>
+      <aside className={`relative z-10 flex h-full flex-col border-r border-slate-200 dark:border-white/10 bg-white/80 dark:bg-white/[0.03] backdrop-blur-2xl shadow-xl dark:shadow-[4px_0_24px_rgba(0,0,0,0.2)] transition-all duration-300 ease-in-out overflow-hidden print:hidden ${isSidebarOpen ? 'w-64' : 'w-20'}`}>
         <div className="flex h-full w-64 flex-col">
           {/* Logo */}
           <div className="flex h-20 items-center px-5">
@@ -107,10 +106,10 @@ export default function AppLayout({ children }) {
       </aside>
 
       {/* Main Content Area */}
-      <div className="relative z-10 flex flex-1 flex-col overflow-hidden">
+      <div className="relative z-10 flex flex-1 flex-col overflow-hidden print:overflow-visible">
         
         {/* Top Header */}
-        <header className="flex h-24 shrink-0 items-center justify-between border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-[#060816]/80 px-8 backdrop-blur-md">
+        <header className="flex h-24 shrink-0 items-center justify-between border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-[#060816]/80 px-8 backdrop-blur-md print:hidden">
           
           <div className="flex items-center gap-6">
             {/* Sidebar Toggle */}
@@ -138,9 +137,6 @@ export default function AppLayout({ children }) {
                 <Bell className="h-5 w-5" />
                 <span className="absolute right-2 top-2 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-violet-500 text-[9px] font-bold text-slate-900 dark:text-white">3</span>
               </button>
-              <Link to="/settings" className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:text-white">
-                <Settings className="h-5 w-5" />
-              </Link>
               <button 
                 onClick={toggleTheme}
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:text-white"
@@ -150,6 +146,9 @@ export default function AppLayout({ children }) {
               <button onClick={toggleFullscreen} className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:text-white">
                 {isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
               </button>
+              <Link to="/settings" className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:text-white">
+                <Settings className="h-5 w-5" />
+              </Link>
             </div>
 
             {/* Profile Dropdown */}
@@ -169,7 +168,7 @@ export default function AppLayout({ children }) {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-8">
+        <main className="flex-1 overflow-y-auto p-8 print:overflow-visible print:p-0">
           {children}
         </main>
         

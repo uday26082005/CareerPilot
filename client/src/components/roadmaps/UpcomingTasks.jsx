@@ -11,8 +11,8 @@ export default function UpcomingTasks() {
   return (
     <div className="flex flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-[#0a0c1a] p-5 shadow-lg">
       <div className="flex items-center justify-between mb-5">
-        <h3 className="text-[11px] font-bold text-slate-600 dark:text-gray-300">Upcoming Tasks</h3>
-        <Link to="#" className="text-[10px] font-medium text-violet-400 hover:text-violet-300 transition-colors">
+        <h3 className="text-sm font-bold text-slate-600 dark:text-gray-300">Upcoming Tasks</h3>
+        <Link to="#" className="text-xs font-medium text-violet-400 hover:text-violet-300 transition-colors">
           View All
         </Link>
       </div>
@@ -25,11 +25,11 @@ export default function UpcomingTasks() {
                 <task.icon className="h-4 w-4" />
               </div>
               <div>
-                <h4 className="text-[11px] font-bold text-slate-900 dark:text-white mb-0.5">{task.title}</h4>
-                <p className="text-[9px] text-slate-400 dark:text-gray-500">{task.cat}</p>
+                <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-0.5">{task.title}</h4>
+                <p className="text-xs text-slate-400 dark:text-gray-500">{task.cat}</p>
               </div>
             </div>
-            <button className={`rounded-md border px-2 py-1 text-[9px] font-semibold transition-colors ${task.statusColor} hover:bg-slate-100 dark:hover:bg-white/5`}>
+            <button className={`rounded-md border px-2 py-1 text-xs font-semibold transition-colors ${task.statusColor} hover:bg-slate-100 dark:hover:bg-white/5`}>
               {task.status}
             </button>
           </div>

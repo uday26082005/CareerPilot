@@ -12,12 +12,12 @@ export default function StayOnTrack() {
           <Target className="h-6 w-6" />
         </div>
         <div>
-          <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-1">Stay on Track!</h3>
-          <p className="text-[10px] text-slate-600 dark:text-gray-300">Consistency is the key to success.</p>
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Stay on Track!</h3>
+          <p className="text-xs text-slate-600 dark:text-gray-300">Consistency is the key to success.</p>
         </div>
       </div>
 
-      <button className="w-full mt-2 rounded-lg bg-violet-600 py-3 text-[11px] font-bold text-slate-900 dark:text-white transition-colors hover:bg-violet-500 shadow-[0_0_20px_rgba(139,92,246,0.4)] relative z-10">
+      <button className="w-full mt-2 rounded-lg bg-violet-600 py-3 text-sm font-bold text-slate-900 dark:text-white transition-colors hover:bg-violet-500 shadow-[0_0_20px_rgba(139,92,246,0.4)] relative z-10">
         Mark Today's Progress
       </button>
 

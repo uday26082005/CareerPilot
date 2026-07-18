@@ -3,7 +3,6 @@ import SkillRadarChart from "../components/skills/SkillRadarChart";
 import SkillsBreakdown from "../components/skills/SkillsBreakdown";
 import PrioritySkills from "../components/skills/PrioritySkills";
 import LearningRecommendations from "../components/skills/LearningRecommendations";
-import JobReadyEstimate from "../components/skills/JobReadyEstimate";
 
 export default function SkillGapAnalysis() {
   return (
@@ -35,13 +34,8 @@ export default function SkillGapAnalysis() {
       </div>
 
       {/* Bottom Row: Learning Recs & Estimate */}
-      <div className="grid gap-6 lg:grid-cols-4">
-        <div className="lg:col-span-3">
-          <LearningRecommendations />
-        </div>
-        <div className="lg:col-span-1">
-          <JobReadyEstimate />
-        </div>
+      <div className="w-full">
+        <LearningRecommendations />
       </div>
     </div>
   );

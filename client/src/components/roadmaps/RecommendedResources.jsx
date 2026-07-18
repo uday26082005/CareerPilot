@@ -12,8 +12,8 @@ export default function RecommendedResources() {
   return (
     <div className="flex flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-[#0a0c1a] p-5 shadow-lg">
       <div className="flex items-center justify-between mb-5">
-        <h3 className="text-[11px] font-bold text-slate-600 dark:text-gray-300">Recommended Resources</h3>
-        <Link to="#" className="text-[10px] font-medium text-violet-400 hover:text-violet-300 transition-colors">
+        <h3 className="text-sm font-bold text-slate-600 dark:text-gray-300">Recommended Resources</h3>
+        <Link to="#" className="text-xs font-medium text-violet-400 hover:text-violet-300 transition-colors">
           View All
         </Link>
       </div>
@@ -26,11 +26,11 @@ export default function RecommendedResources() {
                 <item.icon className="h-4 w-4" />
               </div>
               <div>
-                <h4 className="text-[11px] font-bold text-slate-900 dark:text-white mb-0.5">{item.title}</h4>
-                <p className="text-[9px] text-slate-400 dark:text-gray-500">{item.src}</p>
+                <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-0.5">{item.title}</h4>
+                <p className="text-xs text-slate-400 dark:text-gray-500">{item.src}</p>
               </div>
             </div>
-            <span className="text-[9px] font-semibold text-violet-400">{item.type}</span>
+            <span className="text-xs font-semibold text-violet-400">{item.type}</span>
           </div>
         ))}
       </div>

@@ -10,9 +10,9 @@ import ResumeAnalysis from "./pages/ResumeAnalysis";
 import MockInterviews from "./pages/MockInterviews";
 import SkillGapAnalysis from "./pages/SkillGapAnalysis";
 import AskAI from "./pages/AskAI";
-import Leaderboard from "./pages/Leaderboard";
 import CareerInsights from "./pages/CareerInsights";
 import Roadmap from "./pages/Roadmap";
+import PracticeQuiz from "./pages/PracticeQuiz";
 import Settings from "./pages/Settings";
 import AppLayout from "./components/layout/AppLayout";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -34,7 +34,7 @@ function App() {
       <Route path="/mock-interviews" element={<AppLayout><MockInterviews /></AppLayout>} />
       <Route path="/skill-gap-analysis" element={<AppLayout><SkillGapAnalysis /></AppLayout>} />
       <Route path="/ask-ai" element={<AppLayout><AskAI /></AppLayout>} />
-      <Route path="/leaderboard" element={<AppLayout><Leaderboard /></AppLayout>} />
+      <Route path="/practice" element={<AppLayout><PracticeQuiz /></AppLayout>} />
       <Route path="/career-insights" element={<AppLayout><CareerInsights /></AppLayout>} />
       <Route path="/roadmaps" element={<AppLayout><Roadmap /></AppLayout>} />
         <Route path="/settings" element={<AppLayout><Settings /></AppLayout>} />

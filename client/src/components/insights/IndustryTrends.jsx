@@ -20,9 +20,9 @@ export default function IndustryTrends() {
     <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
       
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-[11px] font-semibold text-slate-500 dark:text-gray-400">Industry Trends</h3>
-        <Link to="#" className="flex items-center gap-1.5 text-[10px] font-medium text-violet-400 hover:text-violet-300 transition-colors">
-          View All <ArrowRight className="h-3 w-3" />
+        <h3 className="text-base font-semibold text-slate-500 dark:text-gray-400">Industry Trends</h3>
+        <Link to="#" className="flex items-center gap-1.5 text-sm font-medium text-violet-400 hover:text-violet-300 transition-colors">
+          View All <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
 
@@ -35,8 +35,8 @@ export default function IndustryTrends() {
                 <trend.icon className="h-4 w-4" style={{ color: trend.color }} />
               </div>
               <div>
-                <h4 className="text-[11px] font-bold text-slate-900 dark:text-white mb-0.5">{trend.name}</h4>
-                <p className="text-[9px]" style={{ color: trend.color }}>{trend.demand}</p>
+                <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-0.5">{trend.name}</h4>
+                <p className="text-xs" style={{ color: trend.color }}>{trend.demand}</p>
               </div>
             </div>
 

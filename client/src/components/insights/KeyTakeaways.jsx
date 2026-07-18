@@ -31,7 +31,7 @@ export default function KeyTakeaways() {
   return (
     <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
       
-      <h3 className="mb-6 text-[11px] font-semibold text-slate-500 dark:text-gray-400">Key Takeaways</h3>
+      <h3 className="mb-6 text-base font-semibold text-slate-500 dark:text-gray-400">Key Takeaways</h3>
 
       <div className="flex-1 flex flex-col justify-between">
         {TAKEAWAYS.map((item, idx) => (
@@ -39,9 +39,8 @@ export default function KeyTakeaways() {
             <div className={`mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${item.iconColor}`}>
               <item.icon className="h-3.5 w-3.5" />
             </div>
-            <div>
-              <h4 className="text-[11px] font-bold text-slate-900 dark:text-white mb-1">{item.title}</h4>
-              <p className="text-[10px] text-slate-500 dark:text-gray-400 leading-relaxed">{item.desc}</p>
+            <div className="flex items-center">
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white">{item.title}</h4>
             </div>
           </div>
         ))}
