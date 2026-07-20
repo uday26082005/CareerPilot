@@ -11,7 +11,7 @@ import {
     ArrowRight,
 } from "lucide-react";
 
-import heroImage from "../../assets/hero-crossroads.jpeg";
+import heroImageDark from "../../assets/hero-crossroads.jpeg";
 
 const features = [
     { icon: ScanLine, text: "Resume Analysis" },
@@ -117,7 +117,7 @@ export default function Hero() {
                         <motion.img
                             animate={{ y: [-10, 10, -10] }}
                             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                            src={heroImage}
+                            src={heroImageDark}
                             alt="AI Career Mentor"
                             className="relative z-10 w-full max-w-[420px] object-cover rounded-3xl shadow-[0_0_60px_rgba(139,92,246,0.15)] mix-blend-screen"
                             style={{ filter: 'brightness(1.1) contrast(1.1)' }}

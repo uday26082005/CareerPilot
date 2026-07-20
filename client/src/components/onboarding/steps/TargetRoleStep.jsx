@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Briefcase, Building, BarChart, MapPin } from "lucide-react";
 import toast from "react-hot-toast";
 
-export default function TargetRoleStep({ onNext, onPrev }) {
+export default function TargetRoleStep({ onNext, onPrev, isSubmitting }) {
   const [formData, setFormData] = useState({
     role: "",
     industry: "",
@@ -21,7 +21,7 @@ export default function TargetRoleStep({ onNext, onPrev }) {
       toast.error("Please fill all mandatory fields to continue.");
       return;
     }
-    onNext();
+    onNext({ targetRole: formData.role, industry: formData.industry, targetExperience: formData.experience });
   };
 
   return (
@@ -170,11 +170,12 @@ export default function TargetRoleStep({ onNext, onPrev }) {
         </button>
         <motion.button
           onClick={handleNext}
+          disabled={isSubmitting}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-semibold text-slate-900 dark:text-white transition-colors hover:bg-violet-500"
+          className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-semibold text-slate-900 dark:text-white transition-colors hover:bg-violet-500 disabled:opacity-50"
         >
-          Save & Continue <ArrowRight className="h-5 w-5" />
+          {isSubmitting ? "Saving..." : "Continue"} <ArrowRight className="h-5 w-5" />
         </motion.button>
       </div>
     </motion.div>

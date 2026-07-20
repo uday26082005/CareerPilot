@@ -143,10 +143,10 @@ export default function PracticeQuiz() {
   // ---------------------------------------------------------------------------
   if (view === "selection") {
     return (
-      <div className="max-w-5xl mx-auto space-y-10 py-10">
-        <div className="text-center space-y-3">
-          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">Practice Arena</h1>
-          <p className="text-base text-slate-500 dark:text-gray-400 max-w-2xl mx-auto">
+      <div className="flex flex-col gap-6 pb-6 w-full max-w-7xl mx-auto">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Practice Arena</h1>
+          <p className="mt-1 text-sm text-slate-500 dark:text-gray-400">
             Select a topic below to start a 10-question practice quiz. Challenge yourself and see where you stand!
           </p>
         </div>

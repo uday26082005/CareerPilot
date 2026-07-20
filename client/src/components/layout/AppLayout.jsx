@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useTheme } from "../../contexts/ThemeContext";
 import { 
   Bot, Home, FileText, Mic, BarChart2, Map, PieChart, 
-  Trophy, Sparkles, LogOut, Bell, Settings, Moon, Sun, 
-  Maximize, Minimize, Plus, ArrowRight, Menu, Target
+  Trophy, Sparkles, LogOut, Bell, Settings, 
+  Maximize, Minimize, Plus, ArrowRight, Menu, Target, X
 } from "lucide-react";
 
 const SIDEBAR_LINKS = [
@@ -20,9 +19,24 @@ const SIDEBAR_LINKS = [
 
 export default function AppLayout({ children }) {
   const location = useLocation();
-  const { isDark, toggleTheme } = useTheme();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [notifications, setNotifications] = useState([
+    { id: 1, title: "Resume Analyzed", message: "Your resume score improved by 15%.", time: "2 hours ago", unread: true },
+    { id: 2, title: "New Interview Prep", message: "Mock interview for Frontend Developer is ready.", time: "5 hours ago", unread: true },
+    { id: 3, title: "Goal Completed", message: "You finished 'Learn React Hooks' goal.", time: "1 day ago", unread: false },
+  ]);
+
+  const unreadCount = notifications.filter(n => n.unread).length;
+
+  const markAllAsRead = () => {
+    setNotifications(notifications.map(n => ({ ...n, unread: false })));
+  };
+
+  const removeNotification = (id) => {
+    setNotifications(notifications.filter(n => n.id !== id));
+  };
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -109,7 +123,7 @@ export default function AppLayout({ children }) {
       <div className="relative z-10 flex flex-1 flex-col overflow-hidden print:overflow-visible">
         
         {/* Top Header */}
-        <header className="flex h-24 shrink-0 items-center justify-between border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-[#060816]/80 px-8 backdrop-blur-md print:hidden">
+        <header className="relative z-50 flex h-24 shrink-0 items-center justify-between border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-[#060816]/80 px-8 backdrop-blur-md print:hidden">
           
           <div className="flex items-center gap-6">
             {/* Sidebar Toggle */}
@@ -133,16 +147,57 @@ export default function AppLayout({ children }) {
           <div className="flex items-center gap-4">
             {/* Icon Buttons */}
             <div className="flex items-center gap-2">
-              <button className="relative flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:text-white">
-                <Bell className="h-5 w-5" />
-                <span className="absolute right-2 top-2 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-violet-500 text-[9px] font-bold text-slate-900 dark:text-white">3</span>
-              </button>
-              <button 
-                onClick={toggleTheme}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:text-white"
-              >
-                {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-              </button>
+              <div className="relative">
+                <button 
+                  onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+                  className="relative flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:text-white"
+                >
+                  <Bell className="h-5 w-5" />
+                  {unreadCount > 0 && (
+                    <span className="absolute right-2 top-2 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-violet-500 text-[9px] font-bold text-white">
+                      {unreadCount}
+                    </span>
+                  )}
+                </button>
+
+                {isNotificationsOpen && (
+                  <div className="absolute right-0 top-full mt-3 w-80 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/80 dark:bg-[#0a0c1a]/90 p-4 shadow-xl backdrop-blur-xl dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)] z-50">
+                    <div className="mb-4 flex items-center justify-between">
+                      <h3 className="text-sm font-bold text-slate-900 dark:text-white">Notifications</h3>
+                      {unreadCount > 0 && (
+                        <button 
+                          onClick={markAllAsRead}
+                          className="text-xs font-medium text-violet-600 dark:text-violet-400 hover:underline"
+                        >
+                          Mark all as read
+                        </button>
+                      )}
+                    </div>
+                    <div className="space-y-3 max-h-80 overflow-y-auto pr-1">
+                      {notifications.length === 0 ? (
+                        <p className="text-sm text-center text-slate-500 dark:text-gray-400 py-4">No notifications</p>
+                      ) : (
+                        notifications.map((notification) => (
+                          <div key={notification.id} className="group flex gap-3 rounded-xl bg-slate-50 dark:bg-white/5 p-3 transition-colors hover:bg-slate-100 dark:hover:bg-white/10 relative pr-8">
+                            <div className={`mt-1 h-2 w-2 shrink-0 rounded-full ${notification.unread ? 'bg-violet-500' : 'bg-transparent border border-slate-300 dark:border-gray-600'}`}></div>
+                            <div>
+                              <p className="text-sm font-medium text-slate-900 dark:text-white">{notification.title}</p>
+                              <p className="text-xs text-slate-500 dark:text-gray-400">{notification.message}</p>
+                              <p className="mt-1 text-[10px] text-slate-400 dark:text-gray-500">{notification.time}</p>
+                            </div>
+                            <button 
+                              onClick={() => removeNotification(notification.id)}
+                              className="absolute right-2 top-2 p-1 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 opacity-0 group-hover:opacity-100 transition-opacity rounded-full hover:bg-slate-200 dark:hover:bg-white/10"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
               <button onClick={toggleFullscreen} className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:text-white">
                 {isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
               </button>
@@ -153,17 +208,12 @@ export default function AppLayout({ children }) {
 
             {/* Profile Dropdown */}
             <div className="mx-2 h-8 w-px bg-slate-200 dark:bg-white/10" />
-            <button className="flex items-center gap-3 rounded-full border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 p-1.5 pr-4 transition-colors hover:bg-slate-200 dark:hover:bg-white/10">
+            <Link to="/profile" className="flex items-center gap-3 rounded-full border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 p-1.5 pr-4 transition-colors hover:bg-slate-200 dark:hover:bg-white/10">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-violet-600 text-sm font-bold text-white">
                 U
               </div>
               <span className="text-sm font-medium text-slate-900 dark:text-white">Uday Kumar</span>
-            </button>
-
-            {/* New Goal Button */}
-            <button className="ml-2 flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-bold text-white shadow-[0_0_20px_rgba(139,92,246,0.3)] transition-colors hover:bg-violet-500">
-              <Plus className="h-4 w-4" /> New Goal
-            </button>
+            </Link>
           </div>
         </header>
 

@@ -60,15 +60,12 @@ export default function ResetPassword() {
       transition={{ delay: 0.1, duration: 0.6 }}
       className="text-center"
     >
-      <div className="mx-auto mb-2 flex h-14 w-14 items-center justify-center rounded-full border border-violet-500/20 bg-violet-600/10 shadow-[0_0_40px_rgba(139,92,246,0.2)]">
-        <Lock className="h-6 w-6 text-violet-400" />
+      <div className="mx-auto mb-1 flex h-12 w-12 items-center justify-center rounded-full border border-violet-500/20 bg-violet-600/10 shadow-[0_0_40px_rgba(139,92,246,0.2)]">
+        <Lock className="h-5 w-5 text-violet-400" />
       </div>
-      <h1 className="mb-1 text-2xl font-black md:text-3xl">
+      <h1 className="text-2xl font-black md:text-3xl">
         Reset Your <span className="text-violet-400">Password</span>
       </h1>
-      <p className="mx-auto max-w-sm text-sm text-slate-500 dark:text-gray-400">
-        Enter your new password below. Make sure it's strong and secure.
-      </p>
     </motion.div>
   );
 
@@ -77,7 +74,7 @@ export default function ResetPassword() {
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3, duration: 0.6 }}
-      className="space-y-4 text-center"
+      className="text-center mt-2"
     >
       <p className="text-sm text-slate-500 dark:text-gray-400">
         Remember your old password?{" "}
@@ -85,15 +82,6 @@ export default function ResetPassword() {
           Back to Login
         </Link>
       </p>
-      
-      <div>
-        <div className="mb-1 flex items-center justify-center gap-2 text-sm font-medium text-slate-900 dark:text-white">
-          <ShieldCheck className="h-4 w-4" /> Your data is safe with us.
-        </div>
-        <p className="text-xs text-slate-400 dark:text-gray-500">
-          We never share your information with anyone.
-        </p>
-      </div>
     </motion.div>
   );
 
@@ -165,15 +153,11 @@ export default function ResetPassword() {
             disabled={loading}
             whileHover={{ scale: 1.02, boxShadow: "0px 0px 35px rgba(139,92,246,.55)" }}
             whileTap={{ scale: 0.98 }}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-3 font-semibold text-slate-900 dark:text-white transition-opacity disabled:opacity-60"
+            className="flex w-full mt-6 mb-2 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-3 font-semibold text-slate-900 dark:text-white transition-opacity disabled:opacity-60"
           >
             <Lock className="h-4 w-4" />
             {loading ? "Resetting..." : "Reset Password"}
           </motion.button>
-          
-          <div className="mt-3 flex items-center justify-center gap-2 text-[11px] font-medium text-emerald-400">
-            <CheckCircle className="h-4 w-4" /> Your password is encrypted and secure.
-          </div>
         </div>
 
       </form>

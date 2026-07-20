@@ -24,7 +24,7 @@ export default function BestCareerMatch() {
         {/* Best Match */}
         <div className="flex flex-col w-full">
           <h3 className="mb-4 text-sm font-semibold text-slate-500 dark:text-gray-400 flex items-center gap-1.5">
-            Your Best Career Match <Info className="h-4 w-4" />
+            Your Best Career Match
           </h3>
           
           <div className="flex items-center gap-6">

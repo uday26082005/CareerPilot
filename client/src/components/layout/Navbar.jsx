@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bot, Menu, X, Sun, Moon } from "lucide-react";
-import { useTheme } from "../../contexts/ThemeContext";
+import { Bot, Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const { isDark, toggleTheme } = useTheme();
 
   const links = [
     {
@@ -89,12 +87,6 @@ export default function Navbar() {
             {/* Right Side */}
 
             <div className="hidden items-center gap-4 md:flex">
-              <button
-                onClick={toggleTheme}
-                className="flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/5 text-slate-600 dark:text-gray-300 transition-all hover:bg-white dark:hover:bg-white/10 hover:shadow-lg"
-              >
-                {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-              </button>
               <a
                 href="/login"
                 className="rounded-xl border border-violet-500/40 px-6 py-3 text-[16px] font-semibold text-slate-900 dark:text-white transition-all duration-300 hover:border-violet-400 hover:bg-violet-600 hover:shadow-[0_0_25px_rgba(139,92,246,.45)]"
@@ -106,12 +98,6 @@ export default function Navbar() {
             {/* Mobile Button */}
 
             <div className="flex items-center gap-3 md:hidden">
-              <button
-                onClick={toggleTheme}
-                className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/5 text-slate-600 dark:text-gray-300 transition-colors"
-              >
-                {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-              </button>
               <button
                 onClick={() => setOpen(!open)}
                 className="text-slate-900 dark:text-white"

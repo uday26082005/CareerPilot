@@ -8,6 +8,7 @@ import AuthLayout from "../components/layout/AuthLayout";
 import FormInput from "../components/auth/FormInput";
 import PasswordInput from "../components/auth/PasswordInput";
 import SocialAuthButtons from "../components/auth/SocialAuthButtons";
+import { supabase } from "../lib/supabase";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -31,12 +32,17 @@ export default function Login() {
 
     setLoading(true);
     try {
-      // Mock API call
-      await new Promise((resolve) => setTimeout(resolve, 900));
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: form.email,
+        password: form.password,
+      });
+
+      if (error) throw error;
+
       toast.success("Successfully logged in!");
       setTimeout(() => navigate("/dashboard"), 1000);
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Invalid credentials. Try again.");
+      toast.error(err.message || "Invalid credentials. Try again.");
     } finally {
       setLoading(false);
     }

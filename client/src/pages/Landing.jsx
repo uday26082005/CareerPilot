@@ -61,7 +61,7 @@ export default function Landing() {
 
       {/* Footer */}
 
-      <footer className="border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#070914] py-8">
+      <footer id="contact" className="border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#070914] py-8">
         <div className="mx-auto max-w-7xl px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-slate-500 dark:text-gray-400">
             {/* Left: Brand */}

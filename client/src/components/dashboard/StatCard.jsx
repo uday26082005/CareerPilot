@@ -31,20 +31,22 @@ export default function StatCard({
       </div>
       
       {/* Mini Sparkline Chart */}
-      <div className="mt-2 h-10 w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={chartData}>
-            <Line 
-              type="monotone" 
-              dataKey="value" 
-              stroke={chartColor} 
-              strokeWidth={2} 
-              dot={false}
-              isAnimationActive={true}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+      {chartData && chartData.length > 0 && (
+        <div className="mt-2 h-10 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData}>
+              <Line 
+                type="monotone" 
+                dataKey="value" 
+                stroke={chartColor} 
+                strokeWidth={2} 
+                dot={false}
+                isAnimationActive={true}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      )}
     </div>
   );
 }

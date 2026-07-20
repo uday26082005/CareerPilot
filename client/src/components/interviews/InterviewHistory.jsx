@@ -1,5 +1,5 @@
-import { Code, Briefcase, Building, Target, Star, ChevronRight, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Code, Briefcase, Building, Target, Star, ChevronDown, ChevronUp } from "lucide-react";
 
 const HISTORY = [
   {
@@ -70,6 +70,9 @@ const HISTORY = [
 ];
 
 export default function InterviewHistory() {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const displayedHistory = isExpanded ? HISTORY : HISTORY.slice(0, 3);
+
   const renderStars = (rating) => {
     return (
       <div className="flex items-center gap-0.5">
@@ -96,7 +99,7 @@ export default function InterviewHistory() {
 
       {/* Table Rows */}
       <div className="flex flex-col gap-2">
-        {HISTORY.map((row, idx) => (
+        {displayedHistory.map((row, idx) => (
           <div key={idx} className="group grid grid-cols-12 items-center gap-4 cursor-pointer transition-colors hover:bg-white dark:bg-white/[0.02] rounded-xl -mx-2 px-2 py-1.5">
             
             {/* Role & Icon */}
@@ -126,9 +129,16 @@ export default function InterviewHistory() {
 
       {/* Footer */}
       <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/5">
-        <Link to="/history" className="flex items-center gap-2 text-sm font-medium text-violet-400 transition-colors hover:text-violet-300">
-          View All Interviews <ArrowRight className="h-4 w-4" />
-        </Link>
+        <button 
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="flex items-center gap-2 text-sm font-medium text-violet-400 transition-colors hover:text-violet-300"
+        >
+          {isExpanded ? (
+            <>Show Less <ChevronUp className="h-4 w-4" /></>
+          ) : (
+            <>View All Interviews <ChevronDown className="h-4 w-4" /></>
+          )}
+        </button>
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ import AuthLayout from "../components/layout/AuthLayout";
 import FormInput from "../components/auth/FormInput";
 import PasswordInput from "../components/auth/PasswordInput";
 import SocialAuthButtons from "../components/auth/SocialAuthButtons";
+import { supabase } from "../lib/supabase";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -37,14 +38,22 @@ export default function Register() {
 
     setLoading(true);
     try {
-      // TODO: swap for the real endpoint once the backend is live
-      // await axios.post("/api/auth/register", form);
-      await new Promise((resolve) => setTimeout(resolve, 900));
+      const { data, error } = await supabase.auth.signUp({
+        email: form.email,
+        password: form.password,
+        options: {
+          data: {
+            full_name: form.fullName,
+          }
+        }
+      });
+
+      if (error) throw error;
 
       toast.success("Account created successfully!");
       setTimeout(() => navigate("/onboarding"), 1000);
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Something went wrong. Try again.");
+      toast.error(err.message || "Something went wrong. Try again.");
     } finally {
       setLoading(false);
     }

@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { BrainCircuit, Plus, Send, FileText, BookOpen, Target, Briefcase } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -10,8 +11,19 @@ export default function AskAI() {
     { text: "Suggest a learning roadmap for me", icon: Briefcase, color: "text-orange-400 bg-orange-500/10" },
   ];
 
-  const [question, setQuestion] = useState("");
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const initialQuery = queryParams.get('q') || "";
+
+  const [question, setQuestion] = useState(initialQuery);
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    const q = new URLSearchParams(location.search).get('q');
+    if (q) {
+      setQuestion(q);
+    }
+  }, [location.search]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];

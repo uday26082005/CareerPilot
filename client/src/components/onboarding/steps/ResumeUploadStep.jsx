@@ -2,8 +2,11 @@ import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, CloudUpload, Lightbulb, Check, FileText, X } from "lucide-react";
 import toast from "react-hot-toast";
+import axios from "axios";
+import { useAuth } from "../../../contexts/AuthContext";
 
-export default function ResumeUploadStep({ onNext, onPrev }) {
+export default function ResumeUploadStep({ onNext, onPrev, globalData }) {
+  const { user } = useAuth();
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -20,12 +23,49 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
     }
   };
 
-  const handleNext = () => {
+  const [analyzing, setAnalyzing] = useState(false);
+
+  const handleNext = async () => {
     if (!file) {
       toast.error("Please upload your resume to continue.");
       return;
     }
-    onNext();
+
+    setAnalyzing(true);
+    const toastId = toast.loading("Analyzing your resume with Gemini AI...");
+    
+    try {
+      const formData = new FormData();
+      formData.append("resume", file);
+      if (user?.id) {
+        formData.append("userId", user.id);
+      }
+      if (globalData?.githubUrl) {
+        formData.append("githubUrl", globalData.githubUrl);
+      }
+      if (globalData?.linkedinUrl) {
+        formData.append("linkedinUrl", globalData.linkedinUrl);
+      }
+
+      // Call our new Node.js backend endpoint
+      const response = await axios.post("http://localhost:5000/api/resume/analyze", formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
+
+      console.log("Gemini AI Analysis Result:", response.data.data);
+      
+      toast.success("Resume analyzed successfully!", { id: toastId });
+      
+      // We will save this result to global state or context in the next phase
+      // For now, just proceed to the next step
+      onNext();
+
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.error || "Failed to analyze resume. Please try again.", { id: toastId });
+    } finally {
+      setAnalyzing(false);
+    }
   };
   return (
     <motion.div
@@ -125,11 +165,13 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
         </button>
         <motion.button
           onClick={handleNext}
+          disabled={analyzing}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-semibold text-slate-900 dark:text-white transition-colors hover:bg-violet-500"
+          className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-semibold text-slate-900 dark:text-white transition-colors hover:bg-violet-500 disabled:opacity-50"
         >
-          Save & Continue <ArrowRight className="h-5 w-5" />
+          {analyzing ? "Analyzing AI..." : "Analyze & Finish"}
+          {!analyzing && <ArrowRight className="h-5 w-5" />}
         </motion.button>
       </div>
     </motion.div>

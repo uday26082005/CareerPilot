@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 export default function RoadmapWidget({ steps }) {
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
-      <div className="mb-8 flex items-center justify-between">
+    <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-5 backdrop-blur-md">
+      <div className="mb-5 flex items-center justify-between">
         <h3 className="text-lg font-bold text-slate-900 dark:text-white">Recommended Roadmap</h3>
         <Link to="/roadmaps" className="flex items-center gap-2 text-sm font-medium text-violet-400 transition-colors hover:text-violet-300">
           View Full Roadmap <ArrowRight className="h-4 w-4" />
@@ -35,7 +35,7 @@ export default function RoadmapWidget({ steps }) {
             </div>
             
             {/* Text */}
-            <div className="mt-4 text-center">
+            <div className="mt-3 text-center">
               <h4 className="text-xs font-bold text-slate-900 dark:text-white max-w-[80px]">{step.title}</h4>
               <p className={`mt-1 text-[10px] uppercase font-bold tracking-wider ${
                 step.status === "completed" ? "text-slate-500 dark:text-gray-400" :

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, User, Mail, GraduationCap, BookOpen, Calendar, Briefcase, Pencil, Sparkles, X } from "lucide-react";
 import toast from "react-hot-toast";
 
-export default function ProfileSetupStep({ onNext, onPrev }) {
+export default function ProfileSetupStep({ onNext, onPrev, onSave }) {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -25,6 +25,7 @@ export default function ProfileSetupStep({ onNext, onPrev }) {
       toast.error("Please fill all mandatory fields to continue.");
       return;
     }
+    if (onSave) onSave({ ...formData, skills, bio });
     onNext();
   };
 

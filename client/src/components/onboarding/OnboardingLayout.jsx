@@ -4,9 +4,9 @@ import { Bot, HelpCircle, LogOut, User, UploadCloud, Link as LinkIcon, Target, S
 
 const STEPS = [
   { id: 1, title: "Profile Setup", desc: "Tell us about yourself", icon: User },
-  { id: 2, title: "Resume Upload", desc: "Upload your resume", icon: UploadCloud },
-  { id: 3, title: "Connect Accounts", desc: "Connect GitHub & LinkedIn", icon: LinkIcon },
-  { id: 4, title: "Target Role", desc: "Select your target role", icon: Target },
+  { id: 2, title: "Connect Accounts", desc: "Connect GitHub & LinkedIn", icon: LinkIcon },
+  { id: 3, title: "Target Role", desc: "Select your target role", icon: Target },
+  { id: 4, title: "Resume Upload", desc: "Upload your resume", icon: UploadCloud },
   { id: 5, title: "You're All Set!", desc: "Ready to explore", icon: Shield },
 ];
 

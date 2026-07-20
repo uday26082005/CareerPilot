@@ -14,12 +14,12 @@ import CareerInsights from "./pages/CareerInsights";
 import Roadmap from "./pages/Roadmap";
 import PracticeQuiz from "./pages/PracticeQuiz";
 import Settings from "./pages/Settings";
+import ProfileSummary from "./pages/ProfileSummary";
 import AppLayout from "./components/layout/AppLayout";
-import { ThemeProvider } from "./contexts/ThemeContext";
-
+import { AuthProvider } from "./contexts/AuthContext";
 function App() {
   return (
-    <ThemeProvider>
+    <AuthProvider>
       <Routes>
         <Route path="/" element={<Landing />} />
       <Route path="/signup" element={<Register />} />
@@ -38,8 +38,9 @@ function App() {
       <Route path="/career-insights" element={<AppLayout><CareerInsights /></AppLayout>} />
       <Route path="/roadmaps" element={<AppLayout><Roadmap /></AppLayout>} />
         <Route path="/settings" element={<AppLayout><Settings /></AppLayout>} />
+        <Route path="/profile" element={<AppLayout><ProfileSummary /></AppLayout>} />
       </Routes>
-    </ThemeProvider>
+    </AuthProvider>
   );
 }
 

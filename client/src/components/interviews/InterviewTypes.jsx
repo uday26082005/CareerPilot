@@ -1,4 +1,5 @@
 import { Code, Briefcase, Target, Building, Star } from "lucide-react";
+import { useState } from "react";
 
 const TYPES = [
   {
@@ -44,6 +45,8 @@ const TYPES = [
 ];
 
 export default function InterviewTypes() {
+  const [activeType, setActiveType] = useState("Technical Interview");
+
   return (
     <div className="flex flex-col">
       <h3 className="mb-4 text-base font-semibold text-slate-500 dark:text-gray-400">Choose Interview Type</h3>
@@ -52,8 +55,9 @@ export default function InterviewTypes() {
         {TYPES.map((type, idx) => (
           <div 
             key={idx} 
+            onClick={() => setActiveType(type.title)}
             className={`flex cursor-pointer flex-col justify-between rounded-xl p-5 transition-all ${
-              type.active 
+              activeType === type.title 
                 ? "border border-violet-500 bg-violet-900/10 shadow-[0_0_20px_rgba(139,92,246,0.15)] scale-[1.02]" 
                 : "border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] hover:bg-white/[0.04] hover:border-slate-200 dark:border-white/10"
             }`}

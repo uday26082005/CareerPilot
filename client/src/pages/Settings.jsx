@@ -1,11 +1,7 @@
 import { 
   ProfileSection, 
-  AppearanceSettings, 
   NotificationSettings, 
-  PreferencesSettings, 
-  SecuritySettings, 
-  DataPrivacySettings, 
-  AccountSettings 
+  SecuritySettings 
 } from "../components/settings/SettingsCards";
 
 export default function Settings() {
@@ -24,17 +20,10 @@ export default function Settings() {
         <ProfileSection />
 
         <div className="grid md:grid-cols-2 gap-6">
-          <AppearanceSettings />
           <NotificationSettings />
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <PreferencesSettings />
-          <SecuritySettings />
-        </div>
-
-        <DataPrivacySettings />
-        <AccountSettings />
+        <SecuritySettings />
       </div>
 
     </div>

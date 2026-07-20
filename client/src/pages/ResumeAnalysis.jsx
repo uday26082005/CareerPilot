@@ -23,9 +23,13 @@ export default function ResumeAnalysis() {
           <button className="flex items-center gap-2 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 px-4 py-2 text-sm font-medium text-slate-900 dark:text-white transition-colors hover:bg-slate-200 dark:hover:bg-white/10">
             <RefreshCcw className="h-4 w-4" /> Re-analyze
           </button>
-          <button className="flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-slate-900 dark:text-white transition-colors hover:bg-violet-500 shadow-lg shadow-violet-500/20">
+          <button 
+            onClick={() => document.getElementById('resume-upload-input').click()}
+            className="flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-slate-900 dark:text-white transition-colors hover:bg-violet-500 shadow-lg shadow-violet-500/20"
+          >
             <Upload className="h-4 w-4" /> Upload New Resume
           </button>
+          <input type="file" id="resume-upload-input" className="hidden" />
         </div>
       </div>
 
