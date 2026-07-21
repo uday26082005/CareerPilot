@@ -46,7 +46,17 @@ export default function SkillMetrics({
             </div>
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-bold text-emerald-400 leading-tight">Good<br />Match</span>
+            <span className={`text-sm font-bold leading-tight ${
+              overallScore >= 75 ? "text-emerald-400" :
+              overallScore >= 50 ? "text-blue-400" :
+              overallScore >= 25 ? "text-yellow-400" :
+              "text-red-400"
+            }`}>
+              {overallScore >= 75 ? "Great\nMatch" :
+               overallScore >= 50 ? "Good\nMatch" :
+               overallScore >= 25 ? "Fair\nMatch" :
+               "Low\nMatch"}
+            </span>
           </div>
         </div>
       </div>

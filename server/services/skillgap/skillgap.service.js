@@ -9,19 +9,10 @@ const HTTP_STATUS_INTERNAL_SERVER_ERROR = 500;
 const HTTP_STATUS_UNPROCESSABLE_ENTITY = 422;
 
 const extractJson = (text) => {
-  let jsonString = text;
-  const match = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
-  if (match) {
-    jsonString = match[1];
-  }
-  
-  // Try to remove trailing commas which commonly break JSON.parse
-  jsonString = jsonString.replace(/,\s*([\]}])/g, '$1');
-
   try {
-    return JSON.parse(jsonString);
+    return JSON.parse(text);
   } catch (error) {
-    console.error("Raw JSON string that failed to parse:", jsonString);
+    console.error("Failed to parse schema-enforced JSON:", text);
     throw error;
   }
 };
@@ -35,30 +26,10 @@ Missing Skills: ${JSON.stringify(missingSkills)}
 Based on this gap, provide a personalized learning roadmap. 
 IMPORTANT: Recommend ONLY 100% FREE resources (e.g. Roadmap.sh, MDN, freeCodeCamp, MIT OpenCourseWare, YouTube, official docs). NEVER recommend paid courses.
 
-Return exactly one valid JSON object. Do not include markdown formatting, trailing commas, or any text outside the JSON object. 
-Ensure all quotation marks within string values are properly escaped (\\" instead of ").
+You MUST provide AT LEAST 3 to 4 recommended_courses, AT LEAST 3 to 4 recommended_projects, and AT LEAST 3 to 4 practice_questions.
+For practice_questions, provide a related topic_id. The ONLY valid topic_ids are: "dsa", "frontend", "backend", "system_design", "databases", "devops". You MUST choose one of these 6 strings for the topic_id based on what the question relates to most.
 
-Required JSON shape:
-{
-  "priority_skills": ["Skill1", "Skill2"],
-  "recommended_projects": [
-    {
-      "title": "Project Name",
-      "description": "Brief description",
-      "difficulty": "Beginner/Intermediate/Advanced"
-    }
-  ],
-  "recommended_resources": [
-    {
-      "title": "Resource Name",
-      "type": "Course/Documentation/Video/Article/Practice",
-      "url": "https://..."
-    }
-  ],
-  "learning_order": ["Skill1", "Skill2", "Skill3"],
-  "summary": "Brief encouraging summary of their current standing and what they need to focus on.",
-  "next_learning_step": "The single most important next step to take today."
-}`;
+Return the data precisely following the schema.`;
 
 const analyzeWithGemini = async (targetRole, matchedSkills, missingSkills) => {
   const client = getGeminiClient();
@@ -67,6 +38,49 @@ const analyzeWithGemini = async (targetRole, matchedSkills, missingSkills) => {
     contents: buildGeminiPrompt(targetRole, matchedSkills, missingSkills),
     config: {
       responseMimeType: "application/json",
+      responseSchema: {
+        type: "OBJECT",
+        properties: {
+          priority_skills: { type: "ARRAY", items: { type: "STRING" } },
+          recommended_projects: {
+            type: "ARRAY",
+            items: {
+              type: "OBJECT",
+              properties: {
+                title: { type: "STRING" },
+                description: { type: "STRING" },
+                difficulty: { type: "STRING" }
+              }
+            }
+          },
+          recommended_resources: {
+            type: "ARRAY",
+            items: {
+              type: "OBJECT",
+              properties: {
+                title: { type: "STRING" },
+                type: { type: "STRING" },
+                url: { type: "STRING" }
+              }
+            }
+          },
+          practice_questions: {
+            type: "ARRAY",
+            items: {
+              type: "OBJECT",
+              properties: {
+                title: { type: "STRING" },
+                platform: { type: "STRING" },
+                url: { type: "STRING" },
+                topic_id: { type: "STRING" }
+              }
+            }
+          },
+          learning_order: { type: "ARRAY", items: { type: "STRING" } },
+          summary: { type: "STRING" },
+          next_learning_step: { type: "STRING" }
+        }
+      },
       temperature: 0.2,
     },
   });
@@ -136,7 +150,7 @@ const analyzeSkillGap = async (userId) => {
     .eq("role_name", targetRole)
     .single();
 
-  if (existingAnalysis) {
+  if (existingAnalysis && existingAnalysis.analysis_json?.practice_questions?.[0]?.topic_id) {
     return existingAnalysis;
   }
 

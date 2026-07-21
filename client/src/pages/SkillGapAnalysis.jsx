@@ -136,9 +136,9 @@ export default function SkillGapAnalysis() {
           {/* Bottom Row: Learning Recs & Estimate */}
           <div className="w-full">
             <LearningRecommendations 
-              courses={analysis.recommended_resources?.filter(r => r.type.toLowerCase().includes("course") || r.type.toLowerCase().includes("video"))}
+              courses={analysis.recommended_resources || []}
               projects={analysis.recommended_projects || []}
-              practice={analysis.recommended_resources?.filter(r => r.type.toLowerCase().includes("practice") || r.type.toLowerCase().includes("documentation") || r.type.toLowerCase().includes("article"))}
+              practice={analysis.analysis_json?.practice_questions || []}
             />
           </div>
         </>

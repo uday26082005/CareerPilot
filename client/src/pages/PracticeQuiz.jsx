@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CheckCircle2, XCircle, ChevronRight, HelpCircle, Code, Layers, Server, Database, Cloud, ArrowLeft, RefreshCw, Trophy, ArrowRight } from "lucide-react";
 
 const TOPICS = [
@@ -95,6 +96,18 @@ export default function PracticeQuiz() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [score, setScore] = useState(0);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const topicParam = params.get("topic");
+    
+    if (topicParam && TOPICS.find(t => t.id === topicParam)) {
+      handleStartQuiz(topicParam);
+    }
+  }, [location.search]);
 
   const handleStartQuiz = (topicId) => {
     setActiveTopic(topicId);
