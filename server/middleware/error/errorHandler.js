@@ -1,6 +1,7 @@
 const { ZodError } = require("zod");
 const multer = require("multer");
 const { env } = require("../../config/env");
+const { HTTP_STATUS } = require("../../utils/constants/httpStatus");
 
 const getStatusCode = (error) => error.statusCode || error.status || 500;
 
@@ -23,9 +24,10 @@ const errorHandler = (error, req, res, next) => {
   }
 
   if (error instanceof multer.MulterError) {
-    return res.status(400).json({
+    const isOversizedFile = error.code === "LIMIT_FILE_SIZE";
+    return res.status(isOversizedFile ? HTTP_STATUS.PAYLOAD_TOO_LARGE : HTTP_STATUS.BAD_REQUEST).json({
       success: false,
-      message: error.message,
+      message: isOversizedFile ? "Resume file must not exceed 5 MB." : error.message,
     });
   }
 

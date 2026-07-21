@@ -28,7 +28,15 @@ const SUGGESTIONS = [
   }
 ];
 
-export default function KeySuggestions() {
+export default function KeySuggestions({ suggestions }) {
+  const displayedSuggestions = suggestions === undefined
+    ? SUGGESTIONS
+    : suggestions.map((suggestion, index) => ({
+      ...SUGGESTIONS[index % SUGGESTIONS.length],
+      title: suggestion,
+      desc: "Address this area to strengthen your resume.",
+    }));
+
   return (
     <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
       <h3 className="mb-4 text-base font-semibold text-slate-500 dark:text-gray-400 flex items-center gap-2">
@@ -36,7 +44,7 @@ export default function KeySuggestions() {
       </h3>
       
       <div className="flex-1 space-y-3">
-        {SUGGESTIONS.map((item, idx) => (
+        {displayedSuggestions.map((item, idx) => (
           <div key={idx} className="group flex cursor-pointer items-center gap-4 rounded-xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-3 transition-colors hover:border-slate-200 dark:border-white/10 hover:bg-white/[0.04]">
             {/* Icon */}
             <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border ${item.color}`}>

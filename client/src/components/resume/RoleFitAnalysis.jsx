@@ -1,9 +1,18 @@
 import { Target, CheckCircle2, AlertCircle, ArrowRight, Lock } from "lucide-react";
 
-export default function RoleFitAnalysis() {
-  const score = 85;
+const DEFAULT_KEY_SKILLS = [
+  "Strong match in technical skills",
+  "Relevant project experience",
+  "Good use of modern technologies",
+];
+const DEFAULT_MISSING_SKILLS = ["Add more experience with state management"];
+
+export default function RoleFitAnalysis({ targetRole, roleFit, score: scoreProp, keySkills, missingSkills }) {
+  const score = Math.round(scoreProp ?? 85);
   const circumference = 2 * Math.PI * 45; // radius 45
   const strokeDashoffset = circumference - (score / 100) * circumference;
+  const displayKeySkills = keySkills ?? DEFAULT_KEY_SKILLS;
+  const displayMissingSkills = missingSkills ?? DEFAULT_MISSING_SKILLS;
 
   return (
     <div className="flex flex-col gap-4">
@@ -17,9 +26,9 @@ export default function RoleFitAnalysis() {
             </h3>
             
             <p className="text-xs font-medium text-slate-400 dark:text-gray-500">Target Role</p>
-            <h2 className="mb-2 text-xl font-bold text-slate-900 dark:text-white">Frontend Developer</h2>
+            <h2 className="mb-2 text-xl font-bold text-slate-900 dark:text-white">{targetRole ?? "Frontend Developer"}</h2>
             <p className="text-sm text-slate-500 dark:text-gray-400 leading-relaxed max-w-sm">
-              You're a good fit for this role. Focus on highlighted areas to improve your match further.
+              {roleFit ?? "You're a good fit for this role. Focus on highlighted areas to improve your match further."}
             </p>
           </div>
         </div>
@@ -49,22 +58,18 @@ export default function RoleFitAnalysis() {
 
         {/* Right Side: Checklist */}
         <div className="flex-1 flex flex-col justify-center gap-3 border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-white/5 pt-4 lg:pt-0 lg:pl-6">
-          <div className="flex items-start gap-3">
-            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
-            <span className="text-sm text-slate-600 dark:text-gray-300">Strong match in technical skills</span>
-          </div>
-          <div className="flex items-start gap-3">
-            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
-            <span className="text-sm text-slate-600 dark:text-gray-300">Relevant project experience</span>
-          </div>
-          <div className="flex items-start gap-3">
-            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
-            <span className="text-sm text-slate-600 dark:text-gray-300">Good use of modern technologies</span>
-          </div>
-          <div className="flex items-start gap-3">
-            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-orange-500" />
-            <span className="text-sm text-slate-600 dark:text-gray-300">Add more experience with state management</span>
-          </div>
+          {displayKeySkills.slice(0, 3).map((skill) => (
+            <div key={skill} className="flex items-start gap-3">
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+              <span className="text-sm text-slate-600 dark:text-gray-300">{skill}</span>
+            </div>
+          ))}
+          {displayMissingSkills.slice(0, 2).map((skill) => (
+            <div key={skill} className="flex items-start gap-3">
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-orange-500" />
+              <span className="text-sm text-slate-600 dark:text-gray-300">{skill}</span>
+            </div>
+          ))}
         </div>
       </div>
 

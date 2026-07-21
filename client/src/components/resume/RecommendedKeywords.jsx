@@ -1,12 +1,14 @@
 import { Info, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export default function RecommendedKeywords() {
-  const keywords = [
+const DEFAULT_KEYWORDS = [
     "JavaScript", "React.js", "Node.js", "SQL",
     "Problem Solving", "Data Structures", "Git",
     "REST APIs", "Agile", "MongoDB", "AWS"
-  ];
+];
+
+export default function RecommendedKeywords({ keywords }) {
+  const displayedKeywords = keywords ?? DEFAULT_KEYWORDS;
 
   return (
     <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
@@ -15,7 +17,7 @@ export default function RecommendedKeywords() {
       </h3>
       
       <div className="flex-1 flex flex-wrap gap-2 content-start">
-        {keywords.map((kw, idx) => (
+        {displayedKeywords.map((kw, idx) => (
           <span 
             key={idx} 
             className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-medium text-emerald-400 transition-colors hover:bg-emerald-500/20"

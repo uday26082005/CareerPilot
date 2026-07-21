@@ -5,15 +5,30 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useAuth } from "../../../contexts/AuthContext";
 
-export default function ResumeUploadStep({ onNext, onPrev, globalData }) {
-  const { user, session } = useAuth();
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
+export default function ResumeUploadStep({ onNext, onPrev }) {
+  const { session } = useAuth();
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
 
   const handleFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
+    const selectedFile = e.target.files?.[0];
+    if (!selectedFile) return;
+
+    if (selectedFile.type !== "application/pdf") {
+      toast.error("Only PDF resumes are supported.");
+      e.target.value = "";
+      return;
     }
+
+    if (selectedFile.size > 5 * 1024 * 1024) {
+      toast.error("Resume file must not exceed 5 MB.");
+      e.target.value = "";
+      return;
+    }
+
+    setFile(selectedFile);
   };
 
   const handleRemoveFile = () => {
@@ -37,22 +52,9 @@ export default function ResumeUploadStep({ onNext, onPrev, globalData }) {
     try {
       const formData = new FormData();
       formData.append("resume", file);
-      if (user?.id) {
-        formData.append("userId", user.id);
-      }
-      if (globalData?.githubUrl) {
-        formData.append("githubUrl", globalData.githubUrl);
-      }
-      if (globalData?.linkedinUrl) {
-        formData.append("linkedinUrl", globalData.linkedinUrl);
-      }
 
-      // Call our new Node.js backend endpoint
-      const response = await axios.post("http://localhost:5000/api/resume/analyze", formData, {
-        headers: { 
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${session?.access_token}`
-        }
+      const response = await axios.post(`${API_BASE_URL}/resume/analyze`, formData, {
+        headers: { Authorization: `Bearer ${session?.access_token}` }
       });
 
       console.log("Gemini AI Analysis Result:", response.data.data);
@@ -65,7 +67,12 @@ export default function ResumeUploadStep({ onNext, onPrev, globalData }) {
 
     } catch (error) {
       console.error(error);
-      toast.error(error.response?.data?.error || "Failed to analyze resume. Please try again.", { id: toastId });
+      const responseData = error.response?.data;
+      const validationMessage = responseData?.errors?.map((item) => item.message).join(", ");
+      toast.error(
+        validationMessage || responseData?.message || "Failed to analyze resume. Please try again.",
+        { id: toastId }
+      );
     } finally {
       setAnalyzing(false);
     }
@@ -93,7 +100,7 @@ export default function ResumeUploadStep({ onNext, onPrev, globalData }) {
             type="file" 
             ref={fileInputRef} 
             onChange={handleFileChange} 
-            accept=".pdf,.doc,.docx" 
+            accept="application/pdf,.pdf"
             className="hidden" 
           />
 
@@ -113,7 +120,7 @@ export default function ResumeUploadStep({ onNext, onPrev, globalData }) {
                 Browse Files
               </button>
               
-              <p className="mt-4 text-sm text-slate-500 dark:text-gray-400">Supports PDF, DOCX (Max 10MB)</p>
+              <p className="mt-4 text-sm text-slate-500 dark:text-gray-400">Supports PDF (Max 5MB)</p>
             </>
           ) : (
             <div className="flex flex-col items-center">

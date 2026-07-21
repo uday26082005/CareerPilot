@@ -1,6 +1,7 @@
 const multer = require("multer");
 const { env } = require("../../config/env");
 const { AppError } = require("../error/AppError");
+const { HTTP_STATUS } = require("../../utils/constants/httpStatus");
 
 const storage = multer.memoryStorage();
 
@@ -12,7 +13,7 @@ const resumeUpload = multer({
   },
   fileFilter(req, file, callback) {
     if (file.mimetype !== "application/pdf") {
-      callback(new AppError("Only PDF resume uploads are allowed.", 400));
+      callback(new AppError("Only PDF resume uploads are allowed.", HTTP_STATUS.UNSUPPORTED_MEDIA_TYPE));
       return;
     }
 
