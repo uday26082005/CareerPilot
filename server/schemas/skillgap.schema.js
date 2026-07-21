@@ -20,6 +20,8 @@ const practiceQuestionSchema = z.object({
 });
 
 const skillGapAnalysisSchema = z.object({
+  matched_skills: z.array(z.string().trim()).max(50),
+  missing_skills: z.array(z.string().trim()).max(50),
   priority_skills: z.array(z.string().trim()).max(20),
   recommended_projects: z.array(recommendedProjectSchema).max(10),
   recommended_resources: z.array(recommendedResourceSchema).max(20),

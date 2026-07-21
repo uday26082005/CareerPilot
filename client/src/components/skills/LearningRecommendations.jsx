@@ -77,10 +77,15 @@ export default function LearningRecommendations({ courses = [], projects = [], p
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-gray-400 group-hover:bg-emerald-500/10 group-hover:text-emerald-400 transition-colors">
                     <HelpCircle className="h-5 w-5" />
                   </div>
-                  <div>
+                  <div className="flex flex-col">
                     <h5 className="text-sm font-bold text-slate-900 dark:text-white leading-tight">
-                      {item.topic_id ? TOPIC_NAMES[item.topic_id] : item.title}
+                      {item.title}
                     </h5>
+                    {item.topic_id && (
+                      <p className="text-xs text-slate-500 dark:text-gray-400 mt-1">
+                        {TOPIC_NAMES[item.topic_id]}
+                      </p>
+                    )}
                   </div>
                 </div>
               </Link>

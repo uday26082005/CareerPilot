@@ -1,6 +1,6 @@
 const { AppError } = require("../../middleware/error/AppError");
 const { getSupabaseAdmin } = require("../../config/supabase");
-const { getGeminiClient, geminiModel } = require("../../config/gemini");
+const aiService = require("../ai/gemini.service");
 const { skillGapAnalysisSchema } = require("../../schemas/skillgap.schema");
 
 const HTTP_STATUS_OK = 200;
@@ -8,22 +8,21 @@ const HTTP_STATUS_NOT_FOUND = 404;
 const HTTP_STATUS_INTERNAL_SERVER_ERROR = 500;
 const HTTP_STATUS_UNPROCESSABLE_ENTITY = 422;
 
-const extractJson = (text) => {
-  try {
-    return JSON.parse(text);
-  } catch (error) {
-    console.error("Failed to parse schema-enforced JSON:", text);
-    throw error;
-  }
-};
+const buildGeminiPrompt = (targetRole, resumeText, requiredSkills) => `You are an expert AI Career Advisor and Software Engineering Mentor.
+I have a user targeting the role of "${targetRole}".
 
-const buildGeminiPrompt = (targetRole, matchedSkills, missingSkills) => `You are an expert AI Career Advisor and Software Engineering Mentor.
-I have analyzed a user's skills against their target role of "${targetRole}".
+Here is the raw text extracted from their resume:
+"""
+${resumeText}
+"""
 
-Matched Skills: ${JSON.stringify(matchedSkills)}
-Missing Skills: ${JSON.stringify(missingSkills)}
+Required skills for the target role:
+${JSON.stringify(requiredSkills)}
 
-Based on this gap, provide a personalized learning roadmap. 
+Task 1: Analyze the resume text carefully. Match the user's actual experience and skills against the required skills. Use intelligent semantic matching (e.g., if they have "MySQL" or "PostgreSQL", that matches "SQL". If they have "GitHub" or "GitLab", that matches "Git"). Be generous in your interpretation if the semantic overlap is strong.
+Return two arrays: "matched_skills" (which required skills they have) and "missing_skills" (which required skills they lack). Both arrays MUST contain the names of the *required skills* exactly as provided.
+
+Task 2: Based on the missing skills, provide a personalized learning roadmap. 
 IMPORTANT: Recommend ONLY 100% FREE resources (e.g. Roadmap.sh, MDN, freeCodeCamp, MIT OpenCourseWare, YouTube, official docs). NEVER recommend paid courses.
 
 You MUST provide AT LEAST 3 to 4 recommended_courses, AT LEAST 3 to 4 recommended_projects, and AT LEAST 3 to 4 practice_questions.
@@ -31,62 +30,9 @@ For practice_questions, provide a related topic_id. The ONLY valid topic_ids are
 
 Return the data precisely following the schema.`;
 
-const analyzeWithGemini = async (targetRole, matchedSkills, missingSkills) => {
-  const client = getGeminiClient();
-  const response = await client.models.generateContent({
-    model: geminiModel,
-    contents: buildGeminiPrompt(targetRole, matchedSkills, missingSkills),
-    config: {
-      responseMimeType: "application/json",
-      responseSchema: {
-        type: "OBJECT",
-        properties: {
-          priority_skills: { type: "ARRAY", items: { type: "STRING" } },
-          recommended_projects: {
-            type: "ARRAY",
-            items: {
-              type: "OBJECT",
-              properties: {
-                title: { type: "STRING" },
-                description: { type: "STRING" },
-                difficulty: { type: "STRING" }
-              }
-            }
-          },
-          recommended_resources: {
-            type: "ARRAY",
-            items: {
-              type: "OBJECT",
-              properties: {
-                title: { type: "STRING" },
-                type: { type: "STRING" },
-                url: { type: "STRING" }
-              }
-            }
-          },
-          practice_questions: {
-            type: "ARRAY",
-            items: {
-              type: "OBJECT",
-              properties: {
-                title: { type: "STRING" },
-                platform: { type: "STRING" },
-                url: { type: "STRING" },
-                topic_id: { type: "STRING" }
-              }
-            }
-          },
-          learning_order: { type: "ARRAY", items: { type: "STRING" } },
-          summary: { type: "STRING" },
-          next_learning_step: { type: "STRING" }
-        }
-      },
-      temperature: 0.2,
-    },
-  });
-
-  const parsedResponse = extractJson(response.text);
-  return skillGapAnalysisSchema.parse(parsedResponse);
+const analyzeWithGemini = async (targetRole, resumeText, requiredSkills) => {
+  const prompt = buildGeminiPrompt(targetRole, resumeText, requiredSkills);
+  return await aiService.generateStructuredResponse(prompt, skillGapAnalysisSchema);
 };
 
 const analyzeSkillGap = async (userId) => {
@@ -111,7 +57,7 @@ const analyzeSkillGap = async (userId) => {
   // 2. Fetch Latest Resume Analysis
   const { data: resumeAnalysis, error: resumeError } = await supabase
     .from("resume_analysis")
-    .select("id, key_skills, strengths, recommended_keywords")
+    .select("id, resume_text")
     .eq("user_id", userId)
     .order("created_at", { ascending: false })
     .limit(1)
@@ -154,39 +100,22 @@ const analyzeSkillGap = async (userId) => {
     return existingAnalysis;
   }
 
-  // 5. Calculate Backend Logic
-  // Combine all user skills and lowercase them for comparison
-  const rawUserSkills = [
-    ...(resumeAnalysis.key_skills || []),
-    ...(resumeAnalysis.strengths || []),
-    ...(resumeAnalysis.recommended_keywords || [])
-  ];
-  
-  const userSkillsSet = new Set(rawUserSkills.map(s => s.toLowerCase().trim()));
-
-  const matchedSkills = [];
-  const missingSkills = [];
-
-  requiredSkills.forEach(skill => {
-    if (userSkillsSet.has(skill.toLowerCase().trim())) {
-      matchedSkills.push(skill);
-    } else {
-      missingSkills.push(skill);
-    }
-  });
-
-  const skillMatchPercentage = requiredSkills.length > 0 
-    ? Math.round((matchedSkills.length / requiredSkills.length) * 100) 
-    : 0;
-
-  // 6. Call Gemini
+  // 5. Backend Logic bypassed - passing full resume text to Gemini
+  // 6. Call Gemini to semantically match skills directly from the resume text and generate the roadmap
   let geminiResult;
   try {
-    geminiResult = await analyzeWithGemini(targetRole, matchedSkills, missingSkills);
+    geminiResult = await analyzeWithGemini(targetRole, resumeAnalysis.resume_text, requiredSkills);
   } catch (error) {
     console.error("Gemini skill gap analysis failed.", error);
     throw new AppError(`Failed to generate personalized learning plan with AI: ${error.message}`, HTTP_STATUS_INTERNAL_SERVER_ERROR);
   }
+
+  const matchedSkills = geminiResult.matched_skills || [];
+  const missingSkills = geminiResult.missing_skills || [];
+  
+  const skillMatchPercentage = requiredSkills.length > 0 
+    ? Math.round((matchedSkills.length / requiredSkills.length) * 100) 
+    : 0;
 
   // 7. Save Analysis
   const payload = {

@@ -1,7 +1,7 @@
 const pdfParse = require("pdf-parse");
 const { randomUUID } = require("crypto");
 
-const { getGeminiClient, geminiModel } = require("../../config/gemini");
+const aiService = require("../ai/gemini.service");
 const { getSupabaseAdmin } = require("../../config/supabase");
 const { AppError } = require("../../middleware/error/AppError");
 const { HTTP_STATUS } = require("../../utils/constants/httpStatus");
@@ -119,28 +119,9 @@ Resume text:
 ${resumeText.slice(0, MAX_RESUME_TEXT_LENGTH)}
 ---`;
 
-const extractJson = (responseText) => {
-  const trimmed = String(responseText || "").trim();
-  const jsonText = trimmed
-    .replace(/^```(?:json)?\s*/i, "")
-    .replace(/\s*```$/, "");
-
-  return JSON.parse(jsonText);
-};
-
 const analyzeWithGemini = async (resumeText, targetRole) => {
-  const client = getGeminiClient();
-  const response = await client.models.generateContent({
-    model: geminiModel,
-    contents: buildGeminiPrompt(resumeText, targetRole),
-    config: {
-      responseMimeType: "application/json",
-      temperature: 0.2,
-    },
-  });
-
-  const parsedResponse = extractJson(response.text);
-  return resumeAnalysisSchema.parse(parsedResponse);
+  const prompt = buildGeminiPrompt(resumeText, targetRole);
+  return await aiService.generateStructuredResponse(prompt, resumeAnalysisSchema);
 };
 
 const uploadResume = async (supabase, storagePath, file) => {
