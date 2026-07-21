@@ -10,7 +10,7 @@ import TargetRoleStep from "../components/onboarding/steps/TargetRoleStep";
 import CompletedStep from "../components/onboarding/steps/CompletedStep";
 
 export default function Onboarding() {
-  const { user } = useAuth();
+  const { user, session } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [globalData, setGlobalData] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,13 +33,18 @@ export default function Onboarding() {
         yearsExperience: completeData.experience === "fresher" ? 0 : completeData.experience === "junior" ? 2 : 5,
         githubUrl: completeData.githubUrl,
         linkedinUrl: completeData.linkedinUrl
+      }, {
+        headers: { Authorization: `Bearer ${session?.access_token}` }
       });
       
       toast.success("Profile saved successfully!", { id: toastId });
       setCurrentStep(4);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to save profile.", { id: toastId });
+      const errMsg = error.response?.data?.errors 
+        ? error.response.data.errors.map(e => e.message).join(", ") 
+        : error.response?.data?.message || "Failed to save profile.";
+      toast.error(errMsg, { id: toastId });
     } finally {
       setIsSubmitting(false);
     }

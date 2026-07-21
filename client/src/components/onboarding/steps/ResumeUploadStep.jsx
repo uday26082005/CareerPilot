@@ -6,7 +6,7 @@ import axios from "axios";
 import { useAuth } from "../../../contexts/AuthContext";
 
 export default function ResumeUploadStep({ onNext, onPrev, globalData }) {
-  const { user } = useAuth();
+  const { user, session } = useAuth();
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -49,7 +49,10 @@ export default function ResumeUploadStep({ onNext, onPrev, globalData }) {
 
       // Call our new Node.js backend endpoint
       const response = await axios.post("http://localhost:5000/api/resume/analyze", formData, {
-        headers: { "Content-Type": "multipart/form-data" }
+        headers: { 
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${session?.access_token}`
+        }
       });
 
       console.log("Gemini AI Analysis Result:", response.data.data);
