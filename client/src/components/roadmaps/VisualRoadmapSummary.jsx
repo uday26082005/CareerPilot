@@ -1,6 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 
-const VisualRoadmapSummary = forwardRef((props, ref) => {
+const VisualRoadmapSummary = forwardRef(({ roadmap }, ref) => {
   const containerRef = useRef(null);
 
   useImperativeHandle(ref, () => ({
@@ -19,44 +19,52 @@ const VisualRoadmapSummary = forwardRef((props, ref) => {
       }
 
       const canvas = await window.html2canvas(element, { scale: 2, useCORS: true, logging: false });
-      const dataUri = canvas.toDataURL('image/jpeg', 0.98);
+      const dataUri = canvas.toDataURL('image/png', 1.0);
       
       const a = document.createElement('a');
       a.href = dataUri;
-      a.download = 'CareerPilot_Roadmap.jpg';
+      a.download = 'CareerPilot_Roadmap.png';
       a.click();
     }
   }));
 
-  const phases = [
-    { num: 1, title: "Fundamentals", desc: "Build strong programming fundamentals with HTML, CSS, JS, and Git.", color: "#e84393" },
-    { num: 2, title: "Frontend Dev", desc: "Master modern frameworks like React and build interactive UIs.", color: "#1abc9c" },
-    { num: 3, title: "Backend Dev", desc: "Develop robust APIs using Node.js, Express, and REST principles.", color: "#9b59b6" },
-    { num: 4, title: "Databases", desc: "Design scalable relational and NoSQL database architectures.", color: "#e67e22" },
-    { num: 5, title: "System Design", desc: "Deploy apps, set up CI/CD, and master cloud architecture.", color: "#3498db" },
-  ];
+  if (!roadmap || !roadmap.phases) return null;
 
-  // Distribute 5 nodes evenly across 1600px width.
-  // Margins 200px, spacing 300px.
-  // Peaks at y=300, Dips at y=550.
+  // We have a predefined SVG winding road designed for up to 7 nodes.
+  const colors = ["#e84393", "#1abc9c", "#9b59b6", "#e67e22", "#3498db", "#e74c3c", "#2ecc71"];
+  
   const nodeCoords = [
     { x: 200, y: 550 },
     { x: 500, y: 300 },
     { x: 800, y: 550 },
     { x: 1100, y: 300 },
     { x: 1400, y: 550 },
+    { x: 1700, y: 300 },
+    { x: 2000, y: 550 },
   ];
 
-  // Mathematically perfect continuous sine-like wave
-  const roadPath = [
-    "M -100 300",
-    "C 50 300, 50 550, 200 550",
-    "C 350 550, 350 300, 500 300",
-    "C 650 300, 650 550, 800 550",
-    "C 950 550, 950 300, 1100 300",
-    "C 1250 300, 1250 550, 1400 550",
-    "C 1550 550, 1550 300, 1700 300"
-  ].join(" ");
+  // Map dynamic phases. Limit to 7 to fit the expanded road canvas safely if Gemini goes crazy.
+  const displayPhases = roadmap.phases.slice(0, 7);
+
+  const pathSegments = ["M -100 300"];
+  for (let i = 0; i < displayPhases.length; i++) {
+    const prevX = (i * 300) + 50;
+    const nextX = (i * 300) + 200;
+    const isEven = i % 2 === 0;
+    const prevY = isEven ? 300 : 550;
+    const destY = isEven ? 550 : 300;
+    pathSegments.push(`C ${prevX} ${prevY}, ${prevX} ${destY}, ${nextX} ${destY}`);
+  }
+  // Extend road smoothly horizontally to the right
+  const lastI = displayPhases.length - 1;
+  const lastX = (lastI * 300) + 200;
+  const lastY = (lastI % 2 === 0) ? 550 : 300;
+  pathSegments.push(`C ${lastX + 100} ${lastY}, ${lastX + 200} ${lastY}, ${lastX + 300} ${lastY}`);
+  
+  const roadPath = pathSegments.join(" ");
+  
+  // Calculate width based on number of phases so it fits nicely
+  const canvasWidth = Math.max(1200, displayPhases.length * 300 + 400);
 
   return (
     <div 
@@ -65,7 +73,7 @@ const VisualRoadmapSummary = forwardRef((props, ref) => {
     >
       <div 
         ref={containerRef} 
-        style={{ width: '1600px', height: '900px', backgroundColor: '#ffffff', position: 'relative', overflow: 'hidden' }}
+        style={{ width: `${canvasWidth}px`, height: '900px', backgroundColor: '#ffffff', position: 'relative', overflow: 'hidden' }}
       >
         {/* Header Section */}
         <div 
@@ -103,13 +111,13 @@ const VisualRoadmapSummary = forwardRef((props, ref) => {
             color: '#111111', 
             margin: '10px 0 0 0' 
           }}>
-            Full Stack Developer Journey
+            {roadmap.target_role || "Professional Journey"}
           </h2>
         </div>
 
         {/* SVG Winding Road */}
         <svg 
-          width="1600" 
+          width={canvasWidth} 
           height="900" 
           style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none' }}
         >
@@ -121,17 +129,18 @@ const VisualRoadmapSummary = forwardRef((props, ref) => {
         </svg>
 
         {/* Phases (Nodes & Text) */}
-        {phases.map((phase, i) => {
+        {displayPhases.map((phase, i) => {
           const coord = nodeCoords[i];
+          const color = colors[i % colors.length];
           
           return (
-            <div key={phase.num}>
+            <div key={phase.phase_number}>
               {/* Teardrop Marker */}
               <div 
                 style={{ 
                   position: 'absolute', 
                   left: coord.x - 60, 
-                  top: coord.y - 90, // Tip of the teardrop precisely touches the road
+                  top: coord.y - 90,
                   width: 120, 
                   height: 100, 
                   zIndex: 30 
@@ -140,13 +149,12 @@ const VisualRoadmapSummary = forwardRef((props, ref) => {
                 <svg viewBox="0 0 120 100" style={{ width: '100%', height: '100%' }}>
                   <path 
                     d="M 30 40 A 30 30 0 0 1 90 40 Q 90 70 60 90 Q 30 70 30 40 Z" 
-                    fill={phase.color} 
+                    fill={color} 
                     stroke="#ffffff" 
                     strokeWidth="4" 
                   />
                   <circle cx="60" cy="40" r="22" fill="#ffffff" />
                   
-                  {/* Number perfectly centered using SVG text */}
                   <text 
                     x="60" 
                     y="50" 
@@ -156,12 +164,12 @@ const VisualRoadmapSummary = forwardRef((props, ref) => {
                     fontFamily='"Arial Black", Impact, sans-serif'
                     fill="#111111"
                   >
-                    {phase.num}
+                    {phase.phase_number}
                   </text>
                 </svg>
               </div>
 
-              {/* Text Block - creates a subtle wave without hugging the curve too tightly */}
+              {/* Text Block */}
               <div 
                 style={{
                   position: 'absolute',
@@ -189,7 +197,7 @@ const VisualRoadmapSummary = forwardRef((props, ref) => {
                   margin: 0, 
                   lineHeight: '1.6' 
                 }}>
-                  {phase.desc}
+                  {phase.description}
                 </p>
               </div>
             </div>

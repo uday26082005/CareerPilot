@@ -24,31 +24,38 @@ const extractJson = (responseText) => {
  * @returns {Promise<object>} The validated data.
  */
 const generateStructuredResponse = async (prompt, zodSchema, options = {}) => {
-  const { temperature = 0.2 } = options;
+  const { temperature = 0.2, maxRetries = 3 } = options;
   const client = getGeminiClient();
 
-  try {
-    const response = await client.models.generateContent({
-      model: geminiModel,
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json",
-        // Pass a very generic object schema to force JSON output
-        responseSchema: {
-          type: "OBJECT",
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await client.models.generateContent({
+        model: geminiModel,
+        contents: prompt,
+        config: {
+          responseMimeType: "application/json",
+          temperature,
         },
-        temperature,
-      },
-    });
+      });
 
-    const parsedJson = extractJson(response.text);
-    return zodSchema.parse(parsedJson);
-  } catch (error) {
-    if (error instanceof AppError) {
-      throw error;
+      const parsedJson = extractJson(response.text);
+      return zodSchema.parse(parsedJson);
+    } catch (error) {
+      const isRetryable = error.message?.includes("503") || error.message?.includes("429") || error.message?.includes("UNAVAILABLE");
+      
+      if (isRetryable && attempt < maxRetries) {
+        const delayMs = attempt * 2000;
+        console.warn(`Gemini API busy (Attempt ${attempt}/${maxRetries}). Retrying in ${delayMs}ms...`);
+        await new Promise(res => setTimeout(res, delayMs));
+        continue;
+      }
+
+      if (error instanceof AppError) {
+        throw error;
+      }
+      console.error("Gemini AI request failed:", error);
+      throw new AppError(`AI analysis failed: ${error.message}`, 500);
     }
-    console.error("Gemini AI request failed:", error);
-    throw new AppError(`AI analysis failed: ${error.message}`, 500);
   }
 };
 

@@ -3,6 +3,7 @@ const authRoutes = require("./auth/auth.routes");
 const profileRoutes = require("./profile/profile.routes");
 const resumeRoutes = require("./resume/resume.routes");
 const skillGapRoutes = require("./skillgap.routes");
+const roadmapRoutes = require("./roadmap/roadmap.routes");
 const { sendSuccess } = require("../utils/responseHandler");
 
 const router = express.Router();
@@ -21,5 +22,6 @@ router.use("/auth", authRoutes);
 router.use("/profile", profileRoutes);
 router.use("/resume", resumeRoutes);
 router.use("/skillgap", skillGapRoutes);
+router.use("/roadmap", roadmapRoutes);
 
 module.exports = router;
