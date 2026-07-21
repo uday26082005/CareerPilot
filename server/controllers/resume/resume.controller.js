@@ -34,8 +34,21 @@ const getAnalysisHistory = asyncHandler(async (req, res) => {
   });
 });
 
+const reanalyzeResume = asyncHandler(async (req, res) => {
+  const data = await resumeService.reanalyzeResume(req.user.id);
+
+  sendSuccess(res, {
+    statusCode: HTTP_STATUS.CREATED,
+    message: data.analysisSource === "fallback"
+      ? "Re-analysis completed with a fallback response. Try again later for full AI insights."
+      : "Resume re-analyzed successfully.",
+    data,
+  });
+});
+
 module.exports = {
   analyzeResume,
+  reanalyzeResume,
   getLatestAnalysis,
   getAnalysisHistory,
 };

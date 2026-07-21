@@ -34,14 +34,22 @@ const formatResumeAnalysis = (record) => {
     id: record.id,
     resumePath: record.resume_url,
     resumeFilename: record.resume_filename,
-    atsScore: record.ats_score,
     overallScore: record.overall_score,
-    roleFit: record.role_fit,
-    keySkills: toArray(record.key_skills),
-    missingSkills: toArray(record.missing_skills),
-    strengths: toArray(record.strengths),
-    improvementAreas: toArray(record.improvement_areas),
+    overallSummary: record.overall_summary || "",
+    atsScore: record.ats_score,
+    atsStatus: record.ats_status || "",
+    atsTips: toArray(record.ats_tips),
+    sectionScores: record.section_scores || {},
+    topStrengths: toArray(record.strengths),
+    keySuggestions: toArray(record.key_suggestions),
     recommendedKeywords: toArray(record.recommended_keywords),
+    roleFit: {
+      targetRole: record.analysis_json?.role_fit?.target_role || record.analysis_json?.target_role || "",
+      score: record.analysis_json?.role_fit?.score || 0,
+      summary: record.role_fit_summary || "",
+      strengths: toArray(record.analysis_json?.role_fit?.strengths),
+      weaknesses: toArray(record.analysis_json?.role_fit?.weaknesses),
+    },
     targetRole: record.analysis_json?.target_role || null,
     analysisSource: record.analysis_json?.source || "gemini",
     analysisWarning: record.analysis_json?.warning || null,
@@ -51,14 +59,22 @@ const formatResumeAnalysis = (record) => {
 };
 
 const buildFallbackAnalysis = (targetRole, reason) => ({
-  ats_score: 0,
   overall_score: 0,
-  role_fit: `Analysis is temporarily unavailable for the ${targetRole} role.`,
-  key_skills: [],
-  missing_skills: [],
+  overall_summary: "Analysis is temporarily unavailable.",
+  ats_score: 0,
+  ats_status: "Error",
+  ats_tips: ["Try analyzing this resume again shortly."],
+  section_scores: {},
   strengths: [],
-  improvement_areas: ["Try analyzing this resume again shortly."],
+  key_suggestions: [],
   recommended_keywords: [],
+  role_fit: {
+    target_role: targetRole,
+    score: 0,
+    summary: `Analysis is temporarily unavailable for the ${targetRole} role.`,
+    strengths: [],
+    weaknesses: []
+  },
   source: "fallback",
   warning: reason,
 });
@@ -71,14 +87,31 @@ Return exactly one JSON object with no Markdown, commentary, or additional keys.
 
 Required JSON shape:
 {
-  "ats_score": 0,
-  "overall_score": 0,
-  "role_fit": "",
-  "key_skills": [],
-  "missing_skills": [],
+  "overall_score": 88,
+  "overall_summary": "",
+  "ats_score": 85,
+  "ats_status": "",
+  "ats_tips": [],
+  "section_scores": {
+    "summary": { "score": 80, "feedback": "" },
+    "experience": { "score": 88, "feedback": "" },
+    "skills": { "score": 90, "feedback": "" },
+    "projects": { "score": 84, "feedback": "" },
+    "education": { "score": 86, "feedback": "" },
+    "certifications": { "score": 78, "feedback": "" }
+  },
   "strengths": [],
-  "improvement_areas": [],
-  "recommended_keywords": []
+  "key_suggestions": [
+    { "title": "", "description": "", "priority": "High" }
+  ],
+  "recommended_keywords": [],
+  "role_fit": {
+    "target_role": "${targetRole}",
+    "score": 82,
+    "summary": "",
+    "strengths": [],
+    "weaknesses": []
+  }
 }
 
 Resume text:
@@ -149,21 +182,23 @@ const extractResumeText = async (fileBuffer) => {
   return resumeText;
 };
 
-const saveAnalysis = async (supabase, userId, storagePath, file, resumeText, targetRole, analysis) => {
+const saveAnalysis = async (supabase, userId, storagePath, filename, resumeText, targetRole, analysis) => {
   const payload = {
     user_id: userId,
-    // The private storage object path is intentionally stored instead of a public URL.
     resume_url: storagePath,
-    resume_filename: sanitizeFilename(file.originalname),
+    resume_filename: sanitizeFilename(filename),
     resume_text: resumeText,
     ats_score: analysis.ats_score,
     overall_score: analysis.overall_score,
-    role_fit: analysis.role_fit,
-    key_skills: analysis.key_skills,
-    missing_skills: analysis.missing_skills,
-    strengths: analysis.strengths,
-    improvement_areas: analysis.improvement_areas,
-    recommended_keywords: analysis.recommended_keywords,
+    role_fit: analysis.role_fit?.summary || "Role fit analyzed.",
+    role_fit_summary: analysis.role_fit?.summary || "",
+    overall_summary: analysis.overall_summary || "",
+    ats_status: analysis.ats_status || "",
+    ats_tips: analysis.ats_tips || [],
+    section_scores: analysis.section_scores || {},
+    strengths: analysis.strengths || [],
+    key_suggestions: analysis.key_suggestions || [],
+    recommended_keywords: analysis.recommended_keywords || [],
     analysis_json: {
       ...analysis,
       target_role: targetRole,
@@ -218,13 +253,11 @@ const analyzeResume = async (userId, file) => {
     try {
       analysis = await analyzeWithGemini(resumeText, targetRole);
     } catch (error) {
-      console.error("Gemini resume analysis failed; using fallback response.", {
-        message: error.message,
-      });
-      analysis = buildFallbackAnalysis(targetRole, "AI analysis is temporarily unavailable. Please try again shortly.");
+      console.error("Gemini resume analysis failed; using fallback response.", error);
+      analysis = buildFallbackAnalysis(targetRole, `AI analysis failed: ${error.message}`);
     }
 
-    return await saveAnalysis(supabase, userId, storagePath, file, resumeText, targetRole, analysis);
+    return await saveAnalysis(supabase, userId, storagePath, file.originalname, resumeText, targetRole, analysis);
   } catch (error) {
     if (uploaded) {
       try {
@@ -276,8 +309,52 @@ const getAnalysisHistory = async (userId, { limit, offset }) => {
   };
 };
 
+const reanalyzeResume = async (userId) => {
+  const supabase = getSupabaseAdmin();
+  
+  const { data: latestAnalysis, error } = await supabase
+    .from("resume_analysis")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error || !latestAnalysis) {
+    throw new AppError("No existing resume found to re-analyze. Please upload a new resume.", HTTP_STATUS.NOT_FOUND);
+  }
+
+  const profile = await profileService.getProfileById(userId);
+  const targetRole = profile.targetRole?.trim();
+
+  if (!targetRole) {
+    throw new AppError("Set a target role in your profile before analyzing a resume.", HTTP_STATUS.UNPROCESSABLE_ENTITY);
+  }
+
+  const resumeText = latestAnalysis.resume_text;
+
+  let analysis;
+  try {
+    analysis = await analyzeWithGemini(resumeText, targetRole);
+  } catch (err) {
+    console.error("Gemini resume re-analysis failed; using fallback response.", err);
+    analysis = buildFallbackAnalysis(targetRole, `AI analysis failed: ${err.message}`);
+  }
+
+  return await saveAnalysis(
+    supabase, 
+    userId, 
+    latestAnalysis.resume_url, 
+    latestAnalysis.resume_filename, 
+    resumeText, 
+    targetRole, 
+    analysis
+  );
+};
+
 module.exports = {
   analyzeResume,
+  reanalyzeResume,
   getLatestAnalysis,
   getAnalysisHistory,
 };

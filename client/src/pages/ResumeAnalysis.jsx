@@ -100,13 +100,39 @@ export default function ResumeAnalysis() {
     submitResume(file);
   };
 
-  const handleReanalyze = () => {
-    if (!resumeFile) {
-      setFeedback({ type: "error", message: "Upload a PDF resume before re-analyzing." });
+  const handleReanalyze = async () => {
+    if (!session?.access_token) {
+      setFeedback({ type: "error", message: "Please sign in before re-analyzing." });
       return;
     }
+    
+    setIsAnalyzing(true);
+    setFeedback(null);
 
-    submitResume(resumeFile);
+    try {
+      const response = await fetch(`${API_BASE_URL}/resume/reanalyze`, {
+        method: "POST",
+        headers: { 
+          Authorization: `Bearer ${session.access_token}`,
+          "Content-Type": "application/json"
+        },
+      });
+      const payload = await response.json();
+
+      if (!response.ok || !payload.success) {
+        throw new Error(payload.message || "Unable to re-analyze resume.");
+      }
+
+      setAnalysis(payload.data);
+      setFeedback({
+        type: payload.data.analysisSource === "fallback" ? "error" : "success",
+        message: payload.data.analysisWarning || payload.message,
+      });
+    } catch (error) {
+      setFeedback({ type: "error", message: error.message });
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   return (
@@ -143,21 +169,21 @@ export default function ResumeAnalysis() {
 
       {/* Top Row: Score, ATS, Strengths */}
       <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-1"><OverallScore score={analysis?.overallScore} /></div>
-        <div className="lg:col-span-1"><ATSCompatibility score={analysis?.atsScore} /></div>
-        <div className="lg:col-span-1"><TopStrengths strengths={analysis?.strengths} /></div>
+        <div className="lg:col-span-1"><OverallScore score={analysis?.overallScore} summary={analysis?.overallSummary} /></div>
+        <div className="lg:col-span-1"><ATSCompatibility score={analysis?.atsScore} status={analysis?.atsStatus} tips={analysis?.atsTips} /></div>
+        <div className="lg:col-span-1"><TopStrengths strengths={analysis?.topStrengths} /></div>
       </div>
 
       {/* Middle Row: Sections, Suggestions */}
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="lg:col-span-1"><SectionScores /></div>
-        <div className="lg:col-span-1"><KeySuggestions suggestions={analysis?.improvementAreas} /></div>
+        <div className="lg:col-span-1"><SectionScores scores={analysis?.sectionScores} /></div>
+        <div className="lg:col-span-1"><KeySuggestions suggestions={analysis?.keySuggestions} /></div>
       </div>
 
       {/* Bottom Row: Keywords, Role Fit */}
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-1"><RecommendedKeywords keywords={analysis?.recommendedKeywords} /></div>
-        <div className="lg:col-span-2"><RoleFitAnalysis targetRole={analysis?.targetRole} roleFit={analysis?.roleFit} score={analysis?.overallScore} keySkills={analysis?.keySkills} missingSkills={analysis?.missingSkills} /></div>
+        <div className="lg:col-span-2"><RoleFitAnalysis targetRole={analysis?.targetRole} roleFit={analysis?.roleFit} /></div>
       </div>
 
     </div>

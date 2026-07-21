@@ -7,6 +7,7 @@ const { validateRequest } = require("../../middleware/validation/validateRequest
 const {
   analyzeResumeSchema,
   listResumeHistorySchema,
+  reanalyzeResumeSchema,
 } = require("../../schemas/resume.schema");
 
 const router = express.Router();
@@ -19,6 +20,13 @@ router.post(
   validateRequest(analyzeResumeSchema),
   resumeController.analyzeResume
 );
+
+router.post(
+  "/reanalyze",
+  validateRequest(reanalyzeResumeSchema),
+  resumeController.reanalyzeResume
+);
+
 router.get("/latest", validateRequest(analyzeResumeSchema), resumeController.getLatestAnalysis);
 router.get("/history", validateRequest(listResumeHistorySchema), resumeController.getAnalysisHistory);
 

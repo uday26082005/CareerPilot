@@ -1,5 +1,5 @@
-export default function OverallScore({ score: scoreProp }) {
-  const score = Math.round(scoreProp ?? 87);
+export default function OverallScore({ score: scoreProp, summary }) {
+  const score = Math.round(scoreProp ?? 0);
   const circumference = 2 * Math.PI * 45; // radius 45
   const strokeDashoffset = circumference - (score / 100) * circumference;
   const scoreLabel = score >= 80 ? "Excellent!" : score >= 60 ? "Good progress" : "Needs attention";
@@ -52,7 +52,7 @@ export default function OverallScore({ score: scoreProp }) {
         <div>
           <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">{scoreLabel}</h2>
           <p className="text-xs text-slate-500 dark:text-gray-400 leading-relaxed">
-            Your resume is strong and well-structured. Address a few improvements to make it even better.
+            {summary || "Upload a resume to get your overall score and detailed feedback."}
           </p>
         </div>
       </div>
