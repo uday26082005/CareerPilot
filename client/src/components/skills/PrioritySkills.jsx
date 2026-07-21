@@ -1,15 +1,17 @@
 import { Info, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const SKILLS = [
-  { name: "React", progress: 80, val: "20%", icon: "⚛️", badge: "High", badgeColor: "text-red-400 border-red-500/30" },
-  { name: "Node.js", progress: 75, val: "25%", icon: "⬢", badge: "High", badgeColor: "text-red-400 border-red-500/30" },
-  { name: "TypeScript", progress: 90, val: "10%", icon: "TS", badge: "High", badgeColor: "text-red-400 border-red-500/30" },
-  { name: "Docker", progress: 85, val: "15%", icon: "🐳", badge: "Medium", badgeColor: "text-orange-400 border-orange-500/30" },
-  { name: "AWS", progress: 80, val: "20%", icon: "☁️", badge: "Medium", badgeColor: "text-orange-400 border-orange-500/30" },
-];
+export default function PrioritySkills({ prioritySkills = [] }) {
+  // Mocking the progress bars since Gemini only returns skill names
+  const SKILLS = prioritySkills.map((skill, index) => ({
+    name: skill,
+    progress: Math.max(30, 90 - (index * 15)), // arbitrary descending progress
+    val: "High",
+    icon: "🔥",
+    badge: index < 2 ? "High" : "Medium",
+    badgeColor: index < 2 ? "text-red-400 border-red-500/30" : "text-orange-400 border-orange-500/30"
+  })).slice(0, 5); // take top 5
 
-export default function PrioritySkills() {
   return (
     <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
       <h3 className="mb-6 text-base font-semibold text-slate-500 dark:text-gray-400 flex items-center gap-2">

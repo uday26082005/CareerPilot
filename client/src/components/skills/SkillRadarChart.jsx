@@ -1,24 +1,26 @@
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Legend, Tooltip } from "recharts";
 
-const DATA = [
-  { subject: 'JavaScript', A: 90, B: 100, fullMark: 100 },
-  { subject: 'React', A: 85, B: 90, fullMark: 100 },
-  { subject: 'Node.js', A: 70, B: 85, fullMark: 100 },
-  { subject: 'Databases', A: 75, B: 80, fullMark: 100 },
-  { subject: 'System Design', A: 50, B: 75, fullMark: 100 },
-  { subject: 'Cloud (AWS)', A: 40, B: 70, fullMark: 100 },
-  { subject: 'DevOps', A: 30, B: 60, fullMark: 100 },
-  { subject: 'Problem Solving', A: 85, B: 80, fullMark: 100 },
-];
 
-export default function SkillRadarChart() {
+
+export default function SkillRadarChart({ matchedSkills = [], missingSkills = [] }) {
+  // Combine up to 8 skills to fit the radar chart nicely
+  const combined = [
+    ...matchedSkills.slice(0, 4).map(skill => ({ subject: skill, A: 100, B: 100, fullMark: 100 })),
+    ...missingSkills.slice(0, 4).map(skill => ({ subject: skill, A: 30, B: 100, fullMark: 100 }))
+  ];
+  
+  // If we don't have enough skills from the backend, pad with some empty ones so chart doesn't break
+  while (combined.length > 0 && combined.length < 3) {
+    combined.push({ subject: '', A: 0, B: 0, fullMark: 100 });
+  }
+
   return (
     <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
       <h3 className="mb-0 text-base font-semibold text-slate-500 dark:text-gray-400">Skill Comparison</h3>
       
       <div className="h-[280px] w-full flex-1">
         <ResponsiveContainer width="100%" height="100%">
-          <RadarChart cx="50%" cy="50%" outerRadius="70%" data={DATA}>
+          <RadarChart cx="50%" cy="50%" outerRadius="70%" data={combined.length > 0 ? combined : [{subject: 'No Data', A:0, B:0, fullMark: 100}]}>
             <PolarGrid stroke="#ffffff20" />
             <PolarAngleAxis dataKey="subject" tick={{ fill: '#9ca3af', fontSize: 12 }} />
             <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fill: '#6b7280', fontSize: 12 }} stroke="#ffffff20" />

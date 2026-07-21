@@ -1,7 +1,7 @@
 import { CheckCircle2, AlertCircle, XCircle, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export default function SkillsBreakdown() {
+export default function SkillsBreakdown({ strongSkills = [], missingSkills = [] }) {
   return (
     <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
       <h3 className="mb-4 text-base font-semibold text-slate-500 dark:text-gray-400">Skills Breakdown</h3>
@@ -17,11 +17,11 @@ export default function SkillsBreakdown() {
             </div>
           </div>
           <div className="flex flex-wrap gap-2 pl-8">
-            {["HTML", "CSS", "JavaScript", "Git", "Problem Solving", "SQL"].map((skill, i) => (
+            {strongSkills.length > 0 ? strongSkills.map((skill, i) => (
               <span key={i} className="rounded-md border border-emerald-500/20 bg-emerald-500/5 px-2 py-1 text-xs font-medium text-emerald-400">
                 {skill}
               </span>
-            ))}
+            )) : <span className="text-xs text-slate-500">No matched skills.</span>}
           </div>
         </div>
 
@@ -34,11 +34,11 @@ export default function SkillsBreakdown() {
             </div>
           </div>
           <div className="flex flex-wrap gap-2 pl-8">
-            {["TypeScript", "Next.js", "Docker", "AWS", "System Design", "CI/CD", "Testing (Jest)"].map((skill, i) => (
+            {missingSkills.length > 0 ? missingSkills.map((skill, i) => (
               <span key={i} className="rounded-md border border-red-500/20 bg-red-500/5 px-2 py-1 text-xs font-medium text-red-400">
                 {skill}
               </span>
-            ))}
+            )) : <span className="text-xs text-slate-500">No missing skills.</span>}
           </div>
         </div>
 

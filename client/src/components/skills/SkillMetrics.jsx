@@ -1,7 +1,12 @@
 import { Briefcase, BarChart2, CheckCircle2, XCircle, Info } from "lucide-react";
 
-export default function SkillMetrics() {
-  const overallScore = 68;
+export default function SkillMetrics({ 
+  overallScore = 0, 
+  targetRole = "Not Set", 
+  totalSkills = 0, 
+  matchedSkills = 0, 
+  missingSkills = 0 
+}) {
   const circumference = 2 * Math.PI * 40; // radius 40
   const strokeDashoffset = circumference - (overallScore / 100) * circumference;
 
@@ -53,11 +58,11 @@ export default function SkillMetrics() {
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-violet-500/10 text-violet-400">
             <Briefcase className="h-6 w-6" />
           </div>
-          <span className="text-base font-bold text-slate-900 dark:text-white">Full Stack Developer</span>
+          <span className="text-base font-bold text-slate-900 dark:text-white">{targetRole}</span>
         </div>
         <div className="text-xs text-slate-400 dark:text-gray-500">
-          <span className="block mb-1">Experience Level</span>
-          <span className="font-semibold text-slate-600 dark:text-gray-300 text-sm">Fresher / Entry Level</span>
+          <span className="block mb-1">Target Role</span>
+          <span className="font-semibold text-slate-600 dark:text-gray-300 text-sm">{targetRole}</span>
         </div>
       </div>
 
@@ -71,7 +76,7 @@ export default function SkillMetrics() {
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400">
               <BarChart2 className="h-6 w-6" />
             </div>
-            <span className="block text-3xl font-bold text-slate-900 dark:text-white leading-tight">32</span>
+            <span className="block text-3xl font-bold text-slate-900 dark:text-white leading-tight">{totalSkills}</span>
           </div>
         </div>
 
@@ -84,7 +89,7 @@ export default function SkillMetrics() {
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
               <CheckCircle2 className="h-6 w-6" />
             </div>
-            <span className="block text-3xl font-bold text-slate-900 dark:text-white leading-tight">15</span>
+            <span className="block text-3xl font-bold text-slate-900 dark:text-white leading-tight">{matchedSkills}</span>
           </div>
         </div>
 
@@ -97,7 +102,7 @@ export default function SkillMetrics() {
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-red-500/10 text-red-400">
               <XCircle className="h-6 w-6" />
             </div>
-            <span className="block text-3xl font-bold text-slate-900 dark:text-white leading-tight">8</span>
+            <span className="block text-3xl font-bold text-slate-900 dark:text-white leading-tight">{missingSkills}</span>
           </div>
         </div>
 
