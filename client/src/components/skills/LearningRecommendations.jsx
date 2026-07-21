@@ -79,7 +79,7 @@ export default function LearningRecommendations({ courses = [], projects = [], p
                   </div>
                   <div className="flex flex-col">
                     <h5 className="text-sm font-bold text-slate-900 dark:text-white leading-tight">
-                      {item.title}
+                      {item.topic_id ? `Practice ${TOPIC_NAMES[item.topic_id] || "Interview Skills"}` : item.title}
                     </h5>
                     {item.topic_id && (
                       <p className="text-xs text-slate-500 dark:text-gray-400 mt-1">

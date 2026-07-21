@@ -6,6 +6,7 @@ const skillGapRoutes = require("./skillgap.routes");
 const roadmapRoutes = require("./roadmap/roadmap.routes");
 const interviewRoutes = require("./interview.routes");
 const transcribeRoutes = require("./transcribe.routes");
+const practiceRoutes = require("./practice.routes");
 const { sendSuccess } = require("../utils/responseHandler");
 
 const router = express.Router();
@@ -27,5 +28,6 @@ router.use("/skillgap", skillGapRoutes);
 router.use("/roadmap", roadmapRoutes);
 router.use("/interviews", interviewRoutes);
 router.use("/transcribe", transcribeRoutes);
+router.use("/practice", practiceRoutes);
 
 module.exports = router;
