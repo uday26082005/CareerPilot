@@ -1,6 +1,6 @@
 const { AppError } = require("../../middleware/error/AppError");
 const { getSupabaseAdmin } = require("../../config/supabase");
-const aiService = require("../ai/gemini.service");
+const aiService = require("../ai/groq.service");
 const { skillGapAnalysisSchema } = require("../../schemas/skillgap.schema");
 
 const HTTP_STATUS_OK = 200;
@@ -8,7 +8,7 @@ const HTTP_STATUS_NOT_FOUND = 404;
 const HTTP_STATUS_INTERNAL_SERVER_ERROR = 500;
 const HTTP_STATUS_UNPROCESSABLE_ENTITY = 422;
 
-const buildGeminiPrompt = (targetRole, resumeText, requiredSkills) => `You are an expert AI Career Advisor and Software Engineering Mentor.
+const buildGroqPrompt = (targetRole, resumeText, requiredSkills) => `You are an expert AI Career Advisor and Software Engineering Mentor.
 I have a user targeting the role of "${targetRole}".
 
 Here is the raw text extracted from their resume:
@@ -28,10 +28,22 @@ IMPORTANT: Recommend ONLY 100% FREE resources (e.g. Roadmap.sh, MDN, freeCodeCam
 You MUST provide AT LEAST 3 to 4 recommended_courses, AT LEAST 3 to 4 recommended_projects, and AT LEAST 3 to 4 practice_questions.
 For practice_questions, provide a related topic_id. The ONLY valid topic_ids are: "dsa", "frontend", "backend", "system_design", "databases", "devops". You MUST choose one of these 6 strings for the topic_id based on what the question relates to most.
 
-Return the data precisely following the schema.`;
+Return the data as a JSON object precisely following this exact JSON structure. Do NOT add any extra keys, and do not use markdown outside of the JSON block:
+{
+  "matched_skills": ["skill1", "skill2"],
+  "missing_skills": ["skill3", "skill4"],
+  "priority_skills": ["skill3"],
+  "recommended_projects": [{ "title": "string", "description": "string", "difficulty": "string" }],
+  "recommended_resources": [{ "title": "string", "type": "string", "url": "string" }],
+  "practice_questions": [{ "title": "string", "platform": "string", "url": "string", "topic_id": "string" }],
+  "learning_order": ["step 1", "step 2"],
+  "summary": "string",
+  "next_learning_step": "string"
+}
+`;
 
-const analyzeWithGemini = async (targetRole, resumeText, requiredSkills) => {
-  const prompt = buildGeminiPrompt(targetRole, resumeText, requiredSkills);
+const analyzeWithGroq = async (targetRole, resumeText, requiredSkills) => {
+  const prompt = buildGroqPrompt(targetRole, resumeText, requiredSkills);
   return await aiService.generateStructuredResponse(prompt, skillGapAnalysisSchema);
 };
 
@@ -101,17 +113,17 @@ const analyzeSkillGap = async (userId) => {
   }
 
   // 5. Backend Logic bypassed - passing full resume text to Gemini
-  // 6. Call Gemini to semantically match skills directly from the resume text and generate the roadmap
-  let geminiResult;
+  // 6. Call Groq to semantically match skills directly from the resume text and generate the roadmap
+  let groqResult;
   try {
-    geminiResult = await analyzeWithGemini(targetRole, resumeAnalysis.resume_text, requiredSkills);
+    groqResult = await analyzeWithGroq(targetRole, resumeAnalysis.resume_text, requiredSkills);
   } catch (error) {
-    console.error("Gemini skill gap analysis failed.", error);
+    console.error("Groq skill gap analysis failed.", error);
     throw new AppError(`Failed to generate personalized learning plan with AI: ${error.message}`, HTTP_STATUS_INTERNAL_SERVER_ERROR);
   }
 
-  const matchedSkills = geminiResult.matched_skills || [];
-  const missingSkills = geminiResult.missing_skills || [];
+  const matchedSkills = groqResult.matched_skills || [];
+  const missingSkills = groqResult.missing_skills || [];
   
   const skillMatchPercentage = requiredSkills.length > 0 
     ? Math.round((matchedSkills.length / requiredSkills.length) * 100) 
@@ -124,14 +136,14 @@ const analyzeSkillGap = async (userId) => {
     role_name: targetRole,
     matched_skills: matchedSkills,
     missing_skills: missingSkills,
-    priority_skills: geminiResult.priority_skills || [],
-    recommended_projects: geminiResult.recommended_projects || [],
-    recommended_resources: geminiResult.recommended_resources || [],
-    learning_order: geminiResult.learning_order || [],
+    priority_skills: groqResult.priority_skills || [],
+    recommended_projects: groqResult.recommended_projects || [],
+    recommended_resources: groqResult.recommended_resources || [],
+    learning_order: groqResult.learning_order || [],
     skill_match_percentage: skillMatchPercentage,
-    next_learning_step: geminiResult.next_learning_step || "",
-    summary: geminiResult.summary || "",
-    analysis_json: geminiResult
+    next_learning_step: groqResult.next_learning_step || "",
+    summary: groqResult.summary || "",
+    analysis_json: groqResult
   };
 
   const { data: savedAnalysis, error: saveError } = await supabase

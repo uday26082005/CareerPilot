@@ -1,7 +1,7 @@
 import { Mic, Plus, MessageSquare } from "lucide-react";
 import { motion } from "framer-motion";
 
-export default function HeroBanner() {
+export default function HeroBanner({ onStart, activeInterview, onResume }) {
   return (
     <div className="relative flex h-full flex-col justify-center overflow-hidden rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-[#0a0c1a] p-6 shadow-xl">
       {/* Background glow effects */}
@@ -15,9 +15,15 @@ export default function HeroBanner() {
           <p className="text-sm text-slate-500 dark:text-gray-400 leading-relaxed mb-4">
             Select a role and start your AI-powered mock interview.
           </p>
-          <button className="flex items-center gap-2 rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-semibold text-slate-900 dark:text-white transition-colors hover:bg-violet-500 shadow-lg shadow-violet-500/25">
-            <Plus className="h-4 w-4" /> Start New Interview
-          </button>
+          {activeInterview ? (
+            <button onClick={onResume} className="flex items-center gap-2 rounded-lg bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-orange-600 shadow-lg shadow-orange-500/25">
+              <Plus className="h-4 w-4" /> Resume Pending Interview
+            </button>
+          ) : (
+            <button onClick={onStart} className="flex items-center gap-2 rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-violet-500 shadow-lg shadow-violet-500/25">
+              <Plus className="h-4 w-4" /> Start New Interview
+            </button>
+          )}
         </div>
 
         {/* Right Side: Graphic */}

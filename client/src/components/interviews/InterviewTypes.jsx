@@ -44,8 +44,7 @@ const TYPES = [
   }
 ];
 
-export default function InterviewTypes() {
-  const [activeType, setActiveType] = useState("Technical Interview");
+export default function InterviewTypes({ activeType, setActiveType }) {
 
   return (
     <div className="flex flex-col">

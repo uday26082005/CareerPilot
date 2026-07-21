@@ -1,7 +1,7 @@
 const pdfParse = require("pdf-parse");
 const { randomUUID } = require("crypto");
 
-const aiService = require("../ai/gemini.service");
+const aiService = require("../ai/groq.service");
 const { getSupabaseAdmin } = require("../../config/supabase");
 const { AppError } = require("../../middleware/error/AppError");
 const { HTTP_STATUS } = require("../../utils/constants/httpStatus");
@@ -84,6 +84,7 @@ const buildGeminiPrompt = (resumeText, targetRole) => `You are an ATS resume ana
 Target role: ${targetRole}
 
 Return exactly one JSON object with no Markdown, commentary, or additional keys. All scores must be numbers from 0 to 100. Use concise, specific string items in every array.
+CRITICAL SCORING INSTRUCTIONS: Be extremely critical and strict. A typical average resume should score between 40-60. Only absolutely perfect, world-class resumes should ever score 90+. Most users lack experience and should be scored harshly to identify areas of improvement.
 
 Required JSON shape:
 {
@@ -119,7 +120,7 @@ Resume text:
 ${resumeText.slice(0, MAX_RESUME_TEXT_LENGTH)}
 ---`;
 
-const analyzeWithGemini = async (resumeText, targetRole) => {
+const analyzeWithGroq = async (resumeText, targetRole) => {
   const prompt = buildGeminiPrompt(resumeText, targetRole);
   return await aiService.generateStructuredResponse(prompt, resumeAnalysisSchema);
 };
@@ -232,9 +233,9 @@ const analyzeResume = async (userId, file) => {
 
     let analysis;
     try {
-      analysis = await analyzeWithGemini(resumeText, targetRole);
+      analysis = await analyzeWithGroq(resumeText, targetRole);
     } catch (error) {
-      console.error("Gemini resume analysis failed; using fallback response.", error);
+      console.error("Groq resume analysis failed; using fallback response.", error);
       analysis = buildFallbackAnalysis(targetRole, `AI analysis failed: ${error.message}`);
     }
 
@@ -316,9 +317,9 @@ const reanalyzeResume = async (userId) => {
 
   let analysis;
   try {
-    analysis = await analyzeWithGemini(resumeText, targetRole);
+    analysis = await analyzeWithGroq(resumeText, targetRole);
   } catch (err) {
-    console.error("Gemini resume re-analysis failed; using fallback response.", err);
+    console.error("Groq resume re-analysis failed; using fallback response.", err);
     analysis = buildFallbackAnalysis(targetRole, `AI analysis failed: ${err.message}`);
   }
 

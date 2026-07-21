@@ -1,6 +1,6 @@
 const { AppError } = require("../../middleware/error/AppError");
 const { getSupabaseAdmin } = require("../../config/supabase");
-const aiService = require("../ai/gemini.service");
+const aiService = require("../ai/groq.service");
 const { generateRoadmapSchema } = require("../../schemas/roadmap.schema");
 
 const HTTP_STATUS_OK = 200;
@@ -129,7 +129,7 @@ const _generateAndSaveRoadmap = async (userId, profile, resumeAnalysis, skillGap
   try {
     aiRoadmap = await aiService.generateStructuredResponse(prompt, generateRoadmapSchema);
   } catch (error) {
-    console.error("Gemini roadmap generation failed.", error);
+    console.error("Groq roadmap generation failed.", error);
     throw new AppError(`Failed to generate roadmap: ${error.message}`, HTTP_STATUS_INTERNAL_SERVER_ERROR);
   }
 
