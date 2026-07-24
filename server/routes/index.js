@@ -7,6 +7,7 @@ const roadmapRoutes = require("./roadmap/roadmap.routes");
 const interviewRoutes = require("./interview.routes");
 const transcribeRoutes = require("./transcribe.routes");
 const practiceRoutes = require("./practice.routes");
+const dashboardRoutes = require("./dashboard.routes");
 const { sendSuccess } = require("../utils/responseHandler");
 
 const router = express.Router();
@@ -29,5 +30,6 @@ router.use("/roadmap", roadmapRoutes);
 router.use("/interviews", interviewRoutes);
 router.use("/transcribe", transcribeRoutes);
 router.use("/practice", practiceRoutes);
+router.use("/dashboard", dashboardRoutes);
 
 module.exports = router;

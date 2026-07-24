@@ -103,7 +103,9 @@ Required JSON shape:
   },
   "strengths": [],
   "key_suggestions": [
-    { "title": "", "description": "", "priority": "High" }
+    { "title": "", "description": "", "priority": "High" },
+    { "title": "", "description": "", "priority": "Medium" },
+    { "title": "", "description": "", "priority": "Low" }
   ],
   "recommended_keywords": [],
   "role_fit": {
@@ -114,6 +116,8 @@ Required JSON shape:
     "weaknesses": []
   }
 }
+
+Ensure you provide at least 3-5 key_suggestions.
 
 Resume text:
 ---

@@ -1,61 +1,62 @@
-import { ClipboardList, Target, TrendingUp, Briefcase, FileText } from "lucide-react";
+import { ClipboardList, Target, TrendingUp, Briefcase, FileText, CheckCircle, Activity, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
-import { supabase } from "../lib/supabase";
+import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
 import StatCard from "../components/dashboard/StatCard";
-import ProgressChart from "../components/dashboard/ProgressChart";
 import UpcomingEvents from "../components/dashboard/UpcomingEvents";
 import RoadmapWidget from "../components/dashboard/RoadmapWidget";
 import AIRecommendations from "../components/dashboard/AIRecommendations";
 
-// MOCK_DATA removed as we will generate everything dynamically!
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 export default function Dashboard() {
-  const { user } = useAuth();
-  const [profile, setProfile] = useState(null);
-  const [resume, setResume] = useState(null);
-  const [allResumes, setAllResumes] = useState([]);
+  const { session } = useAuth();
+  const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!user) return;
-      try {
-        const { data: pData, error } = await supabase.from('profiles').select('*').eq('id', user.id).single();
-        
-        // If there's an error finding the profile, or if the profile is missing crucial onboarding data
-        if (error || !pData || !pData.target_role) {
-          console.log("Incomplete profile found, redirecting to onboarding...");
-          navigate("/onboarding");
-          return;
-        }
-        
-        setProfile(pData);
-        
-        const { data: rData } = await supabase.from('resumes').select('*').eq('user_id', user.id).order('created_at', { ascending: true });
-        if (rData && rData.length > 0) {
-          setAllResumes(rData);
-          setResume(rData[rData.length - 1]);
-        }
-      } catch (err) {
-        console.error("Error fetching dashboard data", err);
-      } finally {
-        setLoading(false);
+  const fetchDashboardData = async () => {
+    if (!session?.access_token) return;
+    try {
+      const { data: res } = await axios.get(`${API_BASE_URL}/dashboard`, {
+        headers: { Authorization: `Bearer ${session.access_token}` }
+      });
+      
+      const data = res.data;
+      if (!data.profile || !data.profile.target_role) {
+        console.log("Incomplete profile found, redirecting to onboarding...");
+        navigate("/onboarding");
+        return;
       }
-    };
-    fetchData();
-  }, [user]);
+      
+      setDashboardData(data);
+    } catch (err) {
+      console.error("Error fetching dashboard data", err);
+      setError("Failed to load dashboard data. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, [session, navigate]);
 
   if (loading) {
     return <div className="flex h-[60vh] items-center justify-center text-slate-500">Loading your AI Dashboard...</div>;
   }
 
-  if (!profile || !profile.target_role) {
+  if (error) {
+    return <div className="flex h-[60vh] items-center justify-center text-red-500">{error}</div>;
+  }
+
+  if (!dashboardData || !dashboardData.profile?.target_role) {
     return <Navigate to="/onboarding" replace />;
   }
+
+  const { profile, resume, skill_gap, roadmap, interviews, practice, upcoming_tasks } = dashboardData;
 
   const generateSummary = (tip) => {
     let summary = tip.split(",")[0];
@@ -64,74 +65,41 @@ export default function Dashboard() {
     return summary;
   };
 
-  const dynamicRecommendations = resume?.improvement_tips?.map((tip) => {
-    const summary = generateSummary(tip);
+  const dynamicRecommendations = (resume?.improvement_tips || []).map((tip) => {
+    // tip is an object: { title: "...", description: "..." }
+    const titleText = tip.title || tip;
+    const summary = generateSummary(titleText);
     const formattedSummary = summary.charAt(0).toLowerCase() + summary.slice(1);
     
     return {
-      title: tip,
+      title: titleText,
       question: `How can I ${formattedSummary}?`,
-      desc: "",
+      desc: tip.description || "",
       type: "resume"
     };
-  }) || [];
-
-  // Generate dynamic progress chart data using actual historical resumes
-  const dynamicProgressData = allResumes.map(r => {
-    const d = new Date(r.created_at);
-    return {
-      day: `${d.toLocaleString('default', { month: 'short' })} ${d.getDate()}`,
-      value: r.score || 0
-    };
   });
+
+
+  // Map Upcoming Tasks to UpcomingEvents component visually
+  let dynamicUpcoming = [...(upcoming_tasks || [])];
   
-  // If there's only one point, add a baseline dot so a line can be drawn
-  if (dynamicProgressData.length === 1) {
-    const d = new Date(allResumes[0].created_at);
-    d.setDate(d.getDate() - 1);
-    dynamicProgressData.unshift({
-      day: `${d.toLocaleString('default', { month: 'short' })} ${d.getDate()}`,
-      value: 0
+  if (dynamicUpcoming.length === 0) {
+    const today = new Date();
+    dynamicUpcoming.push({ 
+      title: "Start your journey", 
+      subtitle: profile?.target_role || "Target Role", 
+      date: today.toISOString(), 
+      type: "assessment" 
     });
   }
 
-  const score = resume?.score || 0;
-  const numSkills = resume?.strong_skills?.length || 0;
-
-  // Generate actual historical sparklines based on all user resumes
-  const historicalScores = allResumes.map(r => ({ value: r.score || 0 }));
-  const dynamicSparkline1 = historicalScores.length > 1 ? historicalScores : [{ value: score }, { value: score }];
-
-  const historicalSkills = allResumes.map(r => ({ value: r.strong_skills?.length || 0 }));
-  const dynamicSparkline2 = historicalSkills.length > 1 ? historicalSkills : [{ value: numSkills }, { value: numSkills }];
-  
-  // Target Role doesn't have a numerical progression, so we remove the sparkline
-  const dynamicSparkline3 = [];
-
-  // Generate dynamic upcoming events based on missing skills
-  const missingSkills = resume?.missing_skills || [];
-  const dynamicUpcoming = missingSkills.slice(0, 3).map((skill, idx) => {
-    const dates = ["Tomorrow", "In 3 Days", "Next Week"];
-    const times = ["10:00 AM", "02:00 PM", "04:30 PM"];
-    return {
-      title: `Learn ${skill}`,
-      subtitle: `Skill Gap Identified`,
-      date: dates[idx] || "Soon",
-      time: times[idx] || "Anytime",
-      type: idx === 0 ? "review" : idx === 1 ? "assessment" : "interview"
-    };
-  });
-  if (dynamicUpcoming.length === 0) {
-    dynamicUpcoming.push({ title: "Apply to Jobs", subtitle: profile?.target_role || "Target Role", date: "Tomorrow", time: "Morning", type: "assessment" });
-  }
-
-  // Generate dynamic roadmap
+  // Generate dynamic roadmap from backend summary
   const dynamicRoadmap = [
-    { title: "Profile Creation", status: "completed" },
-    { title: "AI Resume Analysis", status: "completed" },
-    { title: missingSkills.length > 0 ? `Master ${missingSkills[0]}` : "Mock Interviews", status: "in_progress" },
-    { title: `Apply for ${profile?.target_role || "Roles"}`, status: "pending" },
-    { title: "Land the Job!", status: "pending" },
+    { title: "Profile Creation", status: profile?.target_role ? "completed" : "pending" },
+    { title: "AI Resume Analysis", status: (resume?.overall_score > 0 || resume?.strong_skills?.length > 0) ? "completed" : "pending" },
+    { title: "Skill Gap Check", status: (skill_gap?.skill_match > 0 || skill_gap?.missing_skills > 0) ? "completed" : "pending" },
+    { title: "Mock Interviews", status: interviews?.taken > 0 ? "completed" : "pending" },
+    { title: "Practice Arena", status: practice?.sessions > 0 ? "completed" : "pending" },
   ];
 
   return (
@@ -147,28 +115,28 @@ export default function Dashboard() {
         </p>
       </div>
       
-      {/* Stats Row */}
+      {/* Stats Row 1: Profile & Resume */}
       <div className="grid gap-6 md:grid-cols-3">
         <StatCard 
-          title="Resume AI Score"
-          value={resume?.score || "N/A"}
-          subtitle="/100 Overall Strength"
-          subtitleColor={resume?.score > 80 ? "text-emerald-400" : "text-yellow-400"}
+          title="Resume Score"
+          value={resume?.overall_score || "N/A"}
+          subtitle={`ATS: ${resume?.ats_score || "N/A"}/100`}
+          subtitleColor={resume?.overall_score > 80 ? "text-emerald-400" : "text-yellow-400"}
           icon={ClipboardList}
           iconBgColor="bg-violet-500/10"
           iconColor="text-violet-400"
-          chartData={dynamicSparkline1}
+          chartData={[]}
           chartColor="#8b5cf6"
         />
         <StatCard 
-          title="Strong Skills"
-          value={resume?.strong_skills?.length || 0}
-          subtitle="Identified by AI"
+          title="Skill Match"
+          value={`${skill_gap?.skill_match || 0}%`}
+          subtitle={`${skill_gap?.missing_skills || 0} Missing Skills`}
           subtitleColor="text-blue-400"
           icon={Target}
           iconBgColor="bg-blue-500/10"
           iconColor="text-blue-400"
-          chartData={dynamicSparkline2}
+          chartData={[]}
           chartColor="#3b82f6"
         />
         <StatCard 
@@ -179,18 +147,52 @@ export default function Dashboard() {
           icon={Briefcase}
           iconBgColor="bg-fuchsia-500/10"
           iconColor="text-fuchsia-400"
-          chartData={dynamicSparkline3}
+          chartData={[]}
           chartColor="#d946ef"
         />
       </div>
 
-      {/* Charts & Events Row */}
+      {/* Stats Row 2: Roadmap, Interviews, Practice */}
+      <div className="grid gap-6 md:grid-cols-3">
+        <StatCard 
+          title="Roadmap Progress"
+          value={`${roadmap?.completion || 0}%`}
+          subtitle={`${roadmap?.completed_tasks}/${roadmap?.completed_tasks + roadmap?.pending_tasks} Tasks Completed`}
+          subtitleColor="text-emerald-400"
+          icon={CheckCircle}
+          iconBgColor="bg-emerald-500/10"
+          iconColor="text-emerald-400"
+          chartData={[]}
+          chartColor="#10b981"
+        />
+        <StatCard 
+          title="Interviews"
+          value={interviews?.taken || 0}
+          subtitle={`Avg Score: ${interviews?.average_score || 0} | Best: ${interviews?.best_score || 0}`}
+          subtitleColor="text-amber-400"
+          icon={FileText}
+          iconBgColor="bg-amber-500/10"
+          iconColor="text-amber-400"
+          chartData={[]}
+          chartColor="#f59e0b"
+        />
+        <StatCard 
+          title="Practice Arena"
+          value={practice?.sessions || 0}
+          subtitle={`Accuracy: ${practice?.accuracy || 0}% | Best: ${practice?.best_category}`}
+          subtitleColor="text-cyan-400"
+          icon={Activity}
+          iconBgColor="bg-cyan-500/10"
+          iconColor="text-cyan-400"
+          chartData={[]}
+          chartColor="#06b6d4"
+        />
+      </div>
+
+      {/* Events Row */}
       <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-          <ProgressChart data={dynamicProgressData} />
-        </div>
-        <div className="lg:col-span-1">
-          <UpcomingEvents events={dynamicUpcoming} />
+        <div className="lg:col-span-3">
+          <UpcomingEvents events={dynamicUpcoming} onEventCreated={fetchDashboardData} />
         </div>
       </div>
 

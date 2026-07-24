@@ -35,7 +35,12 @@ const generateRoadmapSchema = z.object({
 });
 
 const updateTaskStatusSchema = z.object({
-  status: z.enum(["Pending", "In Progress", "Completed"])
+  body: z.object({
+    status: z.enum(["Pending", "In Progress", "Completed"])
+  }),
+  params: z.object({
+    taskId: z.string().uuid()
+  })
 });
 
 module.exports = {

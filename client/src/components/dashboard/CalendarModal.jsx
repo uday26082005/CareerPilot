@@ -20,15 +20,12 @@ export default function CalendarModal({ isOpen, onClose, events }) {
   const currentMonthName = monthNames[month];
 
   // Helper to check if an event matches a day
-  // Assuming event.date is something like "July 18" or "18 July 2026"
-  // For a beautiful UI demo, we'll just show some mock event indicators if the real ones don't easily map, 
-  // but let's try to match by day number if the month matches.
   const getEventsForDay = (day) => {
-    // Basic mock mapping just to show UI if events don't match exactly
-    // In reality you'd parse event.date
     return events.filter(e => {
-      // simple check if day number is in the date string (not perfect but good for demo)
-      return e.date && e.date.includes(day.toString());
+      if (!e.date) return false;
+      const d = new Date(e.date);
+      // Ensure the event matches the specific day, month, and year of the calendar
+      return d.getDate() === day && d.getMonth() === month && d.getFullYear() === year;
     });
   };
 

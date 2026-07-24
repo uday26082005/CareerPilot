@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Calendar, CheckCircle, Briefcase, ArrowRight } from "lucide-react";
 import CalendarModal from "./CalendarModal";
+import ScheduleEventModal from "./ScheduleEventModal";
+import { Plus } from "lucide-react";
 
-export default function UpcomingEvents({ events }) {
+export default function UpcomingEvents({ events, onEventCreated }) {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isScheduleOpen, setIsScheduleOpen] = useState(false);
 
   const getIcon = (type) => {
     switch (type) {
@@ -28,7 +31,7 @@ export default function UpcomingEvents({ events }) {
       <h3 className="mb-6 text-lg font-bold text-slate-900 dark:text-white">Upcoming</h3>
       
       <div className="flex-1 space-y-4">
-        {events.map((event, idx) => (
+        {events.slice(0, 5).map((event, idx) => (
           <div key={idx} className="flex items-start gap-4 rounded-xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-4 transition-colors hover:bg-white/[0.04]">
             <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border ${getBg(event.type)}`}>
               {getIcon(event.type)}
@@ -38,19 +41,30 @@ export default function UpcomingEvents({ events }) {
               <p className="mt-0.5 text-xs text-slate-500 dark:text-gray-400">{event.subtitle}</p>
             </div>
             <div className="text-right">
-              <p className="text-sm font-medium text-slate-900 dark:text-white">{event.date}</p>
-              <p className="mt-0.5 text-xs text-slate-400 dark:text-gray-500">{event.time}</p>
+              <p className="text-sm font-medium text-slate-900 dark:text-white">
+                {new Date(event.date).toLocaleDateString()}
+              </p>
+              <p className="mt-0.5 text-xs text-slate-400 dark:text-gray-500">
+                {new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </p>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="mt-4 pt-4 border-t border-slate-200 dark:border-white/5">
+      <div className="mt-4 pt-4 border-t border-slate-200 dark:border-white/5 flex items-center justify-between">
         <button 
           onClick={() => setIsCalendarOpen(true)}
           className="flex items-center gap-2 text-sm font-medium text-violet-400 transition-colors hover:text-violet-300"
         >
           View Calendar <ArrowRight className="h-4 w-4" />
+        </button>
+        
+        <button 
+          onClick={() => setIsScheduleOpen(true)}
+          className="flex items-center gap-1.5 rounded-lg bg-violet-500/10 px-3 py-1.5 text-xs font-bold text-violet-500 transition-colors hover:bg-violet-500/20 dark:text-violet-400"
+        >
+          <Plus className="h-3.5 w-3.5" /> Add Event
         </button>
       </div>
 
@@ -58,6 +72,12 @@ export default function UpcomingEvents({ events }) {
         isOpen={isCalendarOpen} 
         onClose={() => setIsCalendarOpen(false)} 
         events={events} 
+      />
+      
+      <ScheduleEventModal 
+        isOpen={isScheduleOpen}
+        onClose={() => setIsScheduleOpen(false)}
+        onEventCreated={onEventCreated}
       />
     </div>
   );

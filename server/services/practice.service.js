@@ -196,10 +196,10 @@ const buildQuestionPrompt = (context, session, questionNumber, difficulty, quest
   "  \"question\": \"\",",
   "  \"question_type\": \"" + questionType + "\",",
   "  \"difficulty\": \"" + difficulty + "\",",
-  "  \"options\": [],",
-  "  \"correct_answer\": \"\",",
-  "  \"hint\": \"\",",
-  "  \"explanation\": \"\"",
+  "  \"options\": [\"Option 1\", \"Option 2\"],",
+  "  \"correct_answer\": \"The exact correct answer text\",",
+  "  \"hint\": \"A helpful hint\",",
+  "  \"explanation\": \"Why this is correct\"",
   "}",
 ].join("\n");
 
