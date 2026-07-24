@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { 
+import {
   Bot, Home, FileText, Mic, BarChart2, Map, PieChart, 
-  Trophy, Sparkles, LogOut, Bell, Settings, 
+  Trophy, Sparkles, LogOut, Bell, Settings,
   Maximize, Minimize, Plus, ArrowRight, Menu, Target, X
 } from "lucide-react";
+import { useAuth } from "../../contexts/AuthContext";
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 const SIDEBAR_LINKS = [
   { name: "Dashboard", path: "/dashboard", icon: Home },
@@ -19,23 +22,56 @@ const SIDEBAR_LINKS = [
 
 export default function AppLayout({ children }) {
   const location = useLocation();
+  const { session } = useAuth();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [notifications, setNotifications] = useState([
-    { id: 1, title: "Resume Analyzed", message: "Your resume score improved by 15%.", time: "2 hours ago", unread: true },
-    { id: 2, title: "New Interview Prep", message: "Mock interview for Frontend Developer is ready.", time: "5 hours ago", unread: true },
-    { id: 3, title: "Goal Completed", message: "You finished 'Learn React Hooks' goal.", time: "1 day ago", unread: false },
-  ]);
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    if (session?.access_token) {
+      fetch(`${API_BASE_URL}/notifications`, {
+        headers: { Authorization: `Bearer ${session.access_token}` }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          // ensure unread logic works on frontend by mapping is_read to !unread
+          const mapped = data.data.map(n => ({ ...n, unread: !n.is_read }));
+          setNotifications(mapped);
+        }
+      })
+      .catch(err => console.error("Failed to fetch notifications", err));
+    }
+  }, [session?.access_token]);
 
   const unreadCount = notifications.filter(n => n.unread).length;
 
   const markAllAsRead = () => {
-    setNotifications(notifications.map(n => ({ ...n, unread: false })));
+    fetch(`${API_BASE_URL}/notifications/read-all`, {
+      method: 'PUT',
+      headers: { Authorization: `Bearer ${session.access_token}` }
+    }).then(() => {
+      setNotifications(notifications.map(n => ({ ...n, unread: false })));
+    });
   };
 
   const removeNotification = (id) => {
-    setNotifications(notifications.filter(n => n.id !== id));
+    fetch(`${API_BASE_URL}/notifications/${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${session.access_token}` }
+    }).then(() => {
+      setNotifications(notifications.filter(n => n.id !== id));
+    });
+  };
+
+  const markAsRead = (id) => {
+    fetch(`${API_BASE_URL}/notifications/${id}/read`, {
+      method: 'PUT',
+      headers: { Authorization: `Bearer ${session.access_token}` }
+    }).then(() => {
+      setNotifications(notifications.map(n => n.id === id ? { ...n, unread: false } : n));
+    });
   };
 
   useEffect(() => {
@@ -178,15 +214,19 @@ export default function AppLayout({ children }) {
                         <p className="text-sm text-center text-slate-500 dark:text-gray-400 py-4">No notifications</p>
                       ) : (
                         notifications.map((notification) => (
-                          <div key={notification.id} className="group flex gap-3 rounded-xl bg-slate-50 dark:bg-white/5 p-3 transition-colors hover:bg-slate-100 dark:hover:bg-white/10 relative pr-8">
+                          <div 
+                            key={notification.id} 
+                            className="group flex gap-3 rounded-xl bg-slate-50 dark:bg-white/5 p-3 transition-colors hover:bg-slate-100 dark:hover:bg-white/10 relative pr-8 cursor-pointer"
+                            onClick={() => notification.unread && markAsRead(notification.id)}
+                          >
                             <div className={`mt-1 h-2 w-2 shrink-0 rounded-full ${notification.unread ? 'bg-violet-500' : 'bg-transparent border border-slate-300 dark:border-gray-600'}`}></div>
                             <div>
                               <p className="text-sm font-medium text-slate-900 dark:text-white">{notification.title}</p>
                               <p className="text-xs text-slate-500 dark:text-gray-400">{notification.message}</p>
-                              <p className="mt-1 text-[10px] text-slate-400 dark:text-gray-500">{notification.time}</p>
+                              <p className="mt-1 text-[10px] text-slate-400 dark:text-gray-500">{new Date(notification.created_at).toLocaleDateString()}</p>
                             </div>
                             <button 
-                              onClick={() => removeNotification(notification.id)}
+                              onClick={(e) => { e.stopPropagation(); removeNotification(notification.id); }}
                               className="absolute right-2 top-2 p-1 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 opacity-0 group-hover:opacity-100 transition-opacity rounded-full hover:bg-slate-200 dark:hover:bg-white/10"
                             >
                               <X className="h-3 w-3" />
