@@ -6,7 +6,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
-const TOPICS = [
+const DEFAULT_TOPICS = [
   { id: "dsa", category: "Data Structures & Algorithms", name: "Data Structures & Algorithms", icon: HelpCircle, count: 120, desc: "Master arrays, trees, graphs, and core algorithms." },
   { id: "frontend", category: "React", name: "Frontend Development", icon: Code, count: 80, desc: "React, CSS, HTML, and browser fundamentals." },
   { id: "backend", category: "Node.js", name: "Backend Development", icon: Server, count: 95, desc: "Node.js, Express, APIs, and server architecture." },
@@ -14,6 +14,46 @@ const TOPICS = [
   { id: "databases", category: "SQL", name: "Databases", icon: Database, count: 65, desc: "SQL, NoSQL, indexing, and normalization." },
   { id: "devops", category: "DevOps & Cloud", name: "DevOps & Cloud", icon: Cloud, count: 40, desc: "AWS, Docker, CI/CD, and deployment strategies." },
 ];
+
+const getTopicsForRole = (role) => {
+  const normalized = (role || "").toLowerCase();
+  
+  if (normalized.includes("data") || normalized.includes("ml") || normalized.includes("ai") || normalized.includes("science") || normalized.includes("analyst")) {
+    return [
+      { id: "python_r", category: "Python & R", name: "Python & R Programming", icon: Code, count: 110, desc: "Python, R, scripting, OOP, and data structures." },
+      { id: "ml_dl", category: "Machine Learning", name: "ML & Deep Learning", icon: HelpCircle, count: 95, desc: "Supervised, unsupervised, neural nets, and evaluation." },
+      { id: "data_analysis", category: "Data Analysis", name: "Data Analysis & Viz", icon: Server, count: 85, desc: "Pandas, NumPy, Matplotlib, and data preprocessing." },
+      { id: "stats_math", category: "Statistics", name: "Stats & Probability", icon: Layers, count: 70, desc: "Probability, distributions, hypothesis testing, and calculus." },
+      { id: "databases", category: "SQL", name: "Databases & SQL", icon: Database, count: 80, desc: "Query writing, database schemas, and data warehousing." },
+      { id: "dsa", category: "Data Structures & Algorithms", name: "DSA for Data Science", icon: Cloud, count: 60, desc: "Core algorithms, complexity, and basic data structures." }
+    ];
+  }
+  
+  if (normalized.includes("qa") || normalized.includes("test") || normalized.includes("quality") || normalized.includes("automation")) {
+    return [
+      { id: "testing_fundamentals", category: "Software Testing", name: "Testing Fundamentals", icon: HelpCircle, count: 90, desc: "Unit, integration, regression, and E2E testing theories." },
+      { id: "automation_testing", category: "Automation Testing", name: "Automation Frameworks", icon: Code, count: 85, desc: "Selenium, Playwright, Cypress, and scripting." },
+      { id: "api_testing", category: "API Testing", name: "API & Integration Testing", icon: Server, count: 75, desc: "Postman, REST, SOAP, and mock services." },
+      { id: "databases", category: "SQL", name: "Database Testing", icon: Database, count: 65, desc: "Validation, SQL joins, queries, and data integrity." },
+      { id: "cicd_devops", category: "DevOps & Cloud", name: "CI/CD & DevOps", icon: Cloud, count: 50, desc: "Jenkins, GitHub Actions, Docker, and test deployment." },
+      { id: "dsa", category: "Data Structures & Algorithms", name: "Data Structures & Algorithms", icon: Layers, count: 60, desc: "Core algorithms, complexity, and problem solving." }
+    ];
+  }
+
+  if (normalized.includes("frontend") || normalized.includes("ui") || normalized.includes("ux") || normalized.includes("web") || normalized.includes("designer")) {
+    return [
+      { id: "frontend", category: "React", name: "Frontend Development", icon: Code, count: 120, desc: "React, CSS, HTML, and browser fundamentals." },
+      { id: "js_ts", category: "JavaScript", name: "JavaScript & TypeScript", icon: HelpCircle, count: 100, desc: "Closures, async/await, ES6+, and type safety." },
+      { id: "ui_ux", category: "UI/UX Design", name: "UI/UX Design Concepts", icon: Layers, count: 80, desc: "Figma, responsive layouts, accessibility, and color theory." },
+      { id: "web_performance", category: "Web Performance", name: "Web Performance & SEO", icon: Cloud, count: 65, desc: "Asset optimization, caching, SEO, and web vitals." },
+      { id: "dsa", category: "Data Structures & Algorithms", name: "Data Structures & Algorithms", icon: Database, count: 70, desc: "Master arrays, trees, graphs, and core algorithms." },
+      { id: "databases", category: "SQL", name: "Client-side & Databases", icon: Server, count: 55, desc: "LocalStorage, IndexedDB, and REST API integration." }
+    ];
+  }
+
+  // Default: Backend or general Software Engineer
+  return DEFAULT_TOPICS;
+};
 
 export default function PracticeQuiz() {
   const { session } = useAuth();
@@ -34,13 +74,32 @@ export default function PracticeQuiz() {
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  
+  // Dynamic customized topics based on user's target role
+  const [topics, setTopics] = useState(DEFAULT_TOPICS);
+
+  useEffect(() => {
+    const fetchUserRoleAndCustomize = async () => {
+      if (!session?.access_token) return;
+      try {
+        const res = await axios.get(`${API_BASE_URL}/profile`, {
+          headers: { Authorization: `Bearer ${session.access_token}` }
+        });
+        const role = res.data?.data?.targetRole || session?.user?.user_metadata?.target_role || "";
+        setTopics(getTopicsForRole(role));
+      } catch (err) {
+        console.error("Failed to fetch profile for customizing topics:", err);
+      }
+    };
+    fetchUserRoleAndCustomize();
+  }, [session]);
 
   const authHeaders = () => ({
     Authorization: "Bearer " + (session && session.access_token ? session.access_token : ""),
   });
 
   const startPractice = useCallback(async (topicId) => {
-    const topic = TOPICS.find((item) => item.id === topicId);
+    const topic = topics.find((item) => item.id === topicId);
     if (!topic) return;
 
     setActiveTopic(topicId);
@@ -73,15 +132,15 @@ export default function PracticeQuiz() {
     } finally {
       setLoading(false);
     }
-  }, [session]);
+  }, [session, topics]);
 
   useEffect(() => {
     const topicParam = new URLSearchParams(location.search).get("topic");
-    if (topicParam && TOPICS.some((topic) => topic.id === topicParam) && startedTopicParamRef.current !== topicParam) {
+    if (topicParam && topics.some((topic) => topic.id === topicParam) && startedTopicParamRef.current !== topicParam) {
       startedTopicParamRef.current = topicParam;
       startPractice(topicParam);
     }
-  }, [location.search, startPractice]);
+  }, [location.search, startPractice, topics]);
 
   const submitAnswer = async (answer) => {
     if (!practiceSessionId || !currentQuestion || !answer.trim()) return;
@@ -182,7 +241,7 @@ export default function PracticeQuiz() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {TOPICS.map((topic) => (
+          {topics.map((topic) => (
             <button
               key={topic.id}
               onClick={() => startPractice(topic.id)}
@@ -206,7 +265,7 @@ export default function PracticeQuiz() {
   }
 
   if (view === "quiz") {
-    const topic = TOPICS.find((item) => item.id === activeTopic);
+    const topic = topics.find((item) => item.id === activeTopic);
     const questionNumber = currentQuestion ? currentQuestion.question_number : 1;
     const hasOptions = Boolean(currentQuestion && currentQuestion.options && currentQuestion.options.length);
     const answerReady = Boolean(selectedAnswer || textAnswer.trim());
@@ -341,7 +400,7 @@ export default function PracticeQuiz() {
   }
 
   if (view === "results") {
-    const topic = TOPICS.find((item) => item.id === activeTopic);
+    const topic = topics.find((item) => item.id === activeTopic);
     const percentage = report ? report.accuracy : score * 10;
     const resultMessage = percentage >= 80
       ? "Excellent work!"

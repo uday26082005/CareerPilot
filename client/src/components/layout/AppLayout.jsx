@@ -35,6 +35,22 @@ export default function AppLayout({ children }) {
     return "Good evening";
   };
 
+  const renderFormattedText = (text) => {
+    if (!text) return "";
+    const parts = text.split(/"([^"]+)"/g);
+    if (parts.length === 1) return text;
+    return parts.map((part, index) => {
+      if (index % 2 === 1) {
+        return (
+          <span key={index} className="text-violet-600 dark:text-violet-400 font-bold">
+            {part}
+          </span>
+        );
+      }
+      return part;
+    });
+  };
+
   const userName = session?.user?.user_metadata?.full_name || session?.user?.user_metadata?.name || session?.user?.email?.split('@')[0] || "User";
   const userInitial = userName.charAt(0).toUpperCase();
 
@@ -231,8 +247,8 @@ export default function AppLayout({ children }) {
                           >
                             <div className={`mt-1 h-2 w-2 shrink-0 rounded-full ${notification.unread ? 'bg-violet-500' : 'bg-transparent border border-slate-300 dark:border-gray-600'}`}></div>
                             <div>
-                              <p className="text-sm font-medium text-slate-900 dark:text-white">{notification.title}</p>
-                              <p className="text-xs text-slate-500 dark:text-gray-400">{notification.message}</p>
+                              <p className="text-sm font-medium text-slate-900 dark:text-white">{renderFormattedText(notification.title)}</p>
+                              <p className="text-xs text-slate-500 dark:text-gray-400">{renderFormattedText(notification.message)}</p>
                               <p className="mt-1 text-[10px] text-slate-400 dark:text-gray-500">{new Date(notification.created_at).toLocaleDateString()}</p>
                             </div>
                             <button 

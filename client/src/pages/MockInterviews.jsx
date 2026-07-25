@@ -7,6 +7,7 @@ import InterviewModal from "../components/interviews/InterviewModal";
 import { useState } from "react";
 import { AlertCircle, Trash2 } from "lucide-react";
 import axios from "axios";
+import toast from "react-hot-toast";
 import { useAuth } from "../contexts/AuthContext";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
@@ -88,6 +89,13 @@ export default function MockInterviews() {
               setIsModalOpen(true);
             }}
             onStart={() => {
+              if (selectedType === "Company-specific" && !companyName.trim()) {
+                toast.error("Please enter a Target Company Name to proceed!");
+                return;
+              }
+              if (selectedType === "Company-specific") {
+                setIsCompanyConfirmed(true);
+              }
               setResumeInterviewId(null);
               setIsModalOpen(true);
             }} 

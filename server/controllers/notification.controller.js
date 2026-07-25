@@ -4,8 +4,8 @@ const { sendSuccess } = require("../utils/responseHandler");
 const getNotifications = async (req, res, next) => {
   try {
     const unreadOnly = req.path.endsWith("/unread");
-    // Trigger smart generation in background (fire & forget to avoid blocking response)
-    notificationService.generateSmartNotifications(req.user.id).catch(err => console.error("Smart Notification Gen Failed:", err));
+    // Trigger smart generation and wait for completion so the response contains the new notifications
+    await notificationService.generateSmartNotifications(req.user.id).catch(err => console.error("Smart Notification Gen Failed:", err));
     
     const data = await notificationService.getNotifications(req.user.id, unreadOnly);
     sendSuccess(res, { data, message: "Notifications fetched." });

@@ -134,6 +134,55 @@ const generateSmartNotifications = async (userId) => {
     }
   }
 
+  // Logic: Check for past scheduled events that have started/happened
+  try {
+    const nowStr = new Date().toISOString();
+    const { data: pastEvents } = await supabase
+      .from("user_scheduled_events")
+      .select("*")
+      .eq("user_id", userId)
+      .lte("scheduled_at", nowStr);
+
+    if (pastEvents && pastEvents.length > 0) {
+      for (const event of pastEvents) {
+        const actionUrl = `/calendar?event_id=${event.id}`;
+        // Check if we already notified the user
+        const { data: existing } = await supabase
+          .from("notifications")
+          .select("id")
+          .eq("user_id", userId)
+          .eq("action_url", actionUrl)
+          .maybeSingle();
+
+        if (!existing) {
+          let eventTime = "";
+          try {
+            eventTime = new Date(event.scheduled_at).toLocaleTimeString('en-US', {
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: true,
+              timeZone: 'Asia/Kolkata'
+            });
+          } catch (e) {
+            eventTime = new Date(event.scheduled_at).toLocaleTimeString();
+          }
+
+          newNotifications.push({
+            user_id: userId,
+            title: `Event: "${event.title}"`,
+            message: `Scheduled at : ${eventTime}`,
+            type: "Event Reminder",
+            priority: "High",
+            source_module: "Calendar",
+            action_url: actionUrl
+          });
+        }
+      }
+    }
+  } catch (err) {
+    console.error("Error generating event notifications:", err);
+  }
+
   // Insert generated notifications
   if (newNotifications.length > 0) {
     await supabase.from("notifications").insert(newNotifications);

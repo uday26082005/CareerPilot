@@ -13,6 +13,8 @@ const buttons = [
 
 export default function SocialAuthButtons() {
   const handleOAuth = async (provider) => {
+    const providerLabel = provider.replace('_oidc', '').toUpperCase();
+    toast.loading(`Redirecting to ${providerLabel}...`, { id: "oauth-loading" });
     try {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: provider,
@@ -22,7 +24,7 @@ export default function SocialAuthButtons() {
       });
       if (error) throw error;
     } catch (err) {
-      toast.error(err.message || `Failed to sign in with ${provider}`);
+      toast.error(err.message || `Failed to sign in with ${providerLabel}`, { id: "oauth-loading" });
     }
   };
 

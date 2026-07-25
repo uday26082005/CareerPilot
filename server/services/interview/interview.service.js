@@ -50,7 +50,7 @@ const getSubTopic = (type, qNum) => {
   return topics[(qNum - 1) % topics.length];
 };
 
-const buildQuestionPrompt = (context, type, difficulty, company, prevQuestions, subTopic) => {
+const buildQuestionPrompt = (context, type, difficulty, company, prevQuestions, subTopic, companyQuestions = []) => {
   let typeInstructions = "";
   if (type === "Technical Interview") {
     typeInstructions = `This is a Technical interview. The specific sub-topic focus for THIS exact question MUST be: ${subTopic}.`;
@@ -59,7 +59,14 @@ const buildQuestionPrompt = (context, type, difficulty, company, prevQuestions, 
   } else if (type === "Role-specific Interview") {
     typeInstructions = `This is a Role-Specific interview for a ${context.profile?.target_role || "Software Engineer"}. The specific sub-topic focus for THIS exact question MUST be: ${subTopic}.`;
   } else if (type === "Company-specific") {
-    typeInstructions = `This is a Company-specific interview for ${company || "top tech companies"}. The specific sub-topic focus for THIS exact question MUST be: ${subTopic}. You MUST explicitly mention ${company} or its specific products/scenarios.`;
+    typeInstructions = `This is a Company-specific interview for ${company || "top tech companies"}. The specific sub-topic focus for THIS exact question MUST be: ${subTopic}. You MUST explicitly mention ${company} or its specific products/scenarios.
+    
+    Here are questions previously asked by ${company} in other interviews:
+    ${companyQuestions && companyQuestions.length > 0 
+      ? companyQuestions.map((q, i) => `${i+1}. ${q.question}`).join("\n") 
+      : "None recorded yet. Please generate standard questions asked in real interviews at " + company}
+      
+    CRITICAL: To simulate a realistic interview path for ${company}, you should generate a question that is SIMILAR in technical style, difficulty level, or conceptual focus to the previously asked questions listed above, but adapted to the candidate's context.`;
   }
 
   let prompt = `You are an expert technical interviewer and hiring manager at top tech companies.
@@ -175,9 +182,33 @@ const startInterview = async (userId, payload) => {
   }
 
   // 2. Generate First Question (Question 1 is Easy)
+  let companyQuestions = [];
+  if (payload.interviewType === "Company-specific" && payload.companyName) {
+    try {
+      const { data: pastInterviews } = await supabase
+        .from("interviews")
+        .select("id")
+        .eq("company_name", payload.companyName);
+        
+      if (pastInterviews && pastInterviews.length > 0) {
+        const interviewIds = pastInterviews.map(i => i.id);
+        const { data: pastQuestions } = await supabase
+          .from("interview_questions")
+          .select("question, category")
+          .in("interview_id", interviewIds)
+          .limit(10);
+        if (pastQuestions) {
+          companyQuestions = pastQuestions;
+        }
+      }
+    } catch (dbErr) {
+      console.error("Failed to fetch past company questions:", dbErr);
+    }
+  }
+
   const currentDifficulty = "Easy";
   const subTopic = getSubTopic(payload.interviewType, 1);
-  const prompt = buildQuestionPrompt(context, payload.interviewType, currentDifficulty, payload.companyName, [], subTopic);
+  const prompt = buildQuestionPrompt(context, payload.interviewType, currentDifficulty, payload.companyName, [], subTopic, companyQuestions);
   
   let aiQuestion;
   try {
@@ -285,8 +316,32 @@ const answerQuestion = async (userId, interviewId, payload) => {
     if (nextQNum === 3 || nextQNum === 4) currentDifficulty = "Medium";
     if (nextQNum === 5) currentDifficulty = "Hard";
 
+    let companyQuestions = [];
+    if (interview.interview_type === "Company-specific" && interview.company_name) {
+      try {
+        const { data: pastInterviews } = await supabase
+          .from("interviews")
+          .select("id")
+          .eq("company_name", interview.company_name);
+          
+        if (pastInterviews && pastInterviews.length > 0) {
+          const interviewIds = pastInterviews.map(i => i.id);
+          const { data: pastQuestions } = await supabase
+            .from("interview_questions")
+            .select("question, category")
+            .in("interview_id", interviewIds)
+            .limit(10);
+          if (pastQuestions) {
+            companyQuestions = pastQuestions;
+          }
+        }
+      } catch (dbErr) {
+        console.error("Failed to fetch past company questions:", dbErr);
+      }
+    }
+
     const subTopic = getSubTopic(interview.interview_type, nextQNum);
-    const nextQPrompt = buildQuestionPrompt(context, interview.interview_type, currentDifficulty, interview.company_name, prevQs || [], subTopic);
+    const nextQPrompt = buildQuestionPrompt(context, interview.interview_type, currentDifficulty, interview.company_name, prevQs || [], subTopic, companyQuestions);
     
     let aiQuestion;
     try {

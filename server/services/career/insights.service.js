@@ -1,6 +1,8 @@
 const { getSupabaseAdmin } = require("../../config/supabase");
 const aiService = require("../ai/groq.service");
 const profileService = require("../profile/profile.service");
+const companyLogos = require("../../data/companyLogos.json");
+const salaryRanges = require("../../data/salaryRanges.json");
 const { AppError } = require("../../middleware/error/AppError");
 const { HTTP_STATUS } = require("../../utils/constants/httpStatus");
 const { careerInsightsSchema } = require("../../schemas/insights.schema");
@@ -8,55 +10,57 @@ const { careerInsightsSchema } = require("../../schemas/insights.schema");
 const buildInsightsPrompt = (profile, latestResume, latestSkillGap) => {
   const targetRole = profile?.targetRole || profile?.current_role || "Software Engineer";
   const resumeScore = latestResume?.overall_score || "N/A";
-  const strengths = latestResume?.strengths?.join(", ") || "None recorded";
-  const missingSkills = latestSkillGap?.missing_skills?.join(", ") || "None recorded";
+  const strengths = latestResume?.strengths || [];
+  const strengthsStr = strengths.join(", ") || "None recorded";
+  const missingSkills = latestSkillGap?.missing_skills || [];
+  const missingStr = missingSkills.join(", ") || "None recorded";
   const currentExp = profile?.years_experience || 0;
+  const randomSeed = Math.floor(Math.random() * 1000000);
 
-  return `You are an elite Career Advisor AI. Based on the user's profile, generate personalized career insights.
+  return `You are a senior Career Coach specializing in the Indian tech job market. Analyze this candidate's profile and generate hyper-personalized career insights.
 
-User Profile context:
+CANDIDATE PROFILE:
 - Target Role: ${targetRole}
-- Years Experience: ${currentExp}
-- Resume Score: ${resumeScore}
-- Known Strengths: ${strengths}
-- Missing Skills (Skill Gap): ${missingSkills}
+- Years of Experience: ${currentExp}
+- Resume Score: ${resumeScore}/100
+- Current Strengths: ${strengthsStr}
+- Skill Gaps (missing): ${missingStr}
+- Session ID: ${randomSeed}
 
-Generate a structured JSON response matching the required schema exactly. Do not omit any fields. Ensure the insights are highly specific to the user's target role.
+CRITICAL RULES FOR PERSONALIZATION:
+1. ai_advice MUST reference the candidate's SPECIFIC missing skills by name (${missingStr}) and explain exactly how to learn each one. Do NOT give generic advice like "practice coding challenges". Instead say things like "Start with ${missingSkills[0] || 'the first missing skill'} by building a project that uses it alongside your existing ${strengths[0] || 'strengths'}."
+2. ai_focus_area MUST be a specific learning path derived from their top 2-3 missing skills, NOT a generic phrase.
+3. ai_potential_improvement MUST be calculated based on: each missing skill closed = roughly ${missingSkills.length > 0 ? Math.round(30 / missingSkills.length) : 5}% improvement. Show realistic range.
+4. match_reason MUST mention their actual strengths (${strengthsStr}) and what's holding them back (${missingStr}).
+5. key_takeaways MUST be actionable steps specific to their skill gaps, not generic career advice.
+6. other_matches should be roles that genuinely align with their CURRENT skills (${strengthsStr}).
 
-Required JSON shape (provide 3-4 other_matches, 4-5 top_companies, and 3-4 key_takeaways):
+Generate a JSON response matching this exact schema. Every field must feel like it was written by a human mentor who reviewed their resume:
+
 {
-  "best_match_role": "Full Stack Developer",
-  "match_score": 95,
-  "match_reason": "Strong match based on your skills.",
+  "best_match_role": "${targetRole}",
+  "match_score": 85,
+  "match_reason": "Your strengths in X and Y position you well for ${targetRole}, but gaps in A and B are limiting your match.",
   "other_matches": [
-    { "name": "Frontend Developer", "percent": 92, "color": "bg-emerald-500" }
+    { "name": "Related Role", "percent": 80, "color": "bg-emerald-500" }
   ],
   "salary_entry": "₹4 - 8 LPA",
   "salary_mid": "₹10 - 18 LPA",
   "salary_senior": "₹25 - 40 LPA",
   "top_companies": [
-    { "name": "Google", "domain": "google.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹18 - 45 LPA" },
-    { "name": "TCS", "domain": "tcs.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹3.5 - 12 LPA" }
+    { "name": "Google", "domain": "google.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹18 - 45 LPA" }
   ],
   "key_takeaways": [
-    { "title": "High demand", "desc": "Market is strong.", "iconName": "Target", "iconColor": "text-violet-400 bg-violet-500/10" }
+    { "title": "Specific actionable step", "desc": "Details about what to do", "iconName": "Target", "iconColor": "text-violet-400 bg-violet-500/10" }
   ],
-  "ai_advice": "Focus on backend skills.",
-  "ai_focus_area": "Backend & Cloud",
-  "ai_potential_improvement": "8 - 12% match increase"
+  "ai_advice": "Detailed 3-4 sentence advice mentioning their specific skills by name...",
+  "ai_focus_area": "Specific Learning Path (e.g. 'Git workflows & REST API design')",
+  "ai_potential_improvement": "12 - 18% match increase"
 }
 
-Guidelines for JSON fields:
-- best_match_role: Ensure it aligns with their target role (e.g. "Full Stack Developer", "Data Scientist").
-- match_score: A realistic match percentage out of 100 based on their resume score and missing skills.
-- match_reason: 1-2 sentence explanation of why this is their best match.
-- other_matches: Provide 3-4 other roles with percentage matches (70-95%) and colors (use Tailwind colors like "bg-emerald-500", "bg-blue-500", "bg-orange-500", "bg-purple-500").
-- salary_entry, salary_mid, salary_senior: Provide realistic salaries in INR (LPA) for the target role in India based on market averages. (e.g., "₹4 - 8 LPA").
-- top_companies: List 4-5 top companies hiring for this role. For each company, provide their official website "domain" (e.g., "google.com", "microsoft.com"). Do not provide image URLs or text fallbacks.
-- key_takeaways: 3-4 actionable points. For "iconName", use EXACTLY one of these strings: "Target", "ShieldCheck", "Briefcase", "ArrowUpRight", "TrendingUp", "Star". For "iconColor", use Tailwind classes like "text-violet-400 bg-violet-500/10".
-- ai_advice: 2-3 sentences of direct advice based on their missing skills and strengths.
-- ai_focus_area: A short phrase (e.g., "Backend Development & Cloud").
-- ai_potential_improvement: e.g., "8 - 12% match increase".
+For iconName use ONLY: "Target", "ShieldCheck", "Briefcase", "ArrowUpRight", "TrendingUp", "Star".
+For colors use Tailwind classes like "bg-emerald-500", "bg-blue-500", "bg-orange-500", "bg-purple-500".
+Provide 3-4 other_matches, 4-5 top_companies, and 3-4 key_takeaways.
 `;
 };
 
@@ -87,6 +91,40 @@ const generateInsights = async (userId) => {
   // 2. Build prompt and call AI
   const prompt = buildInsightsPrompt(profile, resumeAnalysis, skillGap);
   const analysisJson = await aiService.generateStructuredResponse(prompt, careerInsightsSchema);
+
+  // Force best_match_role to the user's actual target role
+  const roleKey = profile?.targetRole || profile?.current_role || "Software Engineer";
+  analysisJson.best_match_role = roleKey;
+
+  // Case-insensitive fuzzy lookup helper
+  const findKey = (obj, key) => {
+    const lower = key.toLowerCase();
+    const exactMatch = Object.keys(obj).find(k => k.toLowerCase() === lower);
+    if (exactMatch) return exactMatch;
+    // Partial match: find a key that contains or is contained in the search term
+    return Object.keys(obj).find(k => lower.includes(k.toLowerCase()) || k.toLowerCase().includes(lower)) || null;
+  };
+
+  // Override company data with role-specific companies
+  const companyKey = findKey(companyLogos, roleKey);
+  if (companyKey) {
+    analysisJson.top_companies = companyLogos[companyKey];
+  }
+
+  // Override salary ranges with role-specific real industry data
+  const salaryKey = findKey(salaryRanges, roleKey);
+  if (salaryKey) {
+    analysisJson.salary_entry = salaryRanges[salaryKey].entry;
+    analysisJson.salary_mid = salaryRanges[salaryKey].mid;
+    analysisJson.salary_senior = salaryRanges[salaryKey].senior;
+  }
+
+  // Compute relevance match score based on strengths vs missing skills
+  const strengthsCount = (resumeAnalysis?.strengths?.length) || 0;
+  const missingCount = (skillGap?.missing_skills?.length) || 0;
+  const total = strengthsCount + missingCount;
+  const computedMatchScore = total > 0 ? Math.round((strengthsCount / total) * 100) : analysisJson.match_score || 0;
+  analysisJson.match_score = computedMatchScore;
 
   // 3. Upsert into database
   const { data, error } = await supabase
@@ -130,8 +168,14 @@ const getInsights = async (userId) => {
     throw new AppError("Error fetching career insights.", HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
 
-  // If no insights found, generate them
+  // If no insights found, or data is stale (older than 24 hours), regenerate
   if (!data) {
+    return await generateInsights(userId);
+  }
+
+  const updatedAt = new Date(data.updated_at || data.created_at);
+  const hoursSinceUpdate = (Date.now() - updatedAt.getTime()) / (1000 * 60 * 60);
+  if (hoursSinceUpdate > 24) {
     return await generateInsights(userId);
   }
 

@@ -1,4 +1,4 @@
-import { User, Mail, GraduationCap, BookOpen, Calendar, Briefcase, Building, MapPin, Sparkles, Globe } from "lucide-react";
+import { User, Mail, GraduationCap, BookOpen, Calendar, Briefcase, Building, MapPin, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
@@ -33,15 +33,15 @@ export default function ProfileSummary() {
   }
 
   const profileData = {
-    fullName: profile?.full_name || "Set up your profile",
+    fullName: profile?.full_name || user?.user_metadata?.full_name || user?.user_metadata?.name || "Set up your profile",
     email: user?.email || "",
-    currentRole: profile?.job_role || "Not Specified",
-    experience: profile?.years_experience ? `${profile.years_experience} Years` : "Not Specified",
-    bio: resume?.summary || "Upload a resume to automatically generate your professional bio.",
-    skills: resume?.strong_skills || [],
-    targetRole: profile?.target_role || "Not Specified",
-    githubUrl: profile?.github_url || null,
-    linkedinUrl: profile?.linkedin_url || null
+    currentRole: profile?.job_role || profile?.current_role || user?.user_metadata?.current_role || "Not Specified",
+    experience: (profile?.years_experience !== undefined && profile?.years_experience !== null) ? `${profile.years_experience} Years` : ((user?.user_metadata?.years_experience !== undefined && user?.user_metadata?.years_experience !== null) ? `${user.user_metadata.years_experience} Years` : "Not Specified"),
+    bio: resume?.summary || profile?.bio || user?.user_metadata?.bio || "Complete your profile or upload a resume to generate your professional bio.",
+    skills: resume?.strong_skills || (profile?.skills ? profile.skills.split(",").map(s => s.trim()).filter(Boolean) : (user?.user_metadata?.skills ? user.user_metadata.skills.split(",").map(s => s.trim()).filter(Boolean) : [])),
+    targetRole: profile?.target_role || user?.user_metadata?.target_role || "Not Specified",
+    githubUrl: profile?.github_url || user?.user_metadata?.github_url || null,
+    linkedinUrl: profile?.linkedin_url || user?.user_metadata?.linkedin_url || null
   };
 
   return (
@@ -85,18 +85,20 @@ export default function ProfileSummary() {
               </div>
               
               <div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-violet-400" /> Key Skills
-                </h3>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-2">Key Skills</h3>
                 <div className="flex flex-wrap gap-2">
-                  {profileData.skills.map((skill, idx) => (
-                    <span
-                      key={idx}
-                      className="rounded-md bg-violet-50 dark:bg-violet-500/10 px-2.5 py-1 text-xs font-medium text-violet-600 dark:text-violet-300 border border-violet-200 dark:border-violet-500/20"
-                    >
-                      {skill}
-                    </span>
-                  ))}
+                  {profileData.skills.length > 0 ? (
+                    profileData.skills.map((skill, idx) => (
+                      <span
+                        key={idx}
+                        className="rounded-md bg-violet-50 dark:bg-violet-500/10 px-2.5 py-1 text-xs font-medium text-violet-600 dark:text-violet-300 border border-violet-200 dark:border-violet-500/20"
+                      >
+                        {skill}
+                      </span>
+                    ))
+                  ) : (
+                    <p className="text-sm text-slate-500 dark:text-gray-400">Upload a resume or add skills in Settings to see your key skills here.</p>
+                  )}
                 </div>
               </div>
             </div>

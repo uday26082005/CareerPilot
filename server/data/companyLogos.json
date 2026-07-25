@@ -1,0 +1,100 @@
+{
+  "Software Engineer": [
+    {"name": "Google", "domain": "google.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹20 - 45 LPA"},
+    {"name": "Microsoft", "domain": "microsoft.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹18 - 40 LPA"},
+    {"name": "Amazon", "domain": "amazon.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹15 - 35 LPA"},
+    {"name": "Infosys", "domain": "infosys.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹5 - 18 LPA"},
+    {"name": "TCS", "domain": "tcs.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹4 - 15 LPA"}
+  ],
+  "Frontend Developer": [
+    {"name": "Google", "domain": "google.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹18 - 42 LPA"},
+    {"name": "Flipkart", "domain": "flipkart.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹14 - 32 LPA"},
+    {"name": "Razorpay", "domain": "razorpay.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹12 - 28 LPA"},
+    {"name": "Swiggy", "domain": "swiggy.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹10 - 25 LPA"},
+    {"name": "Atlassian", "domain": "atlassian.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹16 - 38 LPA"}
+  ],
+  "Backend Developer": [
+    {"name": "Amazon", "domain": "amazon.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹16 - 40 LPA"},
+    {"name": "Microsoft", "domain": "microsoft.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹18 - 42 LPA"},
+    {"name": "PayPal", "domain": "paypal.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹14 - 30 LPA"},
+    {"name": "Uber", "domain": "uber.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹18 - 38 LPA"},
+    {"name": "Zoho", "domain": "zoho.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹6 - 18 LPA"}
+  ],
+  "Full Stack Developer": [
+    {"name": "Google", "domain": "google.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹20 - 50 LPA"},
+    {"name": "Microsoft", "domain": "microsoft.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹18 - 45 LPA"},
+    {"name": "Flipkart", "domain": "flipkart.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹14 - 35 LPA"},
+    {"name": "Freshworks", "domain": "freshworks.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹10 - 28 LPA"},
+    {"name": "Infosys", "domain": "infosys.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹5 - 18 LPA"}
+  ],
+  "Data Scientist": [
+    {"name": "Google", "domain": "google.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹25 - 55 LPA"},
+    {"name": "Microsoft", "domain": "microsoft.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹22 - 50 LPA"},
+    {"name": "IBM", "domain": "ibm.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹14 - 32 LPA"},
+    {"name": "Mu Sigma", "domain": "mu-sigma.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹8 - 18 LPA"},
+    {"name": "Fractal Analytics", "domain": "fractal.ai", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹10 - 25 LPA"}
+  ],
+  "Data Analyst": [
+    {"name": "Deloitte", "domain": "deloitte.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹6 - 15 LPA"},
+    {"name": "Accenture", "domain": "accenture.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹5 - 14 LPA"},
+    {"name": "TCS", "domain": "tcs.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹4 - 10 LPA"},
+    {"name": "Amazon", "domain": "amazon.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹10 - 22 LPA"},
+    {"name": "Flipkart", "domain": "flipkart.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹8 - 18 LPA"}
+  ],
+  "Machine Learning Engineer": [
+    {"name": "Google", "domain": "google.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹30 - 60 LPA"},
+    {"name": "NVIDIA", "domain": "nvidia.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹28 - 55 LPA"},
+    {"name": "Microsoft", "domain": "microsoft.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹25 - 50 LPA"},
+    {"name": "Amazon", "domain": "amazon.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹22 - 45 LPA"},
+    {"name": "Flipkart", "domain": "flipkart.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹18 - 35 LPA"}
+  ],
+  "DevOps Engineer": [
+    {"name": "Amazon", "domain": "amazon.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹15 - 40 LPA"},
+    {"name": "Microsoft", "domain": "microsoft.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹14 - 38 LPA"},
+    {"name": "Infosys", "domain": "infosys.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹6 - 18 LPA"},
+    {"name": "HCL", "domain": "hcltech.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹5 - 16 LPA"},
+    {"name": "Wipro", "domain": "wipro.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹5 - 15 LPA"}
+  ],
+  "Mobile App Developer": [
+    {"name": "Google", "domain": "google.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹18 - 42 LPA"},
+    {"name": "PhonePe", "domain": "phonepe.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹14 - 30 LPA"},
+    {"name": "Swiggy", "domain": "swiggy.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹12 - 28 LPA"},
+    {"name": "Zomato", "domain": "zomato.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹10 - 25 LPA"},
+    {"name": "Paytm", "domain": "paytm.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹8 - 22 LPA"}
+  ],
+  "UI/UX Designer": [
+    {"name": "Google", "domain": "google.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹15 - 35 LPA"},
+    {"name": "Flipkart", "domain": "flipkart.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹10 - 22 LPA"},
+    {"name": "Adobe", "domain": "adobe.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹14 - 30 LPA"},
+    {"name": "Razorpay", "domain": "razorpay.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹8 - 20 LPA"},
+    {"name": "Swiggy", "domain": "swiggy.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹8 - 18 LPA"}
+  ],
+  "Product Manager": [
+    {"name": "Google", "domain": "google.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹30 - 60 LPA"},
+    {"name": "Microsoft", "domain": "microsoft.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹28 - 55 LPA"},
+    {"name": "Amazon", "domain": "amazon.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹25 - 50 LPA"},
+    {"name": "Flipkart", "domain": "flipkart.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹20 - 40 LPA"},
+    {"name": "Razorpay", "domain": "razorpay.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹18 - 35 LPA"}
+  ],
+  "Web Developer": [
+    {"name": "Wipro", "domain": "wipro.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹4 - 12 LPA"},
+    {"name": "TCS", "domain": "tcs.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹3.5 - 10 LPA"},
+    {"name": "Infosys", "domain": "infosys.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹4 - 12 LPA"},
+    {"name": "Cognizant", "domain": "cognizant.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹4 - 11 LPA"},
+    {"name": "Accenture", "domain": "accenture.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹5 - 14 LPA"}
+  ],
+  "React Developer": [
+    {"name": "Flipkart", "domain": "flipkart.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹14 - 32 LPA"},
+    {"name": "Razorpay", "domain": "razorpay.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹12 - 28 LPA"},
+    {"name": "Atlassian", "domain": "atlassian.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹16 - 38 LPA"},
+    {"name": "Swiggy", "domain": "swiggy.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹10 - 25 LPA"},
+    {"name": "Freshworks", "domain": "freshworks.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹8 - 22 LPA"}
+  ],
+  "AI Engineer": [
+    {"name": "Google", "domain": "google.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹30 - 65 LPA"},
+    {"name": "Microsoft", "domain": "microsoft.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹28 - 58 LPA"},
+    {"name": "NVIDIA", "domain": "nvidia.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹28 - 55 LPA"},
+    {"name": "Amazon", "domain": "amazon.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹22 - 48 LPA"},
+    {"name": "Flipkart", "domain": "flipkart.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹18 - 35 LPA"}
+  ]
+}

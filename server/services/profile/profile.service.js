@@ -11,6 +11,8 @@ const formatProfileResponse = (profile) => {
     yearsExperience: profile.years_experience,
     githubUrl: profile.github_url,
     linkedinUrl: profile.linkedin_url,
+    bio: profile.bio || "",
+    skills: profile.skills || "",
     createdAt: profile.created_at,
     updatedAt: profile.updated_at,
   };
@@ -27,6 +29,8 @@ const upsertProfile = async (userId, profileData) => {
     years_experience: profileData.yearsExperience,
     github_url: profileData.githubUrl,
     linkedin_url: profileData.linkedinUrl,
+    bio: profileData.bio,
+    skills: profileData.skills,
     updated_at: new Date().toISOString(),
   };
 
@@ -72,6 +76,8 @@ const updateProfile = async (userId, updateData) => {
     years_experience: updateData.yearsExperience,
     github_url: updateData.githubUrl,
     linkedin_url: updateData.linkedinUrl,
+    bio: updateData.bio,
+    skills: updateData.skills,
     updated_at: new Date().toISOString(),
   };
   

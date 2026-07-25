@@ -3,8 +3,14 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 const LOGO_OVERRIDES = {
-  "tcs": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Tata_Consultancy_Services_Logo.svg",
-  "tata consultancy services": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Tata_Consultancy_Services_Logo.svg",
+  "tcs": "https://cdn.worldvectorlogo.com/logos/tata-consultancy-services.svg",
+  "tata consultancy services": "https://cdn.worldvectorlogo.com/logos/tata-consultancy-services.svg",
+  "wipro": "https://www.google.com/s2/favicons?domain=wipro.com&sz=128",
+  "hcl": "https://www.google.com/s2/favicons?domain=hcltech.com&sz=128",
+  "hcl technologies": "https://www.google.com/s2/favicons?domain=hcltech.com&sz=128",
+  "infosys": "https://www.google.com/s2/favicons?domain=infosys.com&sz=128",
+  "cognizant": "https://www.google.com/s2/favicons?domain=cognizant.com&sz=128",
+  "tech mahindra": "https://www.google.com/s2/favicons?domain=techmahindra.com&sz=128",
 };
 
 function CompanyLogo({ company }) {
@@ -29,7 +35,7 @@ function CompanyLogo({ company }) {
   const textFallbackStr = company.name.substring(0, 3).toLowerCase();
   
   return (
-    <div className={`mb-3 flex h-10 w-10 p-1 items-center justify-center rounded-xl bg-slate-100 dark:bg-white/5 overflow-hidden`}>
+    <div className="mb-3 flex h-10 w-10 p-1 items-center justify-center rounded-xl bg-white overflow-hidden shadow-sm">
       {isTextFallback ? (
         <span className={`font-bold text-base ${company.textColor || 'text-slate-500 dark:text-gray-400'}`}>
           {textFallbackStr}
@@ -39,7 +45,7 @@ function CompanyLogo({ company }) {
           src={logoUrl} 
           alt={company.name} 
           onError={() => setImgErrorCount(prev => prev + 1)}
-          className={`h-full w-full object-contain drop-shadow-sm ${company.invertDark ? 'dark:invert dark:brightness-200' : ''}`} 
+          className="h-full w-full object-contain drop-shadow-sm p-0.5" 
         />
       )}
     </div>
