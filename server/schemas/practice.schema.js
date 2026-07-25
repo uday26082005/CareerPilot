@@ -73,9 +73,9 @@ const evaluatePracticeAnswerSchema = z.object({
 });
 
 const generatePracticeReportNarrativeSchema = z.object({
-  strengths: z.array(z.string().trim()).max(5).default([]),
-  weaknesses: z.array(z.string().trim()).max(5).default([]),
-  recommended_topics: z.array(z.string().trim()).max(5).default([]),
+  strengths: z.array(z.string().trim()).max(10).default([]),
+  weaknesses: z.array(z.string().trim()).max(10).default([]),
+  recommended_topics: z.array(z.string().trim()).max(10).default([]),
   summary: z.string().trim(),
 });
 

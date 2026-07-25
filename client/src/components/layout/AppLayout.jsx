@@ -28,6 +28,16 @@ export default function AppLayout({ children }) {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good morning";
+    if (hour < 18) return "Good afternoon";
+    return "Good evening";
+  };
+
+  const userName = session?.user?.user_metadata?.full_name || session?.user?.user_metadata?.name || session?.user?.email?.split('@')[0] || "User";
+  const userInitial = userName.charAt(0).toUpperCase();
+
   useEffect(() => {
     if (session?.access_token) {
       fetch(`${API_BASE_URL}/notifications`, {
@@ -159,7 +169,7 @@ export default function AppLayout({ children }) {
       <div className="relative z-10 flex flex-1 flex-col overflow-hidden print:overflow-visible">
         
         {/* Top Header */}
-        <header className="relative z-50 flex h-24 shrink-0 items-center justify-between border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-[#060816]/80 px-8 backdrop-blur-md print:hidden">
+        <header className="relative z-50 flex h-20 shrink-0 items-center justify-between border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-[#060816]/80 px-8 backdrop-blur-md print:hidden">
           
           <div className="flex items-center gap-6">
             {/* Sidebar Toggle */}
@@ -174,7 +184,7 @@ export default function AppLayout({ children }) {
             {/* Greetings */}
             <div>
               <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                Good evening, Uday!
+                {getGreeting()}, <span className="capitalize">{userName.split(' ')[0]}</span>!
               </h2>
             </div>
           </div>
@@ -249,16 +259,16 @@ export default function AppLayout({ children }) {
             {/* Profile Dropdown */}
             <div className="mx-2 h-8 w-px bg-slate-200 dark:bg-white/10" />
             <Link to="/profile" className="flex items-center gap-3 rounded-full border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 p-1.5 pr-4 transition-colors hover:bg-slate-200 dark:hover:bg-white/10">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-violet-600 text-sm font-bold text-white">
-                U
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-violet-600 text-sm font-bold text-white uppercase">
+                {userInitial}
               </div>
-              <span className="text-sm font-medium text-slate-900 dark:text-white">Uday Kumar</span>
+              <span className="text-sm font-medium text-slate-900 dark:text-white capitalize">{userName}</span>
             </Link>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-8 print:overflow-visible print:p-0">
+        <main className="flex-1 flex flex-col overflow-y-auto p-8 print:overflow-visible print:p-0">
           {children}
         </main>
         

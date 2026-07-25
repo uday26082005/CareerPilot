@@ -50,7 +50,10 @@ const getPreferences = async (userId) => {
   const supabase = getSupabaseAdmin();
   const { data, error } = await supabase.from("notification_preferences").select("*").eq("user_id", userId).maybeSingle();
   
-  if (error) throw new AppError("Failed to fetch preferences", HTTP_STATUS.INTERNAL_SERVER_ERROR);
+  if (error) {
+    console.error("Supabase Error in getPreferences:", error);
+    throw new AppError("Failed to fetch preferences", HTTP_STATUS.INTERNAL_SERVER_ERROR);
+  }
   
   if (!data) {
     // Return default preferences if not yet created
@@ -111,6 +114,21 @@ const generateSmartNotifications = async (userId) => {
         newNotifications.push({
           user_id: userId, title: "Resume Analysis Reminder", message: "Upload your resume to get AI feedback and improve your ATS score.",
           type: "Resume Analysis Reminder", priority: "High", source_module: "Resume Analysis", action_url: "/resume-analysis"
+        });
+      }
+    }
+  }
+
+  // Logic: Mock Interview Reminder
+  if (prefs.interview_notifications) {
+    const { data: lastInterview } = await supabase.from("interviews").select("created_at").eq("user_id", userId).order("created_at", { ascending: false }).limit(1).maybeSingle();
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    if (!lastInterview || new Date(lastInterview.created_at) < sevenDaysAgo) {
+      const { data: recentNotif } = await supabase.from("notifications").select("id").eq("user_id", userId).eq("type", "Mock Interview Reminder").gte("created_at", sevenDaysAgo.toISOString()).maybeSingle();
+      if (!recentNotif) {
+        newNotifications.push({
+          user_id: userId, title: "Mock Interview Reminder", message: "It's been a while since your last mock interview. Practice makes perfect!",
+          type: "Mock Interview Reminder", priority: "High", source_module: "Mock Interviews", action_url: "/interviews"
         });
       }
     }

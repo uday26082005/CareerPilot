@@ -69,7 +69,7 @@ export default function ProfileSummary() {
                 {profileData.fullName.charAt(0)}
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{profileData.fullName}</h2>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white capitalize">{profileData.fullName}</h2>
                 <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-gray-400 mt-1">
                   <Mail className="h-4 w-4" /> {profileData.email}
                 </div>
@@ -147,12 +147,12 @@ export default function ProfileSummary() {
             <div className="space-y-5">
               <div className="space-y-1">
                 <span className="text-xs font-medium text-slate-500 dark:text-gray-400">Target Role</span>
-                <p className="text-sm font-semibold text-slate-900 dark:text-white">{profileData.targetRole}</p>
+                <p className="text-sm font-semibold text-slate-900 dark:text-white capitalize">{profileData.targetRole}</p>
               </div>
               
               <div className="space-y-1">
                 <span className="text-xs font-medium text-slate-500 dark:text-gray-400">Current Role</span>
-                <p className="text-sm font-semibold text-slate-900 dark:text-white">{profileData.currentRole}</p>
+                <p className="text-sm font-semibold text-slate-900 dark:text-white capitalize">{profileData.currentRole}</p>
               </div>
 
               <div className="space-y-1">

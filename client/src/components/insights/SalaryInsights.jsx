@@ -1,7 +1,9 @@
 import { Info, ArrowRight, CheckCircle2, TrendingUp, Trophy } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export default function SalaryInsights() {
+export default function SalaryInsights({ data }) {
+  if (!data) return null;
+
   return (
     <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-5 backdrop-blur-md">
       
@@ -18,7 +20,7 @@ export default function SalaryInsights() {
             <CheckCircle2 className="h-4 w-4 text-blue-400" />
             <span className="text-xs font-medium text-slate-500 dark:text-gray-400">Entry Level</span>
           </div>
-          <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-1">₹4 - 8 LPA</h4>
+          <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-1">{data.salary_entry}</h4>
           <span className="text-xs text-slate-400 dark:text-gray-500">0 - 2 years</span>
         </div>
 
@@ -28,7 +30,7 @@ export default function SalaryInsights() {
             <TrendingUp className="h-4 w-4 text-pink-400" />
             <span className="text-xs font-medium text-slate-500 dark:text-gray-400">Mid Level</span>
           </div>
-          <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-1">₹10 - 18 LPA</h4>
+          <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-1">{data.salary_mid}</h4>
           <span className="text-xs text-slate-400 dark:text-gray-500">2 - 5 years</span>
         </div>
 
@@ -38,7 +40,7 @@ export default function SalaryInsights() {
             <Trophy className="h-4 w-4 text-amber-400" />
             <span className="text-xs font-medium text-slate-500 dark:text-gray-400">Senior Level</span>
           </div>
-          <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-1">₹25 - 40 LPA</h4>
+          <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-1">{data.salary_senior}</h4>
           <span className="text-xs text-slate-400 dark:text-gray-500">5+ years</span>
         </div>
 

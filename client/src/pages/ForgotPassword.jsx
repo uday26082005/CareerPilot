@@ -6,6 +6,8 @@ import { Mail, Lock, Send, ShieldCheck } from "lucide-react";
 import AuthLayout from "../components/layout/AuthLayout";
 import FormInput from "../components/auth/FormInput";
 import GoogleIcon from "../components/auth/GoogleIcon";
+import { supabase } from "../lib/supabase";
+import toast from "react-hot-toast";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -13,9 +15,26 @@ export default function ForgotPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!email) {
+      toast.error("Please enter your email");
+      return;
+    }
+    
     setLoading(true);
-    // Mock API call
-    setTimeout(() => setLoading(false), 1000);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      
+      if (error) throw error;
+      
+      toast.success("Password reset link sent to your email!");
+      setEmail("");
+    } catch (err) {
+      toast.error(err.message || "Failed to send reset link");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const aboveCard = null;

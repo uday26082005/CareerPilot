@@ -5,8 +5,12 @@ import { Lock, ShieldCheck, CheckCircle, Circle } from "lucide-react";
 
 import AuthLayout from "../components/layout/AuthLayout";
 import PasswordInput from "../components/auth/PasswordInput";
+import { supabase } from "../lib/supabase";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function ResetPassword() {
+  const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -48,9 +52,32 @@ export default function ResetPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+    
+    if (strengthScore <= 2) {
+      toast.error("Please choose a stronger password");
+      return;
+    }
+    
     setLoading(true);
-    // Mock API call
-    setTimeout(() => setLoading(false), 1000);
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: password
+      });
+      
+      if (error) throw error;
+      
+      toast.success("Password updated successfully!");
+      setTimeout(() => navigate("/dashboard"), 1500);
+    } catch (err) {
+      toast.error(err.message || "Failed to reset password");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const aboveCard = (

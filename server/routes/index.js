@@ -11,6 +11,7 @@ const dashboardRoutes = require("./dashboard.routes");
 const analyticsRoutes = require("./analytics.routes");
 const notificationRoutes = require("./notification.routes");
 const advisorRoutes = require("./advisor.routes");
+const insightsRoutes = require("./insights.routes");
 const { sendSuccess } = require("../utils/responseHandler");
 
 const router = express.Router();
@@ -37,5 +38,6 @@ router.use("/dashboard", dashboardRoutes);
 router.use("/analytics", analyticsRoutes);
 router.use("/notifications", notificationRoutes);
 router.use("/advisor", advisorRoutes);
+router.use("/insights", insightsRoutes);
 
 module.exports = router;

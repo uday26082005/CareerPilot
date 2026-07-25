@@ -19,11 +19,12 @@ export default function MockInterviews() {
   const [isCompanyConfirmed, setIsCompanyConfirmed] = useState(false);
   const [resumeInterviewId, setResumeInterviewId] = useState(null);
   const [activeInterviews, setActiveInterviews] = useState([]);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   // Assuming a generic trigger to refresh data when modal closes
   const [refreshKey, setRefreshKey] = useState(0);
 
-  const handleCancelInterview = async () => {
-    if (!window.confirm("Are you sure you want to cancel and delete your pending interview(s)?")) return;
+  const executeDeleteInterview = async () => {
+    setShowDeleteConfirm(false);
     try {
       for (const interview of activeInterviews) {
         await axios.delete(`${API_BASE_URL}/interviews/${interview.id}`, {
@@ -35,6 +36,10 @@ export default function MockInterviews() {
     } catch (error) {
       console.error("Failed to delete interview(s):", error);
     }
+  };
+
+  const handleCancelInterview = () => {
+    setShowDeleteConfirm(true);
   };
 
   return (
@@ -167,6 +172,37 @@ export default function MockInterviews() {
         companyName={companyName}
         resumeInterviewId={resumeInterviewId}
       />
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0a0c1a] p-6 shadow-2xl">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-500/10 text-red-600 dark:text-red-500">
+                <Trash2 className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Delete Pending Interview</h3>
+                <p className="text-sm text-slate-500 dark:text-gray-400 mt-1">Are you sure you want to cancel and delete your pending interview(s)? This action cannot be undone.</p>
+              </div>
+            </div>
+            <div className="flex justify-end gap-3 mt-6">
+              <button 
+                onClick={() => setShowDeleteConfirm(false)}
+                className="rounded-xl px-4 py-2 text-sm font-semibold text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={executeDeleteInterview}
+                className="rounded-xl bg-red-600 px-4 py-2 text-sm font-bold text-white hover:bg-red-700 transition-colors shadow-md"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

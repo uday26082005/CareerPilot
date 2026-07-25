@@ -89,7 +89,7 @@ CRITICAL SCORING INSTRUCTIONS: Be extremely critical and strict. A typical avera
 Required JSON shape:
 {
   "overall_score": 88,
-  "overall_summary": "",
+  "overall_summary": "Write a 2-3 line professional summary describing the candidate based on the entire resume, highlighting their core expertise and fit.",
   "ats_score": 85,
   "ats_status": "",
   "ats_tips": [],

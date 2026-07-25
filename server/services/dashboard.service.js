@@ -18,7 +18,7 @@ const fetchProfileSummary = async (userId) => {
 const fetchResumeSummary = async (userId) => {
   const { data: allData, error } = await supabase
     .from("resume_analysis")
-    .select("overall_score, ats_score, strengths, key_suggestions, created_at")
+    .select("overall_score, overall_summary, ats_score, strengths, key_suggestions, created_at")
     .eq("user_id", userId)
     .order("created_at", { ascending: true });
 
@@ -52,6 +52,7 @@ const fetchResumeSummary = async (userId) => {
   return {
     overall_score: latest.overall_score || 0,
     ats_score: latest.ats_score || 0,
+    summary: latest.overall_summary || "",
     strong_skills: latest.strengths || [],
     missing_skills: [],
     improvement_tips: latest.key_suggestions || [],
@@ -104,8 +105,8 @@ const fetchRoadmapSummary = async (userId) => {
     throw new AppError(`Error fetching roadmap tasks: ${tasksError.message}`, 500);
   }
 
-  const completed = tasks.filter(t => t.status === "completed").length;
-  const pending = tasks.filter(t => t.status !== "completed").length;
+  const completed = tasks.filter(t => t.status?.toLowerCase() === "completed").length;
+  const pending = tasks.filter(t => t.status?.toLowerCase() !== "completed").length;
   const total = completed + pending;
   const completion = total > 0 ? Math.round((completed / total) * 100) : 0;
 
