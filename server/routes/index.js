@@ -9,7 +9,6 @@ const transcribeRoutes = require("./transcribe.routes");
 const practiceRoutes = require("./practice.routes");
 const dashboardRoutes = require("./dashboard.routes");
 const analyticsRoutes = require("./analytics.routes");
-const notificationRoutes = require("./notification.routes");
 const advisorRoutes = require("./advisor.routes");
 const insightsRoutes = require("./insights.routes");
 const { sendSuccess } = require("../utils/responseHandler");
@@ -36,7 +35,6 @@ router.use("/transcribe", transcribeRoutes);
 router.use("/practice", practiceRoutes);
 router.use("/dashboard", dashboardRoutes);
 router.use("/analytics", analyticsRoutes);
-router.use("/notifications", notificationRoutes);
 router.use("/advisor", advisorRoutes);
 router.use("/insights", insightsRoutes);
 

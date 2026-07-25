@@ -116,9 +116,53 @@ const deleteProfile = async (userId) => {
   return true;
 };
 
+const deleteUserAccount = async (userId) => {
+  const supabase = getSupabaseAdmin();
+  
+  try {
+    // Delete from other tables first to avoid FK constraint errors if cascade is not set
+    await supabase.from("practice_questions").delete().eq("user_id", userId);
+    await supabase.from("resumes").delete().eq("user_id", userId);
+    await supabase.from("roadmaps").delete().eq("user_id", userId);
+    await supabase.from("interviews").delete().eq("user_id", userId);
+    await supabase.from("profiles").delete().eq("id", userId);
+  } catch (dbErr) {
+    console.warn("Manual table deletion error (might cascade anyway):", dbErr);
+  }
+
+  // Finally, delete the auth user
+  const { data, error } = await supabase.auth.admin.deleteUser(userId);
+
+  if (error) {
+    console.error("Delete user error:", error);
+    throw new AppError(error.message || "Failed to delete auth user.", 500);
+  }
+
+  return true;
+};
+
+const exportUserData = async (userId) => {
+  const supabase = getSupabaseAdmin();
+
+  // Fetch all related user data
+  const [profileRes, resumesRes, practiceRes] = await Promise.all([
+    supabase.from("profiles").select("*").eq("id", userId).single(),
+    supabase.from("resumes").select("*").eq("user_id", userId).order("created_at", { ascending: false }),
+    supabase.from("practice_questions").select("*").eq("user_id", userId).order("created_at", { ascending: false })
+  ]);
+
+  return {
+    profile: profileRes.data || null,
+    resumes: resumesRes.data || [],
+    practiceHistory: practiceRes.data || []
+  };
+};
+
 module.exports = {
   upsertProfile,
   getProfileById,
   updateProfile,
   deleteProfile,
+  deleteUserAccount,
+  exportUserData
 };

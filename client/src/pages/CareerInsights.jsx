@@ -1,4 +1,4 @@
-import { BarChart3, Loader2, AlertCircle } from "lucide-react";
+import { BarChart3, Loader2, AlertCircle, RefreshCw } from "lucide-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
@@ -43,15 +43,25 @@ export default function CareerInsights() {
     <div className="flex flex-col gap-6 pb-6 w-full max-w-7xl mx-auto">
       
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
             Career Insights
           </h1>
-          <p className="mt-1 text-base text-slate-500 dark:text-gray-400">
+          <p className="mt-1 text-sm text-slate-500 dark:text-gray-400">
             Discover personalized career opportunities, market trends and actionable insights to achieve your goals.
           </p>
         </div>
+        {insights && (
+          <button 
+            onClick={() => fetchInsights(true)}
+            disabled={isLoading}
+            className="flex items-center gap-1.5 text-sm font-bold text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 transition-colors disabled:opacity-50 border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 rounded-lg px-5 py-2.5 shadow-sm shrink-0"
+          >
+            <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} /> 
+            {isLoading ? "Regenerating..." : "Regenerate"}
+          </button>
+        )}
       </div>
 
       {/* Grid Layout */}

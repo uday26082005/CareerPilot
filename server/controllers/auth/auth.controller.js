@@ -34,8 +34,40 @@ const logout = asyncHandler(async (req, res) => {
   });
 });
 
+const validateEmail = asyncHandler(async (req, res) => {
+  const emailValidator = require('deep-email-validator');
+  const { email } = req.body;
+  
+  if (!email) {
+    return res.status(400).json({ success: false, message: "Email is required" });
+  }
+
+  const { valid, reason, validators } = await emailValidator.validate({
+    email,
+    validateRegex: true,
+    validateMx: true,
+    validateTypo: true,
+    validateDisposable: true,
+    validateSMTP: true // Important for checking if mailbox actually exists
+  });
+
+  if (!valid && validators[reason]) {
+    return res.status(400).json({ 
+      success: false, 
+      message: `Email validation failed: ${validators[reason].reason || reason}`,
+      reason 
+    });
+  }
+
+  sendSuccess(res, {
+    message: "Email is valid",
+    data: { valid: true }
+  });
+});
+
 module.exports = {
   login,
   getSession,
   logout,
+  validateEmail,
 };

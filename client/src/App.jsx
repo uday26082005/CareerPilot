@@ -1,4 +1,6 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 import Landing from "./pages/Landing";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
@@ -17,10 +19,27 @@ import Settings from "./pages/Settings";
 import ProfileSummary from "./pages/ProfileSummary";
 import AppLayout from "./components/layout/AppLayout";
 import { AuthProvider } from "./contexts/AuthContext";
-function App() {
+
+function AppContent() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash && hash.includes("error=")) {
+      const params = new URLSearchParams(hash.replace("#", "?"));
+      const errorDesc = params.get("error_description") || params.get("error");
+      if (errorDesc) {
+        toast.error(errorDesc.replace(/\+/g, " "));
+        window.history.replaceState(null, "", window.location.pathname + window.location.search);
+        navigate("/login", { replace: true });
+      }
+    }
+  }, [navigate, location]);
+
   return (
-    <AuthProvider>
-      <Routes>
+    <Routes>
+
         <Route path="/" element={<Landing />} />
       <Route path="/signup" element={<Register />} />
       <Route path="/login" element={<Login />} />
@@ -40,6 +59,13 @@ function App() {
         <Route path="/settings" element={<AppLayout><Settings /></AppLayout>} />
         <Route path="/profile" element={<AppLayout><ProfileSummary /></AppLayout>} />
       </Routes>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
     </AuthProvider>
   );
 }

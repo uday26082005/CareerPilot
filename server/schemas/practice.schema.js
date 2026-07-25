@@ -15,8 +15,18 @@ const PRACTICE_CATEGORIES = [
   "System Design",
   "Aptitude",
   "Behavioral Practice",
-  // Compatibility category for the pre-existing Practice Arena card.
   "DevOps & Cloud",
+  
+  // Custom role-based categories from frontend
+  "Python & R",
+  "Machine Learning",
+  "Data Analysis",
+  "Statistics",
+  "Software Testing",
+  "Automation Testing",
+  "API Testing",
+  "UI/UX Design",
+  "Web Performance",
 ];
 
 const PRACTICE_DIFFICULTIES = ["Easy", "Medium", "Hard"];

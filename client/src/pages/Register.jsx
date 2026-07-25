@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { User, Mail, ArrowRight } from "lucide-react";
+import axios from "axios";
 
 import AuthLayout from "../components/layout/AuthLayout";
 import FormInput from "../components/auth/FormInput";
@@ -38,6 +39,15 @@ export default function Register() {
 
     setLoading(true);
     try {
+      // 1. Verify if the email is a real existing mailbox
+      const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+      const validationRes = await axios.post(`${API_BASE_URL}/auth/validate-email`, { email: form.email });
+      
+      if (!validationRes.data.success) {
+        throw new Error(validationRes.data.message || "Email address does not exist or is invalid.");
+      }
+
+      // 2. If valid, proceed with Supabase sign up
       const { data, error } = await supabase.auth.signUp({
         email: form.email,
         password: form.password,
@@ -50,10 +60,17 @@ export default function Register() {
 
       if (error) throw error;
 
-      toast.success("Account created successfully!");
-      setTimeout(() => navigate("/onboarding"), 1000);
+      if (data.session) {
+        toast.success("Account created successfully!");
+        setTimeout(() => navigate("/onboarding"), 1000);
+      } else {
+        toast.success("Account created! Please check your email for a verification link.");
+        setTimeout(() => navigate("/login"), 3000);
+      }
     } catch (err) {
-      toast.error(err.message || "Something went wrong. Try again.");
+      // Check if it's an axios error with a response from our backend
+      const errorMessage = err.response?.data?.message || err.message || "Something went wrong. Try again.";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

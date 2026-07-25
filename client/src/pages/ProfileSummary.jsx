@@ -1,4 +1,4 @@
-import { User, Mail, GraduationCap, BookOpen, Calendar, Briefcase, Building, MapPin, Globe } from "lucide-react";
+import { User, Mail, GraduationCap, BookOpen, Calendar, Briefcase, Building, MapPin, Globe, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
@@ -9,6 +9,7 @@ export default function ProfileSummary() {
   const [profile, setProfile] = useState(null);
   const [resume, setResume] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,12 +37,19 @@ export default function ProfileSummary() {
     fullName: profile?.full_name || user?.user_metadata?.full_name || user?.user_metadata?.name || "Set up your profile",
     email: user?.email || "",
     currentRole: profile?.job_role || profile?.current_role || user?.user_metadata?.current_role || "Not Specified",
-    experience: (profile?.years_experience !== undefined && profile?.years_experience !== null) ? `${profile.years_experience} Years` : ((user?.user_metadata?.years_experience !== undefined && user?.user_metadata?.years_experience !== null) ? `${user.user_metadata.years_experience} Years` : "Not Specified"),
+    experience: (() => {
+      const years = profile?.years_experience ?? user?.user_metadata?.years_experience;
+      if (years === undefined || years === null) return "Not Specified";
+      if (years < 2) return "Beginner";
+      if (years <= 5) return "Intermediate";
+      return "Expert";
+    })(),
     bio: resume?.summary || profile?.bio || user?.user_metadata?.bio || "Complete your profile or upload a resume to generate your professional bio.",
     skills: resume?.strong_skills || (profile?.skills ? profile.skills.split(",").map(s => s.trim()).filter(Boolean) : (user?.user_metadata?.skills ? user.user_metadata.skills.split(",").map(s => s.trim()).filter(Boolean) : [])),
     targetRole: profile?.target_role || user?.user_metadata?.target_role || "Not Specified",
     githubUrl: profile?.github_url || user?.user_metadata?.github_url || null,
-    linkedinUrl: profile?.linkedin_url || user?.user_metadata?.linkedin_url || null
+    linkedinUrl: profile?.linkedin_url || user?.user_metadata?.linkedin_url || null,
+    avatarUrl: profile?.avatar_url || user?.user_metadata?.avatar_url || ""
   };
 
   return (
@@ -65,9 +73,18 @@ export default function ProfileSummary() {
           {/* Main Info Card */}
           <div className="rounded-xl border border-slate-200 dark:border-white/5 bg-white dark:bg-[#0a0c1a] p-6 shadow-sm">
             <div className="flex items-center gap-5 mb-6">
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-violet-700 text-3xl font-bold text-white shadow-lg shadow-violet-500/20">
-                {profileData.fullName.charAt(0)}
-              </div>
+              {profileData.avatarUrl ? (
+                <img 
+                  src={profileData.avatarUrl} 
+                  alt="Avatar" 
+                  onClick={() => setIsPreviewOpen(true)}
+                  className="h-20 w-20 rounded-full object-cover border border-violet-500/20 shadow-lg shadow-violet-500/10 cursor-pointer hover:border-violet-500/80 transition-colors" 
+                />
+              ) : (
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-violet-700 text-3xl font-bold text-white shadow-lg shadow-violet-500/20 uppercase">
+                  {profileData.fullName.charAt(0)}
+                </div>
+              )}
               <div>
                 <h2 className="text-2xl font-bold text-slate-900 dark:text-white capitalize">{profileData.fullName}</h2>
                 <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-gray-400 mt-1">
@@ -166,6 +183,28 @@ export default function ProfileSummary() {
         </div>
 
       </div>
+
+      {isPreviewOpen && profileData.avatarUrl && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+          onClick={() => setIsPreviewOpen(false)}
+        >
+          <div className="relative max-w-xl w-full flex flex-col items-center">
+            <button 
+              className="absolute -top-12 right-0 p-2 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full transition-colors animate-pulse"
+              onClick={() => setIsPreviewOpen(false)}
+            >
+              <X className="h-6 w-6" />
+            </button>
+            <img 
+              src={profileData.avatarUrl} 
+              alt="Avatar Full Preview" 
+              className="max-h-[70vh] max-w-full rounded-2xl object-contain border border-white/10 shadow-2xl"
+              onClick={(e) => e.stopPropagation()} 
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

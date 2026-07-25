@@ -7,6 +7,7 @@ const { loginSchema, logoutSchema } = require("../../schemas/auth.schema");
 const router = express.Router();
 
 router.post("/login", validateRequest(loginSchema), authController.login);
+router.post("/validate-email", authController.validateEmail);
 router.get("/session", requireAuth, authController.getSession);
 router.get("/me", requireAuth, authController.getSession);
 router.post("/logout", requireAuth, validateRequest(logoutSchema), authController.logout);

@@ -17,15 +17,6 @@ export default function AICareerAdvisor({ data, onRegenerate, isLoading }) {
           <p className="text-sm leading-relaxed text-slate-600 dark:text-gray-300">
             {data.ai_advice}
           </p>
-          
-          <button 
-            onClick={onRegenerate}
-            disabled={isLoading}
-            className="flex items-center gap-1.5 text-sm font-medium text-violet-400 hover:text-violet-300 transition-colors mt-8 disabled:opacity-50"
-          >
-            <RefreshCcw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} /> 
-            {isLoading ? "Regenerating..." : "Regenerate Advice"}
-          </button>
         </div>
 
         {/* Right Side: Metric Boxes */}

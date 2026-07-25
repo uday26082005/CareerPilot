@@ -48,9 +48,32 @@ const deleteProfile = asyncHandler(async (req, res) => {
   });
 });
 
+const exportProfileData = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+  
+  const data = await profileService.exportUserData(userId);
+  
+  sendSuccess(res, {
+    message: "Data exported successfully.",
+    data
+  });
+});
+
+const deleteAccount = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+  
+  await profileService.deleteUserAccount(userId);
+  
+  sendSuccess(res, {
+    message: "Account deleted successfully."
+  });
+});
+
 module.exports = {
   saveProfile,
   getProfile,
   updateProfile,
   deleteProfile,
+  exportProfileData,
+  deleteAccount
 };

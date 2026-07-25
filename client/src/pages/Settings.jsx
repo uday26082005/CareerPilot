@@ -1,7 +1,8 @@
 import { 
   ProfileSection, 
-  NotificationSettings, 
-  SecuritySettings 
+  SecuritySettings,
+  ApplicationDefaults,
+  AccountManagement
 } from "../components/settings/SettingsCards";
 
 export default function Settings() {
@@ -19,11 +20,11 @@ export default function Settings() {
       <div className="flex flex-col gap-6">
         <ProfileSection />
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <NotificationSettings />
-        </div>
+        <ApplicationDefaults />
 
         <SecuritySettings />
+
+        <AccountManagement />
       </div>
 
     </div>

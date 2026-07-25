@@ -50,7 +50,8 @@ router.get("/", async (req, res, next) => {
       githubUrl: profileRecord?.github_url || authUser?.user_metadata?.github_url || "",
       linkedinUrl: profileRecord?.linkedin_url || authUser?.user_metadata?.linkedin_url || "",
       bio: profileRecord?.bio || authUser?.user_metadata?.bio || "",
-      skills: profileRecord?.skills || authUser?.user_metadata?.skills || ""
+      skills: profileRecord?.skills || authUser?.user_metadata?.skills || "",
+      avatarUrl: authUser?.user_metadata?.avatar_url || ""
     };
 
     res.json({ success: true, data: mergedData });
@@ -77,6 +78,7 @@ router.put("/", async (req, res, next) => {
     if (body.linkedinUrl !== undefined) userMetadata.linkedin_url = body.linkedinUrl;
     if (body.bio !== undefined) userMetadata.bio = body.bio;
     if (body.skills !== undefined) userMetadata.skills = body.skills;
+    if (body.avatarUrl !== undefined) userMetadata.avatar_url = body.avatarUrl;
 
     try {
       await supabase.auth.admin.updateUserById(userId, {
@@ -137,7 +139,8 @@ router.put("/", async (req, res, next) => {
       githubUrl: savedData?.github_url || userMetadata.github_url,
       linkedinUrl: savedData?.linkedin_url || userMetadata.linkedin_url,
       bio: savedData?.bio || userMetadata.bio || "",
-      skills: savedData?.skills || userMetadata.skills || ""
+      skills: savedData?.skills || userMetadata.skills || "",
+      avatarUrl: userMetadata.avatar_url || ""
     };
 
     res.json({ success: true, data: mergedData, message: "Profile updated successfully." });
@@ -146,6 +149,64 @@ router.put("/", async (req, res, next) => {
     next(error);
   }
 });
+
+// Upload original avatar to Supabase Storage and get public URL
+router.post("/avatar", async (req, res, next) => {
+  try {
+    const { getSupabaseAdmin } = require("../../config/supabase");
+    const supabase = getSupabaseAdmin();
+    const userId = req.user.id;
+    const { base64Data, contentType } = req.body;
+
+    if (!base64Data) {
+      return res.status(400).json({ success: false, error: "No image data provided" });
+    }
+
+    // Convert base64 to buffer
+    const buffer = Buffer.from(base64Data.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+    
+    // File name: avatar-[userId]-[timestamp]
+    const fileExt = contentType ? contentType.split('/')[1] : 'jpg';
+    const fileName = `avatar-${userId}-${Date.now()}.${fileExt}`;
+
+    // Upload to Supabase Storage
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('avatars')
+      .upload(fileName, buffer, {
+        contentType: contentType || 'image/jpeg',
+        upsert: true
+      });
+
+    if (uploadError) {
+      throw uploadError;
+    }
+
+    // Get public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from('avatars')
+      .getPublicUrl(fileName);
+
+    // Update user auth metadata
+    try {
+      await supabase.auth.admin.updateUserById(userId, {
+        user_metadata: { avatar_url: publicUrl }
+      });
+    } catch (authErr) {
+      console.error("Auth metadata update failed:", authErr);
+    }
+
+    res.json({ success: true, publicUrl });
+  } catch (error) {
+    console.error("Avatar upload error:", error);
+    next(error);
+  }
+});
+
+// Export user data
+router.get("/export", profileController.exportProfileData);
+
+// Delete account completely via Admin SDK
+router.delete("/account", profileController.deleteAccount);
 
 router.post("/save", validateRequest(saveProfileSchema), profileController.saveProfile);
 router.get("/:id", validateRequest(getProfileSchema), profileController.getProfile);

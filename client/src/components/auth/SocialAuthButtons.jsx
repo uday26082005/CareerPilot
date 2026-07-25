@@ -8,7 +8,6 @@ import LinkedinIcon from "./LinkedinIcon";
 const buttons = [
   { label: "Continue with Google", icon: <GoogleIcon />, provider: "google" },
   { label: "Continue with GitHub", icon: <GithubIcon className="h-5 w-5 text-slate-900 dark:text-white" />, provider: "github" },
-  { label: "Continue with LinkedIn", icon: <LinkedinIcon className="h-5 w-5 text-[#0A66C2]" />, provider: "linkedin_oidc" },
 ];
 
 export default function SocialAuthButtons() {

@@ -112,16 +112,7 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col gap-6 pb-6">
       
-      {/* Welcome Banner */}
-      <div className="rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-8 backdrop-blur-md">
-        <h1 className="text-3xl font-black mb-2 text-slate-900 dark:text-white">
-          Welcome back, <span className="text-violet-400 capitalize">{profile?.full_name || 'Explorer'}</span>!
-        </h1>
-        <p className="text-slate-600 dark:text-gray-400 text-lg leading-relaxed text-justify w-full block">
-          {resume?.summary || "Ready to land your next dream role? Let's get to work on optimizing your profile."}
-        </p>
-      </div>
-      
+
       {/* Stats Row 1: Profile & Resume */}
       <div className="grid gap-6 md:grid-cols-3">
         <StatCard 
