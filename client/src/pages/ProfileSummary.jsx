@@ -197,7 +197,7 @@ export default function ProfileSummary() {
               <X className="h-6 w-6" />
             </button>
             <img 
-              src={profileData.avatarUrl} 
+              src={profileData.avatarUrl?.replace(/=s\d+-c/i, '=s1000-c')} 
               alt="Avatar Full Preview" 
               className="max-h-[70vh] max-w-full rounded-2xl object-contain border border-white/10 shadow-2xl"
               onClick={(e) => e.stopPropagation()} 
