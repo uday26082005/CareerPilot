@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>🚀 CareerPilot</h1>
+  <h1>CareerPilot</h1>
   <p><strong>AI-Powered Career Development & Interview Preparation Platform</strong></p>
   
   <p>
@@ -110,9 +110,3 @@ CareerPilot/
     ├── services/           # Core business logic and AI Orchestrator
     └── index.js            # Server entry point
 ```
-
----
-
-<div align="center">
-  <p>Built with ❤️ by Vignesh Samatham & Antigravity AI.</p>
-</div>
