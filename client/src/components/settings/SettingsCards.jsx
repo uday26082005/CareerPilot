@@ -324,6 +324,24 @@ export function SecuritySettings() {
   );
 }
 
+const ROLES = [
+  "Frontend Developer",
+  "Backend Developer",
+  "Full Stack Developer",
+  "Data Scientist",
+  "Product Manager",
+  "UI/UX Designer",
+  "DevOps Engineer",
+  "Mobile App Developer",
+  "Data Analyst",
+  "Machine Learning Engineer",
+  "Cybersecurity Analyst",
+  "Cloud Architect",
+  "Quality Assurance Engineer",
+  "Business Analyst",
+  "Systems Administrator"
+];
+
 export function ApplicationDefaults() {
   const { session } = useAuth();
   const [difficulty, setDifficulty] = useState("easy");
@@ -345,6 +363,14 @@ export function ApplicationDefaults() {
       }, {
         headers: { Authorization: `Bearer ${session?.access_token}` }
       });
+      
+      // Instantly sync the new target_role across all pages via auth metadata
+      if (field === 'targetRole') {
+        await supabase.auth.updateUser({
+          data: { target_role: value }
+        });
+      }
+      
       toast.success("Setting updated");
     } catch (err) {
       console.error(err);
@@ -374,10 +400,6 @@ export function ApplicationDefaults() {
             value={difficulty}
             onChange={(e) => {
               setDifficulty(e.target.value);
-              // Because of the API naming, we send 'default_difficulty' inside userMetadata
-              // Wait, our backend profile route currently accepts specific fields. 
-              // I will use an auth API call directly or update the backend. Actually, the backend `PUT /api/profile` doesn't handle `default_difficulty`.
-              // I'll just use the supabase client directly here since we have the session.
               (async () => {
                 const { error } = await supabase.auth.updateUser({
                   data: { default_difficulty: e.target.value }
@@ -400,16 +422,19 @@ export function ApplicationDefaults() {
             <p className="text-sm text-slate-500 dark:text-gray-400">Default role context for AI tools</p>
           </div>
           <div className="flex gap-2">
-            <input 
-              type="text" 
+            <select 
               value={targetRole} 
               onChange={(e) => setTargetRole(e.target.value)}
-              placeholder="e.g. Frontend Developer"
-              className="rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500" 
-            />
+              className="rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-4 py-2.5 text-sm font-semibold text-slate-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 [&>option]:dark:bg-slate-900 w-[200px] sm:w-[250px]" 
+            >
+              <option value="" disabled>Select your target role</option>
+              {ROLES.map(role => (
+                <option key={role} value={role}>{role}</option>
+              ))}
+            </select>
             <button 
               onClick={() => handleSave('targetRole', targetRole)}
-              disabled={isSaving}
+              disabled={isSaving || !targetRole}
               className="rounded-lg bg-violet-600 px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-violet-700 disabled:opacity-50"
             >
               Save

@@ -98,7 +98,8 @@ Return the data as a JSON object precisely following this exact JSON structure:
   "category": "e.g., DSA, Behavioral, System Design, React",
   "difficulty": "${difficulty}",
   "expected_answer": "A detailed explanation of what a good answer should look like"
-}`;
+}
+CRITICAL INSTRUCTION: Keep the 'expected_answer' extremely concise (2-3 short bullet points max). Do not write a long essay, as it will exceed strict token limits.`;
   return prompt;
 };
 
@@ -122,7 +123,9 @@ Return the data as a JSON object precisely following this exact JSON structure:
   "improvements": ["string", "string"], // what they missed or got wrong
   "ideal_answer": "string", // how you would answer it perfectly
   "next_focus": "string" // one sentence advice
-}`;
+}
+CRITICAL: Limit strengths and improvements arrays to EXACTLY 1 or 2 short items.
+CRITICAL: Keep 'ideal_answer' extremely concise (2-3 sentences max) to avoid token limits.`;
 };
 
 const buildReportPrompt = (questions) => {
@@ -148,9 +151,9 @@ Return the data as a JSON object precisely following this exact JSON structure:
   "confidence_score": 0, // 0 to 100 based on answer assertiveness
   "strengths": ["string"],
   "weaknesses": ["string"],
-  "recommended_practice": ["string"],
   "summary": "A short 1-2 sentence summary"
-}`;
+}
+CRITICAL INSTRUCTION: You MUST limit all array properties (strengths, weaknesses, recommended_practice) to EXACTLY 2 items each. Keep descriptions concise to prevent hitting strict token limits.`;
 };
 
 const startInterview = async (userId, payload) => {

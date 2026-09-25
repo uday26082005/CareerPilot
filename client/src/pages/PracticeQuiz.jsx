@@ -18,7 +18,7 @@ const DEFAULT_TOPICS = [
 const getTopicsForRole = (role) => {
   const normalized = (role || "").toLowerCase();
   
-  if (normalized.includes("data") || normalized.includes("ml") || normalized.includes("ai") || normalized.includes("science") || normalized.includes("analyst")) {
+  if (normalized.includes("data scientist") || normalized.includes("data anal") || normalized.includes("machine learning")) {
     return [
       { id: "python_r", category: "Python & R", name: "Python & R Programming", icon: Code, count: 110, desc: "Python, R, scripting, OOP, and data structures." },
       { id: "ml_dl", category: "Machine Learning", name: "ML & Deep Learning", icon: HelpCircle, count: 95, desc: "Supervised, unsupervised, neural nets, and evaluation." },
@@ -29,7 +29,7 @@ const getTopicsForRole = (role) => {
     ];
   }
   
-  if (normalized.includes("qa") || normalized.includes("test") || normalized.includes("quality") || normalized.includes("automation")) {
+  if (normalized.includes("qa") || normalized.includes("test")) {
     return [
       { id: "testing_fundamentals", category: "Software Testing", name: "Testing Fundamentals", icon: HelpCircle, count: 90, desc: "Unit, integration, regression, and E2E testing theories." },
       { id: "automation_testing", category: "Automation Testing", name: "Automation Frameworks", icon: Code, count: 85, desc: "Selenium, Playwright, Cypress, and scripting." },
@@ -40,7 +40,7 @@ const getTopicsForRole = (role) => {
     ];
   }
 
-  if (normalized.includes("frontend") || normalized.includes("ui") || normalized.includes("ux") || normalized.includes("web") || normalized.includes("designer")) {
+  if (normalized.includes("frontend") || normalized.includes("ui") || normalized.includes("ux")) {
     return [
       { id: "frontend", category: "React", name: "Frontend Development", icon: Code, count: 120, desc: "React, CSS, HTML, and browser fundamentals." },
       { id: "js_ts", category: "JavaScript", name: "JavaScript & TypeScript", icon: HelpCircle, count: 100, desc: "Closures, async/await, ES6+, and type safety." },
@@ -51,7 +51,84 @@ const getTopicsForRole = (role) => {
     ];
   }
 
-  // Default: Backend or general Software Engineer
+  if (normalized.includes("mobile")) {
+    return [
+      { id: "mobile_dev", category: "Mobile Development", name: "Mobile App Development", icon: Code, count: 100, desc: "React Native, Flutter, Swift, or Kotlin." },
+      { id: "mobile_ui", category: "Mobile UI", name: "Mobile UI & Layouts", icon: Layers, count: 80, desc: "Responsive design, gestures, and platform guidelines." },
+      { id: "mobile_state", category: "State Management", name: "State & Data", icon: Database, count: 70, desc: "Redux, Context, local storage, and SQLite." },
+      { id: "mobile_perf", category: "Mobile Performance", name: "App Performance", icon: Server, count: 65, desc: "Memory management, rendering, and offline support." },
+      { id: "dsa", category: "Data Structures & Algorithms", name: "Data Structures & Algorithms", icon: HelpCircle, count: 85, desc: "Core algorithms, trees, arrays, and graphs." },
+      { id: "mobile_apis", category: "API Integration", name: "REST & GraphQL", icon: Cloud, count: 75, desc: "Fetching data, WebSockets, and push notifications." }
+    ];
+  }
+
+  if (normalized.includes("cybersecurity") || normalized.includes("security")) {
+    return [
+      { id: "sec_fundamentals", category: "Security Fundamentals", name: "Security Fundamentals", icon: HelpCircle, count: 90, desc: "CIA triad, threats, vulnerabilities, and risk management." },
+      { id: "net_sec", category: "Network Security", name: "Network Security", icon: Server, count: 85, desc: "Firewalls, VPNs, IDS/IPS, and network protocols." },
+      { id: "app_sec", category: "Application Security", name: "App Security (AppSec)", icon: Code, count: 80, desc: "OWASP Top 10, secure coding, and penetration testing." },
+      { id: "crypto", category: "Cryptography", name: "Cryptography", icon: Layers, count: 75, desc: "Encryption, hashing, PKI, and digital signatures." },
+      { id: "inc_resp", category: "Incident Response", name: "Incident Response", icon: Cloud, count: 70, desc: "Forensics, malware analysis, and SOC operations." },
+      { id: "dsa", category: "Data Structures & Algorithms", name: "DSA & Scripting", icon: Database, count: 60, desc: "Python scripting, core algorithms, and log parsing." }
+    ];
+  }
+
+  if (normalized.includes("cloud") || normalized.includes("devops")) {
+    return [
+      { id: "cloud_arch", category: "Cloud Architecture", name: "Cloud Architecture", icon: Cloud, count: 110, desc: "AWS, Azure, GCP, and cloud-native patterns." },
+      { id: "cicd", category: "CI/CD", name: "CI/CD Pipelines", icon: Layers, count: 95, desc: "Jenkins, GitHub Actions, GitLab CI, and automation." },
+      { id: "containers", category: "Containerization", name: "Docker & K8s", icon: Server, count: 100, desc: "Docker, Kubernetes, orchestration, and microservices." },
+      { id: "iac", category: "Infrastructure as Code", name: "Infrastructure as Code", icon: Code, count: 85, desc: "Terraform, Ansible, CloudFormation, and configuration." },
+      { id: "monitoring", category: "Monitoring & Logging", name: "Monitoring & Observability", icon: HelpCircle, count: 80, desc: "Prometheus, Grafana, ELK stack, and Datadog." },
+      { id: "dsa", category: "Data Structures & Algorithms", name: "Scripting & Algorithms", icon: Database, count: 70, desc: "Bash, Python, shell scripting, and algorithms." }
+    ];
+  }
+
+  if (normalized.includes("database") || normalized.includes("dba")) {
+    return [
+      { id: "sql_advanced", category: "Advanced SQL", name: "Advanced SQL", icon: Database, count: 100, desc: "Complex joins, window functions, and subqueries." },
+      { id: "db_design", category: "Database Design", name: "Data Modeling", icon: Layers, count: 90, desc: "Normalization, ER diagrams, and schema design." },
+      { id: "db_perf", category: "Database Performance", name: "Performance Tuning", icon: Server, count: 85, desc: "Indexing, query optimization, and execution plans." },
+      { id: "nosql", category: "NoSQL Databases", name: "NoSQL Systems", icon: Cloud, count: 75, desc: "MongoDB, Cassandra, Redis, and document stores." },
+      { id: "db_admin", category: "Database Administration", name: "Admin & Security", icon: HelpCircle, count: 70, desc: "Backup, recovery, replication, and permissions." },
+      { id: "dsa", category: "Data Structures & Algorithms", name: "Data Structures", icon: Code, count: 65, desc: "B-trees, hashing, graphs, and core algorithms." }
+    ];
+  }
+
+  if (normalized.includes("blockchain")) {
+    return [
+      { id: "smart_contracts", category: "Smart Contracts", name: "Smart Contracts", icon: Code, count: 90, desc: "Solidity, Rust, and contract deployment." },
+      { id: "web3", category: "Web3 Integration", name: "Web3 & DApps", icon: Layers, count: 85, desc: "Ethers.js, Web3.js, wallets, and frontend integration." },
+      { id: "crypto_fundamentals", category: "Blockchain Fundamentals", name: "Blockchain Concepts", icon: HelpCircle, count: 80, desc: "Consensus, cryptography, ledgers, and nodes." },
+      { id: "defi", category: "DeFi & Protocols", name: "DeFi & Tokenomics", icon: Server, count: 75, desc: "ERC-20, NFTs, liquidity pools, and protocols." },
+      { id: "block_sec", category: "Blockchain Security", name: "Smart Contract Security", icon: Cloud, count: 70, desc: "Reentrancy, audits, vulnerabilities, and testing." },
+      { id: "dsa", category: "Data Structures & Algorithms", name: "Algorithms & Hash Trees", icon: Database, count: 65, desc: "Merkle trees, graph algorithms, and core DSA." }
+    ];
+  }
+
+  if (normalized.includes("product manager")) {
+    return [
+      { id: "agile", category: "Agile & Scrum", name: "Agile & Scrum", icon: Layers, count: 90, desc: "Sprints, backlog grooming, and agile methodologies." },
+      { id: "prod_strategy", category: "Product Strategy", name: "Product Strategy", icon: HelpCircle, count: 85, desc: "Roadmapping, market research, and OKRs." },
+      { id: "user_research", category: "User Research", name: "User Research", icon: Server, count: 80, desc: "User interviews, personas, and A/B testing." },
+      { id: "data_metrics", category: "Data & Metrics", name: "Product Analytics", icon: Database, count: 75, desc: "KPIs, conversion funnels, Mixpanel, and analytics." },
+      { id: "tech_pm", category: "Technical Concepts", name: "Tech for PMs", icon: Code, count: 70, desc: "APIs, system architecture, and tech debt." },
+      { id: "sys_design", category: "System Design", name: "High-level Design", icon: Cloud, count: 65, desc: "Scalability, load balancing, and cloud basics." }
+    ];
+  }
+
+  if (normalized.includes("architect")) {
+    return [
+      { id: "system_design", category: "System Design", name: "System Design", icon: Layers, count: 120, desc: "Scalability, load balancing, and distributed systems." },
+      { id: "microservices", category: "Microservices", name: "Microservices", icon: Server, count: 100, desc: "Service mesh, API gateways, and event-driven arch." },
+      { id: "cloud_arch", category: "Cloud Architecture", name: "Cloud Infrastructure", icon: Cloud, count: 95, desc: "Multi-cloud, high availability, and serverless." },
+      { id: "data_modeling", category: "Data Modeling", name: "Database Architecture", icon: Database, count: 85, desc: "Sharding, replication, CAP theorem, and consistency." },
+      { id: "security_arch", category: "Security Architecture", name: "Enterprise Security", icon: HelpCircle, count: 80, desc: "IAM, zero trust, compliance, and encryption." },
+      { id: "dsa", category: "Data Structures & Algorithms", name: "Advanced Algorithms", icon: Code, count: 70, desc: "Graphs, dynamic programming, and complexity." }
+    ];
+  }
+
+  // Default: Backend or general Software Engineer or Full Stack Developer
   return DEFAULT_TOPICS;
 };
 

@@ -97,7 +97,11 @@ export default function InterviewModal({ isOpen, onClose, interviewType, difficu
       setCurrentQuestionNumber(res.data.data.current_question_number);
       setTotalQuestions(res.data.data.total_questions);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to start interview.");
+      if (!err.response) {
+        setError("Network Error: The backend server is unreachable. Is your local server running?");
+      } else {
+        setError(err.response?.data?.message || "Failed to start interview.");
+      }
     } finally {
       setLoading(false);
     }

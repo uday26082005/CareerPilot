@@ -13,5 +13,6 @@ router.get("/practice", analyticsController.getPractice);
 router.get("/skills", analyticsController.getSkills);
 router.get("/activity", analyticsController.getActivity);
 router.get("/insights", analyticsController.getInsights);
+router.get("/dashboard", analyticsController.getDashboard);
 
 module.exports = router;

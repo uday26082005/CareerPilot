@@ -94,30 +94,29 @@ Required JSON shape:
   "ats_status": "",
   "ats_tips": [],
   "section_scores": {
-    "summary": { "score": 80, "feedback": "" },
-    "experience": { "score": 88, "feedback": "" },
-    "skills": { "score": 90, "feedback": "" },
-    "projects": { "score": 84, "feedback": "" },
-    "education": { "score": 86, "feedback": "" },
-    "certifications": { "score": 78, "feedback": "" }
+    "summary": { "score": 80, "feedback": "max 5 words" },
+    "experience": { "score": 88, "feedback": "max 5 words" },
+    "skills": { "score": 90, "feedback": "max 5 words" },
+    "projects": { "score": 84, "feedback": "max 5 words" },
+    "education": { "score": 86, "feedback": "max 5 words" },
+    "certifications": { "score": 78, "feedback": "max 5 words" }
   },
   "strengths": [],
   "key_suggestions": [
-    { "title": "", "description": "", "priority": "High" },
-    { "title": "", "description": "", "priority": "Medium" },
-    { "title": "", "description": "", "priority": "Low" }
+    { "title": "", "description": "max 1 sentence", "priority": "High" },
+    { "title": "", "description": "max 1 sentence", "priority": "Medium" }
   ],
-  "recommended_keywords": [],
+  "recommended_keywords": ["keyword1", "keyword2", "keyword3"],
   "role_fit": {
     "target_role": "${targetRole}",
     "score": 82,
-    "summary": "",
-    "strengths": [],
-    "weaknesses": []
+    "summary": "1 sentence max",
+    "strengths": ["strength1", "strength2"],
+    "weaknesses": ["weakness1"]
   }
 }
 
-Ensure you provide at least 3-5 key_suggestions.
+Ensure you provide EXACTLY 2 key_suggestions and keep all summaries extremely concise (1 short sentence) to prevent the JSON from being truncated due to strict token limits.
 
 Resume text:
 ---

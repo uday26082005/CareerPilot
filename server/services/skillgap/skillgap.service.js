@@ -8,31 +8,24 @@ const HTTP_STATUS_NOT_FOUND = 404;
 const HTTP_STATUS_INTERNAL_SERVER_ERROR = 500;
 const HTTP_STATUS_UNPROCESSABLE_ENTITY = 422;
 
-const buildGroqPrompt = (targetRole, resumeText, requiredSkills) => `You are an expert AI Career Advisor and Software Engineering Mentor.
+const buildGroqPrompt = (targetRole, matchedSkills, missingSkills) => `You are an expert AI Career Advisor and Software Engineering Mentor.
 I have a user targeting the role of "${targetRole}".
 
-Here is the raw text extracted from their resume:
-"""
-${resumeText}
-"""
+Here are the skills they currently have (calculated by our NLP engine):
+${JSON.stringify(matchedSkills)}
 
-Required skills for the target role:
-${JSON.stringify(requiredSkills)}
+Here are the skills they are MISSING for this role:
+${JSON.stringify(missingSkills)}
 
-Task 1: Analyze the resume text carefully. Match the user's actual experience and skills against the required skills. Use intelligent semantic matching (e.g., if they have "MySQL" or "PostgreSQL", that matches "SQL". If they have "GitHub" or "GitLab", that matches "Git"). Be generous in your interpretation if the semantic overlap is strong.
-Return two arrays: "matched_skills" (which required skills they have) and "missing_skills" (which required skills they lack). Both arrays MUST contain the names of the *required skills* exactly as provided.
-
-Task 2: Based on the missing skills, provide a personalized learning roadmap. 
+Task: Based on the missing skills, provide a personalized learning roadmap. 
 IMPORTANT: Recommend ONLY 100% FREE resources (e.g. Roadmap.sh, MDN, freeCodeCamp, MIT OpenCourseWare, YouTube, official docs). NEVER recommend paid courses.
 
-You MUST provide AT LEAST 3 to 4 recommended_courses, AT LEAST 3 to 4 recommended_projects, and AT LEAST 3 to 4 practice_questions.
+You MUST provide EXACTLY 2 recommended_courses, EXACTLY 2 recommended_projects, and EXACTLY 2 practice_questions.
 For practice_questions, provide a related topic_id. The ONLY valid topic_ids are: "dsa", "frontend", "backend", "system_design", "databases", "devops". You MUST choose one of these 6 strings for the topic_id based on what the question relates to most.
 Each practice question must target a distinct missing or priority skill. Its title should be a short, accurate practice focus for that topic (not a fixed coding-problem name), because the Practice Arena generates the actual question dynamically when the user opens it.
 
 Return the data as a JSON object precisely following this exact JSON structure. Do NOT add any extra keys, and do not use markdown outside of the JSON block:
 {
-  "matched_skills": ["skill1", "skill2"],
-  "missing_skills": ["skill3", "skill4"],
   "priority_skills": ["skill3"],
   "recommended_projects": [{ "title": "string", "description": "string", "difficulty": "string" }],
   "recommended_resources": [{ "title": "string", "type": "string", "url": "string" }],
@@ -43,8 +36,10 @@ Return the data as a JSON object precisely following this exact JSON structure. 
 }
 `;
 
-const analyzeWithGroq = async (targetRole, resumeText, requiredSkills) => {
-  const prompt = buildGroqPrompt(targetRole, resumeText, requiredSkills);
+const { matchSkills } = require("../../utils/nlp");
+
+const analyzeWithGroq = async (targetRole, matchedSkills, missingSkills) => {
+  const prompt = buildGroqPrompt(targetRole, matchedSkills, missingSkills);
   return await aiService.generateStructuredResponse(prompt, skillGapAnalysisSchema);
 };
 
@@ -80,15 +75,32 @@ const analyzeSkillGap = async (userId) => {
     throw new AppError("No resume analysis found. Please analyze your resume first.", HTTP_STATUS_NOT_FOUND);
   }
 
+  // Normalize search for common roles (like fullstack -> full stack)
+  let normalizedRole = targetRole.toLowerCase().replace(/fullstack/g, 'full stack');
+  let searchPattern = `%${normalizedRole.split(/\s+/).join('%')}%`;
+
   // 3. Fetch Role Template
   let { data: roleTemplate, error: templateError } = await supabase
     .from("role_skill_templates")
     .select("required_skills")
-    .ilike("role_name", targetRole)
+    .ilike("role_name", searchPattern)
     .single();
 
   if (templateError || !roleTemplate) {
-    // Fallback if the exact role is not found
+    // Second fallback: try just the first word
+    const firstWord = normalizedRole.split(' ')[0];
+    const { data: fallback1 } = await supabase
+      .from("role_skill_templates")
+      .select("required_skills")
+      .ilike("role_name", `%${firstWord}%`)
+      .limit(1)
+      .single();
+    
+    roleTemplate = fallback1;
+  }
+
+  if (!roleTemplate) {
+    // Final Fallback if the exact role is not found
     const { data: fallbackTemplate } = await supabase
       .from("role_skill_templates")
       .select("required_skills")
@@ -100,24 +112,22 @@ const analyzeSkillGap = async (userId) => {
 
   const requiredSkills = roleTemplate.required_skills || [];
 
-  // 4. Generate a fresh set of targeted practice recommendations on each request.
-  // The actual question is generated by the Practice Arena when the user opens it.
+  // 4. Custom NLP Skill Matching Algorithm (Jaccard Similarity)
+  const nlpResult = matchSkills(resumeAnalysis.resume_text, requiredSkills);
+  const matchedSkills = nlpResult.matchedSkills;
+  const missingSkills = nlpResult.missingSkills;
+  const skillMatchPercentage = nlpResult.matchPercentage;
+
+  // 5. Generate a fresh set of targeted practice recommendations using AI
   let groqResult;
   try {
-    groqResult = await analyzeWithGroq(targetRole, resumeAnalysis.resume_text, requiredSkills);
+    groqResult = await analyzeWithGroq(targetRole, matchedSkills, missingSkills);
   } catch (error) {
     console.error("Groq skill gap analysis failed.", error);
     throw new AppError(`Failed to generate personalized learning plan with AI: ${error.message}`, HTTP_STATUS_INTERNAL_SERVER_ERROR);
   }
 
-  const matchedSkills = groqResult.matched_skills || [];
-  const missingSkills = groqResult.missing_skills || [];
-  
-  const skillMatchPercentage = requiredSkills.length > 0 
-    ? Math.round((matchedSkills.length / requiredSkills.length) * 100) 
-    : 0;
-
-  // 7. Save Analysis
+  // 6. Save Analysis
   const payload = {
     user_id: userId,
     resume_analysis_id: resumeAnalysis.id,

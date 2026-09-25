@@ -18,7 +18,7 @@ const envSchema = z.object({
   SUPABASE_ANON_KEY: z.string().optional().or(z.literal("")),
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional().or(z.literal("")),
   GROQ_API_KEY: z.string().optional().or(z.literal("")),
-  GROQ_MODEL: z.string().default("llama-3.3-70b-versatile"),
+  GROQ_MODEL: z.string().default("qwen/qwen3.8-27b"),
   RATE_LIMIT_WINDOW_MS: numberFromEnv(900000).default(900000),
   RATE_LIMIT_MAX: numberFromEnv(100).default(100),
   JSON_BODY_LIMIT: z.string().default("1mb"),

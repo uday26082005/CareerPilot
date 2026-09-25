@@ -64,6 +64,15 @@ const getInsights = async (req, res, next) => {
   }
 };
 
+const getDashboard = async (req, res, next) => {
+  try {
+    const data = await analyticsService.getDashboardAnalytics(req.user.id);
+    sendSuccess(res, { data, message: "Dashboard analytics fetched." });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getOverview,
   getProgress,
@@ -71,5 +80,6 @@ module.exports = {
   getPractice,
   getSkills,
   getActivity,
-  getInsights
+  getInsights,
+  getDashboard
 };

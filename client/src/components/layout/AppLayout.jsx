@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, Navigate } from "react-router-dom";
 import {
   Bot, Home, FileText, Mic, BarChart2, Map, PieChart, 
-  Trophy, Sparkles, LogOut, Settings,
+  Trophy, Sparkles, LogOut, Settings, TrendingUp,
   Maximize, Minimize, Plus, ArrowRight, Menu, Target
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
@@ -16,6 +16,7 @@ const SIDEBAR_LINKS = [
   { name: "Skill Gap Analysis", path: "/skill-gap-analysis", icon: BarChart2 },
   { name: "Roadmaps", path: "/roadmaps", icon: Map },
   { name: "Career Insights", path: "/career-insights", icon: PieChart },
+  { name: "Analytics", path: "/analytics", icon: TrendingUp },
   { name: "Practice", path: "/practice", icon: Target },
   { name: "AskAI", path: "/ask-ai", icon: Sparkles },
 ];

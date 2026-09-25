@@ -17,6 +17,7 @@ import Roadmap from "./pages/Roadmap";
 import PracticeQuiz from "./pages/PracticeQuiz";
 import Settings from "./pages/Settings";
 import ProfileSummary from "./pages/ProfileSummary";
+import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import AppLayout from "./components/layout/AppLayout";
 import { AuthProvider } from "./contexts/AuthContext";
 
@@ -58,6 +59,7 @@ function AppContent() {
       <Route path="/roadmaps" element={<AppLayout><Roadmap /></AppLayout>} />
         <Route path="/settings" element={<AppLayout><Settings /></AppLayout>} />
         <Route path="/profile" element={<AppLayout><ProfileSummary /></AppLayout>} />
+        <Route path="/analytics" element={<AppLayout><AnalyticsDashboard /></AppLayout>} />
       </Routes>
   );
 }

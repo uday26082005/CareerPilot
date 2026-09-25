@@ -67,7 +67,8 @@ Return a JSON object with the following exact structure:
     }
   ]
 }
-Return the response exactly matching this JSON structure.`;
+Return the response exactly matching this JSON structure.
+CRITICAL INSTRUCTION: You MUST provide EXACTLY 2 phases. Each phase MUST contain EXACTLY 2 tasks. Keep all descriptions extremely concise (max 1 sentence) to prevent hitting strict token limits.`;
 };
 
 const formatRoadmapResponse = (roadmap, tasks) => {

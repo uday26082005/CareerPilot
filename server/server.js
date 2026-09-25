@@ -39,9 +39,12 @@ app.use("/api", apiRoutes);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
+const { initializeCronJobs } = require('./cron/jobs.cron');
+
 if (require.main === module) {
   app.listen(env.PORT, () => {
     console.log(`CareerPilot API listening on http://localhost:${env.PORT}`);
+    initializeCronJobs();
   });
 }
 

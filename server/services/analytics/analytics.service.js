@@ -168,6 +168,20 @@ No markdown. Just JSON.`;
   }
 };
 
+const getDashboardAnalytics = async (userId) => {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase.rpc('get_user_analytics_dashboard', { uid: userId });
+  
+  if (error) {
+    console.error("Dashboard RPC Error:", error);
+    throw new AppError("Failed to fetch dashboard analytics.", 500);
+  }
+
+  // If the user hasn't generated enough data, we can provide fallback structure
+  // But our SQL handles COALESCE, so it should be fine.
+  return data;
+};
+
 module.exports = {
   calculateOverview,
   getProgress,
@@ -175,5 +189,6 @@ module.exports = {
   getPractice,
   getSkills,
   getActivity,
-  generateInsights
+  generateInsights,
+  getDashboardAnalytics
 };

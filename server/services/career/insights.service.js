@@ -60,7 +60,7 @@ Generate a JSON response matching this exact schema. Every field must feel like 
 
 For iconName use ONLY: "Target", "ShieldCheck", "Briefcase", "ArrowUpRight", "TrendingUp", "Star".
 For colors use Tailwind classes like "bg-emerald-500", "bg-blue-500", "bg-orange-500", "bg-purple-500".
-Provide 3-4 other_matches, 4-5 top_companies, and 3-4 key_takeaways.
+Provide EXACTLY 2 other_matches, EXACTLY 2 top_companies, and EXACTLY 2 key_takeaways. Keep descriptions concise to avoid token limits.
 `;
 };
 
@@ -105,18 +105,60 @@ const generateInsights = async (userId) => {
     return Object.keys(obj).find(k => lower.includes(k.toLowerCase()) || k.toLowerCase().includes(lower)) || null;
   };
 
-  // Override company data with role-specific companies
-  const companyKey = findKey(companyLogos, roleKey);
-  if (companyKey) {
-    analysisJson.top_companies = companyLogos[companyKey];
-  }
+  // Fetch real-time scraped jobs for this role
+  const { data: scrapedJobs } = await supabase
+    .from('scraped_jobs')
+    .select('company, salary_min, salary_max')
+    .ilike('role_name', `%${roleKey}%`);
 
-  // Override salary ranges with role-specific real industry data
-  const salaryKey = findKey(salaryRanges, roleKey);
-  if (salaryKey) {
-    analysisJson.salary_entry = salaryRanges[salaryKey].entry;
-    analysisJson.salary_mid = salaryRanges[salaryKey].mid;
-    analysisJson.salary_senior = salaryRanges[salaryKey].senior;
+  if (scrapedJobs && scrapedJobs.length > 0) {
+    // Calculate dynamic salary percentiles
+    const allSalaries = [];
+    scrapedJobs.forEach(job => {
+      if (job.salary_min) allSalaries.push(job.salary_min);
+      if (job.salary_max) allSalaries.push(job.salary_max);
+    });
+    
+    allSalaries.sort((a, b) => a - b);
+    
+    if (allSalaries.length >= 3) {
+      const getPercentile = (p) => allSalaries[Math.floor((allSalaries.length - 1) * p)];
+      const formatLPA = (val) => `₹${(val / 100000).toFixed(1)} LPA`;
+      
+      analysisJson.salary_entry = `${formatLPA(getPercentile(0.1))} - ${formatLPA(getPercentile(0.3))}`;
+      analysisJson.salary_mid = `${formatLPA(getPercentile(0.4))} - ${formatLPA(getPercentile(0.6))}`;
+      analysisJson.salary_senior = `${formatLPA(getPercentile(0.7))} - ${formatLPA(getPercentile(0.9))}`;
+    }
+
+    // Determine top hiring companies dynamically
+    const companyCounts = {};
+    scrapedJobs.forEach(job => {
+      companyCounts[job.company] = (companyCounts[job.company] || 0) + 1;
+    });
+    
+    const sortedCompanies = Object.entries(companyCounts).sort((a, b) => b[1] - a[1]).slice(0, 4);
+    
+    if (sortedCompanies.length > 0) {
+      analysisJson.top_companies = sortedCompanies.map(([comp, count]) => ({
+        name: comp,
+        domain: `${comp.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`,
+        demand: count > 2 ? "Very High" : "High",
+        demandColor: "text-emerald-400",
+        salary: analysisJson.salary_mid
+      }));
+    }
+  } else {
+    // Fallback to static JSON if no scraped data yet
+    const companyKey = findKey(companyLogos, roleKey);
+    if (companyKey) {
+      analysisJson.top_companies = companyLogos[companyKey];
+    }
+    const salaryKey = findKey(salaryRanges, roleKey);
+    if (salaryKey) {
+      analysisJson.salary_entry = salaryRanges[salaryKey].entry;
+      analysisJson.salary_mid = salaryRanges[salaryKey].mid;
+      analysisJson.salary_senior = salaryRanges[salaryKey].senior;
+    }
   }
 
   // Compute relevance match score based on strengths vs missing skills

@@ -30,6 +30,7 @@ const generateStructuredResponse = async (prompt, zodSchema, options = {}) => {
         messages: [{ role: "user", content: prompt }],
         response_format: { type: "json_object" },
         temperature,
+        max_tokens: 900,
       });
 
       const parsedJson = extractJson(response.choices[0].message.content);
@@ -53,14 +54,16 @@ const generateStructuredResponse = async (prompt, zodSchema, options = {}) => {
   }
 };
 
+const fs = require('fs');
+
 /**
  * Transcribes audio using Groq's Whisper API.
  */
-const transcribeAudio = async (buffer, extension = "webm") => {
+const transcribeAudio = async (filePath, extension = "webm") => {
   const client = getGroqClient();
   
   try {
-    const file = await toFile(buffer, `audio.${extension}`, { type: `audio/${extension}` });
+    const file = fs.createReadStream(filePath);
     
     const response = await client.audio.transcriptions.create({
       file: file,
