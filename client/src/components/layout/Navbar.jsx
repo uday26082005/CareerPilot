@@ -40,13 +40,10 @@ export default function Navbar() {
             <a href="/" className="flex items-center gap-3">
 
               <motion.div
-                whileHover={{
-                  rotate: 10,
-                  scale: 1.08,
-                }}
+                whileHover={{ rotate: 10, scale: 1.08 }}
                 transition={{ duration: 0.2 }}
-                className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_4px_20px_rgba(139,92,246,0.2)]">
-                <img src="/logo.jpg" alt="CareerPilot Logo" className="h-9 w-9 rounded-lg mix-blend-lighten" />
+                className="flex h-10 w-10 shrink-0 items-center justify-center">
+                <img src="/logo.jpg" alt="CareerPilot Logo" className="h-9 w-9 rounded-xl mix-blend-lighten" />
               </motion.div>
 
               <div>

@@ -8,9 +8,10 @@ import ReactMarkdown from 'react-markdown';
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 export default function AskAI() {
+  const currentYear = new Date().getFullYear();
   const suggestions = [
     { text: "How can I improve my resume?", icon: FileText, color: "text-violet-400 bg-violet-500/10" },
-    { text: "What skills are in demand in 2024?", icon: BookOpen, color: "text-emerald-400 bg-emerald-500/10" },
+    { text: `What skills are in demand in ${currentYear}?`, icon: BookOpen, color: "text-emerald-400 bg-emerald-500/10" },
     { text: "How to prepare for system design?", icon: Target, color: "text-blue-400 bg-blue-500/10" },
     { text: "Suggest a learning roadmap for me", icon: Briefcase, color: "text-orange-400 bg-orange-500/10" },
   ];

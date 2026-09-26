@@ -5,6 +5,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { supabase } from "../../lib/supabase";
 import axios from "axios";
 import toast from "react-hot-toast";
+import ThemedSelect from "../ui/ThemedSelect";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
@@ -224,15 +225,17 @@ export function ProfileSection() {
 
           <div>
             <label className="block text-xs font-bold text-slate-900 dark:text-white mb-2">Experience Level</label>
-            <select
+            <ThemedSelect
               value={experienceLevel}
-              onChange={(e) => setExperienceLevel(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 [&>option]:dark:bg-slate-900"
-            >
-              <option value="Beginner">Beginner (0-2 years)</option>
-              <option value="Intermediate">Intermediate (3-5 years)</option>
-              <option value="Expert">Expert (5+ years)</option>
-            </select>
+              onChange={setExperienceLevel}
+              options={[
+                { value: "Beginner", label: "Beginner (0-2 years)" },
+                { value: "Intermediate", label: "Intermediate (3-5 years)" },
+                { value: "Expert", label: "Expert (5+ years)" },
+              ]}
+              className="w-full"
+              align="left"
+            />
           </div>
 
           <div className="md:col-span-2">
@@ -396,24 +399,26 @@ export function ApplicationDefaults() {
             <h4 className="text-base font-bold text-slate-900 dark:text-white">Default Difficulty</h4>
             <p className="text-sm text-slate-500 dark:text-gray-400">Default difficulty for practice interviews</p>
           </div>
-          <select 
+          <ThemedSelect 
             value={difficulty}
-            onChange={(e) => {
-              setDifficulty(e.target.value);
+            onChange={(val) => {
+              setDifficulty(val);
               (async () => {
                 const { error } = await supabase.auth.updateUser({
-                  data: { default_difficulty: e.target.value }
+                  data: { default_difficulty: val }
                 });
                 if (error) toast.error("Failed to update difficulty");
                 else toast.success("Difficulty updated");
               })();
             }}
-            className="rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-4 py-2.5 text-sm font-semibold text-slate-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 [&>option]:dark:bg-slate-900"
-          >
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-          </select>
+            options={[
+              { value: "easy", label: "Easy" },
+              { value: "medium", label: "Medium" },
+              { value: "hard", label: "Hard" },
+            ]}
+            className="w-36"
+            align="right"
+          />
         </div>
 
         <div className="flex items-center justify-between w-full">
@@ -422,20 +427,18 @@ export function ApplicationDefaults() {
             <p className="text-sm text-slate-500 dark:text-gray-400">Default role context for AI tools</p>
           </div>
           <div className="flex gap-2">
-            <select 
+            <ThemedSelect 
               value={targetRole} 
-              onChange={(e) => setTargetRole(e.target.value)}
-              className="rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-4 py-2.5 text-sm font-semibold text-slate-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 [&>option]:dark:bg-slate-900 w-[200px] sm:w-[250px]" 
-            >
-              <option value="" disabled>Select your target role</option>
-              {ROLES.map(role => (
-                <option key={role} value={role}>{role}</option>
-              ))}
-            </select>
+              onChange={setTargetRole}
+              options={ROLES}
+              placeholder="Select your target role"
+              className="w-[200px] sm:w-[250px]"
+              align="right"
+            />
             <button 
               onClick={() => handleSave('targetRole', targetRole)}
               disabled={isSaving || !targetRole}
-              className="rounded-lg bg-violet-600 px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-violet-700 disabled:opacity-50"
+              className="rounded-xl bg-violet-600 px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-violet-700 disabled:opacity-50 cursor-pointer shadow-md shadow-violet-600/20"
             >
               Save
             </button>

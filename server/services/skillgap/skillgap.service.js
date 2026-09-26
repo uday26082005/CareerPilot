@@ -2,6 +2,7 @@ const { AppError } = require("../../middleware/error/AppError");
 const { getSupabaseAdmin } = require("../../config/supabase");
 const aiService = require("../ai/groq.service");
 const { skillGapAnalysisSchema } = require("../../schemas/skillgap.schema");
+const marketDemandService = require("./marketDemand.service");
 
 const HTTP_STATUS_OK = 200;
 const HTTP_STATUS_NOT_FOUND = 404;
@@ -75,42 +76,9 @@ const analyzeSkillGap = async (userId) => {
     throw new AppError("No resume analysis found. Please analyze your resume first.", HTTP_STATUS_NOT_FOUND);
   }
 
-  // Normalize search for common roles (like fullstack -> full stack)
-  let normalizedRole = targetRole.toLowerCase().replace(/fullstack/g, 'full stack');
-  let searchPattern = `%${normalizedRole.split(/\s+/).join('%')}%`;
-
-  // 3. Fetch Role Template
-  let { data: roleTemplate, error: templateError } = await supabase
-    .from("role_skill_templates")
-    .select("required_skills")
-    .ilike("role_name", searchPattern)
-    .single();
-
-  if (templateError || !roleTemplate) {
-    // Second fallback: try just the first word
-    const firstWord = normalizedRole.split(' ')[0];
-    const { data: fallback1 } = await supabase
-      .from("role_skill_templates")
-      .select("required_skills")
-      .ilike("role_name", `%${firstWord}%`)
-      .limit(1)
-      .single();
-    
-    roleTemplate = fallback1;
-  }
-
-  if (!roleTemplate) {
-    // Final Fallback if the exact role is not found
-    const { data: fallbackTemplate } = await supabase
-      .from("role_skill_templates")
-      .select("required_skills")
-      .eq("role_name", "Software Engineer")
-      .single();
-    
-    roleTemplate = fallbackTemplate || { required_skills: [] };
-  }
-
-  const requiredSkills = roleTemplate.required_skills || [];
+  // 3. Dynamic Market Skill Extraction (Real-Time 2026 Industry & Job Postings Intelligence)
+  const marketData = await marketDemandService.getDynamicMarketSkills(targetRole, supabase);
+  const requiredSkills = marketData.required_skills;
 
   // 4. Custom NLP Skill Matching Algorithm (Jaccard Similarity)
   const nlpResult = matchSkills(resumeAnalysis.resume_text, requiredSkills);
@@ -141,7 +109,16 @@ const analyzeSkillGap = async (userId) => {
     skill_match_percentage: skillMatchPercentage,
     next_learning_step: groqResult.next_learning_step || "",
     summary: groqResult.summary || "",
-    analysis_json: groqResult
+    analysis_json: {
+      ...groqResult,
+      market_intelligence: {
+        is_live_market: marketData.is_live_market,
+        market_demand_summary: marketData.market_demand_summary,
+        trending_technologies: marketData.trending_technologies || [],
+        extracted_at: marketData.extracted_at,
+        source: marketData.is_live_market ? "Live 2026 Industry Demand Engine" : "Industry Baseline"
+      }
+    }
   };
 
   const { data: savedAnalysis, error: saveError } = await supabase

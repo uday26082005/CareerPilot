@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { RefreshCcw } from "lucide-react";
+import { RefreshCcw, Sparkles, TrendingUp, Globe } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import SkillMetrics from "../components/skills/SkillMetrics";
 import SkillRadarChart from "../components/skills/SkillRadarChart";
@@ -103,6 +103,59 @@ export default function SkillGapAnalysis() {
 
       {analysis && (
         <>
+          {/* Market Intelligence Banner */}
+          {analysis.analysis_json?.market_intelligence && (
+            <div className="rounded-2xl border border-violet-500/20 bg-gradient-to-r from-violet-950/30 via-slate-900/60 to-blue-950/30 p-5 backdrop-blur-xl">
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-600/20 text-violet-400">
+                    <Globe className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                      Live 2026 Industry Market Intelligence
+                      <span className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-400 border border-emerald-500/20">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        Dynamic Market Extraction
+                      </span>
+                    </h3>
+                    <p className="text-xs text-slate-400">
+                      Skills are dynamically extracted from current hiring standards and live postings for <span className="text-violet-300 font-semibold">{analysis.role_name}</span>.
+                    </p>
+                  </div>
+                </div>
+                {analysis.analysis_json.market_intelligence.extracted_at && (
+                  <span className="text-xs text-slate-500">
+                    Updated {new Date(analysis.analysis_json.market_intelligence.extracted_at).toLocaleDateString()}
+                  </span>
+                )}
+              </div>
+
+              {analysis.analysis_json.market_intelligence.market_demand_summary && (
+                <p className="text-sm text-slate-300 leading-relaxed bg-white/[0.02] border border-white/5 rounded-xl p-3 mb-3">
+                  {analysis.analysis_json.market_intelligence.market_demand_summary}
+                </p>
+              )}
+
+              {analysis.analysis_json.market_intelligence.trending_technologies?.length > 0 && (
+                <div className="flex flex-wrap items-center gap-2 pt-1">
+                  <span className="text-xs font-semibold text-slate-400 flex items-center gap-1">
+                    <TrendingUp className="h-3.5 w-3.5 text-violet-400" />
+                    Market Focus:
+                  </span>
+                  {analysis.analysis_json.market_intelligence.trending_technologies.map((tech, idx) => (
+                    <span 
+                      key={idx}
+                      className="rounded-lg bg-violet-500/10 border border-violet-500/20 px-2.5 py-1 text-xs font-medium text-violet-300"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Top Row: 5 Stat Cards (Metrics) */}
           <div>
             <SkillMetrics 

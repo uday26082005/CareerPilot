@@ -73,9 +73,7 @@ export default function AppLayout({ children }) {
           {/* Logo */}
           <div className="flex h-20 items-center px-5">
             <Link to="/" className="group flex items-center gap-3 transition-transform duration-300 hover:scale-105" title={!isSidebarOpen ? "CareerPilot AI" : ""}>
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_4px_20px_rgba(139,92,246,0.2)] transition-transform duration-500 group-hover:rotate-12">
-                <img src="/logo.jpg" alt="CareerPilot Logo" className="h-8 w-8 rounded-lg mix-blend-lighten" />
-              </div>
+              <img src="/logo.jpg" alt="CareerPilot Logo" className="h-9 w-9 shrink-0 rounded-xl mix-blend-lighten transition-transform duration-300 group-hover:scale-105" />
               <h1 className={`text-xl font-extrabold tracking-tight text-slate-900 dark:text-white transition-opacity duration-300 group-hover:text-violet-100 ${isSidebarOpen ? 'opacity-100' : 'opacity-0'}`}>
                 CareerPilot<span className="text-violet-400"> AI</span>
               </h1>

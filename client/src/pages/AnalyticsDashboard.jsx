@@ -108,7 +108,7 @@ export default function AnalyticsDashboard() {
                   </linearGradient>
                 </defs>
                 <XAxis dataKey="date_label" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `${value}`} />
+                <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} allowDecimals={false} tickFormatter={(value) => `${value}`} />
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" opacity={0.2} />
                 <Tooltip 
                   contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px', color: '#fff' }}
@@ -125,17 +125,35 @@ export default function AnalyticsDashboard() {
           <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6">Performance Trends (7-Day Avg)</h3>
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={trends} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+              <AreaChart 
+                data={(trends || []).map(t => ({
+                  ...t,
+                  moving_avg_interview: t.moving_avg_interview ?? 0,
+                  moving_avg_practice: t.moving_avg_practice ?? 0,
+                }))} 
+                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+              >
+                <defs>
+                  <linearGradient id="colorInterview" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                  </linearGradient>
+                  <linearGradient id="colorPractice" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
                 <XAxis dataKey="date_label" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `${value}%`} />
+                <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} domain={[0, 100]} tickFormatter={(value) => `${value}`} />
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" opacity={0.2} />
                 <Tooltip 
                   contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px', color: '#fff' }}
+                  formatter={(value) => [`${value}%`]}
                 />
                 <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px' }} />
-                <Line type="monotone" dataKey="moving_avg_interview" name="Mock Interviews" stroke="#3b82f6" strokeWidth={3} dot={false} activeDot={{ r: 6 }} />
-                <Line type="monotone" dataKey="avg_practice_accuracy" name="Practice Accuracy" stroke="#10b981" strokeWidth={3} dot={false} />
-              </LineChart>
+                <Area type="monotone" dataKey="moving_avg_interview" name="Mock Interviews" stroke="#3b82f6" fillOpacity={1} fill="url(#colorInterview)" />
+                <Area type="monotone" dataKey="moving_avg_practice" name="Practice Accuracy" stroke="#10b981" fillOpacity={1} fill="url(#colorPractice)" />
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>

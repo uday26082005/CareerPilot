@@ -1,6 +1,12 @@
 const { getGroqClient, groqModel } = require("../../config/groq");
 const { AppError } = require("../../middleware/error/AppError");
-const { toFile } = require("groq-sdk");
+
+// Available backup models in case primary model hits rate limit or error
+const BACKUP_MODELS = [
+  groqModel || "qwen/qwen3.8-27b",
+  "openai/gpt-oss-120b",
+  "openai/gpt-oss-20b"
+];
 
 const extractJson = (responseText) => {
   const trimmed = String(responseText || "").trim();
@@ -18,40 +24,65 @@ const extractJson = (responseText) => {
 
 /**
  * Generates a structured JSON response from Groq, validated against a Zod schema.
+ * Features automated multi-model fallback and dynamic token ceiling.
  */
 const generateStructuredResponse = async (prompt, zodSchema, options = {}) => {
-  const { temperature = 0.2, maxRetries = 3 } = options;
+  const { temperature = 0.2, maxRetries = 2, max_tokens = 1800 } = options;
   const client = getGroqClient();
 
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      const response = await client.chat.completions.create({
-        model: groqModel,
-        messages: [{ role: "user", content: prompt }],
-        response_format: { type: "json_object" },
-        temperature,
-        max_tokens: 900,
-      });
+  const modelsToTry = [
+    groqModel || "qwen/qwen3.8-27b",
+    ...BACKUP_MODELS.filter(m => m !== (groqModel || "qwen/qwen3.8-27b"))
+  ];
 
-      const parsedJson = extractJson(response.choices[0].message.content);
-      return zodSchema.parse(parsedJson);
-    } catch (error) {
-      const isRetryable = error.message?.includes("503") || error.message?.includes("429") || error.message?.includes("UNAVAILABLE");
-      
-      if (isRetryable && attempt < maxRetries) {
-        const delayMs = attempt * 2000;
-        console.warn(`Groq API busy (Attempt ${attempt}/${maxRetries}). Retrying in ${delayMs}ms...`);
-        await new Promise(res => setTimeout(res, delayMs));
-        continue;
-      }
+  let lastError;
 
-      if (error instanceof AppError) {
-        throw error;
+  for (let mIdx = 0; mIdx < modelsToTry.length; mIdx++) {
+    const currentModel = modelsToTry[mIdx];
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        const response = await client.chat.completions.create({
+          model: currentModel,
+          messages: [{ role: "user", content: prompt }],
+          response_format: { type: "json_object" },
+          temperature,
+          max_tokens,
+        });
+
+        const parsedJson = extractJson(response.choices[0].message.content);
+        return zodSchema.parse(parsedJson);
+      } catch (error) {
+        lastError = error;
+        const msg = String(error.message || "");
+        const isRateLimit = msg.includes("429");
+        const isBusy = msg.includes("503") || msg.includes("UNAVAILABLE");
+        const isTruncated = msg.includes("json_validate_failed") || msg.includes("max completion tokens");
+
+        if (isRateLimit && mIdx < modelsToTry.length - 1) {
+          console.warn(`[Groq AI] Rate limit reached on ${currentModel}. Seamlessly switching to fallback model ${modelsToTry[mIdx + 1]}...`);
+          break; // break to try next model immediately without delay
+        }
+
+        if ((isBusy || isRateLimit || isTruncated) && attempt < maxRetries) {
+          const delayMs = attempt * 1200;
+          console.warn(`[Groq AI] Request busy or rate-limited (${currentModel}, attempt ${attempt}/${maxRetries}). Retrying in ${delayMs}ms...`);
+          await new Promise(res => setTimeout(res, delayMs));
+          continue;
+        }
+
+        if (error instanceof AppError) {
+          throw error;
+        }
+
+        // Try next fallback model if available
+        break;
       }
-      console.error("Groq AI request failed:", error);
-      throw new AppError(`AI analysis failed: ${error.message}`, 500);
     }
   }
+
+  console.error("All Groq AI models/retries exhausted:", lastError);
+  throw new AppError(`AI analysis failed: ${lastError?.message || "Unknown error"}`, 500);
 };
 
 const fs = require('fs');

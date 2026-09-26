@@ -1,6 +1,7 @@
 import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import { Maximize2, Minimize2, CheckCircle2, CircleDashed, Circle, ChevronDown, ChevronUp, Monitor, Layout, FileJson, Database, Rocket, ExternalLink, Code } from "lucide-react";
 import html2pdf from 'html2pdf.js';
+import ThemedSelect from "../ui/ThemedSelect";
 
 const LearningRoadmap = forwardRef(({ roadmap, onTaskStatusChange }, ref) => {
   const [expandedPhases, setExpandedPhases] = useState([]);
@@ -182,20 +183,17 @@ const LearningRoadmap = forwardRef(({ roadmap, onTaskStatusChange }, ref) => {
                     {phase.tasks?.map(task => (
                       <div key={task.id} className="flex items-center justify-between p-3.5 rounded-xl bg-white dark:bg-white/[0.03] border border-slate-200 dark:border-white/5 hover:border-violet-500/30 transition-colors">
                         <div className="flex items-center gap-4">
-                          <select 
+                          <ThemedSelect
                             value={task.status}
-                            onChange={(e) => onTaskStatusChange && onTaskStatusChange(task.id, e.target.value)}
-                            className={`text-xs font-bold rounded-md border py-1.5 px-2 focus:outline-none focus:ring-2 focus:ring-violet-500 print:hidden cursor-pointer transition-colors
-                              ${task.status === 'Completed' ? 'border-emerald-500/30 bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400' :
-                                task.status === 'In Progress' ? 'border-blue-500/30 bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400' :
-                                'border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-700 dark:text-gray-300'
-                              }
-                            `}
-                          >
-                            <option className="text-slate-900 bg-white dark:bg-slate-800 dark:text-white" value="Pending">Pending</option>
-                            <option className="text-slate-900 bg-white dark:bg-slate-800 dark:text-white" value="In Progress">In Progress</option>
-                            <option className="text-slate-900 bg-white dark:bg-slate-800 dark:text-white" value="Completed">Completed</option>
-                          </select>
+                            onChange={(val) => onTaskStatusChange && onTaskStatusChange(task.id, val)}
+                            options={[
+                              { value: "Pending", label: "Pending" },
+                              { value: "In Progress", label: "In Progress" },
+                              { value: "Completed", label: "Completed" }
+                            ]}
+                            className="w-36 print:hidden"
+                            align="left"
+                          />
                           <div className="flex flex-col">
                             <span className={`text-sm font-semibold ${task.status === 'Completed' ? 'text-slate-500 dark:text-gray-500' : 'text-slate-700 dark:text-gray-200'} print:text-black`}>
                               {task.title}

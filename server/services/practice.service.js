@@ -137,39 +137,15 @@ const getAdaptiveDifficulty = (baseDifficulty, questions) => {
 };
 
 const compactContext = (context) => ({
-  profile: {
-    current_role: context.profile.current_role || "Not specified",
-    target_role: context.profile.target_role || "Software Engineer",
-    years_experience: context.profile.years_experience || 0,
-  },
-  resume_analysis: context.resumeAnalysis ? {
-    skills: asArray(context.resumeAnalysis.skills),
-    overall_summary: context.resumeAnalysis.overall_summary || "Available",
-  } : "Unavailable; do not invent resume facts.",
-  skill_gap: context.skillGapAnalysis ? {
-    matched_skills: asArray(context.skillGapAnalysis.matched_skills),
-    missing_skills: asArray(context.skillGapAnalysis.missing_skills),
-    priority_skills: asArray(context.skillGapAnalysis.priority_skills),
-    learning_order: asArray(context.skillGapAnalysis.learning_order),
-  } : "Unavailable; use the requested category and target role.",
-  roadmap: context.roadmap ? {
-    summary: context.roadmap.summary || "",
-    current_phase: context.roadmap.current_phase,
-  } : "Unavailable.",
-  recent_mock_interviews: context.interviews.map((interview) => ({
-    type: interview.interview_type,
-    score: interview.overall_score,
-    feedback: interview.feedback_summary,
-    recommendations: asArray(interview.recommended_practice),
-  })),
-  strong_topics: context.strongTopics,
-  weak_topics: context.weakTopics,
-  previous_practice_sessions: context.previousSessions,
+  target_role: context.profile.target_role || "Software Engineer",
+  years_experience: context.profile.years_experience || 0,
+  missing_skills: context.skillGapAnalysis ? asArray(context.skillGapAnalysis.missing_skills).slice(0, 5) : [],
+  weak_topics: asArray(context.weakTopics).slice(0, 3),
 });
 
 const buildQuestionPrompt = (context, session, questionNumber, difficulty, questionType, previousQuestions) => [
   "You are the CareerPilot Practice Arena question generator.",
-  "Create exactly one personalized practice question. Use the provided context to target a genuine weak area where available, while keeping the question aligned to the requested practice category.",
+  "Create exactly one personalized practice question. Keep it direct and focused on the requested practice category.",
   "",
   "Candidate context:",
   JSON.stringify(compactContext(context)),
@@ -182,13 +158,15 @@ const buildQuestionPrompt = (context, session, questionNumber, difficulty, quest
   "- Required question type: " + questionType,
   "",
   "Previously asked questions (do not repeat their concept):",
-  previousQuestions.map((question) => "- " + question.question).join("\n") || "None",
+  previousQuestions.slice(-3).map((question) => "- " + question.question).join("\n") || "None",
   "",
   "Rules:",
   "- Generate one original, interview-relevant question only.",
+  "- Keep question text clear, focused, and under 100 words.",
   "- Use exactly the required question type and difficulty.",
   "- For Multiple Choice, provide exactly four plausible options. For True / False, provide exactly [\"True\", \"False\"]. For Coding Challenge, Short Answer, Scenario Based, and Fill in the Blank, use an empty options array.",
-  "- The explanation must be concise and teach the concept. The hint must help without revealing the answer.",
+  "- For Coding Challenge, provide clean, minimal, working code under 25 lines without excessive comments in 'correct_answer'.",
+  "- The explanation and hint must be 1-2 brief sentences each.",
   "- Do not calculate or mention progress, completion, aggregate statistics, or accuracy.",
   "- Return strict JSON only. Do not wrap it in Markdown.",
   "",
@@ -212,7 +190,7 @@ const buildEvaluationPrompt = (question, answer) => [
   "Expected answer: " + question.correct_answer,
   "Candidate answer: " + answer,
   "",
-  "Evaluate correctness and quality. Score the answer from 0 to 10 (where 10 is perfectly correct). Use score 0 for a skipped, empty, or I do not know response. Be concise, constructive, and technically accurate.",
+  "Evaluate correctness and quality. Score the answer from 0 to 10 (where 10 is perfectly correct). Use score 0 for a skipped, empty, or I do not know response. Keep feedback, explanation, and next_focus concise (1-2 sentences each).",
   "Do not calculate progress, completion, aggregate statistics, or accuracy.",
   "Return strict JSON only:",
   "{",

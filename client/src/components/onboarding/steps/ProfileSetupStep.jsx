@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, User, Mail, GraduationCap, BookOpen, Calendar, Briefcase, Pencil, Sparkles, X } from "lucide-react";
 import toast from "react-hot-toast";
+import ThemedSelect from "../../ui/ThemedSelect";
 
 export default function ProfileSetupStep({ onNext, onPrev, onSave }) {
   const [formData, setFormData] = useState({
@@ -154,22 +155,20 @@ export default function ProfileSetupStep({ onNext, onPrev, onSave }) {
           {/* Experience */}
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-900 dark:text-white">Experience Level *</label>
-            <div className="relative flex items-center">
-              <div className="absolute left-4 flex items-center justify-center">
-                <Briefcase className="h-5 w-5 text-violet-400" />
-              </div>
-              <select 
-                name="experience"
-                value={formData.experience}
-                onChange={handleChange}
-                className="w-full appearance-none rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 py-4 pl-12 pr-4 text-base text-slate-500 dark:text-gray-400 outline-none transition-all focus:border-violet-500 focus:bg-slate-200 dark:bg-white/10"
-              >
-                <option value="" className="bg-white dark:bg-[#060816] text-slate-900 dark:text-white">Select experience level</option>
-                <option value="fresher" className="bg-white dark:bg-[#060816] text-slate-900 dark:text-white">Fresher (0 years)</option>
-                <option value="junior" className="bg-white dark:bg-[#060816] text-slate-900 dark:text-white">Junior (1-3 years)</option>
-                <option value="mid" className="bg-white dark:bg-[#060816] text-slate-900 dark:text-white">Mid-level (3-5 years)</option>
-              </select>
-            </div>
+            <ThemedSelect
+              value={formData.experience}
+              onChange={(val) => setFormData((prev) => ({ ...prev, experience: val }))}
+              options={[
+                { value: "fresher", label: "Fresher (0 years)" },
+                { value: "junior", label: "Junior (1-3 years)" },
+                { value: "mid", label: "Mid-level (3-5 years)" }
+              ]}
+              placeholder="Select experience level"
+              icon={Briefcase}
+              size="lg"
+              className="w-full"
+              align="left"
+            />
           </div>
         </div>
 
