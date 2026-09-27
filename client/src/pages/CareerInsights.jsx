@@ -1,4 +1,4 @@
-import { BarChart3, Loader2, AlertCircle, RefreshCw } from "lucide-react";
+import { Loader2, AlertCircle, RefreshCw } from "lucide-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
@@ -104,7 +104,7 @@ export default function CareerInsights() {
         {/* Row 3: AI Advisor */}
         <div className="grid gap-6 lg:grid-cols-12">
           <div className="lg:col-span-12">
-            <AICareerAdvisor data={insights} onRegenerate={() => fetchInsights(true)} isLoading={isLoading} />
+            <AICareerAdvisor data={insights} />
           </div>
         </div>
 

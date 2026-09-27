@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Sparkles, Download, RefreshCcw } from "lucide-react";
+import toast from "react-hot-toast";
 import RoadmapOverview from "../components/roadmaps/RoadmapOverview";
 import LearningRoadmap from "../components/roadmaps/LearningRoadmap";
 import VisualRoadmapSummary from "../components/roadmaps/VisualRoadmapSummary";
@@ -14,6 +15,7 @@ export default function Roadmap() {
   const [roadmap, setRoadmap] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const [error, setError] = useState(null);
 
   const fetchLatestRoadmap = async () => {
@@ -154,14 +156,29 @@ export default function Roadmap() {
             {isGenerating ? "Regenerating..." : "Regenerate"}
           </button>
           <button 
-            onClick={() => {
-              if (visualRoadmapRef.current) {
-                visualRoadmapRef.current.generatePdf();
+            onClick={async () => {
+              if (!visualRoadmapRef.current) return;
+              try {
+                setIsDownloading(true);
+                toast.loading("Generating high-resolution Roadmap PNG...", { id: "roadmap-png" });
+                if (visualRoadmapRef.current.downloadPng) {
+                  await visualRoadmapRef.current.downloadPng();
+                } else if (visualRoadmapRef.current.generatePdf) {
+                  await visualRoadmapRef.current.generatePdf();
+                }
+                toast.success("Roadmap PNG downloaded successfully!", { id: "roadmap-png" });
+              } catch (err) {
+                console.error("PNG download error:", err);
+                toast.error("Failed to download PNG: " + (err.message || "Unknown error"), { id: "roadmap-png" });
+              } finally {
+                setIsDownloading(false);
               }
             }}
-            className="flex items-center gap-2 rounded-lg border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm font-bold text-violet-300 transition-colors hover:bg-violet-500/20 print:hidden"
+            disabled={isDownloading}
+            className="flex items-center gap-2 rounded-lg border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm font-bold text-violet-300 transition-colors hover:bg-violet-500/20 disabled:opacity-50 print:hidden shadow-lg shadow-violet-500/10"
           >
-            <Download className="h-5 w-5" /> Download PNG
+            <Download className={`h-4 w-4 ${isDownloading ? 'animate-bounce' : ''}`} /> 
+            {isDownloading ? "Generating PNG..." : "Download PNG"}
           </button>
         </div>
       </div>

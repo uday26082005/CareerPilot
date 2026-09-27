@@ -1,5 +1,4 @@
-import { Info, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Info } from "lucide-react";
 
 const DEFAULT_KEYWORDS = [
     "JavaScript", "React.js", "Node.js", "SQL",

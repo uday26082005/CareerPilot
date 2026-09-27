@@ -1,4 +1,4 @@
-import { Sparkles, FileText, Target, Mic, Lightbulb, ChevronRight, ArrowRight } from "lucide-react";
+import { Sparkles, FileText, Target, Mic, Lightbulb, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function AIRecommendations({ recommendations }) {

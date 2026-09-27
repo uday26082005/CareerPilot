@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
-import { RefreshCcw, Sparkles, TrendingUp, Globe } from "lucide-react";
+import { RefreshCcw, TrendingUp, Globe } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import SkillMetrics from "../components/skills/SkillMetrics";
-import SkillRadarChart from "../components/skills/SkillRadarChart";
 import SkillsBreakdown from "../components/skills/SkillsBreakdown";
-import PrioritySkills from "../components/skills/PrioritySkills";
 import LearningRecommendations from "../components/skills/LearningRecommendations";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
@@ -64,6 +62,10 @@ export default function SkillGapAnalysis() {
       setIsAnalyzing(false);
     }
   };
+
+  const marketDemandLayer = analysis?.analysis_json?.market_demand_layer || [];
+  const detectedMarketCount = marketDemandLayer.filter(m => m.isDetected).length;
+
   return (
     <div className="flex flex-col gap-6 pb-6">
       {/* Header */}
@@ -71,14 +73,14 @@ export default function SkillGapAnalysis() {
         <div>
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Skill Gap Analysis</h1>
           <p className="mt-1 text-sm text-slate-500 dark:text-gray-400">
-            Compare your skills with job requirements and discover areas to improve.
+            Compare your skills with role taxonomy and live industry demand to discover growth opportunities.
           </p>
         </div>
         <div className="flex items-center gap-3">
           <button 
             onClick={handleAnalyze} 
             disabled={isAnalyzing} 
-            className="flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-slate-900 dark:text-white transition-colors hover:bg-violet-500 shadow-lg shadow-violet-500/20"
+            className="flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-violet-500 shadow-lg shadow-violet-500/20"
           >
             <RefreshCcw className={`h-4 w-4 ${isAnalyzing ? "animate-spin" : ""}`} /> 
             {isAnalyzing ? "Analyzing..." : "Generate Analysis"}
@@ -114,10 +116,6 @@ export default function SkillGapAnalysis() {
                   <div>
                     <h3 className="text-sm font-bold text-white flex items-center gap-2">
                       Live 2026 Industry Market Intelligence
-                      <span className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-400 border border-emerald-500/20">
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                        Dynamic Market Extraction
-                      </span>
                     </h3>
                     <p className="text-xs text-slate-400">
                       Skills are dynamically extracted from current hiring standards and live postings for <span className="text-violet-300 font-semibold">{analysis.role_name}</span>.
@@ -156,35 +154,47 @@ export default function SkillGapAnalysis() {
             </div>
           )}
 
-          {/* Top Row: 5 Stat Cards (Metrics) */}
+
+          {/* Top Row: Stat Cards (Role Skill Coverage & Market Demand) */}
           <div>
             <SkillMetrics 
               overallScore={analysis.skill_match_percentage} 
+              roleCoverage={analysis.analysis_json?.role_skills_coverage ?? analysis.skill_match_percentage}
+              roleBasis={analysis.analysis_json?.role_coverage_details?.basisLabel || ""}
+              applicableDetected={analysis.analysis_json?.role_coverage_details?.applicableDetected ?? (analysis.matched_skills?.length || 0)}
+              applicableBenchmark={analysis.analysis_json?.role_coverage_details?.applicableBenchmark ?? ((analysis.matched_skills?.length || 0) + (analysis.missing_skills?.length || 0))}
+
+              roleSkillsDetected={analysis.analysis_json?.role_skills_detected || []}
+              roleSkillsGaps={analysis.analysis_json?.role_skills_gaps || []}
+
+              marketDemandAlignment={analysis.analysis_json?.market_demand_alignment ?? 0}
+              marketBasis={analysis.analysis_json?.market_demand_details?.basisLabel || ""}
+              marketDetected={analysis.analysis_json?.market_detected_count ?? detectedMarketCount}
+              totalMarketSkills={analysis.analysis_json?.total_market_skills_count ?? marketDemandLayer.length}
+              marketGaps={analysis.analysis_json?.market_gaps_count ?? marketDemandLayer.filter(m => !m.isDetected).length}
+
               targetRole={analysis.role_name} 
-              totalSkills={analysis.matched_skills?.length + analysis.missing_skills?.length}
-              matchedSkills={analysis.matched_skills?.length}
-              missingSkills={analysis.missing_skills?.length}
+
+              totalRoleSkills={analysis.analysis_json?.total_role_skills_count ?? ((analysis.matched_skills?.length || 0) + (analysis.missing_skills?.length || 0))}
+              roleDetected={analysis.analysis_json?.role_detected_count ?? (analysis.matched_skills?.length || 0)}
+              roleGaps={analysis.analysis_json?.role_gaps_count ?? (analysis.missing_skills?.length || 0)}
             />
           </div>
 
-          {/* Middle Row: Radar Chart, Breakdown, Priority */}
-          <div className="grid gap-6 lg:grid-cols-3">
-            <div className="lg:col-span-1">
-              <SkillRadarChart 
-                matchedSkills={analysis.matched_skills || []}
-                missingSkills={analysis.missing_skills || []}
-              />
-            </div>
-            <div className="lg:col-span-1">
-              <SkillsBreakdown 
-                strongSkills={analysis.matched_skills || []}
-                missingSkills={analysis.missing_skills || []}
-              />
-            </div>
-            <div className="lg:col-span-1">
-              <PrioritySkills prioritySkills={analysis.priority_skills || []} />
-            </div>
+
+          {/* Skills Breakdown */}
+          <div className="w-full">
+            <SkillsBreakdown 
+              roleSkillsDetected={analysis.analysis_json?.role_skills_detected || []}
+              roleSkillsGaps={analysis.analysis_json?.role_skills_gaps || []}
+              marketDemandSkills={analysis.analysis_json?.market_demand_layer || marketDemandLayer || []}
+              categorizedGaps={analysis.analysis_json?.categorized_gaps || null}
+              relevanceBreakdown={analysis.analysis_json?.relevance_breakdown || null}
+              strongSkills={analysis.matched_skills || []}
+              missingSkills={analysis.missing_skills || []}
+            />
           </div>
+
 
           {/* Bottom Row: Learning Recs & Estimate */}
           <div className="w-full">
@@ -196,7 +206,6 @@ export default function SkillGapAnalysis() {
           </div>
         </>
       )}
-
 
     </div>
   );

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Pencil, Shield, Loader2, Camera, X, Settings, AlertTriangle, Download, Trash2 } from "lucide-react";
+import { Pencil, Shield, Loader2, Camera, X, Settings, AlertTriangle, Trash2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { supabase } from "../../lib/supabase";
@@ -8,6 +8,18 @@ import toast from "react-hot-toast";
 import ThemedSelect from "../ui/ThemedSelect";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
+const mapExperience = (years) => {
+  if (!years || years < 2) return "Beginner";
+  if (years <= 5) return "Intermediate";
+  return "Expert";
+};
+
+const mapExperienceToYears = (level) => {
+  if (level === "Beginner") return 1;
+  if (level === "Intermediate") return 3;
+  return 6;
+};
 
 export function ProfileSection() {
   const { session } = useAuth();
@@ -60,18 +72,6 @@ export function ProfileSection() {
     };
     fetchProfile();
   }, [session?.access_token]);
-
-  const mapExperience = (years) => {
-    if (!years || years < 2) return "Beginner";
-    if (years <= 5) return "Intermediate";
-    return "Expert";
-  };
-
-  const mapExperienceToYears = (level) => {
-    if (level === "Beginner") return 1;
-    if (level === "Intermediate") return 3;
-    return 6;
-  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];

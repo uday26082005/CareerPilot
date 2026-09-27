@@ -24,16 +24,6 @@ export default function InterviewModal({ isOpen, onClose, interviewType, difficu
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
 
-  useEffect(() => {
-    if (isOpen && !interviewId && !loading && !error) {
-      if (resumeInterviewId) {
-        resumeInterview(resumeInterviewId);
-      } else {
-        startInterview();
-      }
-    }
-  }, [isOpen]);
-
   const resumeInterview = async (id) => {
     setLoading(true);
     setError(null);
@@ -107,6 +97,16 @@ export default function InterviewModal({ isOpen, onClose, interviewType, difficu
     }
   };
 
+  useEffect(() => {
+    if (isOpen && !interviewId && !loading && !error) {
+      if (resumeInterviewId) {
+        resumeInterview(resumeInterviewId);
+      } else {
+        startInterview();
+      }
+    }
+  }, [isOpen]);
+
   const submitAnswer = async () => {
     if (!answer.trim()) return;
     
@@ -152,7 +152,7 @@ export default function InterviewModal({ isOpen, onClose, interviewType, difficu
       });
       setIsCompleted(true);
       setReport(res.data.data.report);
-    } catch (err) {
+    } catch {
       setError("Failed to complete interview.");
     } finally {
       setLoading(false);

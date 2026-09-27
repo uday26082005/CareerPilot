@@ -1,4 +1,4 @@
-import { Users, Target, TrendingUp, TrendingDown, Loader2 } from "lucide-react";
+import { Users, Target, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../contexts/AuthContext";

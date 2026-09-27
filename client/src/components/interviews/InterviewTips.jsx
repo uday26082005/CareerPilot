@@ -1,5 +1,4 @@
-import { Lightbulb, Mic, FileText, BarChart, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Lightbulb, Mic, FileText, BarChart } from "lucide-react";
 
 const TIPS = [
   {

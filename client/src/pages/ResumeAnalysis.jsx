@@ -14,7 +14,6 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api"
 export default function ResumeAnalysis() {
   const { session } = useAuth();
   const [analysis, setAnalysis] = useState(null);
-  const [resumeFile, setResumeFile] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [feedback, setFeedback] = useState(null);
 
@@ -96,7 +95,6 @@ export default function ResumeAnalysis() {
       return;
     }
 
-    setResumeFile(file);
     submitResume(file);
   };
 

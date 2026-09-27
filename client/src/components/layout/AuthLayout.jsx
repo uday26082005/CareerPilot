@@ -1,7 +1,15 @@
-import { useState, useEffect } from "react";
-import { Bot, ArrowLeft } from "lucide-react";
+import { useEffect } from "react";
+import { ArrowLeft } from "lucide-react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { Link } from "react-router-dom";
+
+const PARTICLES = Array.from({ length: 20 }, (_, i) => ({
+  id: i,
+  top: `${(i * 37 + 13) % 100}%`,
+  left: `${(i * 47 + 23) % 100}%`,
+  duration: 3 + ((i * 7) % 4),
+  delay: (i * 0.3) % 2
+}));
 
 export default function AuthLayout({ backLink, children, aboveCard, belowCard }) {
   const mouseX = useMotionValue(0);
@@ -51,13 +59,13 @@ export default function AuthLayout({ backLink, children, aboveCard, belowCard })
         />
 
         {/* Floating Particles (Stars) */}
-        {[...Array(20)].map((_, i) => (
+        {PARTICLES.map((p) => (
           <motion.div
-            key={i}
+            key={p.id}
             className="absolute h-1.5 w-1.5 rounded-full bg-violet-400/90 dark:bg-white/90 shadow-[0_0_15px_rgba(139,92,246,1)] dark:shadow-[0_0_15px_rgba(255,255,255,1)]"
             style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
+              top: p.top,
+              left: p.left,
             }}
             animate={{
               y: [0, -40, 0],
@@ -65,9 +73,9 @@ export default function AuthLayout({ backLink, children, aboveCard, belowCard })
               scale: [0.8, 1.8, 0.8]
             }}
             transition={{
-              duration: 3 + Math.random() * 4,
+              duration: p.duration,
               repeat: Infinity,
-              delay: Math.random() * 2,
+              delay: p.delay,
               ease: "easeInOut"
             }}
           />

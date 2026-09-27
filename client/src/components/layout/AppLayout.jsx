@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, Navigate } from "react-router-dom";
 import {
-  Bot, Home, FileText, Mic, BarChart2, Map, PieChart, 
-  Trophy, Sparkles, LogOut, Settings, TrendingUp,
-  Maximize, Minimize, Plus, ArrowRight, Menu, Target
+  Home, FileText, Mic, BarChart2, Map, PieChart, 
+  Sparkles, LogOut, Settings, TrendingUp,
+  Maximize, Minimize, Menu, Target
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 const SIDEBAR_LINKS = [
   { name: "Dashboard", path: "/dashboard", icon: Home },
@@ -24,12 +22,21 @@ const SIDEBAR_LINKS = [
 export default function AppLayout({ children }) {
   const location = useLocation();
   const { session, loading } = useAuth();
-  
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, []);
+
   if (!loading && !session) {
     return <Navigate to="/login" replace />;
   }
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return "Good morning";
@@ -40,14 +47,6 @@ export default function AppLayout({ children }) {
   const userName = session?.user?.user_metadata?.full_name || session?.user?.user_metadata?.name || session?.user?.email?.split('@')[0] || "User";
   const userInitial = userName.charAt(0).toUpperCase();
   const avatarUrl = session?.user?.user_metadata?.avatar_url || "";
-
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
-  }, []);
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {

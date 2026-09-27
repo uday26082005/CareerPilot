@@ -1,5 +1,4 @@
-import { User, Mail, GraduationCap, BookOpen, Calendar, Briefcase, Building, MapPin, Globe, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { User, Mail, Briefcase, Globe, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";

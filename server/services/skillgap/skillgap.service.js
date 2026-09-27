@@ -3,25 +3,36 @@ const { getSupabaseAdmin } = require("../../config/supabase");
 const aiService = require("../ai/groq.service");
 const { skillGapAnalysisSchema } = require("../../schemas/skillgap.schema");
 const marketDemandService = require("./marketDemand.service");
+const { evaluateRoleAndMarketSkills } = require("./semanticMatcher");
 
 const HTTP_STATUS_OK = 200;
 const HTTP_STATUS_NOT_FOUND = 404;
 const HTTP_STATUS_INTERNAL_SERVER_ERROR = 500;
 const HTTP_STATUS_UNPROCESSABLE_ENTITY = 422;
 
-const buildGroqPrompt = (targetRole, matchedSkills, missingSkills) => `You are an expert AI Career Advisor and Software Engineering Mentor.
+const buildGroqPrompt = (targetRole, matchedSkills, missingSkills, marketFocus = []) => {
+  const topMissing = Array.isArray(missingSkills) && missingSkills.length > 35 
+    ? missingSkills.slice(0, 35) 
+    : missingSkills;
+
+  const marketFocusText = marketFocus.length > 0 
+    ? `\nCRITICAL - Market Focus / Trending Technologies in High Demand: ${JSON.stringify(marketFocus)}.\nNOTE: Missing skills that align with these Market Focus skills MUST be prioritized first in "priority_skills" and placed at the beginning of "learning_order".` 
+    : "";
+
+  return `You are an expert AI Career Advisor and Software Engineering Mentor.
 I have a user targeting the role of "${targetRole}".
 
-Here are the skills they currently have (calculated by our NLP engine):
+Here are the skills they currently have (calculated by our NLP & semantic engine):
 ${JSON.stringify(matchedSkills)}
 
-Here are the skills they are MISSING for this role:
-${JSON.stringify(missingSkills)}
+Here are the skills they are MISSING or NOT YET DETECTED for this role (prioritizing current market demand):
+${JSON.stringify(topMissing)}
+${marketFocusText}
 
 Task: Based on the missing skills, provide a personalized learning roadmap. 
 IMPORTANT: Recommend ONLY 100% FREE resources (e.g. Roadmap.sh, MDN, freeCodeCamp, MIT OpenCourseWare, YouTube, official docs). NEVER recommend paid courses.
 
-You MUST provide EXACTLY 2 recommended_courses, EXACTLY 2 recommended_projects, and EXACTLY 2 practice_questions.
+You MUST provide EXACTLY 2 recommended_resources, EXACTLY 2 recommended_projects, and EXACTLY 2 practice_questions.
 For practice_questions, provide a related topic_id. The ONLY valid topic_ids are: "dsa", "frontend", "backend", "system_design", "databases", "devops". You MUST choose one of these 6 strings for the topic_id based on what the question relates to most.
 Each practice question must target a distinct missing or priority skill. Its title should be a short, accurate practice focus for that topic (not a fixed coding-problem name), because the Practice Arena generates the actual question dynamically when the user opens it.
 
@@ -36,12 +47,11 @@ Return the data as a JSON object precisely following this exact JSON structure. 
   "next_learning_step": "string"
 }
 `;
+};
 
-const { matchSkills } = require("../../utils/nlp");
-
-const analyzeWithGroq = async (targetRole, matchedSkills, missingSkills) => {
-  const prompt = buildGroqPrompt(targetRole, matchedSkills, missingSkills);
-  return await aiService.generateStructuredResponse(prompt, skillGapAnalysisSchema);
+const analyzeWithGroq = async (targetRole, matchedSkills, missingSkills, marketFocus = []) => {
+  const prompt = buildGroqPrompt(targetRole, matchedSkills, missingSkills, marketFocus);
+  return await aiService.generateStructuredResponse(prompt, skillGapAnalysisSchema, { max_tokens: 2200 });
 };
 
 const analyzeSkillGap = async (userId) => {
@@ -66,7 +76,7 @@ const analyzeSkillGap = async (userId) => {
   // 2. Fetch Latest Resume Analysis
   const { data: resumeAnalysis, error: resumeError } = await supabase
     .from("resume_analysis")
-    .select("id, resume_text")
+    .select("id, resume_text, recommended_keywords, analysis_json")
     .eq("user_id", userId)
     .order("created_at", { ascending: false })
     .limit(1)
@@ -78,18 +88,37 @@ const analyzeSkillGap = async (userId) => {
 
   // 3. Dynamic Market Skill Extraction (Real-Time 2026 Industry & Job Postings Intelligence)
   const marketData = await marketDemandService.getDynamicMarketSkills(targetRole, supabase);
-  const requiredSkills = marketData.required_skills;
 
-  // 4. Custom NLP Skill Matching Algorithm (Jaccard Similarity)
-  const nlpResult = matchSkills(resumeAnalysis.resume_text, requiredSkills);
-  const matchedSkills = nlpResult.matchedSkills;
-  const missingSkills = nlpResult.missingSkills;
-  const skillMatchPercentage = nlpResult.matchPercentage;
+  // 4. Semantic Role Relevance & Broader Taxonomy Evaluation
+  // Evaluates candidate's skills against 50-80+ role skill universe,
+  // separates the ~25 live market demand skills layer,
+  // classifies detected skills across 4 relevance tiers (0.80-1.00 Highly Relevant, 0.60-0.79 Relevant, 0.40-0.59 Somewhat Relevant, 0.00-0.39 Low Relevance),
+  // identifies additional role skills outside the top 25, and labels missing skills as "Not Detected".
+  const candidateKeywords = [
+    ...(resumeAnalysis.recommended_keywords || []),
+    ...(resumeAnalysis.analysis_json?.role_fit?.strengths || [])
+  ];
 
-  // 5. Generate a fresh set of targeted practice recommendations using AI
+  const evaluation = evaluateRoleAndMarketSkills(
+    targetRole,
+    resumeAnalysis.resume_text,
+    candidateKeywords,
+    marketData
+  );
+
+  const matchedSkills = evaluation.matchedRoleSkills;
+  const missingSkills = evaluation.prioritizedMissingSkills;
+  const skillMatchPercentage = evaluation.roleSkillCoverage;
+
+  // 5. Generate targeted practice recommendations using AI
   let groqResult;
   try {
-    groqResult = await analyzeWithGroq(targetRole, matchedSkills, missingSkills);
+    groqResult = await analyzeWithGroq(
+      targetRole, 
+      matchedSkills, 
+      missingSkills, 
+      marketData.trending_technologies || []
+    );
   } catch (error) {
     console.error("Groq skill gap analysis failed.", error);
     throw new AppError(`Failed to generate personalized learning plan with AI: ${error.message}`, HTTP_STATUS_INTERNAL_SERVER_ERROR);
@@ -111,6 +140,31 @@ const analyzeSkillGap = async (userId) => {
     summary: groqResult.summary || "",
     analysis_json: {
       ...groqResult,
+      // Role Universe (e.g. 45 role-relevant skills)
+      total_role_skills_count: evaluation.totalRoleSkillsCount,
+      role_detected_count: evaluation.roleDetectedCount,
+      role_gaps_count: evaluation.roleGapsCount,
+
+      // Core & Important Competency Coverage
+      role_skills_coverage: evaluation.roleSkillCoverage,
+      role_coverage_details: evaluation.roleCoverageDetails,
+
+      // Market Demand Universe (Exact 25 current-demand skills)
+      total_market_skills_count: evaluation.totalMarketSkillsCount,
+      market_detected_count: evaluation.marketDetectedCount,
+      market_gaps_count: evaluation.marketGapsCount,
+      market_demand_alignment: evaluation.marketDemandAlignment,
+      market_demand_details: evaluation.marketDemandDetails,
+
+      // Canonical Lists
+      role_universe_skills: evaluation.roleUniverseSkills,
+      role_skills_detected: evaluation.roleSkillsDetected,
+      role_skills_gaps: evaluation.roleSkillsGaps,
+      market_demand_layer: evaluation.marketDemandLayer,
+      additional_role_skills: evaluation.additionalRoleSkills,
+      categorized_gaps: evaluation.categorizedGaps,
+      radar_data: evaluation.radarData,
+
       market_intelligence: {
         is_live_market: marketData.is_live_market,
         market_demand_summary: marketData.market_demand_summary,

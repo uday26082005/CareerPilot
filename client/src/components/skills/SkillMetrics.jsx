@@ -1,121 +1,219 @@
-import { Briefcase, BarChart2, CheckCircle2, XCircle, Info } from "lucide-react";
+import { Briefcase, Layers, Flame } from "lucide-react";
 
 export default function SkillMetrics({ 
-  overallScore = 0, 
+  roleCoverage = null,
+  roleSkillsDetected = [],
+  roleSkillsGaps = [],
+  marketDetected = null,
+  totalMarketSkills = 25,
   targetRole = "Not Set", 
-  totalSkills = 0, 
-  matchedSkills = 0, 
-  missingSkills = 0 
+  totalRoleSkills = 0,
+  roleDetected = null,
+  roleGaps = null
 }) {
-  const circumference = 2 * Math.PI * 40; // radius 40
-  const strokeDashoffset = circumference - (overallScore / 100) * circumference;
+  // Exact Role Universe Numbers: roleDetected + roleGaps === totalRoleSkills
+  const detectedRoleCount = roleDetected !== null 
+    ? roleDetected 
+    : (Array.isArray(roleSkillsDetected) ? roleSkillsDetected.length : 0);
+
+  const dynamicRoleTotal = (Array.isArray(roleSkillsDetected) && Array.isArray(roleSkillsGaps) && (roleSkillsDetected.length + roleSkillsGaps.length > 0))
+    ? (roleSkillsDetected.length + roleSkillsGaps.length)
+    : (totalRoleSkills || detectedRoleCount + (roleGaps || 0));
+
+  const displayRoleDetected = detectedRoleCount;
+  const displayRoleTotal = dynamicRoleTotal;
+
+  // Exact Market Universe Numbers: marketDetected + marketGaps === totalMarketSkills (25)
+  const displayMarketTotal = totalMarketSkills || 25;
+  const displayMarketDetected = marketDetected !== null 
+    ? marketDetected 
+    : (Array.isArray(roleSkillsDetected) ? roleSkillsDetected.filter(s => s.isMarketSkill).length : 0);
+
+  // 1. Core Weightage Method:
+  // - Core weight: 3.0, Important weight: 2.0, Supporting weight: 0.5 (max 3.0 points)
+  const coreWeight = 3.0;
+  const importantWeight = 2.0;
+  const supportingWeight = 0.5;
+
+  let coreDetectedCount = 0;
+  let importantDetectedCount = 0;
+  let supportingDetectedCount = 0;
+
+  if (Array.isArray(roleSkillsDetected) && roleSkillsDetected.length > 0) {
+    coreDetectedCount = roleSkillsDetected.filter(s => s.roleTier === "core").length;
+    importantDetectedCount = roleSkillsDetected.filter(s => s.roleTier === "important").length;
+    supportingDetectedCount = roleSkillsDetected.filter(s => s.roleTier === "supporting" || (!s.roleTier && s.roleRelevance !== "High")).length;
+  }
+
+  // Dynamic total tier counts directly from gaps + detected:
+  let coreGapsCount = 0;
+  let importantGapsCount = 0;
+  if (Array.isArray(roleSkillsGaps) && roleSkillsGaps.length > 0) {
+    coreGapsCount = roleSkillsGaps.filter(s => s.roleTier === "core").length;
+    importantGapsCount = roleSkillsGaps.filter(s => s.roleTier === "important").length;
+  }
+
+  const effectiveTotalCore = coreDetectedCount + coreGapsCount;
+  const effectiveTotalImportant = importantDetectedCount + importantGapsCount;
+
+  const supportingContribution = Math.min(3.0, supportingWeight * supportingDetectedCount);
+  const weightedNumerator = (coreWeight * coreDetectedCount) + (importantWeight * importantDetectedCount) + supportingContribution;
+  const weightedDenominator = (coreWeight * effectiveTotalCore) + (importantWeight * effectiveTotalImportant);
+
+  let coverageScore;
+  if (roleCoverage !== null && roleCoverage !== undefined) {
+    coverageScore = roleCoverage;
+  } else if (weightedDenominator > 0) {
+    coverageScore = Math.min(100, Math.round((weightedNumerator / weightedDenominator) * 100));
+  } else {
+    coverageScore = displayRoleTotal > 0 ? Math.round((displayRoleDetected / displayRoleTotal) * 100) : 0;
+  }
+
+  const circumference = 2 * Math.PI * 38;
+  const coverageOffset = circumference - (coverageScore / 100) * circumference;
+
+  // 2. Market Demand Match (Direct unweighted calculation, NO trending weightage):
+  // e.g. 4 / 25 detected = 16%, or 11 / 25 detected = 44%
+  const marketScore = displayMarketTotal > 0 
+    ? Math.round((displayMarketDetected / displayMarketTotal) * 100) 
+    : 0;
+  const marketOffset = circumference - (marketScore / 100) * circumference;
 
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       
-      {/* Card 1: Overall Match */}
-      <div className="flex flex-col justify-center rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-5 backdrop-blur-md lg:col-span-1">
-        <h3 className="w-full mb-4 flex items-center gap-1.5 text-sm font-semibold text-slate-500 dark:text-gray-400 justify-start">
-          Overall Skill Match <Info className="h-4 w-4" />
+      {/* Card 1: Role Skill Coverage */}
+      <div className="flex flex-col justify-between rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-4 sm:p-5 backdrop-blur-md">
+        <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-gray-400">
+          <Layers className="h-4 w-4 text-violet-400" />
+          Role Skill Coverage
         </h3>
-        <div className="flex items-center justify-center gap-8 w-full mt-2">
-          <div className="relative flex h-28 w-28 items-center justify-center shrink-0">
+
+        <div className="flex items-center gap-3.5 mt-3">
+          <div className="relative flex h-20 w-20 items-center justify-center shrink-0">
             <svg className="h-full w-full -rotate-90 transform" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="40" fill="transparent" stroke="#ffffff10" strokeWidth="8" />
+              <circle cx="50" cy="50" r="38" fill="transparent" stroke="#ffffff10" strokeWidth="8" />
               <circle
                 cx="50"
                 cy="50"
-                r="40"
+                r="38"
                 fill="transparent"
-                stroke="url(#matchGradient)"
+                stroke="url(#coverageGradient)"
                 strokeWidth="8"
                 strokeDasharray={circumference}
-                strokeDashoffset={strokeDashoffset}
+                strokeDashoffset={coverageOffset}
                 strokeLinecap="round"
                 className="transition-all duration-1000 ease-out"
               />
               <defs>
-                <linearGradient id="matchGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <linearGradient id="coverageGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor="#8b5cf6" />
-                  <stop offset="100%" stopColor="#3b82f6" />
+                  <stop offset="100%" stopColor="#6366f1" />
                 </linearGradient>
               </defs>
             </svg>
             <div className="absolute flex flex-col items-center justify-center">
-              <span className="text-2xl font-black text-slate-900 dark:text-white">{overallScore}%</span>
+              <span className="text-xl font-black text-slate-900 dark:text-white tracking-tight">{coverageScore}%</span>
             </div>
           </div>
-          <div className="flex flex-col">
-            <span className={`text-sm font-bold leading-tight ${
-              overallScore >= 75 ? "text-emerald-400" :
-              overallScore >= 50 ? "text-blue-400" :
-              overallScore >= 25 ? "text-yellow-400" :
-              "text-red-400"
+          <div className="flex flex-col justify-center">
+            <span className={`text-xs font-bold leading-tight ${
+              coverageScore >= 75 ? "text-emerald-400" :
+              coverageScore >= 50 ? "text-blue-400" :
+              coverageScore >= 30 ? "text-amber-400" :
+              "text-rose-400"
             }`}>
-              {overallScore >= 75 ? "Great\nMatch" :
-               overallScore >= 50 ? "Good\nMatch" :
-               overallScore >= 25 ? "Fair\nMatch" :
-               "Low\nMatch"}
+              {coverageScore >= 75 ? "Strong\nCoverage" :
+               coverageScore >= 50 ? "Solid\nCoverage" :
+               coverageScore >= 30 ? "Growing\nCoverage" :
+               "Early\nStage"}
             </span>
+            <span className="text-[11px] text-slate-400 mt-1">Weighted Competencies</span>
           </div>
         </div>
       </div>
 
-      {/* Card 2: Target Role */}
-      <div className="flex flex-col justify-center rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-5 backdrop-blur-md lg:col-span-1">
-        <h3 className="mb-4 text-sm font-semibold text-slate-500 dark:text-gray-400">Target Role</h3>
-        <div className="mb-4 flex items-center gap-3">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-violet-500/10 text-violet-400">
-            <Briefcase className="h-6 w-6" />
+      {/* Card 2: Market Demand Match (Market Alignment) */}
+      <div className="flex flex-col justify-between rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-4 sm:p-5 backdrop-blur-md">
+        <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-gray-400">
+          <Flame className="h-4 w-4 text-amber-400" />
+          Market Demand Match
+        </h3>
+
+        <div className="flex items-center gap-3.5 mt-3">
+          <div className="relative flex h-20 w-20 items-center justify-center shrink-0">
+            <svg className="h-full w-full -rotate-90 transform" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="38" fill="transparent" stroke="#ffffff10" strokeWidth="8" />
+              <circle
+                cx="50"
+                cy="50"
+                r="38"
+                fill="transparent"
+                stroke="url(#marketGradient)"
+                strokeWidth="8"
+                strokeDasharray={circumference}
+                strokeDashoffset={marketOffset}
+                strokeLinecap="round"
+                className="transition-all duration-1000 ease-out"
+              />
+              <defs>
+                <linearGradient id="marketGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#f59e0b" />
+                  <stop offset="100%" stopColor="#ef4444" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <div className="absolute flex flex-col items-center justify-center">
+              <span className="text-xl font-black text-slate-900 dark:text-white tracking-tight">{marketScore}%</span>
+            </div>
           </div>
-          <span className="text-base font-bold text-slate-900 dark:text-white">{targetRole}</span>
-        </div>
-        <div className="text-xs text-slate-400 dark:text-gray-500">
-          <span className="block mb-1">Target Role</span>
-          <span className="font-semibold text-slate-600 dark:text-gray-300 text-sm">{targetRole}</span>
+          <div className="flex flex-col justify-center">
+            <span className={`text-xs font-bold leading-tight ${
+              marketScore >= 70 ? "text-emerald-400" :
+              marketScore >= 40 ? "text-amber-400" :
+              "text-rose-400"
+            }`}>
+              {marketScore >= 70 ? "High Market\nAlignment" :
+               marketScore >= 40 ? "Moderate\nAlignment" :
+               "Market\nGap"}
+            </span>
+            <span className="text-[11px] text-slate-400 mt-1">Live Hiring Posts</span>
+          </div>
         </div>
       </div>
 
-      {/* Card 3: Combined Skills Summary */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-4 rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-5 backdrop-blur-md lg:col-span-2">
-        
-        {/* Total Skills */}
-        <div className="flex flex-col flex-1 w-full">
-          <h3 className="mb-2 text-sm font-semibold text-slate-500 dark:text-gray-400">Total Skills</h3>
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400">
-              <BarChart2 className="h-6 w-6" />
-            </div>
-            <span className="block text-3xl font-bold text-slate-900 dark:text-white leading-tight">{totalSkills}</span>
-          </div>
+      {/* Card 3: Role Universe */}
+      <div className="flex flex-col justify-between rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-4 sm:p-5 backdrop-blur-md">
+        <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-gray-400">
+          <Briefcase className="h-4 w-4 text-violet-400" />
+          Role Universe
+        </h3>
+
+        <div className="mt-3">
+          <span className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white block tracking-tight">
+            {displayRoleTotal}
+          </span>
+          <span className="text-xs text-slate-400 mt-1 block">
+            role-relevant skills defined for {targetRole}
+          </span>
         </div>
+      </div>
 
-        <div className="h-px w-full sm:h-16 sm:w-px bg-slate-200 dark:bg-white/10 shrink-0" />
+      {/* Card 4: Market Universe */}
+      <div className="flex flex-col justify-between rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-4 sm:p-5 backdrop-blur-md">
+        <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-gray-400">
+          <Flame className="h-4 w-4 text-amber-400" />
+          Market Universe
+        </h3>
 
-        {/* Matched Skills */}
-        <div className="flex flex-col flex-1 w-full">
-          <h3 className="mb-2 text-sm font-semibold text-slate-500 dark:text-gray-400">Matched Skills</h3>
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
-              <CheckCircle2 className="h-6 w-6" />
-            </div>
-            <span className="block text-3xl font-bold text-slate-900 dark:text-white leading-tight">{matchedSkills}</span>
-          </div>
+        <div className="mt-3">
+          <span className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white block tracking-tight">
+            {displayMarketTotal}
+          </span>
+          <span className="text-xs text-slate-400 mt-1 block">
+            current-demand skills in active listings
+          </span>
         </div>
-
-        <div className="h-px w-full sm:h-16 sm:w-px bg-slate-200 dark:bg-white/10 shrink-0" />
-
-        {/* Missing Skills */}
-        <div className="flex flex-col flex-1 w-full">
-          <h3 className="mb-2 text-sm font-semibold text-slate-500 dark:text-gray-400">Missing Skills</h3>
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-red-500/10 text-red-400">
-              <XCircle className="h-6 w-6" />
-            </div>
-            <span className="block text-3xl font-bold text-slate-900 dark:text-white leading-tight">{missingSkills}</span>
-          </div>
-        </div>
-
       </div>
 
     </div>

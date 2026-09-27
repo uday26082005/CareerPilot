@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Check, Briefcase, BookOpen, Mic, BarChart, PieChart } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function CompletedStep() {

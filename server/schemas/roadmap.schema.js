@@ -1,26 +1,33 @@
 const { z } = require("zod");
 
 const roadmapResourceSchema = z.object({
-  title: z.string(),
-  url: z.string().url(),
-  type: z.string().optional().default("Link"), // e.g., "Course", "Documentation", "Video"
+  title: z.string().optional().default("Resource"),
+  url: z.string().optional().default("https://roadmap.sh"),
+  type: z.string().optional().default("Documentation"),
 });
+
 const roadmapTaskSchema = z.object({
-  title: z.string(),
-  description: z.string(),
-  estimated_hours: z.number().nonnegative().optional().default(0),
+  title: z.string().min(1),
+  description: z.string().optional().default(""),
+  estimated_hours: z.number().nonnegative().optional().default(10),
   resource: roadmapResourceSchema.optional().nullable(),
 });
 
-const roadmapProjectSchema = z.object({
-  title: z.string(),
-  description: z.string(),
-});
+const roadmapProjectSchema = z.union([
+  z.object({
+    title: z.string().min(1),
+    description: z.string().optional().default(""),
+  }),
+  z.string().transform((str) => ({
+    title: str,
+    description: "",
+  })),
+]);
 
 const roadmapPhaseSchema = z.object({
   phase_number: z.number().int().positive(),
-  title: z.string(),
-  description: z.string(),
+  title: z.string().min(1),
+  description: z.string().optional().default(""),
   estimated_duration: z.string().optional().default(""),
   skills: z.array(z.string()).optional().default([]),
   tasks: z.array(roadmapTaskSchema).optional().default([]),

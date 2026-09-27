@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Bot, HelpCircle, LogOut, User, UploadCloud, Link as LinkIcon, Target, Shield, Check } from "lucide-react";
+import { LogOut, User, UploadCloud, Link as LinkIcon, Target, Shield, Check } from "lucide-react";
 
 const STEPS = [
   { id: 1, title: "Profile Setup", desc: "Tell us about yourself", icon: User },

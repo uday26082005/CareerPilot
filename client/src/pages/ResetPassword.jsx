@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Lock, ShieldCheck, CheckCircle, Circle } from "lucide-react";
+import { Lock, CheckCircle, Circle } from "lucide-react";
 
 import AuthLayout from "../components/layout/AuthLayout";
 import PasswordInput from "../components/auth/PasswordInput";

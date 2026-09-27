@@ -1,231 +1,498 @@
-import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import { forwardRef, useImperativeHandle, useRef } from 'react';
+import html2canvas from 'html2canvas';
 
 const VisualRoadmapSummary = forwardRef(({ roadmap }, ref) => {
   const containerRef = useRef(null);
 
   useImperativeHandle(ref, () => ({
-    generatePdf: async () => {
+    downloadPng: async () => {
       const element = containerRef.current;
-      if (!element) return;
-      
-      if (!window.html2canvas) {
-        await new Promise((resolve, reject) => {
-          const script = document.createElement('script');
-          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-          script.onload = resolve;
-          script.onerror = reject;
-          document.head.appendChild(script);
-        });
+      if (!element) throw new Error("Roadmap render container not ready");
+
+      // Wait for all web fonts (Outfit) to settle to ensure accurate font baseline metrics
+      if (document.fonts && document.fonts.ready) {
+        try {
+          await document.fonts.ready;
+        } catch {
+          // ignore font loading errors
+        }
       }
 
-      const canvas = await window.html2canvas(element, { scale: 2, useCORS: true, logging: false });
-      const dataUri = canvas.toDataURL('image/png', 1.0);
-      
-      const a = document.createElement('a');
-      a.href = dataUri;
-      a.download = 'CareerPilot_Roadmap.png';
-      a.click();
+      // Crucial fix: Tailwind CSS Preflight resets <img> to display: block.
+      // html2canvas FontMetrics measures baseline by placing an <img> next to a <span>.
+      // If <img> is block, it breaks to a new line, shifting every text baseline down by 15-20px.
+      // Injecting img { display: inline-block !important; } guarantees accurate vertical centering.
+      const fixStyle = document.createElement('style');
+      fixStyle.id = 'html2canvas-fontmetrics-override';
+      fixStyle.innerHTML = `
+        img { display: inline-block !important; vertical-align: baseline !important; }
+      `;
+      document.head.appendChild(fixStyle);
+
+      try {
+        // Small tick for layout stabilization
+        await new Promise((r) => setTimeout(r, 60));
+
+        // Capture using html2canvas with onclone hook.
+        // This leaves the user's LIVE DOM completely untouched, avoiding screen shifts,
+        // scrollbar flickers, and the 2-second layout jank.
+        const canvas = await html2canvas(element, {
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          backgroundColor: '#090d16',
+          windowWidth: 1400,
+          windowHeight: element.offsetHeight || 1200,
+          onclone: (clonedDoc, clonedElement) => {
+            // Also inject style into cloned iframe document
+            const clonedFix = clonedDoc.createElement('style');
+            clonedFix.innerHTML = `
+              img { display: inline-block !important; vertical-align: baseline !important; }
+            `;
+            clonedDoc.head.appendChild(clonedFix);
+
+            const clonedWrapper = clonedDoc.getElementById('visual-roadmap-export-wrapper');
+            if (clonedWrapper) {
+              clonedWrapper.style.position = 'static';
+              clonedWrapper.style.left = '0px';
+              clonedWrapper.style.top = '0px';
+              clonedWrapper.style.opacity = '1';
+              clonedWrapper.style.display = 'block';
+              clonedWrapper.style.visibility = 'visible';
+              clonedWrapper.style.transform = 'none';
+            }
+            if (clonedElement) {
+              clonedElement.style.position = 'static';
+              clonedElement.style.left = '0px';
+              clonedElement.style.top = '0px';
+              clonedElement.style.opacity = '1';
+              clonedElement.style.visibility = 'visible';
+              clonedElement.style.display = 'block';
+              clonedElement.style.transform = 'none';
+            }
+          }
+        });
+
+        const dataUri = canvas.toDataURL('image/png', 1.0);
+        const safeRole = (roadmap.target_role || 'CareerPilot').replace(/[^a-zA-Z0-9]/g, '_');
+        
+        const a = document.createElement('a');
+        a.href = dataUri;
+        a.download = `CareerPilot_${safeRole}_Roadmap.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } finally {
+        if (fixStyle && fixStyle.parentNode) {
+          fixStyle.parentNode.removeChild(fixStyle);
+        }
+      }
+    },
+    generatePdf: async function () {
+      return this.downloadPng();
     }
   }));
 
-  if (!roadmap || !roadmap.phases) return null;
+  if (!roadmap || !roadmap.phases || roadmap.phases.length === 0) return null;
 
-  // We have a predefined SVG winding road designed for up to 7 nodes.
-  const colors = ["#e84393", "#1abc9c", "#9b59b6", "#e67e22", "#3498db", "#e74c3c", "#2ecc71"];
-  
-  const nodeCoords = [
-    { x: 200, y: 550 },
-    { x: 500, y: 300 },
-    { x: 800, y: 550 },
-    { x: 1100, y: 300 },
-    { x: 1400, y: 550 },
-    { x: 1700, y: 300 },
-    { x: 2000, y: 550 },
+  const phases = roadmap.phases;
+  const colors = [
+    { primary: "#8b5cf6", glow: "rgba(139, 92, 246, 0.4)", text: "#c4b5fd" },
+    { primary: "#3b82f6", glow: "rgba(59, 130, 246, 0.4)", text: "#93c5fd" },
+    { primary: "#10b981", glow: "rgba(16, 185, 129, 0.4)", text: "#6ee7b7" },
+    { primary: "#f59e0b", glow: "rgba(245, 158, 11, 0.4)", text: "#fcd34d" },
+    { primary: "#ec4899", glow: "rgba(236, 72, 153, 0.4)", text: "#f472b6" }
   ];
 
-  // Map dynamic phases. Limit to 7 to fit the expanded road canvas safely if Gemini goes crazy.
-  const displayPhases = roadmap.phases.slice(0, 7);
-
-  const pathSegments = ["M -100 300"];
-  for (let i = 0; i < displayPhases.length; i++) {
-    const prevX = (i * 300) + 50;
-    const nextX = (i * 300) + 200;
-    const isEven = i % 2 === 0;
-    const prevY = isEven ? 300 : 550;
-    const destY = isEven ? 550 : 300;
-    pathSegments.push(`C ${prevX} ${prevY}, ${prevX} ${destY}, ${nextX} ${destY}`);
-  }
-  // Extend road smoothly horizontally to the right
-  const lastI = displayPhases.length - 1;
-  const lastX = (lastI * 300) + 200;
-  const lastY = (lastI % 2 === 0) ? 550 : 300;
-  pathSegments.push(`C ${lastX + 100} ${lastY}, ${lastX + 200} ${lastY}, ${lastX + 300} ${lastY}`);
-  
-  const roadPath = pathSegments.join(" ");
-  
-  // Calculate width based on number of phases so it fits nicely
-  const canvasWidth = Math.max(1200, displayPhases.length * 300 + 400);
+  const canvasWidth = 1400;
+  const canvasHeight = Math.max(900, 360 + phases.length * 320);
 
   return (
     <div 
-      className="absolute top-0 left-[-9999px]" 
+      id="visual-roadmap-export-wrapper"
+      style={{
+        position: 'fixed',
+        left: '-99999px',
+        top: '0px',
+        pointerEvents: 'none',
+        opacity: 0,
+        zIndex: -9999
+      }}
       aria-hidden="true"
     >
       <div 
         ref={containerRef} 
-        style={{ width: `${canvasWidth}px`, height: '900px', backgroundColor: '#ffffff', position: 'relative', overflow: 'hidden' }}
+        id="visual-roadmap-export-container"
+        style={{ 
+          width: `${canvasWidth}px`, 
+          minHeight: `${canvasHeight}px`, 
+          backgroundColor: '#090d16', 
+          backgroundImage: 'radial-gradient(ellipse 80% 50% at 50% -20%, rgba(120, 119, 198, 0.18), rgba(255, 255, 255, 0))',
+          position: 'relative', 
+          padding: '48px 56px',
+          boxSizing: 'border-box',
+          fontFamily: "'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+          color: '#ffffff',
+          WebkitFontSmoothing: 'antialiased',
+          MozOsxFontSmoothing: 'grayscale'
+        }}
       >
-        {/* Header Section */}
-        <div 
-          style={{ 
-            backgroundColor: '#cddc39', 
-            height: '180px',
+        {/* Header Block */}
+        <div style={{
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          paddingBottom: '32px',
+          marginBottom: '40px',
+          display: 'flex',
+          alignItems: 'flex-start',
+          justifyContent: 'space-between',
+          boxSizing: 'border-box'
+        }}>
+          <div>
+            {/* Top Capsule Badge */}
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              padding: '6px 16px',
+              borderRadius: '9999px',
+              backgroundColor: 'rgba(139, 92, 246, 0.15)',
+              border: '1px solid rgba(139, 92, 246, 0.3)',
+              fontSize: '13px',
+              lineHeight: '1',
+              fontWeight: '700',
+              color: '#c4b5fd',
+              letterSpacing: '0.05em',
+              textTransform: 'uppercase',
+              marginBottom: '14px',
+              boxSizing: 'border-box'
+            }}>
+              <span style={{ fontSize: '13px', lineHeight: '1', display: 'inline-flex', alignItems: 'center' }}>🚀</span>
+              <span style={{ fontSize: '13px', lineHeight: '1', display: 'inline-flex', alignItems: 'center' }}>CAREERPILOT AI • 2026 LEARNING ROADMAP</span>
+            </div>
+
+            <h1 style={{
+              fontSize: '44px',
+              fontWeight: '800',
+              lineHeight: '1.2',
+              margin: '0 0 10px 0',
+              letterSpacing: '-0.02em',
+              color: '#ffffff'
+            }}>
+              {roadmap.target_role || "Engineering Roadmap"}
+            </h1>
+
+            <p style={{
+              fontSize: '16px',
+              color: '#94a3b8',
+              margin: '0',
+              maxWidth: '850px',
+              lineHeight: '1.6'
+            }}>
+              {roadmap.summary || `Personalized learning progression designed to bridge your missing skills with market focus priority.`}
+            </p>
+          </div>
+
+          <div style={{
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            zIndex: 10
-          }}
-        >
-          <h1 style={{ 
-            fontSize: '84px', 
-            fontWeight: '900', 
-            fontFamily: '"Arial Black", Impact, sans-serif',
-            color: '#ffffff', 
-            textTransform: 'uppercase', 
-            margin: '0', 
-            letterSpacing: '4px',
-            lineHeight: '1'
+            alignItems: 'flex-end',
+            gap: '12px'
           }}>
-            ROADMAP
-          </h1>
-          <h2 style={{ 
-            fontSize: '24px', 
-            fontWeight: '700', 
-            fontFamily: 'Georgia, serif',
-            fontStyle: 'italic',
-            color: '#111111', 
-            margin: '10px 0 0 0' 
-          }}>
-            {roadmap.target_role || "Professional Journey"}
-          </h2>
-        </div>
-
-        {/* SVG Winding Road */}
-        <svg 
-          width={canvasWidth} 
-          height="900" 
-          style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none' }}
-        >
-          {/* Black Inner Road */}
-          <path d={roadPath} fill="none" stroke="#111111" strokeWidth="48" strokeLinecap="round" />
-
-          {/* Dashed White Center Line */}
-          <path d={roadPath} fill="none" stroke="#ffffff" strokeWidth="6" strokeDasharray="16 16" />
-        </svg>
-
-        {/* Phases (Nodes & Text) */}
-        {displayPhases.map((phase, i) => {
-          const coord = nodeCoords[i];
-          const color = colors[i % colors.length];
-          
-          return (
-            <div key={phase.phase_number}>
-              {/* Teardrop Marker */}
-              <div 
-                style={{ 
-                  position: 'absolute', 
-                  left: coord.x - 60, 
-                  top: coord.y - 90,
-                  width: 120, 
-                  height: 100, 
-                  zIndex: 30 
-                }}
-              >
-                <svg viewBox="0 0 120 100" style={{ width: '100%', height: '100%' }}>
-                  <path 
-                    d="M 30 40 A 30 30 0 0 1 90 40 Q 90 70 60 90 Q 30 70 30 40 Z" 
-                    fill={color} 
-                    stroke="#ffffff" 
-                    strokeWidth="4" 
-                  />
-                  <circle cx="60" cy="40" r="22" fill="#ffffff" />
-                  
-                  <text 
-                    x="60" 
-                    y="50" 
-                    textAnchor="middle" 
-                    fontSize="28" 
-                    fontWeight="900" 
-                    fontFamily='"Arial Black", Impact, sans-serif'
-                    fill="#111111"
-                  >
-                    {phase.phase_number}
-                  </text>
-                </svg>
-              </div>
-
-              {/* Text Block */}
-              <div 
-                style={{
-                  position: 'absolute',
-                  left: coord.x - 120,
-                  top: coord.y === 300 ? 520 : 600,
-                  width: '240px',
-                  textAlign: 'center',
-                  zIndex: 20
-                }}
-              >
-                <h3 style={{ 
-                  fontSize: '28px', 
-                  fontWeight: '900', 
-                  fontFamily: '"Arial Black", Impact, sans-serif',
-                  color: '#111111', 
-                  margin: '0 0 12px 0'
-                }}>
-                  {phase.title}
-                </h3>
-                <p style={{ 
-                  fontSize: '14px', 
-                  fontWeight: '500', 
-                  fontFamily: 'Arial, sans-serif',
-                  color: '#555555', 
-                  margin: 0, 
-                  lineHeight: '1.6' 
-                }}>
-                  {phase.description}
-                </p>
-              </div>
+            {/* Est Duration Box */}
+            <div style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.04)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              borderRadius: '12px',
+              padding: '12px 18px',
+              textAlign: 'right',
+              boxSizing: 'border-box'
+            }}>
+              <span style={{ display: 'block', fontSize: '11px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: '600', lineHeight: '1.3', marginBottom: '4px' }}>
+                EST. DURATION
+              </span>
+              <span style={{ display: 'block', fontSize: '18px', fontWeight: '700', color: '#a78bfa', lineHeight: '1.2' }}>
+                {roadmap.estimated_duration || "Self-Paced"}
+              </span>
             </div>
-          );
-        })}
 
-        {/* Footer */}
-        <div 
-          style={{ 
-            backgroundColor: '#cddc39', 
-            height: '60px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            zIndex: 10
-          }}
-        >
-          <div style={{ backgroundColor: '#ffffff', padding: '6px 24px', borderRadius: '20px' }}>
-            <span style={{ fontSize: '14px', fontWeight: '700', fontFamily: 'Arial, sans-serif', color: '#111111' }}>
-              www.careerpilot-ai.com
-            </span>
+            {/* Market Focus Badge */}
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              backgroundColor: 'rgba(16, 185, 129, 0.1)',
+              border: '1px solid rgba(16, 185, 129, 0.25)',
+              borderRadius: '12px',
+              padding: '6px 14px',
+              fontSize: '12px',
+              fontWeight: '600',
+              color: '#34d399',
+              lineHeight: '1',
+              boxSizing: 'border-box'
+            }}>
+              <span style={{ fontSize: '13px', lineHeight: '1', display: 'inline-flex', alignItems: 'center' }}>⚡</span>
+              <span style={{ fontSize: '12px', lineHeight: '1', display: 'inline-flex', alignItems: 'center' }}>Market Focus Skills Prioritized</span>
+            </div>
           </div>
         </div>
 
+        {/* Phases List */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+          {phases.map((phase, idx) => {
+            const theme = colors[idx % colors.length];
+
+            return (
+              <div 
+                key={phase.phase_number || idx}
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                  border: `1px solid rgba(255, 255, 255, 0.08)`,
+                  borderLeft: `4px solid ${theme.primary}`,
+                  borderRadius: '18px',
+                  padding: '28px 32px',
+                  position: 'relative',
+                  boxSizing: 'border-box'
+                }}
+              >
+                {/* Phase Header */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: '16px'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                    {/* Phase Number Circle */}
+                    <div style={{
+                      width: '42px',
+                      height: '42px',
+                      borderRadius: '12px',
+                      backgroundColor: theme.primary,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '18px',
+                      fontWeight: '800',
+                      color: '#ffffff',
+                      boxShadow: `0 4px 14px ${theme.glow}`,
+                      boxSizing: 'border-box',
+                      lineHeight: '1'
+                    }}>
+                      <span style={{ lineHeight: '1', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {phase.phase_number || idx + 1}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h2 style={{
+                        fontSize: '22px',
+                        fontWeight: '700',
+                        margin: '0 0 4px 0',
+                        color: '#f8fafc',
+                        lineHeight: '1.3'
+                      }}>
+                        {phase.title}
+                      </h2>
+                      {phase.estimated_duration && (
+                        <span style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '5px',
+                          fontSize: '13px',
+                          color: theme.text,
+                          fontWeight: '600',
+                          lineHeight: '1'
+                        }}>
+                          <span style={{ fontSize: '12px', lineHeight: '1' }}>⏱</span>
+                          <span style={{ lineHeight: '1' }}>{phase.estimated_duration}</span>
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Phase Description */}
+                {phase.description && (
+                  <p style={{
+                    fontSize: '14px',
+                    color: '#94a3b8',
+                    lineHeight: '1.5',
+                    margin: '0 0 16px 0'
+                  }}>
+                    {phase.description}
+                  </p>
+                )}
+
+                {/* Targeted Missing Skills Badges */}
+                {phase.skills && phase.skills.length > 0 && (
+                  <div style={{ marginBottom: '18px' }}>
+                    <span style={{ display: 'block', fontSize: '11px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px', lineHeight: '1.2' }}>
+                      TARGETED MISSING SKILLS
+                    </span>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                      {phase.skills.map((skill, sIdx) => (
+                        <span 
+                          key={sIdx}
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                            border: '1px solid rgba(255, 255, 255, 0.12)',
+                            borderRadius: '8px',
+                            padding: '6px 12px',
+                            fontSize: '12px',
+                            fontWeight: '600',
+                            lineHeight: '1',
+                            color: '#e2e8f0',
+                            boxSizing: 'border-box'
+                          }}
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Tasks & Resource Breakdown */}
+                {phase.tasks && phase.tasks.length > 0 && (
+                  <div style={{
+                    backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                    borderRadius: '12px',
+                    padding: '16px 20px',
+                    marginBottom: '16px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '12px',
+                    boxSizing: 'border-box'
+                  }}>
+                    <span style={{ display: 'block', fontSize: '11px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', lineHeight: '1.2' }}>
+                      Actionable Learning Tasks
+                    </span>
+
+                    {phase.tasks.map((task, tIdx) => (
+                      <div 
+                        key={tIdx}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          justifyContent: 'space-between',
+                          gap: '16px',
+                          borderBottom: tIdx < phase.tasks.length - 1 ? '1px solid rgba(255, 255, 255, 0.05)' : 'none',
+                          paddingBottom: tIdx < phase.tasks.length - 1 ? '12px' : '0'
+                        }}
+                      >
+                        <div style={{ flex: 1 }}>
+                          <span style={{ fontSize: '14px', fontWeight: '600', color: '#f1f5f9', display: 'block', lineHeight: '1.4' }}>
+                            • {task.title}
+                          </span>
+                          {task.description && (
+                            <span style={{ fontSize: '12px', color: '#94a3b8', display: 'block', marginTop: '3px', lineHeight: '1.45' }}>
+                              {task.description}
+                            </span>
+                          )}
+                          {task.resource?.title && (
+                            <span style={{
+                              fontSize: '11px',
+                              color: '#38bdf8',
+                              marginTop: '4px',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                              lineHeight: '1.3'
+                            }}>
+                              <span style={{ lineHeight: '1' }}>🔗</span>
+                              <span style={{ lineHeight: '1' }}>Recommended: {task.resource.title}</span>
+                            </span>
+                          )}
+                        </div>
+
+                        {task.estimated_hours && (
+                          <span style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                            border: '1px solid rgba(255, 255, 255, 0.08)',
+                            borderRadius: '6px',
+                            padding: '4px 8px',
+                            fontSize: '11px',
+                            color: '#cbd5e1',
+                            fontWeight: '600',
+                            lineHeight: '1',
+                            whiteSpace: 'nowrap',
+                            boxSizing: 'border-box'
+                          }}>
+                            {task.estimated_hours} hrs
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Milestone Banner */}
+                {phase.milestone && (
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    padding: '12px 18px',
+                    borderRadius: '10px',
+                    backgroundColor: 'rgba(139, 92, 246, 0.08)',
+                    border: '1px solid rgba(139, 92, 246, 0.2)',
+                    boxSizing: 'border-box'
+                  }}>
+                    <span style={{
+                      fontSize: '15px',
+                      lineHeight: '1',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      🎯
+                    </span>
+                    <span style={{
+                      fontSize: '13px',
+                      lineHeight: '1.4',
+                      fontWeight: '600',
+                      color: '#ddd6fe',
+                      flex: 1,
+                      display: 'inline-flex',
+                      alignItems: 'center'
+                    }}>
+                      Milestone: {phase.milestone}
+                    </span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Footer */}
+        <div style={{
+          marginTop: '48px',
+          paddingTop: '24px',
+          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          fontSize: '12px',
+          color: '#64748b',
+          lineHeight: '1.4',
+          boxSizing: 'border-box'
+        }}>
+          <span>
+            Generated by <strong style={{ color: '#94a3b8' }}>CareerPilot AI</strong> • Verified with 2026 Labor Market Intelligence
+          </span>
+          <span>
+            www.careerpilot-ai.com
+          </span>
+        </div>
       </div>
     </div>
   );

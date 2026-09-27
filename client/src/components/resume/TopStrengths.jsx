@@ -1,4 +1,4 @@
-import { CheckCircle2, ShieldAlert, ShieldCheck } from "lucide-react";
+import { CheckCircle2, ShieldCheck } from "lucide-react";
 
 export default function TopStrengths({ strengths }) {
   const displayedStrengths = strengths && strengths.length > 0 ? strengths : [];

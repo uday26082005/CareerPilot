@@ -1,4 +1,4 @@
-import { ClipboardList, Target, TrendingUp, Briefcase, FileText, CheckCircle, Activity, Star } from "lucide-react";
+import { ClipboardList, Target, Briefcase, FileText, CheckCircle, Activity } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import axios from "axios";

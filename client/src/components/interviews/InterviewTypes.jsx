@@ -1,5 +1,4 @@
-import { Code, Briefcase, Target, Building, Star } from "lucide-react";
-import { useState } from "react";
+import { Code, Briefcase, Target, Building } from "lucide-react";
 
 const TYPES = [
   {

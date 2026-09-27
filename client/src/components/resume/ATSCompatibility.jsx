@@ -1,4 +1,3 @@
-import { FileText } from "lucide-react";
 
 export default function ATSCompatibility({ score: scoreProp, status, tips }) {
   const score = Math.round(scoreProp ?? 0);

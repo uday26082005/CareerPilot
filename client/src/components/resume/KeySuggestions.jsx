@@ -1,32 +1,4 @@
-import { BarChart, Target, Search, Code, ChevronRight, ArrowRight, Lightbulb } from "lucide-react";
-import { Link } from "react-router-dom";
-
-const SUGGESTIONS = [
-  {
-    title: "Add more quantifiable achievements",
-    desc: "Include numbers and metrics to highlight your impact.",
-    icon: BarChart,
-    color: "bg-violet-500/10 border-violet-500/20 text-violet-400"
-  },
-  {
-    title: "Improve your summary",
-    desc: "Make your summary more targeted to the role.",
-    icon: Target,
-    color: "bg-blue-500/10 border-blue-500/20 text-blue-400"
-  },
-  {
-    title: "Include relevant keywords",
-    desc: "Add industry-specific keywords to improve ATS score.",
-    icon: Search,
-    color: "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-  },
-  {
-    title: "Enhance project descriptions",
-    desc: "Provide more details about technologies and impact.",
-    icon: Code,
-    color: "bg-orange-500/10 border-orange-500/20 text-orange-400"
-  }
-];
+import { Lightbulb } from "lucide-react";
 
 export default function KeySuggestions({ suggestions = [] }) {
   return (

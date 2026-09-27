@@ -3,7 +3,6 @@ import toast from "react-hot-toast";
 import { supabase } from "../../lib/supabase";
 import GoogleIcon from "./GoogleIcon";
 import GithubIcon from "./GithubIcon";
-import LinkedinIcon from "./LinkedinIcon";
 
 const buttons = [
   { label: "Continue with Google", icon: <GoogleIcon />, provider: "google" },
@@ -15,7 +14,7 @@ export default function SocialAuthButtons() {
     const providerLabel = provider.replace('_oidc', '').toUpperCase();
     toast.loading(`Redirecting to ${providerLabel}...`, { id: "oauth-loading" });
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: provider,
         options: {
           redirectTo: `${window.location.origin}/dashboard`

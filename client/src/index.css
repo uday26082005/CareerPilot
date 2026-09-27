@@ -4,6 +4,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  img {
+    display: inline-block;
+  }
+}
+
+img {
+  display: inline-block;
+}
+
 html{
   scroll-behavior:smooth;
   font-size: 17px;

@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Mail, Lock, Send, ShieldCheck } from "lucide-react";
+import { Mail, Send } from "lucide-react";
 
 import AuthLayout from "../components/layout/AuthLayout";
 import FormInput from "../components/auth/FormInput";
-import GoogleIcon from "../components/auth/GoogleIcon";
 import { supabase } from "../lib/supabase";
 import toast from "react-hot-toast";
 

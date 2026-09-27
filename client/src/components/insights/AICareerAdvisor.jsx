@@ -1,6 +1,6 @@
-import { Bot, RefreshCcw, Target, Calendar, TrendingUp } from "lucide-react";
+import { Bot, Target, TrendingUp } from "lucide-react";
 
-export default function AICareerAdvisor({ data, onRegenerate, isLoading }) {
+export default function AICareerAdvisor({ data }) {
   if (!data) return null;
   return (
     <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-5 backdrop-blur-md relative overflow-hidden">

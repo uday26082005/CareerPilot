@@ -1,5 +1,4 @@
-import { Info, ArrowRight, CheckCircle2, TrendingUp, Trophy } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Info, CheckCircle2, TrendingUp, Trophy } from "lucide-react";
 
 export default function SalaryInsights({ data }) {
   if (!data) return null;

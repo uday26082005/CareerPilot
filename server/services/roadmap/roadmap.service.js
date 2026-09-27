@@ -9,29 +9,58 @@ const HTTP_STATUS_INTERNAL_SERVER_ERROR = 500;
 const HTTP_STATUS_UNPROCESSABLE_ENTITY = 422;
 
 const buildRoadmapPrompt = (profile, skillGap) => {
-  return `You are an expert AI Career Advisor and Tech Mentor.
-Generate a personalized, structured learning roadmap for a professional software engineer.
+  const marketFocus = skillGap.analysis_json?.market_intelligence?.trending_technologies || [];
+  const missingSkills = Array.isArray(skillGap.missing_skills) ? skillGap.missing_skills : [];
+  const missingCount = missingSkills.length;
 
-User Profile:
-- Current Role: ${profile.current_role || "Not specified"}
-- Target Role: ${profile.target_role || "Not specified"}
+  // Dynamically determine the optimal number of phases based on the missed skills count:
+  // e.g. 1-4 skills -> 2 phases
+  //      5-9 skills -> 3 phases
+  //      10-16 skills -> 4 phases
+  //      17+ skills -> 5 phases (maximum 5 phases for clean execution)
+  let targetPhaseCount = 3;
+  if (missingCount <= 4) {
+    targetPhaseCount = Math.max(2, Math.ceil(missingCount / 2));
+  } else if (missingCount <= 9) {
+    targetPhaseCount = 3;
+  } else if (missingCount <= 16) {
+    targetPhaseCount = 4;
+  } else {
+    targetPhaseCount = 5;
+  }
+
+  return `You are an expert AI Career Advisor and Senior Technical Mentor.
+Generate a personalized, structured progressive learning roadmap for a candidate targeting "${profile.target_role || skillGap.role_name || "Software Engineer"}".
+
+Candidate Context:
+- Target Role: "${profile.target_role || skillGap.role_name || "Software Engineer"}"
+- Current Role: "${profile.current_role || "Not specified"}"
 - Years of Experience: ${profile.years_experience || 0}
 
-Analysis Data:
-- Missing Skills (needs to learn): ${JSON.stringify(skillGap.missing_skills)}
-- Priority Skills (most important): ${JSON.stringify(skillGap.priority_skills)}
-- Recommended Learning Order: ${JSON.stringify(skillGap.learning_order)}
+Skill Gap Intelligence (from 2026 Live Labor Market Analysis):
+- Total Missing Skills to Master: ${missingCount}
+- Missing Skills List: ${JSON.stringify(missingSkills)}
+- Priority Skills: ${JSON.stringify(skillGap.priority_skills || [])}
+- Market Focus / Surging Demand Technologies: ${JSON.stringify(marketFocus)}
 
-TASK:
-Organize the learning journey into logical phases based on the missing skills and priority skills.
-Do NOT recalculate or introduce new technical skills outside of the provided scope. Just structure them logically.
+CRITICAL DYNAMIC PHASING REQUIREMENTS:
+1. DYNAMIC PHASE COUNT: The candidate has ${missingCount} missing skills. You MUST structure this roadmap into EXACTLY ${targetPhaseCount} phases (Phase 1 through Phase ${targetPhaseCount}). Do NOT restrict or fix to 2 phases.
+2. COMPLETE COVERAGE: Every single missing skill from the list of ${missingCount} must be logically assigned to the "skills" array of one of these ${targetPhaseCount} phases.
+3. MARKET FOCUS PRIORITY:
+   - Phase 1 (and Phase 2 if many) MUST front-load the missing skills that align with the Market Focus / Trending Technologies (${JSON.stringify(marketFocus)}) and priority skills.
+   - Intermediate phases must cover core frameworks, databases, APIs, and backend/frontend components.
+   - Final phases must cover architecture, cloud, DevOps, security, and capstone production readiness.
+4. TASKS PER PHASE: Provide 2 to 3 targeted, concise actionable tasks per phase (keep descriptions 1-2 sentences).
+5. 100% FREE RESOURCES: For every task, recommend ONE 100% FREE learning resource URL (e.g. Roadmap.sh, MDN, freeCodeCamp, MIT OCW, YouTube, official docs). NEVER suggest paid courses.
+6. PRACTICAL PROJECT: Suggest 1 hands-on practical project per phase applying the phase's skills.
+7. REALISTIC ESTIMATED DURATION: Provide a realistic total duration (e.g. "${targetPhaseCount * 3} to ${targetPhaseCount * 4} Weeks" or "${targetPhaseCount} Months") reflecting the effort needed for ${missingCount} missing skills.
 
 For each phase:
 - Create a title and short description.
 - Estimate duration.
-- List the skills covered in this phase.
-- Break down learning into specific tasks with estimated hours. Recommend ONE 100% FREE learning resource (URL) per task (e.g., Roadmap.sh, MDN, freeCodeCamp, YouTube, docs). NEVER recommend paid courses.
-- Suggest ONE practical project per phase (if applicable, else empty array).
+- List the skills covered in this phase (from the missing skills).
+- Break down learning into specific tasks with estimated hours and free resource URL.
+- Suggest ONE practical project per phase.
 - Add a concluding milestone.
 
 Return a JSON object with the following exact structure:
@@ -67,8 +96,7 @@ Return a JSON object with the following exact structure:
     }
   ]
 }
-Return the response exactly matching this JSON structure.
-CRITICAL INSTRUCTION: You MUST provide EXACTLY 2 phases. Each phase MUST contain EXACTLY 2 tasks. Keep all descriptions extremely concise (max 1 sentence) to prevent hitting strict token limits.`;
+Return the response strictly matching this JSON structure.`;
 };
 
 const formatRoadmapResponse = (roadmap, tasks) => {
@@ -128,7 +156,7 @@ const _generateAndSaveRoadmap = async (userId, profile, resumeAnalysis, skillGap
   
   let aiRoadmap;
   try {
-    aiRoadmap = await aiService.generateStructuredResponse(prompt, generateRoadmapSchema);
+    aiRoadmap = await aiService.generateStructuredResponse(prompt, generateRoadmapSchema, { max_tokens: 3500 });
   } catch (error) {
     console.error("Groq roadmap generation failed.", error);
     throw new AppError(`Failed to generate roadmap: ${error.message}`, HTTP_STATUS_INTERNAL_SERVER_ERROR);
@@ -251,14 +279,25 @@ const generateRoadmap = async (userId) => {
     .single();
 
   if (existingRoadmap) {
-    // If it exists and matches current context, just return it
-    const { data: tasks } = await supabase
-      .from("roadmap_tasks")
-      .select("*")
-      .eq("roadmap_id", existingRoadmap.id)
-      .order("order_index", { ascending: true });
-      
-    return formatRoadmapResponse(existingRoadmap, tasks || []);
+    const existingPhaseCount = existingRoadmap.roadmap_json?.phases?.length || 0;
+    const missingCount = Array.isArray(skillGapAnalysis.missing_skills) ? skillGapAnalysis.missing_skills.length : 0;
+    const shouldUpgradePhases = missingCount >= 5 && existingPhaseCount <= 2;
+
+    if (!shouldUpgradePhases) {
+      // If it exists and matches current context, return it
+      const { data: tasks } = await supabase
+        .from("roadmap_tasks")
+        .select("*")
+        .eq("roadmap_id", existingRoadmap.id)
+        .order("order_index", { ascending: true });
+        
+      return formatRoadmapResponse(existingRoadmap, tasks || []);
+    } else {
+      console.log(`[Roadmap] Existing roadmap has only ${existingPhaseCount} phases for ${missingCount} missing skills. Automatically regenerating multi-phase roadmap...`);
+      // Clean up previous 2-phase roadmap
+      await supabase.from("roadmap_tasks").delete().eq("roadmap_id", existingRoadmap.id);
+      await supabase.from("roadmaps").delete().eq("id", existingRoadmap.id);
+    }
   }
 
   return await _generateAndSaveRoadmap(userId, profile, resumeAnalysis, skillGapAnalysis, supabase);

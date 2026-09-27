@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { BrainCircuit, Plus, Send, FileText, BookOpen, Target, Briefcase, Bot, User, Loader2 } from "lucide-react";
+import { Plus, Send, FileText, BookOpen, Target, Briefcase, Bot, User, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../contexts/AuthContext";
 import ReactMarkdown from 'react-markdown';
@@ -27,29 +27,10 @@ export default function AskAI() {
   const fileInputRef = useRef(null);
   const scrollContainerRef = useRef(null);
 
-  useEffect(() => {
-    const q = new URLSearchParams(location.search).get('q');
-    if (q) {
-      setQuestion(q);
-      // Wait a tick for state to settle then send
-      setTimeout(() => handleSend(q), 100);
-    }
-  }, [location.search]);
-
-  useEffect(() => {
-    if (messages.length > 1 && scrollContainerRef.current) {
-      scrollContainerRef.current.scrollTo({
-        top: scrollContainerRef.current.scrollHeight,
-        behavior: "smooth"
-      });
-    }
-  }, [messages]);
-
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       console.log("File selected:", file.name);
-      // Feature for later
     }
   };
 
@@ -66,7 +47,7 @@ export default function AskAI() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${session.access_token}`
+          Authorization: `Bearer ${session?.access_token}`
         },
         body: JSON.stringify({
           messages: newMessages.map(m => ({ role: m.role, content: m.content }))
@@ -86,6 +67,24 @@ export default function AskAI() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    const q = new URLSearchParams(location.search).get('q');
+    if (q) {
+      setQuestion(q);
+      // Wait a tick for state to settle then send
+      setTimeout(() => handleSend(q), 100);
+    }
+  }, [location.search]);
+
+  useEffect(() => {
+    if (messages.length > 1 && scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({
+        top: scrollContainerRef.current.scrollHeight,
+        behavior: "smooth"
+      });
+    }
+  }, [messages]);
 
   return (
     <div className="flex flex-col flex-1 max-w-5xl w-full mx-auto gap-4">

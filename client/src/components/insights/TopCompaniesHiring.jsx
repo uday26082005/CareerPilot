@@ -1,5 +1,3 @@
-import { ArrowRight, Search, Building2, Terminal, Monitor, Code } from "lucide-react";
-import { Link } from "react-router-dom";
 import { useState } from "react";
 
 const LOGO_OVERRIDES = {

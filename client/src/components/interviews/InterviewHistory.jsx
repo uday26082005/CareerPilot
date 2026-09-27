@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Code, Briefcase, Building, Target, Star, ChevronDown, ChevronUp, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Code, Briefcase, Building, Target, ChevronDown, ChevronUp, Loader2 } from "lucide-react";
 import axios from "axios";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -38,19 +38,6 @@ export default function InterviewHistory({ refreshKey, onRowClick, onHistoryFetc
   }, [refreshKey]);
 
   const displayedHistory = isExpanded ? history : history.slice(0, 3);
-
-  const renderStars = (rating) => {
-    return (
-      <div className="flex items-center gap-0.5">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <Star 
-            key={star}
-            className={`h-3 w-3 ${star <= rating ? "fill-yellow-500 text-yellow-500" : star - 0.5 === rating ? "fill-yellow-500/50 text-yellow-500" : "fill-white/10 text-transparent"}`} 
-          />
-        ))}
-      </div>
-    );
-  };
 
   return (
     <div className="flex flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-5 backdrop-blur-md">
