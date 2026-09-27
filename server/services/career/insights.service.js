@@ -10,10 +10,13 @@ const { careerInsightsSchema } = require("../../schemas/insights.schema");
 const buildInsightsPrompt = (profile, latestResume, latestSkillGap) => {
   const targetRole = profile?.targetRole || profile?.current_role || "Software Engineer";
   const resumeScore = latestResume?.overall_score || "N/A";
+  const roleFitScore = latestResume?.analysis_json?.role_fit?.score ?? latestSkillGap?.skill_match_percentage ?? "N/A";
   const strengths = latestResume?.strengths || [];
   const strengthsStr = strengths.join(", ") || "None recorded";
+  const matchedSkills = latestSkillGap?.matched_skills || [];
+  const matchedStr = matchedSkills.slice(0, 10).join(", ") || "Foundational skills";
   const missingSkills = latestSkillGap?.missing_skills || [];
-  const missingStr = missingSkills.join(", ") || "None recorded";
+  const missingStr = missingSkills.slice(0, 10).join(", ") || "None recorded";
   const currentExp = profile?.years_experience || 0;
   const randomSeed = Math.floor(Math.random() * 1000000);
 
@@ -23,15 +26,17 @@ CANDIDATE PROFILE:
 - Target Role: ${targetRole}
 - Years of Experience: ${currentExp}
 - Resume Score: ${resumeScore}/100
-- Current Strengths: ${strengthsStr}
-- Skill Gaps (missing): ${missingStr}
+- Target Role Fit Match: ${roleFitScore !== "N/A" ? `${roleFitScore}%` : "In Progress"}
+- Key Profile Strengths: ${strengthsStr}
+- Matched Competencies: ${matchedStr}
+- Missing Skills (to bridge): ${missingStr}
 - Session ID: ${randomSeed}
 
 CRITICAL RULES FOR PERSONALIZATION:
 1. ai_advice MUST reference the candidate's SPECIFIC missing skills by name (${missingStr}) and explain exactly how to learn each one. Do NOT give generic advice like "practice coding challenges". Instead say things like "Start with ${missingSkills[0] || 'the first missing skill'} by building a project that uses it alongside your existing ${strengths[0] || 'strengths'}."
 2. ai_focus_area MUST be a specific learning path derived from their top 2-3 missing skills, NOT a generic phrase.
 3. ai_potential_improvement MUST be calculated based on: each missing skill closed = roughly ${missingSkills.length > 0 ? Math.round(30 / missingSkills.length) : 5}% improvement. Show realistic range.
-4. match_reason MUST mention their actual strengths (${strengthsStr}) and what's holding them back (${missingStr}).
+4. match_reason MUST mention their actual strengths (${strengthsStr}) and reflect their genuine standing (${roleFitScore !== "N/A" ? `${roleFitScore}% role fit` : "current background"}), noting both their foundational alignment and what's holding them back (${missingStr}).
 5. key_takeaways MUST be actionable steps specific to their skill gaps, not generic career advice.
 6. other_matches should be roles that genuinely align with their CURRENT skills (${strengthsStr}).
 
@@ -39,8 +44,8 @@ Generate a JSON response matching this exact schema. Every field must feel like 
 
 {
   "best_match_role": "${targetRole}",
-  "match_score": 85,
-  "match_reason": "Your strengths in X and Y position you well for ${targetRole}, but gaps in A and B are limiting your match.",
+  "match_score": ${typeof roleFitScore === "number" ? roleFitScore : 85},
+  "match_reason": "Your strengths in ${strengths[0] || 'software development'} position you with a solid match for ${targetRole}, but gaps in ${missingSkills.slice(0, 2).join(' and ') || 'specialized areas'} are limiting your progression.",
   "other_matches": [
     { "name": "Related Role", "percent": 80, "color": "bg-emerald-500" }
   ],
@@ -73,7 +78,7 @@ const generateInsights = async (userId) => {
   // Fetch latest resume analysis
   const { data: resumeAnalysis } = await supabase
     .from("resume_analysis")
-    .select("overall_score, strengths")
+    .select("overall_score, strengths, analysis_json")
     .eq("user_id", userId)
     .order("created_at", { ascending: false })
     .limit(1)
@@ -82,7 +87,7 @@ const generateInsights = async (userId) => {
   // Fetch latest skill gap
   const { data: skillGap } = await supabase
     .from("skill_gap_analysis")
-    .select("missing_skills")
+    .select("skill_match_percentage, matched_skills, missing_skills, analysis_json")
     .eq("user_id", userId)
     .order("created_at", { ascending: false })
     .limit(1)
@@ -161,12 +166,24 @@ const generateInsights = async (userId) => {
     }
   }
 
-  // Compute relevance match score based on strengths vs missing skills
-  const strengthsCount = (resumeAnalysis?.strengths?.length) || 0;
-  const missingCount = (skillGap?.missing_skills?.length) || 0;
-  const total = strengthsCount + missingCount;
-  const computedMatchScore = total > 0 ? Math.round((strengthsCount / total) * 100) : analysisJson.match_score || 0;
-  analysisJson.match_score = computedMatchScore;
+  // Derive match score consistently from Resume Role Fit or Skill Gap Analysis
+  const resumeRoleFitScore = resumeAnalysis?.analysis_json?.role_fit?.score;
+  const skillGapScore = skillGap?.analysis_json?.role_skills_coverage ?? skillGap?.skill_match_percentage;
+
+  let resolvedMatchScore = analysisJson.match_score;
+  if (typeof resumeRoleFitScore === 'number' && !isNaN(resumeRoleFitScore) && resumeRoleFitScore > 0) {
+    resolvedMatchScore = Math.round(resumeRoleFitScore);
+  } else if (typeof skillGapScore === 'number' && !isNaN(skillGapScore) && skillGapScore > 0) {
+    resolvedMatchScore = Math.round(skillGapScore);
+  } else if (skillGap?.matched_skills?.length || skillGap?.missing_skills?.length) {
+    const matchedCount = skillGap.matched_skills?.length || 0;
+    const totalSkills = matchedCount + (skillGap.missing_skills?.length || 0);
+    if (totalSkills > 0) {
+      resolvedMatchScore = Math.round((matchedCount / totalSkills) * 100);
+    }
+  }
+
+  analysisJson.match_score = Math.min(100, Math.max(0, resolvedMatchScore || 0));
 
   // 3. Upsert into database
   const { data, error } = await supabase
