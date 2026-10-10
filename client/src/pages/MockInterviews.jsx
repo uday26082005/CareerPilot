@@ -47,14 +47,14 @@ export default function MockInterviews() {
     <div className="flex flex-col gap-6 pb-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Mock Interviews</h1>
-        <p className="mt-1 text-sm text-slate-500 dark:text-gray-400">
+        <h1 className="text-2xl font-bold text-white tracking-tight">Mock Interviews</h1>
+        <p className="mt-1 text-sm text-slate-400">
           Practice real interview scenarios, get AI feedback and improve your confidence.
         </p>
       </div>
 
       {activeInterviews.length > 0 && (
-        <div className="rounded-xl border border-orange-500/30 bg-orange-500/10 p-4 text-orange-500 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="rounded-2xl border border-amber-500/30 bg-[#1c1e24] p-4 text-amber-400 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl shadow-black/25">
           <div className="flex items-center gap-3">
             <AlertCircle className="h-5 w-5 shrink-0" />
             <p className="text-sm font-medium">You have {activeInterviews.length} pending interview(s) in progress.</p>
@@ -62,7 +62,7 @@ export default function MockInterviews() {
           <div className="flex items-center gap-4 w-full sm:w-auto justify-end">
             <button 
               onClick={handleCancelInterview}
-              className="flex items-center gap-1 text-sm font-medium hover:text-orange-400 transition-colors"
+              className="flex items-center gap-1 text-sm font-semibold text-slate-400 hover:text-rose-400 transition-colors"
             >
               <Trash2 className="h-4 w-4" /> Cancel
             </button>
@@ -71,7 +71,7 @@ export default function MockInterviews() {
                 setResumeInterviewId(activeInterviews[0].id);
                 setIsModalOpen(true);
               }}
-              className="rounded-lg bg-orange-500 px-4 py-2 text-sm font-bold text-white hover:bg-orange-600 transition-colors"
+              className="rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] px-4 py-2 text-sm font-bold text-slate-950 shadow-md hover:brightness-105 active:scale-95 transition-all"
             >
               Resume Now
             </button>
@@ -110,8 +110,8 @@ export default function MockInterviews() {
       <div>
         <InterviewTypes activeType={selectedType} setActiveType={setSelectedType} />
         {selectedType === "Company-specific" && (
-          <div className="mt-4 flex flex-col gap-3 p-5 rounded-xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02]">
-            <label className="text-sm font-semibold text-slate-700 dark:text-gray-300">Target Company Name</label>
+          <div className="mt-4 flex flex-col gap-3 p-5 rounded-2xl border border-white/[0.08] bg-[#1c1e24] shadow-xl shadow-black/25">
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Target Company Name</label>
             {!isCompanyConfirmed ? (
               <div className="flex items-center gap-3">
                 <input 
@@ -119,27 +119,27 @@ export default function MockInterviews() {
                   value={companyName} 
                   onChange={(e) => setCompanyName(e.target.value)} 
                   placeholder="e.g. Google, Microsoft, Meta..." 
-                  className="flex-1 max-w-md rounded-lg border border-slate-200 dark:border-white/10 bg-transparent px-4 py-2 text-slate-900 dark:text-white focus:border-violet-500 focus:outline-none"
+                  className="flex-1 max-w-md rounded-xl border border-white/10 bg-[#242730] px-4 py-2.5 text-white placeholder:text-slate-500 focus:border-[#ffd159] focus:outline-none focus:ring-1 focus:ring-[#ffd159]"
                 />
                 <button 
                   onClick={() => {
                     if (companyName.trim()) setIsCompanyConfirmed(true);
                   }}
                   disabled={!companyName.trim()}
-                  className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-violet-500 disabled:opacity-50"
+                  className="rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] px-5 py-2.5 text-sm font-bold text-slate-950 transition-all hover:brightness-105 active:scale-95 disabled:opacity-50 shadow-md"
                 >
                   Confirm
                 </button>
               </div>
             ) : (
-              <div className="flex items-center justify-between max-w-md rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2.5">
-                <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
+              <div className="flex items-center justify-between max-w-md rounded-xl border border-[#4ee4cb]/30 bg-[#4ee4cb]/10 px-4 py-2.5 text-[#4ee4cb]">
+                <div className="flex items-center gap-2">
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                  <span className="text-sm font-medium">Company selection completed: <strong>{companyName}</strong></span>
+                  <span className="text-sm font-medium">Company selection completed: <strong className="font-bold">{companyName}</strong></span>
                 </div>
                 <button 
                   onClick={() => setIsCompanyConfirmed(false)}
-                  className="text-xs text-slate-500 hover:text-slate-700 dark:hover:text-gray-300 underline"
+                  className="text-xs text-slate-400 hover:text-white underline transition-colors"
                 >
                   Edit
                 </button>
@@ -183,27 +183,27 @@ export default function MockInterviews() {
 
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0a0c1a] p-6 shadow-2xl">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 backdrop-blur-md p-4">
+          <div className="w-full max-w-md rounded-3xl border border-white/10 bg-[#1c1e24] p-6 shadow-2xl text-white">
             <div className="flex items-center gap-4 mb-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-500/10 text-red-600 dark:text-red-500">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-rose-500/15 border border-rose-500/30 text-rose-400">
                 <Trash2 className="h-6 w-6" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Delete Pending Interview</h3>
-                <p className="text-sm text-slate-500 dark:text-gray-400 mt-1">Are you sure you want to cancel and delete your pending interview(s)? This action cannot be undone.</p>
+                <h3 className="text-lg font-bold text-white">Delete Pending Interview</h3>
+                <p className="text-sm text-slate-400 mt-1">Are you sure you want to cancel and delete your pending interview(s)? This action cannot be undone.</p>
               </div>
             </div>
             <div className="flex justify-end gap-3 mt-6">
               <button 
                 onClick={() => setShowDeleteConfirm(false)}
-                className="rounded-xl px-4 py-2 text-sm font-semibold text-slate-700 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors"
+                className="rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-300 bg-[#242730] hover:bg-[#2b2f3a] hover:text-white transition-colors"
               >
                 Cancel
               </button>
               <button 
                 onClick={executeDeleteInterview}
-                className="rounded-xl bg-red-600 px-4 py-2 text-sm font-bold text-white hover:bg-red-700 transition-colors shadow-md"
+                className="rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-rose-500 transition-colors shadow-md"
               >
                 Delete
               </button>

@@ -45,10 +45,10 @@ export default function CareerInsights() {
       {/* Header */}
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
             Career Insights
           </h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-gray-400">
+          <p className="mt-1 text-sm text-slate-400">
             Discover personalized career opportunities, market trends and actionable insights to achieve your goals.
           </p>
         </div>
@@ -56,9 +56,9 @@ export default function CareerInsights() {
           <button 
             onClick={() => fetchInsights(true)}
             disabled={isLoading}
-            className="flex items-center gap-1.5 text-sm font-bold text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 transition-colors disabled:opacity-50 border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 rounded-lg px-5 py-2.5 shadow-sm shrink-0"
+            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] px-5 py-2.5 text-sm font-bold text-slate-950 transition-all hover:brightness-105 active:scale-95 disabled:opacity-50 shadow-md shadow-amber-500/10 shrink-0"
           >
-            <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} /> 
+            <RefreshCw className={`h-4 w-4 text-slate-950 ${isLoading ? 'animate-spin' : ''}`} /> 
             {isLoading ? "Regenerating..." : "Regenerate"}
           </button>
         )}
@@ -66,15 +66,15 @@ export default function CareerInsights() {
 
       {/* Grid Layout */}
       {isLoading ? (
-        <div className="flex flex-col items-center justify-center py-20 bg-white/50 dark:bg-white/[0.02] rounded-2xl border border-slate-200 dark:border-white/5">
-          <Loader2 className="h-10 w-10 text-violet-500 animate-spin mb-4" />
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white">AI is analyzing your profile...</h3>
-          <p className="text-sm text-slate-500 dark:text-gray-400 mt-2 text-center max-w-md">
+        <div className="flex flex-col items-center justify-center py-20 bg-[#1c1e24] rounded-3xl border border-white/[0.08] shadow-xl shadow-black/25">
+          <Loader2 className="h-10 w-10 text-[#ffd159] animate-spin mb-4" />
+          <h3 className="text-lg font-bold text-white">AI is analyzing your profile...</h3>
+          <p className="text-sm text-slate-400 mt-2 text-center max-w-md">
             We are aggregating your resume data, skill gaps, and career goals to generate highly personalized insights.
           </p>
         </div>
       ) : error ? (
-        <div className="flex items-center gap-3 p-4 rounded-xl border border-red-500/30 bg-red-500/10 text-red-500">
+        <div className="flex items-center gap-3 p-4 rounded-2xl border border-red-500/30 bg-red-500/10 text-rose-400">
           <AlertCircle className="h-5 w-5 shrink-0" />
           <p className="text-sm font-medium">{error}</p>
         </div>

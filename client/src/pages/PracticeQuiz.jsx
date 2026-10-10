@@ -15,6 +15,15 @@ const DEFAULT_TOPICS = [
   { id: "devops", category: "DevOps & Cloud", name: "DevOps & Cloud", icon: Cloud, count: 40, desc: "AWS, Docker, CI/CD, and deployment strategies." },
 ];
 
+const TOPIC_COLOR_THEMES = [
+  { text: "text-[#4ee4cb]", bg: "bg-[#4ee4cb]/10", border: "border-[#4ee4cb]/20", hoverBorder: "hover:border-[#4ee4cb]/40" },
+  { text: "text-[#ffd159]", bg: "bg-[#ffd159]/10", border: "border-[#ffd159]/20", hoverBorder: "hover:border-[#ffd159]/40" },
+  { text: "text-[#e29aff]", bg: "bg-[#e29aff]/10", border: "border-[#e29aff]/20", hoverBorder: "hover:border-[#e29aff]/40" },
+  { text: "text-[#ffb48a]", bg: "bg-[#ffb48a]/10", border: "border-[#ffb48a]/20", hoverBorder: "hover:border-[#ffb48a]/40" },
+  { text: "text-[#ff94aa]", bg: "bg-[#ff94aa]/10", border: "border-[#ff94aa]/20", hoverBorder: "hover:border-[#ff94aa]/40" },
+  { text: "text-[#72c5ff]", bg: "bg-[#72c5ff]/10", border: "border-[#72c5ff]/20", hoverBorder: "hover:border-[#72c5ff]/40" },
+];
+
 const getTopicsForRole = (role) => {
   const normalized = (role || "").toLowerCase();
   
@@ -310,32 +319,35 @@ export default function PracticeQuiz() {
     return (
       <div className="flex flex-col gap-6 pb-6 w-full max-w-7xl mx-auto">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Practice Arena</h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-gray-400">
+          <h1 className="text-2xl font-bold text-white tracking-tight">Practice Arena</h1>
+          <p className="mt-1 text-sm text-slate-400">
             Select a topic below to start a 10-question practice quiz. Challenge yourself and see where you stand!
           </p>
-          {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
+          {error && <p className="mt-2 text-sm text-[#ff94aa]">{error}</p>}
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {topics.map((topic) => (
-            <button
-              key={topic.id}
-              onClick={() => startPractice(topic.id)}
-              disabled={loading}
-              className="group flex flex-col items-center text-center p-8 rounded-3xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] transition-all hover:-translate-y-2 hover:shadow-2xl hover:border-violet-500/30 hover:bg-slate-50 dark:hover:bg-white/[0.04] disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-100 dark:bg-violet-500/10 text-violet-600 dark:text-violet-400 mb-6 group-hover:scale-110 transition-transform">
-                <topic.icon className="h-8 w-8" />
-              </div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{topic.name}</h3>
-              <p className="text-sm text-slate-500 dark:text-gray-400 mb-6">{topic.desc}</p>
+          {topics.map((topic, index) => {
+            const color = TOPIC_COLOR_THEMES[index % TOPIC_COLOR_THEMES.length];
+            return (
+              <button
+                key={topic.id}
+                onClick={() => startPractice(topic.id)}
+                disabled={loading}
+                className="group flex flex-col items-center text-center p-8 rounded-3xl border border-white/[0.08] bg-[#1c1e24] shadow-xl shadow-black/25 transition-all hover:-translate-y-1 hover:border-white/20 hover:bg-[#20222a] disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                <div className={`flex h-16 w-16 items-center justify-center rounded-2xl ${color.bg} ${color.text} border ${color.border} mb-6 group-hover:scale-110 transition-transform`}>
+                  <topic.icon className="h-8 w-8" />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">{topic.name}</h3>
+                <p className="text-sm text-slate-400 mb-6">{topic.desc}</p>
 
-              <div className="mt-auto flex items-center gap-2 text-sm font-semibold text-violet-600 dark:text-violet-400">
-                {loading ? "Preparing Practice" : "Start Quiz"} {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />}
-              </div>
-            </button>
-          ))}
+                <div className="mt-auto flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#ffd159] group-hover:text-[#fed656]">
+                  {loading ? "Preparing Practice" : "Start Quiz"} {loading ? <Loader2 className="h-4 w-4 animate-spin text-[#ffd159]" /> : <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />}
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
     );
@@ -343,6 +355,8 @@ export default function PracticeQuiz() {
 
   if (view === "quiz") {
     const topic = topics.find((item) => item.id === activeTopic);
+    const topicIndex = topics.findIndex((item) => item.id === activeTopic);
+    const color = TOPIC_COLOR_THEMES[(topicIndex >= 0 ? topicIndex : 0) % TOPIC_COLOR_THEMES.length];
     const questionNumber = currentQuestion ? currentQuestion.question_number : 1;
     const hasOptions = Boolean(currentQuestion && currentQuestion.options && currentQuestion.options.length);
     const answerReady = Boolean(selectedAnswer || textAnswer.trim());
@@ -351,27 +365,27 @@ export default function PracticeQuiz() {
       <div className="max-w-4xl mx-auto py-8">
         <button
           onClick={handleReturnToTopics}
-          className="flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white mb-6 transition-colors"
+          className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-white mb-6 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" /> Back to Topics
         </button>
 
-        <div className="rounded-3xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] backdrop-blur-md overflow-hidden flex flex-col min-h-[600px] shadow-2xl">
-          <div className="p-8 border-b border-slate-200 dark:border-white/5">
+        <div className="rounded-3xl border border-white/[0.08] bg-[#1c1e24] shadow-2xl overflow-hidden flex flex-col min-h-[600px]">
+          <div className="p-8 border-b border-white/[0.08]">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet-100 dark:bg-violet-500/10 text-violet-600 dark:text-violet-400">
+                <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${color.bg} ${color.text} border ${color.border}`}>
                   {topic && <topic.icon className="h-5 w-5" />}
                 </div>
-                <h2 className="text-xl font-bold text-slate-900 dark:text-white">{topic && topic.name}</h2>
+                <h2 className="text-xl font-bold text-white">{topic && topic.name}</h2>
               </div>
-              <span className="text-sm font-bold px-4 py-1.5 rounded-full bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-gray-300">
+              <span className="text-xs font-bold px-4 py-1.5 rounded-full bg-[#242730] border border-white/[0.08] text-slate-300">
                 Question {questionNumber} of {totalQuestions}
               </span>
             </div>
-            <div className="h-2 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
+            <div className="h-2 w-full bg-[#242730] rounded-full overflow-hidden">
               <div
-                className="h-full bg-violet-500 rounded-full transition-all duration-300"
+                className="h-full bg-gradient-to-r from-[#ffd159] to-[#fed656] rounded-full transition-all duration-300"
                 style={{ width: ((questionNumber / totalQuestions) * 100) + "%" }}
               />
             </div>
@@ -380,43 +394,43 @@ export default function PracticeQuiz() {
           <div className="p-8 flex-1 flex flex-col">
             {loading && (
               <div className="flex flex-1 flex-col items-center justify-center gap-4">
-                <Loader2 className="h-8 w-8 animate-spin text-violet-500" />
-                <p className="text-slate-500 dark:text-gray-400">Creating your personalized question...</p>
+                <Loader2 className="h-8 w-8 animate-spin text-[#ffd159]" />
+                <p className="text-slate-400 text-sm">Creating your personalized question...</p>
               </div>
             )}
 
             {!loading && error && (
-              <div className="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-500">
+              <div className="mb-6 rounded-2xl border border-[#ff94aa]/30 bg-[#ff94aa]/10 p-4 text-sm text-[#ff94aa]">
                 {error}
               </div>
             )}
 
             {!loading && currentQuestion && (
               <>
-                <h3 className="text-2xl font-semibold text-slate-900 dark:text-white mb-10 leading-relaxed">
+                <h3 className="text-xl sm:text-2xl font-bold text-white mb-8 leading-relaxed">
                   {currentQuestion.question}
                 </h3>
 
                 {hasOptions ? (
                   <div className="space-y-4">
                     {currentQuestion.options.map((option, index) => {
-                      let stateClass = "border-slate-200 dark:border-white/10 bg-white dark:bg-white/[0.02] hover:border-violet-500/30 hover:bg-violet-500/5 hover:text-violet-400";
+                      let stateClass = "border-white/[0.08] bg-[#242730] text-slate-200 hover:border-white/20 hover:bg-[#2b2f3a] hover:text-white";
                       let icon = null;
                       const isSelected = selectedAnswer === option;
 
                       if (evaluation) {
                         if (isSelected) {
                           stateClass = evaluation.correct
-                            ? "border-emerald-500 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
-                            : "border-red-500 bg-red-500/10 text-red-700 dark:text-red-400";
+                            ? "border-[#4ee4cb] bg-[#4ee4cb]/10 text-[#4ee4cb] shadow-[0_0_15px_rgba(78,228,203,0.15)]"
+                            : "border-[#ff94aa] bg-[#ff94aa]/10 text-[#ff94aa]";
                           icon = evaluation.correct
-                            ? <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-                            : <XCircle className="h-5 w-5 text-red-500" />;
+                            ? <CheckCircle2 className="h-5 w-5 text-[#4ee4cb]" />
+                            : <XCircle className="h-5 w-5 text-[#ff94aa]" />;
                         } else {
-                          stateClass = "border-slate-200 dark:border-white/5 opacity-40";
+                          stateClass = "border-white/[0.04] bg-[#242730] text-slate-500 opacity-40";
                         }
                       } else if (isSelected) {
-                        stateClass = "border-violet-500 bg-violet-500/10 text-violet-700 dark:text-violet-400";
+                        stateClass = "border-2 border-[#ffd159] bg-[#2a2c33] text-white shadow-md shadow-amber-500/10";
                       }
 
                       return (
@@ -438,14 +452,14 @@ export default function PracticeQuiz() {
                     onChange={(event) => setTextAnswer(event.target.value)}
                     disabled={Boolean(evaluation) || submitting}
                     placeholder="Type your answer here..."
-                    className="min-h-[200px] w-full rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/[0.02] p-5 text-base font-medium text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 resize-none"
+                    className="min-h-[200px] w-full rounded-2xl border border-white/10 bg-[#242730] p-5 text-base font-medium text-white placeholder:text-slate-500 focus:border-[#ffd159] focus:outline-none focus:ring-1 focus:ring-[#ffd159] resize-none"
                   />
                 )}
 
                 {evaluation && (
-                  <div className="mt-6 rounded-xl border border-violet-500/20 bg-violet-500/5 p-4 text-sm text-slate-600 dark:text-gray-300">
-                    <p className="font-semibold text-slate-900 dark:text-white">{evaluation.feedback}</p>
-                    <p className="mt-1">{evaluation.explanation}</p>
+                  <div className="mt-6 rounded-2xl border border-white/[0.08] bg-[#242730] p-5 text-sm">
+                    <p className={`font-semibold ${evaluation.correct ? "text-[#4ee4cb]" : "text-[#ff94aa]"}`}>{evaluation.feedback}</p>
+                    <p className="mt-1 text-slate-300">{evaluation.explanation}</p>
                   </div>
                 )}
 
@@ -453,7 +467,7 @@ export default function PracticeQuiz() {
                   <button
                     onClick={handleSkipQuestion}
                     disabled={answerReady || Boolean(evaluation) || submitting}
-                    className={"text-sm font-semibold transition-colors " + (answerReady || evaluation || submitting ? "text-slate-300 dark:text-gray-600 cursor-not-allowed" : "text-slate-500 hover:text-slate-700 dark:text-gray-400 dark:hover:text-white")}
+                    className={"text-xs font-bold uppercase tracking-wider transition-colors " + (answerReady || evaluation || submitting ? "text-slate-600 cursor-not-allowed" : "text-slate-400 hover:text-white")}
                   >
                     Skip Question
                   </button>
@@ -462,8 +476,8 @@ export default function PracticeQuiz() {
                     onClick={handleNextQuestion}
                     disabled={(!answerReady && !evaluation) || submitting}
                     className={"px-8 py-3 rounded-xl text-sm font-bold transition-all " + (answerReady || evaluation
-                      ? "bg-violet-600 hover:bg-violet-500 text-white shadow-[0_0_20px_rgba(139,92,246,0.3)] hover:-translate-y-0.5"
-                      : "bg-slate-100 dark:bg-white/5 text-slate-400 dark:text-gray-500 cursor-not-allowed")}
+                      ? "bg-gradient-to-r from-[#ffd159] to-[#fed656] text-slate-950 hover:brightness-105 active:scale-95 shadow-md shadow-amber-500/10 hover:-translate-y-0.5"
+                      : "bg-[#242730] text-slate-500 cursor-not-allowed border border-white/[0.04]")}
                   >
                     {submitting ? "Checking..." : evaluation ? (pendingQuestion ? "Next Question" : "View Results") : "Check Answer"}
                   </button>
@@ -487,28 +501,30 @@ export default function PracticeQuiz() {
 
     return (
       <div className="max-w-3xl mx-auto py-16 flex flex-col items-center justify-center text-center">
-        <div className="w-full rounded-3xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-12 backdrop-blur-md shadow-2xl relative overflow-hidden">
-          {percentage >= 80 && (
-            <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-64 h-64 bg-emerald-500/20 blur-[80px] rounded-full pointer-events-none" />
+        <div className="w-full rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-12 shadow-2xl relative overflow-hidden">
+          {percentage >= 80 ? (
+            <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-64 h-64 bg-[#4ee4cb]/10 blur-[80px] rounded-full pointer-events-none" />
+          ) : (
+            <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-64 h-64 bg-[#ffd159]/10 blur-[80px] rounded-full pointer-events-none" />
           )}
 
           <div className="flex justify-center mb-8 relative z-10">
-            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-violet-100 dark:bg-violet-500/10 text-violet-600 dark:text-violet-400 ring-8 ring-slate-50 dark:ring-[#060816]">
+            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#ffd159]/10 text-[#ffd159] border border-[#ffd159]/20 ring-8 ring-[#242730]">
               <Trophy className="h-10 w-10" />
             </div>
           </div>
 
-          <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-2 relative z-10">{resultMessage}</h2>
-          <p className="text-slate-500 dark:text-gray-400 mb-10 relative z-10">
-            {report && report.summary ? report.summary : <>You completed the <span className="font-bold text-slate-900 dark:text-white">{topic && topic.name}</span> practice quiz.</>}
+          <h2 className="text-3xl font-black text-white mb-2 relative z-10">{resultMessage}</h2>
+          <p className="text-slate-400 mb-10 relative z-10">
+            {report && report.summary ? report.summary : <>You completed the <span className="font-bold text-white">{topic && topic.name}</span> practice quiz.</>}
           </p>
 
           <div className="flex justify-center mb-12 relative z-10">
             <div className="flex flex-col items-center">
-              <span className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-gray-500 mb-2">Final Score</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Final Score</span>
               <div className="flex items-baseline gap-2">
-                <span className="text-6xl font-black text-slate-900 dark:text-white">{score}</span>
-                <span className="text-2xl font-bold text-slate-400 dark:text-gray-500">/ 10</span>
+                <span className={`text-6xl font-black ${percentage >= 80 ? "text-[#4ee4cb]" : percentage >= 50 ? "text-[#ffd159]" : "text-[#ff94aa]"}`}>{score}</span>
+                <span className="text-2xl font-bold text-slate-500">/ 10</span>
               </div>
             </div>
           </div>
@@ -516,13 +532,13 @@ export default function PracticeQuiz() {
           <div className="flex items-center justify-center gap-4 relative z-10">
             <button
               onClick={handleReturnToTopics}
-              className="px-6 py-3 rounded-xl font-bold text-sm bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white hover:bg-slate-200 dark:hover:bg-white/10 transition-colors"
+              className="px-6 py-3 rounded-xl font-bold text-sm bg-[#242730] text-slate-200 hover:bg-[#2b2f3a] hover:text-white border border-white/[0.08] transition-colors"
             >
               Back to Topics
             </button>
             <button
               onClick={() => startPractice(activeTopic)}
-              className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm bg-violet-600 text-white hover:bg-violet-500 shadow-[0_0_20px_rgba(139,92,246,0.3)] transition-all hover:-translate-y-0.5"
+              className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-[#ffd159] to-[#fed656] text-slate-950 hover:brightness-105 active:scale-95 shadow-md shadow-amber-500/10 transition-all hover:-translate-y-0.5"
             >
               <RefreshCw className="h-4 w-4" /> Retake Quiz
             </button>

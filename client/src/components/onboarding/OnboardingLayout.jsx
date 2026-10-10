@@ -36,7 +36,7 @@ export default function OnboardingLayout({ currentStep, children }) {
             <img src="/logo.jpg" alt="CareerPilot Logo" className="h-9 w-9 rounded-xl mix-blend-lighten" />
           </div>
           <h1 className="text-xl font-extrabold tracking-tight">
-            CareerPilot<span className="text-violet-400"> AI</span>
+            CareerPilot<span className="text-[#ffd159]"> AI</span>
           </h1>
         </div>
 

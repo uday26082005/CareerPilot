@@ -27,24 +27,24 @@ export default function UpcomingEvents({ events, onEventCreated }) {
   };
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
-      <h3 className="mb-6 text-lg font-bold text-slate-900 dark:text-white">Upcoming</h3>
+    <div className="flex h-full flex-col rounded-2xl border border-white/[0.08] bg-[#1c1e24] p-6 shadow-xl shadow-black/25">
+      <h3 className="mb-6 text-lg font-bold text-white tracking-wide">Upcoming</h3>
       
-      <div className="flex-1 space-y-4">
+      <div className="flex-1 space-y-3.5">
         {events.slice(0, 5).map((event, idx) => (
-          <div key={idx} className="flex items-start gap-4 rounded-xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-4 transition-colors hover:bg-white/[0.04]">
+          <div key={idx} className="flex items-start gap-4 rounded-xl border border-white/[0.06] bg-[#242730] p-4 transition-all duration-200 hover:bg-[#2b2f3a] hover:border-white/10 shadow-sm">
             <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border ${getBg(event.type)}`}>
               {getIcon(event.type)}
             </div>
-            <div className="flex-1">
-              <h4 className="text-sm font-bold text-slate-900 dark:text-white">{event.title}</h4>
-              <p className="mt-0.5 text-xs text-slate-500 dark:text-gray-400">{event.subtitle}</p>
+            <div className="flex-1 min-w-0">
+              <h4 className="text-sm font-bold text-white truncate">{event.title}</h4>
+              <p className="mt-0.5 text-xs text-slate-400 truncate">{event.subtitle}</p>
             </div>
-            <div className="text-right">
-              <p className="text-sm font-medium text-slate-900 dark:text-white">
+            <div className="text-right shrink-0">
+              <p className="text-sm font-semibold text-white">
                 {new Date(event.date).toLocaleDateString()}
               </p>
-              <p className="mt-0.5 text-xs text-slate-400 dark:text-gray-500">
+              <p className="mt-0.5 text-xs text-slate-400">
                 {new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </p>
             </div>
@@ -52,19 +52,19 @@ export default function UpcomingEvents({ events, onEventCreated }) {
         ))}
       </div>
 
-      <div className="mt-4 pt-4 border-t border-slate-200 dark:border-white/5 flex items-center justify-between">
+      <div className="mt-4 pt-4 border-t border-white/[0.08] flex items-center justify-between">
         <button 
           onClick={() => setIsCalendarOpen(true)}
-          className="flex items-center gap-2 text-sm font-medium text-violet-400 transition-colors hover:text-violet-300"
+          className="flex items-center gap-2 text-sm font-semibold text-[#4ee4cb] transition-colors hover:text-[#36e2b6]"
         >
           View Calendar <ArrowRight className="h-4 w-4" />
         </button>
         
         <button 
           onClick={() => setIsScheduleOpen(true)}
-          className="flex items-center gap-1.5 rounded-lg bg-violet-500/10 px-3 py-1.5 text-xs font-bold text-violet-500 transition-colors hover:bg-violet-500/20 dark:text-violet-400"
+          className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#ffd159] to-[#fed656] px-3.5 py-1.5 text-xs font-bold text-slate-950 shadow-sm transition-all hover:brightness-105 active:scale-95"
         >
-          <Plus className="h-3.5 w-3.5" /> Add Event
+          <Plus className="h-3.5 w-3.5 stroke-[3]" /> Add Event
         </button>
       </div>
 

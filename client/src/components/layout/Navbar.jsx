@@ -49,11 +49,8 @@ export default function Navbar() {
               <div>
 
                 <h1 className="text-2xl font-extrabold tracking-tight">
-
                   CareerPilot
-
-                  <span className="text-violet-400"> AI</span>
-
+                  <span className="text-[#ffd159]"> AI</span>
                 </h1>
 
               </div>

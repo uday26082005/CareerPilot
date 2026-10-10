@@ -33,9 +33,9 @@ function CompanyLogo({ company }) {
   const textFallbackStr = company.name.substring(0, 3).toLowerCase();
   
   return (
-    <div className="mb-3 flex h-10 w-10 p-1 items-center justify-center rounded-xl bg-white overflow-hidden shadow-sm">
+    <div className="mb-3 flex h-11 w-11 p-1.5 items-center justify-center rounded-2xl bg-white overflow-hidden shadow-sm">
       {isTextFallback ? (
-        <span className={`font-bold text-base ${company.textColor || 'text-slate-500 dark:text-gray-400'}`}>
+        <span className="font-bold text-base text-slate-900">
           {textFallbackStr}
         </span>
       ) : (
@@ -55,21 +55,21 @@ export default function TopCompaniesHiring({ data }) {
   const COMPANIES = data.top_companies || [];
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md overflow-x-auto">
+    <div className="flex h-full flex-col rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-6 shadow-xl shadow-black/25 overflow-x-auto">
       
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-base font-semibold text-slate-500 dark:text-gray-400">Top Companies Hiring</h3>
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">Top Companies Hiring</h3>
       </div>
 
-      <div className="flex-1 grid grid-cols-5 divide-x divide-white/5">
+      <div className="flex-1 grid grid-cols-5 divide-x divide-white/[0.08]">
         {COMPANIES.map((company, idx) => (
           <div key={idx} className="flex flex-col items-center justify-center px-2 text-center">
             
             <CompanyLogo company={company} />
             
-            <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-1">{company.name}</h4>
-            <span className={`text-xs font-bold mb-2 ${company.demandColor}`}>{company.demand}</span>
-            <span className="text-xs text-slate-500 dark:text-gray-400">{company.salary}</span>
+            <h4 className="text-sm font-bold text-white mb-1">{company.name}</h4>
+            <span className={`text-xs font-bold mb-2 ${company.demandColor || 'text-[#4ee4cb]'}`}>{company.demand}</span>
+            <span className="text-xs text-slate-400">{company.salary}</span>
 
           </div>
         ))}

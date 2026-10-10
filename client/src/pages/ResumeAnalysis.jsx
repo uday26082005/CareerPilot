@@ -139,28 +139,33 @@ export default function ResumeAnalysis() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">AI Resume Analysis</h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-gray-400">
+          <h1 className="text-2xl font-bold text-white tracking-tight">AI Resume Analysis</h1>
+          <p className="mt-1 text-sm text-slate-400">
             Get AI-powered insights to improve your resume and stand out to recruiters.
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <button onClick={handleReanalyze} disabled={isAnalyzing} className="flex items-center gap-2 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 px-4 py-2 text-sm font-medium text-slate-900 dark:text-white transition-colors hover:bg-slate-200 dark:hover:bg-white/10">
-            <RefreshCcw className="h-4 w-4" /> {isAnalyzing ? "Analyzing..." : "Re-analyze"}
+          <button 
+            onClick={handleReanalyze} 
+            disabled={isAnalyzing} 
+            className="flex items-center gap-2 rounded-xl border border-white/10 bg-[#1c1e24] px-4 py-2.5 text-sm font-semibold text-white transition-all hover:bg-[#242730] hover:border-white/20 active:scale-95 disabled:opacity-50 shadow-sm"
+          >
+            <RefreshCcw className={`h-4 w-4 ${isAnalyzing ? "animate-spin text-[#ffd159]" : "text-slate-300"}`} /> 
+            {isAnalyzing ? "Analyzing..." : "Re-analyze"}
           </button>
           <button 
             onClick={() => document.getElementById('resume-upload-input').click()}
             disabled={isAnalyzing}
-            className="flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-slate-900 dark:text-white transition-colors hover:bg-violet-500 shadow-lg shadow-violet-500/20"
+            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] px-4 py-2.5 text-sm font-bold text-slate-950 shadow-md shadow-amber-500/10 transition-all hover:brightness-105 active:scale-95 disabled:opacity-50"
           >
-            <Upload className="h-4 w-4" /> Upload New Resume
+            <Upload className="h-4 w-4 stroke-[2.5]" /> Upload New Resume
           </button>
           <input type="file" id="resume-upload-input" className="hidden" accept="application/pdf,.pdf" onChange={handleUpload} />
         </div>
       </div>
 
       {feedback && (
-        <p aria-live="polite" className={`text-sm ${feedback.type === "success" ? "text-emerald-500" : "text-red-500"}`}>
+        <p aria-live="polite" className={`text-sm font-medium ${feedback.type === "success" ? "text-[#4ee4cb]" : "text-rose-400"}`}>
           {feedback.message}
         </p>
       )}

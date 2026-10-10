@@ -9,25 +9,69 @@ export default function StatCard({
   iconBgColor, 
   iconColor,
   chartData,
-  chartColor
+  chartColor,
+  themeVariant = "dark"
 }) {
+  const isCandyCard = themeVariant !== "dark";
+
+  const getContainerStyle = () => {
+    switch (themeVariant) {
+      case "mint":
+        return "bg-gradient-to-br from-[#4ee4cb] via-[#3de7c9] to-[#2cd4b3] text-slate-950 shadow-lg shadow-teal-500/15 border border-teal-300/40 hover:shadow-teal-500/25";
+      case "yellow":
+        return "bg-gradient-to-br from-[#ffd159] via-[#fed656] to-[#f5b82e] text-slate-950 shadow-lg shadow-amber-500/15 border border-amber-300/40 hover:shadow-amber-500/25";
+      case "lavender":
+        return "bg-gradient-to-br from-[#e29aff] via-[#d985fb] to-[#cf75f7] text-slate-950 shadow-lg shadow-purple-500/15 border border-purple-300/40 hover:shadow-purple-500/25";
+      case "pink":
+        return "bg-gradient-to-br from-[#ff94aa] via-[#ff829b] to-[#ff6f8c] text-slate-950 shadow-lg shadow-pink-500/15 border border-pink-300/40 hover:shadow-pink-500/25";
+      case "peach":
+        return "bg-gradient-to-br from-[#ffb48a] via-[#ffa577] to-[#ff9462] text-slate-950 shadow-lg shadow-orange-500/15 border border-orange-300/40 hover:shadow-orange-500/25";
+      case "sky":
+        return "bg-gradient-to-br from-[#72c5ff] via-[#5cb7fa] to-[#46a7f5] text-slate-950 shadow-lg shadow-blue-500/15 border border-blue-300/40 hover:shadow-blue-500/25";
+      default:
+        return "bg-[#1c1e24] border border-white/[0.08] text-white shadow-xl shadow-black/25 hover:bg-[#22252c] hover:border-white/15";
+    }
+  };
+
   return (
-    <div className="flex flex-col justify-between rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-4 backdrop-blur-md transition-all hover:bg-white/[0.04] hover:border-slate-200 dark:border-white/10">
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-3">
-          <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${iconBgColor}`}>
-            <Icon className={`h-5 w-5 ${iconColor}`} />
-          </div>
-          <div>
-            <h3 className="text-sm font-semibold text-slate-500 dark:text-gray-400">{title}</h3>
-            <div className="flex items-baseline gap-2">
-              <span className="text-xl font-bold text-slate-900 dark:text-white">{value}</span>
-              <span className={`text-xs font-medium ${subtitleColor}`}>
-                {subtitle}
-              </span>
-            </div>
-          </div>
+    <div className={`flex flex-col justify-between rounded-2xl p-5 min-h-[148px] transition-all duration-300 backdrop-blur-md ${getContainerStyle()}`}>
+      {/* Top Header: Title & Icon */}
+      <div className="flex items-center justify-between gap-3">
+        <h3 className={`text-xs font-bold uppercase tracking-wider truncate ${
+          isCandyCard ? "text-slate-900/80" : "text-slate-400"
+        }`}>
+          {title}
+        </h3>
+        <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-transform ${
+          isCandyCard 
+            ? "bg-black/15 text-slate-950 shadow-inner" 
+            : iconBgColor || "bg-white/[0.06] border border-white/10"
+        }`}>
+          <Icon className={`h-4.5 w-4.5 ${isCandyCard ? "text-slate-950" : iconColor}`} />
         </div>
+      </div>
+
+      {/* Middle: Prominent Metric Value */}
+      <div className="my-1.5 flex items-baseline">
+        <span className={`text-2xl font-black tracking-tight leading-none truncate ${
+          isCandyCard ? "text-slate-950" : "text-white"
+        }`}>
+          {value}
+        </span>
+      </div>
+
+      {/* Bottom: Subtitle Pill Badge */}
+      <div className="flex items-center">
+        <span 
+          className={`text-xs font-semibold truncate max-w-full ${
+            isCandyCard 
+              ? "text-slate-950 bg-black/10 px-2.5 py-1 rounded-full" 
+              : `bg-white/[0.06] px-2.5 py-1 rounded-full border border-white/[0.06] ${subtitleColor}`
+          }`}
+          title={typeof subtitle === "string" ? subtitle : undefined}
+        >
+          {subtitle}
+        </span>
       </div>
       
       {/* Mini Sparkline Chart */}
@@ -38,7 +82,7 @@ export default function StatCard({
               <Line 
                 type="monotone" 
                 dataKey="value" 
-                stroke={chartColor} 
+                stroke={isCandyCard ? "#0f172a" : chartColor} 
                 strokeWidth={2} 
                 dot={false}
                 isAnimationActive={true}

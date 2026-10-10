@@ -6,10 +6,10 @@ import { useAuth } from "../../contexts/AuthContext";
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 const getIcon = (type) => {
-  if (type === "Behavioral Interview") return { icon: Briefcase, bg: "bg-blue-500/10 text-blue-400", color: "text-blue-400" };
-  if (type === "Role-specific Interview") return { icon: Target, bg: "bg-emerald-500/10 text-emerald-400", color: "text-emerald-400" };
-  if (type === "Company-specific") return { icon: Building, bg: "bg-orange-500/10 text-orange-400", color: "text-orange-400" };
-  return { icon: Code, bg: "bg-violet-500/10 text-violet-400", color: "text-violet-400" }; // Default Technical
+  if (type === "Behavioral Interview") return { icon: Briefcase, bg: "bg-[#ffd159]/10 text-[#ffd159]", color: "text-[#ffd159]" };
+  if (type === "Role-specific Interview") return { icon: Target, bg: "bg-[#e29aff]/10 text-[#e29aff]", color: "text-[#e29aff]" };
+  if (type === "Company-specific") return { icon: Building, bg: "bg-[#ffb48a]/10 text-[#ffb48a]", color: "text-[#ffb48a]" };
+  return { icon: Code, bg: "bg-[#4ee4cb]/10 text-[#4ee4cb]", color: "text-[#4ee4cb]" }; // Default Technical
 };
 
 export default function InterviewHistory({ refreshKey, onRowClick, onHistoryFetched }) {
@@ -40,11 +40,11 @@ export default function InterviewHistory({ refreshKey, onRowClick, onHistoryFetc
   const displayedHistory = isExpanded ? history : history.slice(0, 3);
 
   return (
-    <div className="flex flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-5 backdrop-blur-md">
-      <h3 className="mb-4 text-base font-semibold text-slate-500 dark:text-gray-400">Your Interview History</h3>
+    <div className="flex flex-col rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-6 shadow-xl shadow-black/25">
+      <h3 className="mb-4 text-xs font-semibold tracking-wider text-slate-400 uppercase">Your Interview History</h3>
       
       {/* Table Header */}
-      <div className="mb-3 grid grid-cols-12 gap-4 border-b border-slate-200 dark:border-white/5 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-gray-500">
+      <div className="mb-3 grid grid-cols-12 gap-4 border-b border-white/[0.06] pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
         <div className="col-span-7">Role</div>
         <div className="col-span-3">Date</div>
         <div className="col-span-2">Score</div>
@@ -52,9 +52,9 @@ export default function InterviewHistory({ refreshKey, onRowClick, onHistoryFetc
 
       {/* Table Rows */}
       {loading ? (
-        <div className="flex justify-center p-4"><Loader2 className="h-6 w-6 animate-spin text-violet-500" /></div>
+        <div className="flex justify-center p-4"><Loader2 className="h-6 w-6 animate-spin text-[#ffd159]" /></div>
       ) : displayedHistory.length === 0 ? (
-        <div className="text-center p-4 text-slate-500 dark:text-gray-400">No interviews taken yet.</div>
+        <div className="text-center p-4 text-slate-400">No interviews taken yet.</div>
       ) : (
         <div className="flex flex-col gap-2">
           {displayedHistory.map((row) => {
@@ -74,29 +74,29 @@ export default function InterviewHistory({ refreshKey, onRowClick, onHistoryFetc
                     }
                   }
                 }}
-                className="group grid grid-cols-12 items-center gap-4 cursor-pointer transition-colors hover:bg-slate-50 dark:hover:bg-white/[0.02] rounded-xl -mx-2 px-2 py-1.5"
+                className="group grid grid-cols-12 items-center gap-4 cursor-pointer transition-colors hover:bg-[#242730] rounded-xl -mx-2 px-3 py-2"
               >
                 
                 {/* Role & Icon */}
                 <div className="col-span-7 flex items-center gap-3">
-                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${bg}`}>
+                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${bg}`}>
                     <IconComp className="h-5 w-5" />
                   </div>
-                  <div>
-                    <h4 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-violet-300 transition-colors truncate">{row.target_role}</h4>
-                    <p className="text-sm text-slate-500 dark:text-gray-400 truncate">{row.interview_type}</p>
+                  <div className="min-w-0">
+                    <h4 className="text-base font-bold text-white group-hover:text-[#ffd159] transition-colors truncate">{row.target_role}</h4>
+                    <p className="text-sm text-slate-400 truncate">{row.interview_type}</p>
                   </div>
                 </div>
 
                 {/* Date */}
                 <div className="col-span-3">
-                  <p className="text-sm text-slate-900 dark:text-white">{dateObj.toLocaleDateString()}</p>
-                  <p className="text-xs text-slate-400 dark:text-gray-500">{dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>
+                  <p className="text-sm text-slate-200">{dateObj.toLocaleDateString()}</p>
+                  <p className="text-xs text-slate-400">{dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>
                 </div>
 
                 {/* Score */}
                 <div className="col-span-2">
-                  <span className={`text-base font-bold ${row.overall_score >= 80 ? "text-emerald-400" : row.overall_score >= 60 ? "text-yellow-400" : "text-orange-400"}`}>
+                  <span className={`text-base font-bold ${row.overall_score >= 80 ? "text-[#4ee4cb]" : row.overall_score >= 60 ? "text-[#ffd159]" : "text-[#ff94aa]"}`}>
                     {row.overall_score !== null ? `${row.overall_score}%` : "In Progress"}
                   </span>
                 </div>
@@ -107,10 +107,10 @@ export default function InterviewHistory({ refreshKey, onRowClick, onHistoryFetc
       )}
 
       {/* Footer */}
-      <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/5">
+      <div className="mt-4 pt-3 border-t border-white/[0.06]">
         <button 
           onClick={() => setIsExpanded(!isExpanded)}
-          className="flex items-center gap-2 text-sm font-medium text-violet-400 transition-colors hover:text-violet-300"
+          className="flex items-center gap-2 text-sm font-medium text-[#4ee4cb] transition-colors hover:text-[#4ee4cb]/80"
         >
           {isExpanded ? (
             <>Show Less <ChevronUp className="h-4 w-4" /></>

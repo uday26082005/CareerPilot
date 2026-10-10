@@ -125,6 +125,7 @@ export default function Dashboard() {
           iconColor="text-violet-400"
           chartData={[]}
           chartColor="#8b5cf6"
+          themeVariant="mint"
         />
         <StatCard 
           title="Skill Match"
@@ -136,6 +137,7 @@ export default function Dashboard() {
           iconColor="text-blue-400"
           chartData={[]}
           chartColor="#3b82f6"
+          themeVariant="yellow"
         />
         <StatCard 
           title="Target Role"
@@ -147,6 +149,7 @@ export default function Dashboard() {
           iconColor="text-fuchsia-400"
           chartData={[]}
           chartColor="#d946ef"
+          themeVariant="lavender"
         />
       </div>
 
@@ -158,10 +161,11 @@ export default function Dashboard() {
           subtitle={`${roadmap?.completed_tasks}/${roadmap?.completed_tasks + roadmap?.pending_tasks} Tasks Completed`}
           subtitleColor="text-emerald-400"
           icon={CheckCircle}
-          iconBgColor="bg-emerald-500/10"
+          iconBgColor="bg-emerald-500/15 border border-emerald-500/30"
           iconColor="text-emerald-400"
           chartData={[]}
           chartColor="#10b981"
+          themeVariant="pink"
         />
         <StatCard 
           title="Interviews"
@@ -169,21 +173,23 @@ export default function Dashboard() {
           subtitle={`Avg Score: ${interviews?.average_score || 0} | Best: ${interviews?.best_score || 0}`}
           subtitleColor="text-amber-400"
           icon={FileText}
-          iconBgColor="bg-amber-500/10"
+          iconBgColor="bg-amber-500/15 border border-amber-500/30"
           iconColor="text-amber-400"
           chartData={[]}
           chartColor="#f59e0b"
+          themeVariant="peach"
         />
         <StatCard 
           title="Practice Arena"
           value={practice?.sessions || 0}
-          subtitle={`Accuracy: ${practice?.accuracy || 0}% | Best: ${practice?.best_category}`}
+          subtitle={`Accuracy: ${practice?.accuracy || 0}% · Best: ${practice?.best_category || "General"}`}
           subtitleColor="text-cyan-400"
           icon={Activity}
-          iconBgColor="bg-cyan-500/10"
+          iconBgColor="bg-cyan-500/15 border border-cyan-500/30"
           iconColor="text-cyan-400"
           chartData={[]}
           chartColor="#06b6d4"
+          themeVariant="sky"
         />
       </div>
 
@@ -203,7 +209,7 @@ export default function Dashboard() {
           {dynamicRecommendations.length > 0 ? (
             <AIRecommendations recommendations={dynamicRecommendations} />
           ) : (
-            <div className="rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 h-full flex items-center justify-center text-slate-500">
+            <div className="rounded-2xl border border-white/[0.08] bg-[#1c1e24] p-6 h-full flex items-center justify-center text-slate-400 shadow-xl shadow-black/25">
               No AI recommendations available.
             </div>
           )}

@@ -99,7 +99,7 @@ export default function AuthLayout({ backLink, children, aboveCard, belowCard })
             <img src="/logo.jpg" alt="CareerPilot Logo" className="h-9 w-9 rounded-xl mix-blend-lighten" />
           </motion.div>
           <h1 className="text-2xl font-extrabold tracking-tight">
-            CareerPilot<span className="text-violet-400"> AI</span>
+            CareerPilot<span className="text-[#ffd159]"> AI</span>
           </h1>
         </Link>
 

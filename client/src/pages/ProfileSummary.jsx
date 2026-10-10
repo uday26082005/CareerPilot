@@ -1,7 +1,16 @@
-import { User, Mail, Briefcase, Globe, X } from "lucide-react";
+import { User, Mail, Briefcase, Globe, X, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
+
+const SKILL_COLORS = [
+  "bg-[#4ee4cb]/10 text-[#4ee4cb] border-[#4ee4cb]/20",
+  "bg-[#ffd159]/10 text-[#ffd159] border-[#ffd159]/20",
+  "bg-[#e29aff]/10 text-[#e29aff] border-[#e29aff]/20",
+  "bg-[#ffb48a]/10 text-[#ffb48a] border-[#ffb48a]/20",
+  "bg-[#72c5ff]/10 text-[#72c5ff] border-[#72c5ff]/20",
+  "bg-[#ff94aa]/10 text-[#ff94aa] border-[#ff94aa]/20",
+];
 
 export default function ProfileSummary() {
   const { user } = useAuth();
@@ -29,7 +38,12 @@ export default function ProfileSummary() {
   }, [user]);
 
   if (loading) {
-    return <div className="flex h-[60vh] items-center justify-center text-slate-500">Loading your Profile...</div>;
+    return (
+      <div className="flex h-[60vh] flex-col items-center justify-center gap-3">
+        <Loader2 className="h-8 w-8 animate-spin text-[#ffd159]" />
+        <p className="text-sm text-slate-400">Loading your profile...</p>
+      </div>
+    );
   }
 
   const profileData = {
@@ -57,10 +71,10 @@ export default function ProfileSummary() {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
             Profile Summary
           </h1>
-          <p className="mt-1 text-base text-slate-500 dark:text-gray-400">
+          <p className="mt-1 text-sm text-slate-400">
             A comprehensive overview of your professional profile and career preferences.
           </p>
         </div>
@@ -70,50 +84,50 @@ export default function ProfileSummary() {
         {/* Left Column: Basic Info & Bio */}
         <div className="md:col-span-2 space-y-6">
           {/* Main Info Card */}
-          <div className="rounded-xl border border-slate-200 dark:border-white/5 bg-white dark:bg-[#0a0c1a] p-6 shadow-sm">
+          <div className="rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-6 sm:p-8 shadow-xl shadow-black/25">
             <div className="flex items-center gap-5 mb-6">
               {profileData.avatarUrl ? (
                 <img 
                   src={profileData.avatarUrl} 
                   alt="Avatar" 
                   onClick={() => setIsPreviewOpen(true)}
-                  className="h-20 w-20 rounded-full object-cover border border-violet-500/20 shadow-lg shadow-violet-500/10 cursor-pointer hover:border-violet-500/80 transition-colors" 
+                  className="h-20 w-20 rounded-full object-cover border border-white/10 ring-4 ring-[#242730] shadow-lg cursor-pointer hover:border-[#ffd159]/80 transition-colors" 
                 />
               ) : (
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-violet-700 text-3xl font-bold text-white shadow-lg shadow-violet-500/20 uppercase">
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#ffd159] to-[#fed656] text-3xl font-bold text-slate-950 ring-4 ring-[#242730] shadow-lg uppercase">
                   {profileData.fullName.charAt(0)}
                 </div>
               )}
               <div>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white capitalize">{profileData.fullName}</h2>
-                <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-gray-400 mt-1">
-                  <Mail className="h-4 w-4" /> {profileData.email}
+                <h2 className="text-2xl font-bold text-white capitalize">{profileData.fullName}</h2>
+                <div className="flex items-center gap-2 text-sm text-slate-400 mt-1">
+                  <Mail className="h-4 w-4 text-slate-500" /> {profileData.email}
                 </div>
               </div>
             </div>
 
-            <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-white/5">
+            <div className="space-y-6 pt-6 border-t border-white/[0.08]">
               <div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-2">About Me</h3>
-                <p className="text-sm leading-relaxed text-slate-500 dark:text-gray-400">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">About Me</h3>
+                <p className="text-sm leading-relaxed text-slate-300">
                   {profileData.bio}
                 </p>
               </div>
               
               <div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-2">Key Skills</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Key Skills</h3>
                 <div className="flex flex-wrap gap-2">
                   {profileData.skills.length > 0 ? (
                     profileData.skills.map((skill, idx) => (
                       <span
                         key={idx}
-                        className="rounded-md bg-violet-50 dark:bg-violet-500/10 px-2.5 py-1 text-xs font-medium text-violet-600 dark:text-violet-300 border border-violet-200 dark:border-violet-500/20"
+                        className={`rounded-xl px-3 py-1.5 text-xs font-semibold border ${SKILL_COLORS[idx % SKILL_COLORS.length]}`}
                       >
                         {skill}
                       </span>
                     ))
                   ) : (
-                    <p className="text-sm text-slate-500 dark:text-gray-400">Upload a resume or add skills in Settings to see your key skills here.</p>
+                    <p className="text-sm text-slate-500">Upload a resume or add skills in Settings to see your key skills here.</p>
                   )}
                 </div>
               </div>
@@ -121,35 +135,38 @@ export default function ProfileSummary() {
           </div>
 
           {/* Social Links Card */}
-          <div className="rounded-xl border border-slate-200 dark:border-white/5 bg-white dark:bg-[#0a0c1a] p-6 shadow-sm">
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-              <User className="h-5 w-5 text-violet-400" /> Connected Accounts
-            </h3>
+          <div className="rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-6 sm:p-8 shadow-xl shadow-black/25">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#72c5ff]/10 text-[#72c5ff] border border-[#72c5ff]/20">
+                <User className="h-5 w-5" />
+              </div>
+              <h3 className="text-lg font-bold text-white">Connected Accounts</h3>
+            </div>
             <div className="grid sm:grid-cols-2 gap-4">
               {profileData.githubUrl && (
-                <div className="space-y-1">
-                  <span className="text-xs font-medium text-slate-500 dark:text-gray-400">GitHub</span>
-                  <p className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                <div className="rounded-2xl border border-white/[0.06] bg-[#242730] p-4 space-y-1">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">GitHub</span>
+                  <p className="text-sm font-semibold text-white flex items-center gap-2">
                     <Globe className="h-4 w-4 text-slate-400" /> 
-                    <a href={profileData.githubUrl} target="_blank" rel="noreferrer" className="text-violet-400 hover:underline truncate">
+                    <a href={profileData.githubUrl} target="_blank" rel="noreferrer" className="text-[#ffd159] hover:underline truncate">
                       {profileData.githubUrl.replace('https://github.com/', '')}
                     </a>
                   </p>
                 </div>
               )}
               {profileData.linkedinUrl && (
-                <div className="space-y-1">
-                  <span className="text-xs font-medium text-slate-500 dark:text-gray-400">LinkedIn</span>
-                  <p className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                <div className="rounded-2xl border border-white/[0.06] bg-[#242730] p-4 space-y-1">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">LinkedIn</span>
+                  <p className="text-sm font-semibold text-white flex items-center gap-2">
                     <Globe className="h-4 w-4 text-slate-400" /> 
-                    <a href={profileData.linkedinUrl} target="_blank" rel="noreferrer" className="text-violet-400 hover:underline truncate">
+                    <a href={profileData.linkedinUrl} target="_blank" rel="noreferrer" className="text-[#ffd159] hover:underline truncate">
                       {profileData.linkedinUrl.replace('https://linkedin.com/in/', '')}
                     </a>
                   </p>
                 </div>
               )}
               {!profileData.githubUrl && !profileData.linkedinUrl && (
-                <p className="text-sm text-slate-500 dark:text-gray-400">No accounts connected yet.</p>
+                <p className="text-sm text-slate-500">No accounts connected yet.</p>
               )}
             </div>
           </div>
@@ -157,25 +174,28 @@ export default function ProfileSummary() {
 
         {/* Right Column: Target Role & Preferences */}
         <div className="space-y-6">
-          <div className="rounded-xl border border-slate-200 dark:border-white/5 bg-white dark:bg-[#0a0c1a] p-6 shadow-sm">
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-              <Briefcase className="h-5 w-5 text-violet-400" /> Career Goals
-            </h3>
+          <div className="rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-6 sm:p-8 shadow-xl shadow-black/25">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#ffd159]/10 text-[#ffd159] border border-[#ffd159]/20">
+                <Briefcase className="h-5 w-5" />
+              </div>
+              <h3 className="text-lg font-bold text-white">Career Goals</h3>
+            </div>
             
-            <div className="space-y-5">
-              <div className="space-y-1">
-                <span className="text-xs font-medium text-slate-500 dark:text-gray-400">Target Role</span>
-                <p className="text-sm font-semibold text-slate-900 dark:text-white capitalize">{profileData.targetRole}</p>
+            <div className="space-y-4">
+              <div className="rounded-2xl border border-white/[0.06] bg-[#242730] p-4 space-y-1">
+                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Target Role</span>
+                <p className="text-sm font-bold text-white capitalize">{profileData.targetRole}</p>
               </div>
               
-              <div className="space-y-1">
-                <span className="text-xs font-medium text-slate-500 dark:text-gray-400">Current Role</span>
-                <p className="text-sm font-semibold text-slate-900 dark:text-white capitalize">{profileData.currentRole}</p>
+              <div className="rounded-2xl border border-white/[0.06] bg-[#242730] p-4 space-y-1">
+                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Current Role</span>
+                <p className="text-sm font-bold text-white capitalize">{profileData.currentRole}</p>
               </div>
 
-              <div className="space-y-1">
-                <span className="text-xs font-medium text-slate-500 dark:text-gray-400">Experience Level</span>
-                <p className="text-sm font-semibold text-slate-900 dark:text-white">{profileData.experience}</p>
+              <div className="rounded-2xl border border-white/[0.06] bg-[#242730] p-4 space-y-1">
+                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Experience Level</span>
+                <p className="text-sm font-bold text-white">{profileData.experience}</p>
               </div>
             </div>
           </div>
@@ -198,7 +218,7 @@ export default function ProfileSummary() {
             <img 
               src={profileData.avatarUrl?.replace(/=s\d+-c/i, '=s1000-c')} 
               alt="Avatar Full Preview" 
-              className="max-h-[70vh] max-w-full rounded-2xl object-contain border border-white/10 shadow-2xl"
+              className="max-h-[70vh] max-w-full rounded-3xl object-contain border border-white/10 shadow-2xl"
               onClick={(e) => e.stopPropagation()} 
             />
           </div>

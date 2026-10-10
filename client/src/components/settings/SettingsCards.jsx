@@ -159,14 +159,14 @@ export function ProfileSection() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-12 rounded-xl border border-slate-200 dark:border-white/5 bg-white dark:bg-[#0a0c1a]">
-        <Loader2 className="h-6 w-6 text-violet-500 animate-spin" />
+      <div className="flex items-center justify-center py-12 rounded-3xl border border-white/[0.08] bg-[#1c1e24] shadow-xl shadow-black/25">
+        <Loader2 className="h-6 w-6 text-[#ffd159] animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col rounded-xl border border-slate-200 dark:border-white/5 bg-white dark:bg-[#0a0c1a] p-6 shadow-sm">
+    <div className="flex flex-col rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-6 sm:p-8 shadow-xl shadow-black/25">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="relative group">
@@ -175,10 +175,10 @@ export function ProfileSection() {
                 src={avatarUrl} 
                 alt="Avatar" 
                 onClick={() => !isEditing && setIsPreviewOpen(true)}
-                className={`h-16 w-16 rounded-full object-cover border border-violet-500/30 ${!isEditing ? 'cursor-pointer hover:border-violet-500/80 transition-colors' : ''}`} 
+                className={`h-16 w-16 rounded-full object-cover border border-white/10 ring-4 ring-[#242730] ${!isEditing ? 'cursor-pointer hover:border-[#ffd159]/80 transition-colors' : ''}`} 
               />
             ) : (
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-violet-700 text-2xl font-bold text-white uppercase">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#ffd159] to-[#fed656] text-2xl font-bold text-slate-950 uppercase ring-4 ring-[#242730]">
                 {(name || "U").charAt(0).toUpperCase()}
               </div>
             )}
@@ -190,41 +190,41 @@ export function ProfileSection() {
             )}
           </div>
           <div>
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white capitalize">{name || "Set up your profile"}</h2>
-            <p className="text-sm text-slate-500 dark:text-gray-400">{email}</p>
+            <h2 className="text-lg font-bold text-white capitalize">{name || "Set up your profile"}</h2>
+            <p className="text-sm text-slate-400">{email}</p>
           </div>
         </div>
         <button 
           onClick={() => { if (isEditing) { setIsEditing(false); } else { setIsEditing(true); } }}
-          className="flex items-center gap-2 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 px-4 py-2 text-xs font-bold text-slate-900 dark:text-white transition-colors hover:bg-slate-200 dark:hover:bg-white/10"
+          className="flex items-center gap-2 rounded-xl border border-white/[0.08] bg-[#242730] px-4 py-2 text-xs font-bold text-slate-200 transition-colors hover:bg-[#2b2f3a] hover:text-white"
         >
           <Pencil className="h-3 w-3" /> {isEditing ? "Cancel" : "Edit Profile"}
         </button>
       </div>
 
       {isEditing && (
-        <div className="mt-6 border-t border-slate-200 dark:border-white/5 pt-6 grid md:grid-cols-2 gap-4">
+        <div className="mt-6 border-t border-white/[0.08] pt-6 grid md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-bold text-slate-900 dark:text-white mb-2">Full Name</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Full Name</label>
             <input 
               type="text" 
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
+              className="w-full rounded-xl border border-white/[0.08] bg-[#242730] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-[#ffd159] focus:outline-none focus:ring-1 focus:ring-[#ffd159]"
             />
           </div>
           <div>
-            <label className="block text-xs font-bold text-slate-900 dark:text-white mb-2">Email Address</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Email Address</label>
             <input 
               type="email" 
               value={email}
               disabled
-              className="w-full rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-4 py-2.5 text-sm text-slate-900 dark:text-white opacity-60 cursor-not-allowed"
+              className="w-full rounded-xl border border-white/[0.04] bg-[#242730]/60 px-4 py-2.5 text-sm text-slate-500 opacity-60 cursor-not-allowed"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-900 dark:text-white mb-2">Experience Level</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Experience Level</label>
             <ThemedSelect
               value={experienceLevel}
               onChange={setExperienceLevel}
@@ -239,24 +239,24 @@ export function ProfileSection() {
           </div>
 
           <div className="md:col-span-2">
-            <label className="block text-xs font-bold text-slate-900 dark:text-white mb-2">Skills</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Skills</label>
             <input 
               type="text" 
               value={skills}
               onChange={(e) => setSkills(e.target.value)}
               placeholder="e.g. React, Node.js, UI/UX Design"
-              className="w-full rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
+              className="w-full rounded-xl border border-white/[0.08] bg-[#242730] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-[#ffd159] focus:outline-none focus:ring-1 focus:ring-[#ffd159]"
             />
           </div>
           
           <div className="md:col-span-2">
-            <label className="block text-xs font-bold text-slate-900 dark:text-white mb-2">Bio</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Bio</label>
             <textarea 
               rows={3}
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               placeholder="A short bio about yourself..."
-              className="w-full rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 resize-none"
+              className="w-full rounded-xl border border-white/[0.08] bg-[#242730] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-[#ffd159] focus:outline-none focus:ring-1 focus:ring-[#ffd159] resize-none"
             />
           </div>
 
@@ -264,9 +264,9 @@ export function ProfileSection() {
             <button 
               onClick={handleSave}
               disabled={isSaving}
-              className="rounded-lg bg-violet-600 px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-violet-700 disabled:opacity-50 flex items-center gap-2"
+              className="rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] px-6 py-2.5 text-sm font-bold text-slate-950 transition-all hover:brightness-105 active:scale-95 shadow-md shadow-amber-500/10 disabled:opacity-50 flex items-center gap-2"
             >
-              {isSaving && <Loader2 className="h-4 w-4 animate-spin" />}
+              {isSaving && <Loader2 className="h-4 w-4 animate-spin text-slate-950" />}
               {isSaving ? "Saving..." : "Save Changes"}
             </button>
           </div>
@@ -280,7 +280,7 @@ export function ProfileSection() {
         >
           <div className="relative max-w-xl w-full flex flex-col items-center">
             <button 
-              className="absolute -top-12 right-0 p-2 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full transition-colors animate-pulse"
+              className="absolute -top-12 right-0 p-2 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full transition-colors"
               onClick={() => setIsPreviewOpen(false)}
             >
               <X className="h-6 w-6" />
@@ -301,24 +301,25 @@ export function ProfileSection() {
 
 
 
-
 export function SecuritySettings() {
   return (
-    <div className="flex flex-col rounded-xl border border-slate-200 dark:border-white/5 bg-white dark:bg-[#0a0c1a] p-6 shadow-sm">
+    <div className="flex flex-col rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-6 sm:p-8 shadow-xl shadow-black/25">
       <div className="flex items-center gap-3 mb-6">
-        <Shield className="h-6 w-6 text-violet-400" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#72c5ff]/10 text-[#72c5ff] border border-[#72c5ff]/20">
+          <Shield className="h-5 w-5" />
+        </div>
         <div>
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white">Privacy & Security</h3>
-          <p className="text-sm text-slate-500 dark:text-gray-400">Keep your account secure</p>
+          <h3 className="text-lg font-bold text-white">Privacy & Security</h3>
+          <p className="text-sm text-slate-400">Keep your account secure</p>
         </div>
       </div>
       <div className="flex-1 flex items-end">
-        <div className="flex items-center justify-between w-full border-t border-slate-200 dark:border-white/5 pt-4">
+        <div className="flex items-center justify-between w-full border-t border-white/[0.08] pt-6">
           <div>
-            <h4 className="text-base font-bold text-slate-900 dark:text-white">Change Password</h4>
-            <p className="text-sm text-slate-500 dark:text-gray-400">Update your password regularly</p>
+            <h4 className="text-base font-bold text-white">Change Password</h4>
+            <p className="text-sm text-slate-400">Update your password regularly</p>
           </div>
-          <Link to="/reset-password" className="rounded-lg bg-violet-800 px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-violet-700">
+          <Link to="/reset-password" className="rounded-xl border border-white/[0.08] bg-[#242730] px-6 py-2.5 text-sm font-bold text-slate-200 transition-colors hover:bg-[#2b2f3a] hover:text-white">
             Change
           </Link>
         </div>
@@ -384,20 +385,22 @@ export function ApplicationDefaults() {
   };
 
   return (
-    <div className="flex flex-col rounded-xl border border-slate-200 dark:border-white/5 bg-white dark:bg-[#0a0c1a] p-6 shadow-sm">
+    <div className="flex flex-col rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-6 sm:p-8 shadow-xl shadow-black/25">
       <div className="flex items-center gap-3 mb-6">
-        <Settings className="h-6 w-6 text-violet-400" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#ffd159]/10 text-[#ffd159] border border-[#ffd159]/20">
+          <Settings className="h-5 w-5" />
+        </div>
         <div>
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white">Application Defaults</h3>
-          <p className="text-sm text-slate-500 dark:text-gray-400">Configure default settings for your practice and AI tools</p>
+          <h3 className="text-lg font-bold text-white">Application Defaults</h3>
+          <p className="text-sm text-slate-400">Configure default settings for your practice and AI tools</p>
         </div>
       </div>
-      <div className="space-y-6 flex-1 flex flex-col justify-end border-t border-slate-200 dark:border-white/5 pt-4">
+      <div className="space-y-6 flex-1 flex flex-col justify-end border-t border-white/[0.08] pt-6">
         
-        <div className="flex items-center justify-between w-full">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
           <div>
-            <h4 className="text-base font-bold text-slate-900 dark:text-white">Default Difficulty</h4>
-            <p className="text-sm text-slate-500 dark:text-gray-400">Default difficulty for practice interviews</p>
+            <h4 className="text-base font-bold text-white">Default Difficulty</h4>
+            <p className="text-sm text-slate-400">Default difficulty for practice interviews</p>
           </div>
           <ThemedSelect 
             value={difficulty}
@@ -421,12 +424,12 @@ export function ApplicationDefaults() {
           />
         </div>
 
-        <div className="flex items-center justify-between w-full">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
           <div>
-            <h4 className="text-base font-bold text-slate-900 dark:text-white">Target Job Role</h4>
-            <p className="text-sm text-slate-500 dark:text-gray-400">Default role context for AI tools</p>
+            <h4 className="text-base font-bold text-white">Target Job Role</h4>
+            <p className="text-sm text-slate-400">Default role context for AI tools</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <ThemedSelect 
               value={targetRole} 
               onChange={setTargetRole}
@@ -438,7 +441,7 @@ export function ApplicationDefaults() {
             <button 
               onClick={() => handleSave('targetRole', targetRole)}
               disabled={isSaving || !targetRole}
-              className="rounded-xl bg-violet-600 px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-violet-700 disabled:opacity-50 cursor-pointer shadow-md shadow-violet-600/20"
+              className="rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] px-6 py-2.5 text-sm font-bold text-slate-950 transition-all hover:brightness-105 active:scale-95 shadow-md shadow-amber-500/10 disabled:opacity-50 cursor-pointer"
             >
               Save
             </button>
@@ -474,25 +477,27 @@ export function AccountManagement() {
 
   return (
     <>
-      <div className="flex flex-col rounded-xl border border-red-500/20 bg-white dark:bg-[#0a0c1a] p-6 shadow-sm">
+      <div className="flex flex-col rounded-3xl border border-red-500/20 bg-[#1c1e24] p-6 sm:p-8 shadow-xl shadow-black/25">
         <div className="flex items-center gap-3 mb-6">
-          <AlertTriangle className="h-6 w-6 text-red-500" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10 text-red-400 border border-red-500/20">
+            <AlertTriangle className="h-5 w-5" />
+          </div>
           <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">Account Management</h3>
-            <p className="text-sm text-slate-500 dark:text-gray-400">Manage your data and account status</p>
+            <h3 className="text-lg font-bold text-white">Account Management</h3>
+            <p className="text-sm text-slate-400">Manage your data and account status</p>
           </div>
         </div>
-        <div className="space-y-6 flex-1 flex flex-col justify-end border-t border-slate-200 dark:border-white/5 pt-4">
+        <div className="space-y-6 flex-1 flex flex-col justify-end border-t border-white/[0.08] pt-6">
           
-          <div className="flex items-center justify-between w-full">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
             <div>
-              <h4 className="text-base font-bold text-red-600 dark:text-red-400">Delete Account</h4>
-              <p className="text-sm text-slate-500 dark:text-gray-400">Permanently delete your account and all data</p>
+              <h4 className="text-base font-bold text-red-400">Delete Account</h4>
+              <p className="text-sm text-slate-400">Permanently delete your account and all data</p>
             </div>
             <button 
               onClick={() => setShowDeleteModal(true)}
               disabled={isDeleting}
-              className="flex items-center gap-2 rounded-lg bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 px-6 py-2.5 text-sm font-bold transition-colors hover:bg-red-500 hover:text-white dark:hover:bg-red-500 dark:hover:text-white disabled:opacity-50"
+              className="flex items-center justify-center gap-2 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 px-6 py-2.5 text-sm font-bold transition-all hover:bg-red-500 hover:text-white active:scale-95 disabled:opacity-50"
             >
               {isDeleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
               {isDeleting ? "Deleting..." : "Delete"}
@@ -502,27 +507,29 @@ export function AccountManagement() {
       </div>
 
       {showDeleteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-white dark:bg-[#0f1123] rounded-2xl p-6 max-w-md w-full border border-slate-200 dark:border-white/10 shadow-2xl">
-            <div className="flex items-center gap-3 mb-4 text-red-500">
-              <AlertTriangle className="h-8 w-8" />
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white">Delete Account</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
+          <div className="bg-[#1c1e24] rounded-3xl p-6 sm:p-8 max-w-md w-full border border-white/10 shadow-2xl">
+            <div className="flex items-center gap-3 mb-4 text-red-400">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10 border border-red-500/20">
+                <AlertTriangle className="h-5 w-5" />
+              </div>
+              <h3 className="text-xl font-bold text-white">Delete Account</h3>
             </div>
-            <p className="text-slate-600 dark:text-slate-300 mb-6">
+            <p className="text-slate-300 text-sm mb-6 leading-relaxed">
               Are you ABSOLUTELY sure you want to delete your account? This action cannot be undone and will permanently delete all your data, including resumes and practice history.
             </p>
             <div className="flex items-center justify-end gap-3">
               <button 
                 onClick={() => setShowDeleteModal(false)}
                 disabled={isDeleting}
-                className="px-5 py-2.5 rounded-lg text-sm font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors disabled:opacity-50"
+                className="px-5 py-2.5 rounded-xl text-sm font-bold text-slate-300 bg-[#242730] hover:bg-[#2b2f3a] hover:text-white border border-white/[0.08] transition-colors disabled:opacity-50"
               >
                 Cancel
               </button>
               <button 
                 onClick={confirmDelete}
                 disabled={isDeleting}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-red-500 text-white text-sm font-bold hover:bg-red-600 transition-colors disabled:opacity-50"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-500 text-white text-sm font-bold hover:bg-red-600 active:scale-95 transition-all disabled:opacity-50"
               >
                 {isDeleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
                 Yes, Delete My Account

@@ -61,20 +61,20 @@ export default function AppLayout({ children }) {
   };
 
   return (
-    <div className="relative flex h-screen w-full bg-slate-50 dark:bg-[#060816] text-slate-900 dark:text-white overflow-hidden print:h-auto print:overflow-visible">
+    <div className="relative flex h-screen w-full bg-slate-50 dark:bg-[#121316] text-slate-900 dark:text-white overflow-hidden print:h-auto print:overflow-visible">
       {/* Ambient Background Glows for Glassmorphism effect */}
-      <div className="absolute top-[-10%] left-[-5%] w-96 h-96 bg-violet-600/15 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-blue-600/10 blur-[120px] pointer-events-none" />
+      <div className="absolute top-[-10%] left-[-5%] w-96 h-96 bg-violet-600/10 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-blue-600/5 blur-[120px] pointer-events-none" />
 
       {/* Sidebar */}
-      <aside className={`relative z-10 flex h-full flex-col border-r border-slate-200 dark:border-white/10 bg-white/80 dark:bg-white/[0.03] backdrop-blur-2xl shadow-xl dark:shadow-[4px_0_24px_rgba(0,0,0,0.2)] transition-all duration-300 ease-in-out overflow-hidden print:hidden ${isSidebarOpen ? 'w-64' : 'w-20'}`}>
+      <aside className={`relative z-10 flex h-full flex-col border-r border-slate-200 dark:border-white/[0.06] bg-white/80 dark:bg-[#16171c] backdrop-blur-2xl shadow-xl dark:shadow-none transition-all duration-300 ease-in-out overflow-hidden print:hidden ${isSidebarOpen ? 'w-64' : 'w-20'}`}>
         <div className="flex h-full w-64 flex-col">
           {/* Logo */}
           <div className="flex h-20 items-center px-5">
             <Link to="/" className="group flex items-center gap-3 transition-transform duration-300 hover:scale-105" title={!isSidebarOpen ? "CareerPilot AI" : ""}>
               <img src="/logo.jpg" alt="CareerPilot Logo" className="h-9 w-9 shrink-0 rounded-xl mix-blend-lighten transition-transform duration-300 group-hover:scale-105" />
               <h1 className={`text-xl font-extrabold tracking-tight text-slate-900 dark:text-white transition-opacity duration-300 group-hover:text-violet-100 ${isSidebarOpen ? 'opacity-100' : 'opacity-0'}`}>
-                CareerPilot<span className="text-violet-400"> AI</span>
+                CareerPilot<span className="text-[#ffd159]"> AI</span>
               </h1>
             </Link>
           </div>
@@ -89,12 +89,12 @@ export default function AppLayout({ children }) {
                   to={link.path}
                   className={`group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 hover:translate-x-1 ${
                     isActive 
-                      ? "bg-violet-100 text-violet-600 dark:bg-violet-600/20 dark:text-violet-300 shadow-none dark:shadow-[0_0_15px_rgba(139,92,246,0.15)] border border-violet-200 dark:border-transparent" 
-                      : "text-slate-500 dark:text-gray-400 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white"
+                      ? "bg-violet-100 text-violet-600 dark:bg-[#22252e] dark:text-white shadow-none dark:shadow-sm border border-violet-200 dark:border-white/10" 
+                      : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/[0.04] hover:text-slate-900 dark:hover:text-white"
                   }`}
                   title={!isSidebarOpen ? link.name : ""}
                 >
-                  <link.icon className={`h-5 w-5 shrink-0 transition-transform duration-300 group-hover:scale-110 ${isActive ? "text-violet-500 dark:text-violet-400" : ""}`} />
+                  <link.icon className={`h-5 w-5 shrink-0 transition-transform duration-300 group-hover:scale-110 ${isActive ? "text-violet-500 dark:text-white" : ""}`} />
                   <span className={`whitespace-nowrap transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100' : 'opacity-0'}`}>
                     {link.name}
                   </span>
@@ -104,10 +104,10 @@ export default function AppLayout({ children }) {
           </nav>
 
           {/* Logout */}
-          <div className="p-4 border-t border-slate-200 dark:border-white/5">
+          <div className="p-4 border-t border-slate-200 dark:border-white/[0.06]">
             <Link
               to="/login"
-              className={`group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-500 dark:text-gray-400 transition-all duration-300 hover:translate-x-1 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-500 dark:hover:text-red-400`}
+              className={`group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-500 dark:text-slate-400 transition-all duration-300 hover:translate-x-1 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-500 dark:hover:text-red-400`}
               title={!isSidebarOpen ? "Logout" : ""}
             >
               <LogOut className="h-5 w-5 shrink-0 text-red-500 dark:text-red-400 transition-transform duration-300 group-hover:scale-110" />
@@ -123,13 +123,13 @@ export default function AppLayout({ children }) {
       <div className="relative z-10 flex flex-1 flex-col overflow-hidden print:overflow-visible">
         
         {/* Top Header */}
-        <header className="relative z-50 flex h-20 shrink-0 items-center justify-between border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-[#060816]/80 px-8 backdrop-blur-md print:hidden">
+        <header className="relative z-50 flex h-20 shrink-0 items-center justify-between border-b border-slate-200 dark:border-white/[0.06] bg-slate-50/90 dark:bg-[#121316]/90 px-8 backdrop-blur-md print:hidden">
           
           <div className="flex items-center gap-6">
             {/* Sidebar Toggle */}
             <button 
               onClick={() => setIsSidebarOpen(!isSidebarOpen)} 
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:text-white"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 dark:bg-[#1c1e24] dark:border dark:border-white/[0.08] text-slate-500 dark:text-slate-300 transition-colors hover:bg-slate-200 dark:hover:bg-[#242730] dark:hover:text-white"
               title={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
             >
               <Menu className="h-5 w-5" />
@@ -147,21 +147,21 @@ export default function AppLayout({ children }) {
           <div className="flex items-center gap-4">
             {/* Icon Buttons */}
             <div className="flex items-center gap-2">
-              <button onClick={toggleFullscreen} className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:text-white">
+              <button onClick={toggleFullscreen} className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 dark:bg-[#1c1e24] dark:border dark:border-white/[0.08] text-slate-500 dark:text-slate-300 transition-colors hover:bg-slate-200 dark:hover:bg-[#242730] dark:hover:text-white">
                 {isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
               </button>
-              <Link to="/settings" className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-gray-400 transition-colors hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:text-white">
+              <Link to="/settings" className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 dark:bg-[#1c1e24] dark:border dark:border-white/[0.08] text-slate-500 dark:text-slate-300 transition-colors hover:bg-slate-200 dark:hover:bg-[#242730] dark:hover:text-white">
                 <Settings className="h-5 w-5" />
               </Link>
             </div>
 
             {/* Profile Dropdown */}
-            <div className="mx-2 h-8 w-px bg-slate-200 dark:bg-white/10" />
-            <Link to="/profile" className="flex items-center gap-3 rounded-full border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 p-1.5 pr-4 transition-colors hover:bg-slate-200 dark:hover:bg-white/10">
+            <div className="mx-2 h-8 w-px bg-slate-200 dark:bg-white/[0.08]" />
+            <Link to="/profile" className="flex items-center gap-3 rounded-full border border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-[#1c1e24] p-1.5 pr-4 transition-colors hover:bg-slate-200 dark:hover:bg-[#242730]">
               {avatarUrl ? (
                 <img src={avatarUrl} alt="Avatar" className="h-8 w-8 rounded-full object-cover border border-violet-500/20" />
               ) : (
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-violet-600 text-sm font-bold text-white uppercase">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#ffd159] to-[#f5b82e] text-sm font-bold text-slate-950 uppercase">
                   {userInitial}
                 </div>
               )}

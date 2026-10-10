@@ -4,21 +4,21 @@ export default function TopStrengths({ strengths }) {
   const displayedStrengths = strengths && strengths.length > 0 ? strengths : [];
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md relative overflow-hidden">
-      <h3 className="mb-4 text-sm font-semibold text-slate-500 dark:text-gray-400 flex items-center gap-2">
-        <ShieldCheck className="h-4 w-4 text-violet-400" /> Top Strengths
+    <div className="flex h-full flex-col rounded-2xl border border-white/[0.08] bg-[#1c1e24] p-6 shadow-xl shadow-black/25 relative overflow-hidden">
+      <h3 className="mb-4 text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+        <ShieldCheck className="h-4 w-4 text-[#4ee4cb]" /> Top Strengths
       </h3>
       
-      <div className="relative z-10 flex flex-col gap-3">
+      <div className="relative z-10 flex flex-col gap-2.5">
         {displayedStrengths.length > 0 ? (
           displayedStrengths.map((item, idx) => (
-            <div key={idx} className="flex items-center gap-3">
-              <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-              <span className="text-sm text-slate-600 dark:text-gray-300">{item}</span>
+            <div key={idx} className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-[#242730] px-3.5 py-2.5 transition-all hover:bg-[#2b2f3a] hover:border-white/10 shadow-sm">
+              <CheckCircle2 className="h-4 w-4 text-[#4ee4cb] shrink-0 stroke-[2.5]" />
+              <span className="text-sm font-medium text-white">{item}</span>
             </div>
           ))
         ) : (
-          <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-gray-400">
+          <div className="flex items-center gap-3 text-sm text-slate-400 py-4 justify-center">
             No strengths identified yet.
           </div>
         )}

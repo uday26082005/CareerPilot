@@ -54,11 +54,11 @@ const LearningRoadmap = forwardRef(({ roadmap, onTaskStatusChange }, ref) => {
 
   const getPhaseTheme = (idx) => {
     const themes = [
-      { text: "text-emerald-400", bg: "bg-emerald-500/10", solid: "bg-emerald-500", border: "border-emerald-500/30", icon: CheckCircle2 },
-      { text: "text-blue-400", bg: "bg-blue-500/10", solid: "bg-blue-500", border: "border-blue-500/30", icon: CircleDashed },
-      { text: "text-orange-400", bg: "bg-orange-500/10", solid: "bg-orange-500", border: "border-orange-500/30", icon: CircleDashed },
-      { text: "text-purple-400", bg: "bg-purple-500/10", solid: "bg-purple-500", border: "border-purple-500/30", icon: Circle },
-      { text: "text-pink-400", bg: "bg-pink-500/10", solid: "bg-pink-500", border: "border-pink-500/30", icon: Circle },
+      { text: "text-[#4ee4cb]", bg: "bg-[#4ee4cb]/10", solid: "bg-[#4ee4cb] text-slate-950", border: "border-[#4ee4cb]/30", icon: CheckCircle2 },
+      { text: "text-[#ffd159]", bg: "bg-[#ffd159]/10", solid: "bg-[#ffd159] text-slate-950", border: "border-[#ffd159]/30", icon: CircleDashed },
+      { text: "text-[#e29aff]", bg: "bg-[#e29aff]/10", solid: "bg-[#e29aff] text-slate-950", border: "border-[#e29aff]/30", icon: CircleDashed },
+      { text: "text-[#ffb48a]", bg: "bg-[#ffb48a]/10", solid: "bg-[#ffb48a] text-slate-950", border: "border-[#ffb48a]/30", icon: Circle },
+      { text: "text-[#ff94aa]", bg: "bg-[#ff94aa]/10", solid: "bg-[#ff94aa] text-slate-950", border: "border-[#ff94aa]/30", icon: Circle },
     ];
     return themes[idx % themes.length];
   };
@@ -66,21 +66,21 @@ const LearningRoadmap = forwardRef(({ roadmap, onTaskStatusChange }, ref) => {
   if (!roadmap || !roadmap.phases) return null;
 
   return (
-    <div id="pdf-roadmap-container" className="flex flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-[#0a0c1a] p-6 shadow-lg h-full">
+    <div id="pdf-roadmap-container" className="flex flex-col rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-6 shadow-xl shadow-black/25 h-full">
       
       {/* Header */}
-      <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-200 dark:border-white/5">
-        <h2 className="text-lg font-bold text-slate-900 dark:text-white">Your Learning Roadmap</h2>
+      <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/[0.06]">
+        <h2 className="text-xs font-semibold tracking-wider text-slate-400 uppercase">Your Learning Roadmap</h2>
         <div className="flex items-center gap-4">
           <button 
             onClick={handleExpandAll}
-            className="flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
+            className="flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
           >
             <Maximize2 className="h-4 w-4" /> Expand All
           </button>
           <button 
             onClick={handleCollapseAll}
-            className="flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
+            className="flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
           >
             <Minimize2 className="h-4 w-4" /> Collapse All
           </button>
@@ -101,19 +101,19 @@ const LearningRoadmap = forwardRef(({ roadmap, onTaskStatusChange }, ref) => {
           const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
           let statusText = "Pending";
           let StatusIcon = Circle;
-          let statusColor = "text-slate-500 dark:text-gray-400 border-gray-500/30";
-          let progressColor = "text-slate-400 dark:text-gray-500";
+          let statusColor = "text-slate-400 border-white/10 bg-white/5";
+          let progressColor = "text-slate-500";
           
           if (progress === 100 && totalTasks > 0) {
             statusText = "Completed";
             StatusIcon = CheckCircle2;
-            statusColor = "text-emerald-400 border-emerald-500/30";
-            progressColor = "text-emerald-500";
+            statusColor = "text-[#4ee4cb] border-[#4ee4cb]/30 bg-[#4ee4cb]/5";
+            progressColor = "text-[#4ee4cb]";
           } else if (progress > 0) {
             statusText = "In Progress";
             StatusIcon = CircleDashed;
-            statusColor = "text-blue-400 border-blue-500/30";
-            progressColor = "text-blue-500";
+            statusColor = "text-[#ffd159] border-[#ffd159]/30 bg-[#ffd159]/5";
+            progressColor = "text-[#ffd159]";
           }
           
           return (
@@ -121,17 +121,17 @@ const LearningRoadmap = forwardRef(({ roadmap, onTaskStatusChange }, ref) => {
               
               {/* Timeline Line & Circle */}
               <div className="flex flex-col items-center">
-                <span className="text-xs font-medium text-slate-400 dark:text-gray-500 mb-2">Phase {phase.phase_number}</span>
-                <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold text-slate-900 dark:text-white shadow-lg z-10 ${theme.solid}`}>
+                <span className="text-xs font-semibold text-slate-400 mb-2">Phase {phase.phase_number}</span>
+                <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold shadow-lg z-10 ${theme.solid}`}>
                   {phase.phase_number}
                 </div>
                 {idx < roadmap.phases.length - 1 && (
-                  <div className="w-px flex-1 border-l border-dashed border-slate-300 dark:border-white/20 mt-2 mb-1" />
+                  <div className="w-px flex-1 border-l border-dashed border-white/20 mt-2 mb-1" />
                 )}
               </div>
 
               {/* Content Card */}
-              <div className="flex-1 flex flex-col rounded-xl border border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/[0.01] p-5 hover:bg-white dark:bg-white/[0.02] transition-colors mt-6">
+              <div className="flex-1 flex flex-col rounded-2xl border border-white/[0.06] bg-[#242730] p-5 hover:border-white/15 transition-colors mt-6 shadow-md">
                 
                 <div className="flex items-start gap-4">
                   {/* Icon */}
@@ -142,17 +142,17 @@ const LearningRoadmap = forwardRef(({ roadmap, onTaskStatusChange }, ref) => {
                   {/* Text Info */}
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-1">
-                      <h3 className="text-lg font-bold text-slate-900 dark:text-white">{phase.title}</h3>
-                      <span className={`rounded-full border px-2 py-0.5 text-xs font-bold ${statusColor}`}>
+                      <h3 className="text-lg font-bold text-white">{phase.title}</h3>
+                      <span className={`rounded-full border px-2.5 py-0.5 text-xs font-bold ${statusColor}`}>
                         {statusText}
                       </span>
                     </div>
-                    <p className="text-sm text-slate-500 dark:text-gray-400 mb-4">{phase.description}</p>
+                    <p className="text-sm text-slate-400 mb-4">{phase.description}</p>
                     
                     {/* Skills */}
                     <div className="flex flex-wrap gap-2">
                       {phase.skills?.map((skill, sIdx) => (
-                        <span key={sIdx} className="rounded-md border border-slate-200 dark:border-white/5 bg-slate-100 dark:bg-white/5 px-2 py-1 text-xs font-medium text-slate-600 dark:text-gray-300">
+                        <span key={sIdx} className="rounded-lg border border-white/[0.08] bg-[#1c1e24] px-2.5 py-1 text-xs font-medium text-slate-300">
                           {skill}
                         </span>
                       ))}
@@ -163,12 +163,12 @@ const LearningRoadmap = forwardRef(({ roadmap, onTaskStatusChange }, ref) => {
                   <div className="flex flex-col items-end gap-3 shrink-0 ml-4">
                     <div className="flex items-center gap-2">
                       <StatusIcon className={`h-5 w-5 ${progressColor}`} />
-                      <span className="text-lg font-bold text-slate-900 dark:text-white">{progress}%</span>
+                      <span className="text-lg font-bold text-white">{progress}%</span>
                     </div>
-                    <span className="text-xs text-slate-500 dark:text-gray-400">{completedTasks} / {totalTasks} Tasks</span>
+                    <span className="text-xs text-slate-400">{completedTasks} / {totalTasks} Tasks</span>
                     <button 
                       onClick={() => togglePhase(idx)}
-                      className="mt-4 text-slate-400 dark:text-gray-500 hover:text-slate-900 dark:text-white transition-colors cursor-pointer p-1"
+                      className="mt-4 text-slate-400 hover:text-white transition-colors cursor-pointer p-1"
                     >
                       {isExpanded ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
                     </button>
@@ -176,12 +176,12 @@ const LearningRoadmap = forwardRef(({ roadmap, onTaskStatusChange }, ref) => {
                 </div>
 
                 {/* Expanded Topics Accordion */}
-                <div className={`mt-6 pt-5 border-t border-slate-200 dark:border-white/5 flex-col gap-5 animation-fade-in ${isExpanded ? 'flex' : 'hidden print:flex'}`}>
+                <div className={`mt-6 pt-5 border-t border-white/[0.06] flex-col gap-5 animation-fade-in ${isExpanded ? 'flex' : 'hidden print:flex'}`}>
                   
                   {/* Tasks list */}
                   <div className="flex flex-col gap-3">
                     {phase.tasks?.map(task => (
-                      <div key={task.id} className="flex items-center justify-between p-3.5 rounded-xl bg-white dark:bg-white/[0.03] border border-slate-200 dark:border-white/5 hover:border-violet-500/30 transition-colors">
+                      <div key={task.id} className="flex items-center justify-between p-3.5 rounded-xl bg-[#1c1e24] border border-white/[0.06] hover:border-white/15 transition-colors">
                         <div className="flex items-center gap-4">
                           <ThemedSelect
                             value={task.status}
@@ -195,16 +195,16 @@ const LearningRoadmap = forwardRef(({ roadmap, onTaskStatusChange }, ref) => {
                             align="left"
                           />
                           <div className="flex flex-col">
-                            <span className={`text-sm font-semibold ${task.status === 'Completed' ? 'text-slate-500 dark:text-gray-500' : 'text-slate-700 dark:text-gray-200'} print:text-black`}>
+                            <span className={`text-sm font-semibold ${task.status === 'Completed' ? 'text-slate-500 line-through' : 'text-slate-200'} print:text-black`}>
                               {task.title}
                             </span>
-                            <span className="text-xs text-slate-500 dark:text-gray-500 mb-2">{task.description}</span>
+                            <span className="text-xs text-slate-400 mb-2">{task.description}</span>
                             {task.resource && (
                               <a 
                                 href={task.resource.url} 
                                 target="_blank" 
                                 rel="noopener noreferrer" 
-                                className="w-fit flex items-center gap-1.5 text-[11px] font-bold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-1 rounded-md hover:bg-emerald-100 dark:hover:bg-emerald-500/20 transition-colors"
+                                className="w-fit flex items-center gap-1.5 text-[11px] font-bold bg-[#4ee4cb]/10 text-[#4ee4cb] border border-[#4ee4cb]/20 px-2.5 py-1 rounded-md hover:bg-[#4ee4cb]/20 transition-colors"
                               >
                                 <ExternalLink className="h-3 w-3" />
                                 {task.resource.title}
@@ -212,7 +212,7 @@ const LearningRoadmap = forwardRef(({ roadmap, onTaskStatusChange }, ref) => {
                             )}
                           </div>
                         </div>
-                        <span className="text-xs font-bold text-slate-400 dark:text-gray-600 shrink-0 ml-4">
+                        <span className="text-xs font-bold text-slate-400 shrink-0 ml-4">
                           ~{task.estimated_hours}h
                         </span>
                       </div>
@@ -221,20 +221,20 @@ const LearningRoadmap = forwardRef(({ roadmap, onTaskStatusChange }, ref) => {
 
                   {/* Projects row */}
                   {phase.projects && phase.projects.length > 0 && (
-                    <div className="flex flex-col gap-2 rounded-xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.01] p-4 mt-2">
-                      <h4 className="text-sm font-bold flex items-center gap-2 text-slate-900 dark:text-white">
-                        <Code className="h-4 w-4 text-blue-500" /> Suggested Projects
+                    <div className="flex flex-col gap-2 rounded-2xl border border-white/[0.06] bg-[#1c1e24] p-4 mt-2">
+                      <h4 className="text-sm font-bold flex items-center gap-2 text-white">
+                        <Code className="h-4 w-4 text-[#ffd159]" /> Suggested Projects
                       </h4>
-                      <ul className="text-sm text-slate-600 dark:text-gray-400 space-y-2 list-disc pl-5 marker:text-slate-300 dark:marker:text-gray-700">
+                      <ul className="text-sm text-slate-400 space-y-2 list-disc pl-5 marker:text-[#ffd159]">
                         {phase.projects.map((proj, pIdx) => (
-                          <li key={pIdx}><strong className="text-slate-800 dark:text-gray-300">{proj.title}</strong>: {proj.description}</li>
+                          <li key={pIdx}><strong className="text-slate-200 font-semibold">{proj.title}</strong>: {proj.description}</li>
                         ))}
                       </ul>
                     </div>
                   )}
 
                   {phase.milestone && (
-                    <div className="mt-2 text-sm text-center font-bold text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-500/10 p-3 rounded-xl">
+                    <div className="mt-2 text-sm text-center font-bold text-[#ffd159] bg-[#ffd159]/10 border border-[#ffd159]/20 p-3 rounded-xl">
                       Milestone: {phase.milestone}
                     </div>
                   )}

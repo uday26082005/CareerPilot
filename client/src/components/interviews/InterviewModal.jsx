@@ -245,16 +245,16 @@ export default function InterviewModal({ isOpen, onClose, interviewType, difficu
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="relative flex w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white dark:bg-[#0f111f] shadow-2xl border border-slate-200 dark:border-white/10 max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
+      <div className="relative flex w-full max-w-3xl flex-col overflow-hidden rounded-3xl bg-[#1c1e24] shadow-2xl border border-white/10 max-h-[90vh]">
         
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-100 dark:border-white/5 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-white/[0.08] px-6 py-4 bg-[#1c1e24]">
           <div>
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Mock Interview</h2>
-            <p className="text-sm text-slate-500 dark:text-gray-400">{interviewType} {companyName && interviewType === "Company-specific" ? `(${companyName})` : ''}</p>
+            <h2 className="text-xl font-bold text-white">Mock Interview</h2>
+            <p className="text-sm text-slate-400">{interviewType} {companyName && interviewType === "Company-specific" ? `(${companyName})` : ''}</p>
           </div>
-          <button onClick={handleClose} className="rounded-full p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors">
+          <button onClick={handleClose} className="rounded-full p-2 text-slate-400 hover:text-white hover:bg-white/5 transition-colors">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -263,13 +263,13 @@ export default function InterviewModal({ isOpen, onClose, interviewType, difficu
         <div className="flex-1 overflow-y-auto p-6">
           {loading && !currentQuestion && !report && (
             <div className="flex h-64 flex-col items-center justify-center gap-4">
-              <Loader2 className="h-8 w-8 animate-spin text-violet-500" />
-              <p className="text-slate-500 dark:text-gray-400">Preparing your interview...</p>
+              <Loader2 className="h-8 w-8 animate-spin text-[#ffd159]" />
+              <p className="text-slate-400">Preparing your interview...</p>
             </div>
           )}
 
           {error && (
-            <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-red-500 flex gap-3">
+            <div className="rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-red-400 flex gap-3">
               <AlertCircle className="h-5 w-5 shrink-0" />
               <p className="text-sm">{error}</p>
             </div>
@@ -279,10 +279,10 @@ export default function InterviewModal({ isOpen, onClose, interviewType, difficu
             <div className="flex flex-col gap-6 h-full">
               {/* Progress */}
               <div className="flex items-center gap-4">
-                <span className="text-sm font-medium text-violet-500">Question {currentQuestionNumber} of {totalQuestions}</span>
-                <div className="flex-1 h-2 rounded-full bg-slate-100 dark:bg-white/5">
+                <span className="text-sm font-semibold text-[#ffd159]">Question {currentQuestionNumber} of {totalQuestions}</span>
+                <div className="flex-1 h-2 rounded-full bg-[#242730] border border-white/[0.04]">
                   <div 
-                    className="h-full rounded-full bg-violet-500 transition-all duration-500" 
+                    className="h-full rounded-full bg-gradient-to-r from-[#ffd159] to-[#fed656] transition-all duration-500" 
                     style={{ width: `${(currentQuestionNumber / totalQuestions) * 100}%` }}
                   />
                 </div>
@@ -290,20 +290,20 @@ export default function InterviewModal({ isOpen, onClose, interviewType, difficu
 
               {/* Last Evaluation Feedback (optional) */}
               {lastEvaluation && (
-                <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-4 mb-2">
+                <div className="rounded-2xl bg-[#4ee4cb]/10 border border-[#4ee4cb]/20 p-4 mb-2">
                   <div className="flex items-center gap-2 mb-2">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                    <span className="text-sm font-semibold text-emerald-500">Feedback on previous answer (Score: {lastEvaluation.score}/10)</span>
+                    <CheckCircle2 className="h-4 w-4 text-[#4ee4cb]" />
+                    <span className="text-sm font-semibold text-[#4ee4cb]">Feedback on previous answer (Score: {lastEvaluation.score}/10)</span>
                   </div>
-                  <p className="text-sm text-slate-600 dark:text-gray-300 mb-1"><span className="font-semibold">Strengths:</span> {lastEvaluation?.strengths?.join(", ")}</p>
-                  <p className="text-sm text-slate-600 dark:text-gray-300"><span className="font-semibold">Improvements:</span> {lastEvaluation?.improvements?.join(", ")}</p>
+                  <p className="text-sm text-slate-300 mb-1"><span className="font-semibold text-white">Strengths:</span> {lastEvaluation?.strengths?.join(", ")}</p>
+                  <p className="text-sm text-slate-300"><span className="font-semibold text-white">Improvements:</span> {lastEvaluation?.improvements?.join(", ")}</p>
                 </div>
               )}
 
               {/* AI Question */}
-              <div className="rounded-2xl bg-slate-50 dark:bg-white/[0.02] p-6 border border-slate-100 dark:border-white/5">
-                <p className="text-sm font-medium text-slate-400 mb-2 uppercase tracking-wide">{currentQuestion.category}</p>
-                <h3 className="text-xl font-medium leading-relaxed text-slate-900 dark:text-white">
+              <div className="rounded-2xl bg-[#242730] p-6 border border-white/[0.06]">
+                <p className="text-xs font-semibold text-[#ffd159] mb-2 uppercase tracking-wider">{currentQuestion.category}</p>
+                <h3 className="text-xl font-medium leading-relaxed text-white">
                   {currentQuestion.text}
                 </h3>
               </div>
@@ -311,16 +311,16 @@ export default function InterviewModal({ isOpen, onClose, interviewType, difficu
               {/* User Input */}
               <div className="flex-1 flex flex-col gap-3 min-h-[200px]">
                 <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-slate-700 dark:text-gray-300">Your Answer</label>
+                  <label className="text-sm font-medium text-slate-300">Your Answer</label>
                   <button 
                     onClick={toggleRecording}
                     disabled={isTranscribing}
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                    className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-colors ${
                       isRecording 
                         ? 'bg-red-500 text-white animate-pulse' 
                         : isTranscribing 
-                          ? 'bg-amber-500/20 text-amber-500 cursor-not-allowed'
-                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-white/5 dark:text-gray-300 dark:hover:bg-white/10'
+                          ? 'bg-[#ffd159]/20 text-[#ffd159] cursor-not-allowed'
+                          : 'bg-[#242730] text-slate-300 hover:text-white hover:bg-[#2b2f3a] border border-white/[0.08]'
                     }`}
                   >
                     {isTranscribing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mic className="h-4 w-4" />}
@@ -331,7 +331,7 @@ export default function InterviewModal({ isOpen, onClose, interviewType, difficu
                   value={answer}
                   onChange={(e) => setAnswer(e.target.value)}
                   placeholder="Type your detailed answer here..."
-                  className="flex-1 w-full rounded-xl border border-slate-200 dark:border-white/10 bg-transparent p-4 text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 resize-none"
+                  className="flex-1 w-full rounded-2xl border border-white/10 bg-[#242730] p-4 text-white placeholder:text-slate-500 focus:border-[#ffd159] focus:outline-none focus:ring-1 focus:ring-[#ffd159] resize-none leading-relaxed"
                 />
               </div>
 
@@ -339,7 +339,7 @@ export default function InterviewModal({ isOpen, onClose, interviewType, difficu
                 <button 
                   onClick={submitAnswer}
                   disabled={!answer.trim() || loading || isRecording || isTranscribing}
-                  className="flex items-center gap-2 rounded-lg bg-violet-600 px-6 py-2.5 font-semibold text-white transition-colors hover:bg-violet-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] px-6 py-2.5 font-bold text-slate-950 transition-all hover:brightness-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-amber-500/10"
                 >
                   {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                   Submit Answer
@@ -351,46 +351,46 @@ export default function InterviewModal({ isOpen, onClose, interviewType, difficu
           {isCompleted && report && (
             <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
               <div className="text-center">
-                <div className="inline-flex items-center justify-center h-20 w-20 rounded-full bg-violet-500/10 text-violet-500 mb-4">
-                  <span className="text-3xl font-bold">{report.overall_score}</span>
+                <div className="inline-flex items-center justify-center h-20 w-20 rounded-full bg-[#ffd159]/10 text-[#ffd159] border border-[#ffd159]/30 mb-4">
+                  <span className="text-3xl font-extrabold">{report.overall_score}</span>
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Interview Completed!</h3>
-                <p className="text-slate-500 dark:text-gray-400">{report.summary}</p>
+                <h3 className="text-2xl font-bold text-white mb-2">Interview Completed!</h3>
+                <p className="text-slate-400">{report.summary}</p>
               </div>
 
               <div className="grid grid-cols-3 gap-4">
-                <div className="rounded-xl border border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-white/[0.02] p-4 text-center">
-                  <p className="text-sm text-slate-500 dark:text-gray-400 mb-1">Technical</p>
-                  <p className="text-xl font-bold text-slate-900 dark:text-white">{report.technical_score}/100</p>
+                <div className="rounded-2xl border border-white/[0.06] bg-[#242730] p-4 text-center">
+                  <p className="text-xs uppercase tracking-wider text-slate-400 mb-1">Technical</p>
+                  <p className="text-2xl font-bold text-[#4ee4cb]">{report.technical_score}/100</p>
                 </div>
-                <div className="rounded-xl border border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-white/[0.02] p-4 text-center">
-                  <p className="text-sm text-slate-500 dark:text-gray-400 mb-1">Communication</p>
-                  <p className="text-xl font-bold text-slate-900 dark:text-white">{report.communication_score}/100</p>
+                <div className="rounded-2xl border border-white/[0.06] bg-[#242730] p-4 text-center">
+                  <p className="text-xs uppercase tracking-wider text-slate-400 mb-1">Communication</p>
+                  <p className="text-2xl font-bold text-[#ffd159]">{report.communication_score}/100</p>
                 </div>
-                <div className="rounded-xl border border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-white/[0.02] p-4 text-center">
-                  <p className="text-sm text-slate-500 dark:text-gray-400 mb-1">Confidence</p>
-                  <p className="text-xl font-bold text-slate-900 dark:text-white">{report.confidence_score}/100</p>
+                <div className="rounded-2xl border border-white/[0.06] bg-[#242730] p-4 text-center">
+                  <p className="text-xs uppercase tracking-wider text-slate-400 mb-1">Confidence</p>
+                  <p className="text-2xl font-bold text-[#e29aff]">{report.confidence_score}/100</p>
                 </div>
               </div>
 
               <div className="grid gap-6 md:grid-cols-2">
-                <div>
-                  <h4 className="text-sm font-semibold text-emerald-500 mb-3 uppercase tracking-wide">Key Strengths</h4>
-                  <ul className="space-y-2">
+                <div className="rounded-2xl border border-white/[0.06] bg-[#242730] p-5">
+                  <h4 className="text-xs font-semibold text-[#4ee4cb] mb-3 uppercase tracking-wider">Key Strengths</h4>
+                  <ul className="space-y-2.5">
                     {report?.strengths?.map((s, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-slate-600 dark:text-gray-300">
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
+                      <li key={i} className="flex items-start gap-2 text-sm text-slate-300">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#4ee4cb] mt-1.5 shrink-0" />
                         {s}
                       </li>
                     ))}
                   </ul>
                 </div>
-                <div>
-                  <h4 className="text-sm font-semibold text-orange-500 mb-3 uppercase tracking-wide">Areas to Improve</h4>
-                  <ul className="space-y-2">
+                <div className="rounded-2xl border border-white/[0.06] bg-[#242730] p-5">
+                  <h4 className="text-xs font-semibold text-[#ffb48a] mb-3 uppercase tracking-wider">Areas to Improve</h4>
+                  <ul className="space-y-2.5">
                     {report?.weaknesses?.map((w, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-slate-600 dark:text-gray-300">
-                        <span className="h-1.5 w-1.5 rounded-full bg-orange-500 mt-1.5 shrink-0" />
+                      <li key={i} className="flex items-start gap-2 text-sm text-slate-300">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#ffb48a] mt-1.5 shrink-0" />
                         {w}
                       </li>
                     ))}
@@ -398,7 +398,7 @@ export default function InterviewModal({ isOpen, onClose, interviewType, difficu
                 </div>
               </div>
 
-              <button onClick={handleClose} className="w-full rounded-lg bg-slate-900 dark:bg-white py-3 font-semibold text-white dark:text-slate-900 transition-transform active:scale-[0.98]">
+              <button onClick={handleClose} className="w-full rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] py-3.5 font-bold text-slate-950 transition-all hover:brightness-105 active:scale-[0.98] shadow-md shadow-amber-500/10">
                 Done
               </button>
             </div>

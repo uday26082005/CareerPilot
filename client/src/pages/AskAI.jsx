@@ -10,10 +10,10 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api"
 export default function AskAI() {
   const currentYear = new Date().getFullYear();
   const suggestions = [
-    { text: "How can I improve my resume?", icon: FileText, color: "text-violet-400 bg-violet-500/10" },
-    { text: `What skills are in demand in ${currentYear}?`, icon: BookOpen, color: "text-emerald-400 bg-emerald-500/10" },
-    { text: "How to prepare for system design?", icon: Target, color: "text-blue-400 bg-blue-500/10" },
-    { text: "Suggest a learning roadmap for me", icon: Briefcase, color: "text-orange-400 bg-orange-500/10" },
+    { text: "How can I improve my resume?", icon: FileText, color: "text-[#e29aff] bg-[#e29aff]/10 border border-[#e29aff]/20" },
+    { text: `What skills are in demand in ${currentYear}?`, icon: BookOpen, color: "text-[#4ee4cb] bg-[#4ee4cb]/10 border border-[#4ee4cb]/20" },
+    { text: "How to prepare for system design?", icon: Target, color: "text-[#72c5ff] bg-[#72c5ff]/10 border border-[#72c5ff]/20" },
+    { text: "Suggest a learning roadmap for me", icon: Briefcase, color: "text-[#ffd159] bg-[#ffd159]/10 border border-[#ffd159]/20" },
   ];
 
   const location = useLocation();
@@ -90,37 +90,43 @@ export default function AskAI() {
     <div className="flex flex-col flex-1 max-w-5xl w-full mx-auto gap-4">
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">AskAI</h1>
-        <p className="text-slate-500 dark:text-gray-400">Your personalized AI career coach</p>
+        <h1 className="text-2xl font-bold text-white tracking-tight">AskAI</h1>
+        <p className="mt-1 text-sm text-slate-400">Your personalized AI career coach</p>
       </div>
 
       {/* Chat Container */}
-      <div className="flex flex-col flex-1 overflow-hidden min-h-[400px]">
+      <div className="flex flex-col flex-1 overflow-hidden min-h-[520px]">
         
         {/* Messages Area */}
         <div 
           ref={scrollContainerRef}
-          className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 relative"
+          className="flex-1 overflow-y-auto py-4 space-y-6 relative"
         >
           
           {messages.length === 1 && (
-            <div className="flex flex-col items-center justify-center h-full text-center mt-8 mb-12">
-              <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-8">
+            <div className="flex flex-col items-center justify-center h-full text-center mt-6 mb-10 px-4">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#ffd159]/10 text-[#ffd159] border border-[#ffd159]/20 mb-5 shadow-lg shadow-amber-500/5">
+                <Bot className="h-7 w-7" />
+              </div>
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
                 How can I help you accelerate your career today?
               </h2>
+              <p className="text-sm text-slate-400 mb-8 max-w-md">
+                Ask anything about interview prep, technical roadmaps, resume improvement, or current market demands.
+              </p>
 
               {/* Suggestion Cards */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 w-full max-w-4xl">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 w-full max-w-4xl">
                 {suggestions.map((item, idx) => (
                   <button 
                     key={idx}
                     onClick={() => handleSend(item.text)}
-                    className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/[0.02] p-4 text-center transition-all hover:bg-violet-50 dark:hover:bg-white/[0.05] hover:border-violet-200 dark:hover:border-white/10 shadow-sm group"
+                    className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/[0.08] bg-[#1c1e24] p-5 text-center transition-all hover:bg-[#20222a] hover:border-white/20 hover:-translate-y-0.5 shadow-md shadow-black/20 group"
                   >
-                    <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${item.color} transition-transform group-hover:scale-110`}>
-                      <item.icon className="h-5 w-5" />
+                    <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${item.color} transition-transform group-hover:scale-110 shadow-sm`}>
+                      <item.icon className="h-6 w-6" />
                     </div>
-                    <span className="text-[12px] font-medium text-slate-700 dark:text-gray-300 group-hover:text-violet-600 dark:group-hover:text-violet-300 leading-tight">{item.text}</span>
+                    <span className="text-xs font-semibold text-slate-300 group-hover:text-white leading-relaxed">{item.text}</span>
                   </button>
                 ))}
               </div>
@@ -135,15 +141,15 @@ export default function AskAI() {
                 key={idx}
                 className={`flex w-full ${msg.role === "user" ? "justify-end" : "justify-start"}`}
               >
-                <div className={`flex max-w-[85%] gap-3 ${msg.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
-                  <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full mt-1 ${msg.role === "user" ? "bg-violet-600 text-white" : "bg-gradient-to-br from-violet-600 to-purple-800 text-white shadow-lg"}`}>
+                <div className={`flex max-w-[85%] sm:max-w-[75%] gap-3 ${msg.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
+                  <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl mt-1 ${msg.role === "user" ? "bg-gradient-to-r from-[#ffd159] to-[#fed656] text-slate-950 font-bold shadow-md shadow-amber-500/10" : "bg-[#ffd159]/10 text-[#ffd159] border border-[#ffd159]/20"}`}>
                     {msg.role === "user" ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
                   </div>
-                  <div className={`rounded-2xl px-5 py-4 ${msg.role === "user" ? "bg-violet-600 text-white shadow-md rounded-tr-sm" : "bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/10 text-slate-800 dark:text-gray-200 shadow-sm rounded-tl-sm"}`}>
+                  <div className={`rounded-2xl px-5 py-4 ${msg.role === "user" ? "bg-gradient-to-r from-[#ffd159] to-[#fed656] text-slate-950 font-medium shadow-md shadow-amber-500/10 rounded-tr-sm" : "bg-[#1c1e24] border border-white/[0.08] text-slate-200 shadow-md rounded-tl-sm"}`}>
                     {msg.role === "user" ? (
-                      <p className="text-[15px] whitespace-pre-wrap">{msg.content}</p>
+                      <p className="text-[15px] whitespace-pre-wrap leading-relaxed">{msg.content}</p>
                     ) : (
-                      <div className="prose prose-sm dark:prose-invert prose-violet max-w-none text-[15px]">
+                      <div className="prose prose-sm prose-invert max-w-none text-[15px] leading-relaxed text-slate-200 prose-headings:text-white prose-strong:text-white prose-a:text-[#ffd159] hover:prose-a:underline prose-code:text-[#4ee4cb] prose-code:bg-white/5 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-pre:bg-[#121316] prose-pre:border prose-pre:border-white/[0.08]">
                         <ReactMarkdown>{msg.content}</ReactMarkdown>
                       </div>
                     )}
@@ -159,12 +165,12 @@ export default function AskAI() {
                 className="flex w-full justify-start"
               >
                 <div className="flex gap-3">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full mt-1 bg-gradient-to-br from-violet-600 to-purple-800 text-white shadow-lg">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl mt-1 bg-[#ffd159]/10 text-[#ffd159] border border-[#ffd159]/20">
                     <Bot className="h-4 w-4" />
                   </div>
-                  <div className="rounded-2xl px-5 py-4 bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/10 shadow-sm rounded-tl-sm flex items-center gap-2">
-                    <Loader2 className="h-4 w-4 text-violet-500 animate-spin" />
-                    <span className="text-sm text-slate-500 dark:text-gray-400">CareerPilot AI is thinking...</span>
+                  <div className="rounded-2xl px-5 py-4 bg-[#1c1e24] border border-white/[0.08] shadow-md rounded-tl-sm flex items-center gap-3">
+                    <Loader2 className="h-4 w-4 text-[#ffd159] animate-spin" />
+                    <span className="text-sm text-slate-400">CareerPilot AI is thinking...</span>
                   </div>
                 </div>
               </motion.div>
@@ -174,15 +180,16 @@ export default function AskAI() {
         </div>
 
         {/* Bottom Input Area */}
-        <div className="shrink-0 p-4">
+        <div className="shrink-0 pt-4 pb-2">
           <form 
             onSubmit={(e) => { e.preventDefault(); handleSend(); }}
-            className="relative flex items-center rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0a0c1a] px-3 py-2 shadow-sm focus-within:border-violet-500 focus-within:ring-1 focus-within:ring-violet-500 transition-all"
+            className="relative flex items-center rounded-2xl border border-white/[0.08] bg-[#1c1e24] px-4 py-2.5 shadow-lg shadow-black/20 focus-within:border-[#ffd159]/50 focus-within:ring-1 focus-within:ring-[#ffd159]/50 transition-all"
           >
             <button 
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="flex h-10 w-10 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-600 dark:hover:text-white shrink-0 transition-colors"
+              className="flex h-10 w-10 items-center justify-center rounded-xl text-slate-400 hover:bg-white/5 hover:text-white shrink-0 transition-colors"
+              title="Attach file"
             >
               <Plus className="h-5 w-5" />
             </button>
@@ -198,14 +205,14 @@ export default function AskAI() {
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               placeholder="Ask me anything about your career..." 
-              className="flex-1 bg-transparent px-3 py-2 text-[15px] text-slate-900 dark:text-white placeholder:text-slate-400 dark:text-gray-500 focus:outline-none"
+              className="flex-1 bg-transparent px-3 py-2 text-[15px] text-white placeholder:text-slate-500 focus:outline-none"
               disabled={isLoading}
             />
             
             <button 
               type="submit"
               disabled={!question.trim() || isLoading}
-              className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-600 text-white shadow-md transition-colors hover:bg-violet-500 disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+              className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] text-slate-950 font-bold shadow-md shadow-amber-500/10 transition-all hover:brightness-105 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-[#2e323e] disabled:text-slate-500 shrink-0"
             >
               <Send className="h-4 w-4 -ml-0.5" />
             </button>
