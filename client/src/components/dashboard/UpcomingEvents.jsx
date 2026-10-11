@@ -10,19 +10,19 @@ export default function UpcomingEvents({ events, onEventCreated }) {
 
   const getIcon = (type) => {
     switch (type) {
-      case "interview": return <Calendar className="h-5 w-5 text-violet-400" />;
-      case "review": return <CheckCircle className="h-5 w-5 text-emerald-400" />;
-      case "assessment": return <Briefcase className="h-5 w-5 text-orange-400" />;
-      default: return <Calendar className="h-5 w-5 text-blue-400" />;
+      case "interview": return <Calendar className="h-5 w-5 text-[#e29aff]" />;
+      case "review": return <CheckCircle className="h-5 w-5 text-[#4ee4cb]" />;
+      case "assessment": return <Briefcase className="h-5 w-5 text-[#ffb48a]" />;
+      default: return <Calendar className="h-5 w-5 text-[#72c5ff]" />;
     }
   };
 
   const getBg = (type) => {
     switch (type) {
-      case "interview": return "bg-violet-500/10 border-violet-500/20";
-      case "review": return "bg-emerald-500/10 border-emerald-500/20";
-      case "assessment": return "bg-orange-500/10 border-orange-500/20";
-      default: return "bg-blue-500/10 border-blue-500/20";
+      case "interview": return "bg-[#e29aff]/10 border-[#e29aff]/20";
+      case "review": return "bg-[#4ee4cb]/10 border-[#4ee4cb]/20";
+      case "assessment": return "bg-[#ffb48a]/10 border-[#ffb48a]/20";
+      default: return "bg-[#72c5ff]/10 border-[#72c5ff]/20";
     }
   };
 

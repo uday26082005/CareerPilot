@@ -43,11 +43,11 @@ export default function ForgotPassword() {
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3, duration: 0.6 }}
-      className="text-center mt-2"
+      className="text-center mt-3"
     >
-      <p className="text-sm text-slate-500 dark:text-gray-400">
+      <p className="text-sm text-slate-400">
         Remember your password?{" "}
-        <Link to="/login" className="font-medium text-violet-400 hover:underline">
+        <Link to="/login" className="font-semibold text-[#ffd159] hover:underline">
           Back to Login
         </Link>
       </p>
@@ -56,22 +56,22 @@ export default function ForgotPassword() {
 
   return (
     <AuthLayout aboveCard={aboveCard} belowCard={belowCard}>
-      <div className="mb-4 flex items-center gap-4">
-        <div className="rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 p-3">
-          <Mail className="h-6 w-6 text-violet-400" />
+      <div className="mb-6 flex items-center gap-4">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/[0.08] bg-[#ffd159]/15 shadow-md shadow-black/20">
+          <Mail className="h-6 w-6 text-[#ffd159]" />
         </div>
         <div>
-          <h3 className="text-lg font-bold">Enter your email</h3>
-          <p className="text-sm text-slate-500 dark:text-gray-400">We'll send you a reset link to your email</p>
+          <h3 className="text-xl font-extrabold text-white">Forgot Password?</h3>
+          <p className="text-sm text-slate-400">Enter your email and we'll send you a reset link</p>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <FormInput
-          label="Email Address"
+          label="Registered Email Address"
           icon={Mail}
           type="email"
-          placeholder="Enter your registered email"
+          placeholder="name@example.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -80,9 +80,9 @@ export default function ForgotPassword() {
         <motion.button
           type="submit"
           disabled={loading}
-          whileHover={{ scale: 1.02, boxShadow: "0px 0px 35px rgba(139,92,246,.55)" }}
+          whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.98 }}
-          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-3 font-semibold text-slate-900 dark:text-white transition-opacity disabled:opacity-60"
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] py-3 text-sm font-bold text-slate-950 shadow-md shadow-amber-500/10 transition-all hover:brightness-105 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
         >
           <Send className="h-4 w-4" />
           {loading ? "Sending..." : "Send Reset Link"}

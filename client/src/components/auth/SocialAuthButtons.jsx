@@ -34,9 +34,9 @@ export default function SocialAuthButtons() {
           type="button"
           aria-label={b.label}
           onClick={() => handleOAuth(b.provider)}
-          whileHover={{ y: -4, scale: 1.05 }}
+          whileHover={{ y: -3, scale: 1.04 }}
           whileTap={{ scale: 0.95 }}
-          className="flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 backdrop-blur-xl transition-colors hover:border-violet-500/40 hover:bg-slate-200 dark:hover:bg-white/10"
+          className="flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-[#242730] backdrop-blur-xl shadow-md shadow-black/20 transition-all hover:border-white/20 hover:bg-slate-200 dark:hover:bg-[#2b2f3a]"
         >
           {b.icon}
         </motion.button>

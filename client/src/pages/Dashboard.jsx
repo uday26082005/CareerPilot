@@ -121,10 +121,10 @@ export default function Dashboard() {
           subtitle={`ATS: ${resume?.ats_score || "N/A"}/100`}
           subtitleColor={resume?.overall_score > 80 ? "text-emerald-400" : "text-yellow-400"}
           icon={ClipboardList}
-          iconBgColor="bg-violet-500/10"
-          iconColor="text-violet-400"
+          iconBgColor="bg-[#4ee4cb]/10"
+          iconColor="text-[#4ee4cb]"
           chartData={[]}
-          chartColor="#8b5cf6"
+          chartColor="#4ee4cb"
           themeVariant="mint"
         />
         <StatCard 
@@ -145,10 +145,10 @@ export default function Dashboard() {
           subtitle={`${getExperienceLabel(profile?.years_experience)} Level`}
           subtitleColor="text-fuchsia-400"
           icon={Briefcase}
-          iconBgColor="bg-fuchsia-500/10"
-          iconColor="text-fuchsia-400"
+          iconBgColor="bg-[#e29aff]/10"
+          iconColor="text-[#e29aff]"
           chartData={[]}
-          chartColor="#d946ef"
+          chartColor="#e29aff"
           themeVariant="lavender"
         />
       </div>
@@ -185,10 +185,10 @@ export default function Dashboard() {
           subtitle={`Accuracy: ${practice?.accuracy || 0}% · Best: ${practice?.best_category || "General"}`}
           subtitleColor="text-cyan-400"
           icon={Activity}
-          iconBgColor="bg-cyan-500/15 border border-cyan-500/30"
-          iconColor="text-cyan-400"
+          iconBgColor="bg-[#72c5ff]/10"
+          iconColor="text-[#72c5ff]"
           chartData={[]}
-          chartColor="#06b6d4"
+          chartColor="#72c5ff"
           themeVariant="sky"
         />
       </div>

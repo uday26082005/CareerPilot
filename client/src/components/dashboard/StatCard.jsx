@@ -21,7 +21,7 @@ export default function StatCard({
       case "yellow":
         return "bg-gradient-to-br from-[#ffd159] via-[#fed656] to-[#f5b82e] text-slate-950 shadow-lg shadow-amber-500/15 border border-amber-300/40 hover:shadow-amber-500/25";
       case "lavender":
-        return "bg-gradient-to-br from-[#e29aff] via-[#d985fb] to-[#cf75f7] text-slate-950 shadow-lg shadow-purple-500/15 border border-purple-300/40 hover:shadow-purple-500/25";
+        return "bg-gradient-to-br from-[#e29aff] via-[#d985fb] to-[#cf75f7] text-slate-950 shadow-lg shadow-fuchsia-500/15 border border-fuchsia-300/40 hover:shadow-fuchsia-500/25";
       case "pink":
         return "bg-gradient-to-br from-[#ff94aa] via-[#ff829b] to-[#ff6f8c] text-slate-950 shadow-lg shadow-pink-500/15 border border-pink-300/40 hover:shadow-pink-500/25";
       case "peach":

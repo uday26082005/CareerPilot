@@ -54,6 +54,15 @@ const steps = [
   },
 ];
 
+const STEP_ACCENTS = [
+  { iconBg: "bg-[#4ee4cb]/15", iconText: "text-[#4ee4cb]", badgeBg: "bg-[#4ee4cb]", badgeText: "text-slate-950", borderHover: "hover:border-[#4ee4cb]/30" },
+  { iconBg: "bg-[#ffd159]/15", iconText: "text-[#ffd159]", badgeBg: "bg-[#ffd159]", badgeText: "text-slate-950", borderHover: "hover:border-[#ffd159]/30" },
+  { iconBg: "bg-[#e29aff]/15", iconText: "text-[#e29aff]", badgeBg: "bg-[#e29aff]", badgeText: "text-slate-950", borderHover: "hover:border-[#e29aff]/30" },
+  { iconBg: "bg-[#ffb48a]/15", iconText: "text-[#ffb48a]", badgeBg: "bg-[#ffb48a]", badgeText: "text-slate-950", borderHover: "hover:border-[#ffb48a]/30" },
+  { iconBg: "bg-[#ff94aa]/15", iconText: "text-[#ff94aa]", badgeBg: "bg-[#ff94aa]", badgeText: "text-slate-950", borderHover: "hover:border-[#ff94aa]/30" },
+  { iconBg: "bg-[#72c5ff]/15", iconText: "text-[#72c5ff]", badgeBg: "bg-[#72c5ff]", badgeText: "text-slate-950", borderHover: "hover:border-[#72c5ff]/30" },
+];
+
 export default function HowItWorks() {
 
   return (
@@ -66,9 +75,9 @@ className="relative overflow-hidden py-20">
 
 <div className="absolute inset-0 -z-10">
 
-<div className="absolute left-10 top-24 h-80 w-80 rounded-full bg-violet-700/8 blur-[140px]" />
+<div className="absolute left-10 top-24 h-80 w-80 rounded-full bg-[#ffd159]/5 blur-[140px]" />
 
-<div className="absolute right-0 bottom-10 h-72 w-72 rounded-full bg-fuchsia-700/8 blur-[130px]" />
+<div className="absolute right-0 bottom-10 h-72 w-72 rounded-full bg-[#4ee4cb]/5 blur-[130px]" />
 
 </div>
 
@@ -94,13 +103,13 @@ once:true
 
 className="mb-5 flex justify-center">
 
-<div className="flex items-center gap-2 rounded-full border border-violet-500/25 bg-violet-500/10 px-5 py-2 backdrop-blur-xl">
+<div className="flex items-center gap-2 rounded-full border border-[#ffd159]/20 bg-[#ffd159]/10 px-5 py-2 backdrop-blur-xl">
 
 <Sparkles
 size={16}
-className="text-violet-300"/>
+className="text-[#ffd159]"/>
 
-<span className="text-sm font-semibold text-violet-300">
+<span className="text-sm font-semibold text-[#ffd159]">
 
 Simple Process
 
@@ -128,13 +137,13 @@ viewport={{
 once:true
 }}
 
-className="mx-auto max-w-4xl text-center text-4xl font-black leading-tight lg:text-5xl">
+className="mx-auto max-w-4xl text-center text-4xl font-black leading-tight lg:text-5xl text-white">
 
 Your Journey
 
 <br/>
 
-<span className="bg-gradient-to-r from-violet-300 via-violet-500 to-fuchsia-400 bg-clip-text text-transparent">
+<span className="bg-gradient-to-r from-[#ffd159] via-[#fed656] to-[#f5b82e] bg-clip-text text-transparent">
 
 Towards Success
 
@@ -160,7 +169,7 @@ viewport={{
 once:true
 }}
 
-className="mx-auto mt-5 max-w-3xl text-center text-base leading-8 text-slate-500 dark:text-gray-400">
+className="mx-auto mt-5 max-w-3xl text-center text-base leading-8 text-slate-400">
 
 CareerPilot guides you from resume analysis to interview preparation
 through an intelligent AI-powered workflow.
@@ -172,7 +181,7 @@ through an intelligent AI-powered workflow.
 <div className="relative mx-auto mt-16 max-w-5xl">
 
 {/* Line */}
-<div className="absolute left-8 top-0 hidden h-[calc(100%-80px)] w-[4px] rounded-full bg-gradient-to-b from-violet-500 to-purple-700 md:block"/>
+<div className="absolute left-8 top-0 hidden h-[calc(100%-80px)] w-[2px] rounded-full bg-gradient-to-b from-[#ffd159]/40 via-white/10 to-transparent md:block"/>
 
 <div className="space-y-8">
 
@@ -181,6 +190,7 @@ through an intelligent AI-powered workflow.
 steps.map((step,index)=>{
 
 const Icon=step.icon;
+const accent=STEP_ACCENTS[index % STEP_ACCENTS.length];
 
 return(
 
@@ -210,11 +220,11 @@ delay:index*.08
 className="relative flex flex-col gap-5 md:flex-row">
                 {/* Icon */}
 
-              <div className="relative z-10 flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-purple-700 shadow-[0_0_30px_rgba(139,92,246,.35)]">
+              <div className={`relative z-10 flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl ${accent.iconBg} ${accent.iconText} border border-white/[0.08] shadow-md shadow-black/20 backdrop-blur-md`}>
 
-                <Icon className="h-7 w-7 text-slate-900 dark:text-white" />
+                <Icon className="h-7 w-7" />
 
-                <span className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white text-sm font-bold text-violet-700">
+                <span className={`absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full ${accent.badgeBg} text-xs font-black ${accent.badgeText} shadow-sm`}>
 
                   {index + 1}
 
@@ -231,17 +241,17 @@ className="relative flex flex-col gap-5 md:flex-row">
                   scale: 1.01,
                 }}
 
-                className="flex-1 rounded-3xl border border-slate-200 dark:border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl transition-all duration-300 hover:border-violet-500/40 hover:shadow-[0_15px_40px_rgba(139,92,246,.15)]"
+                className={`flex-1 rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-6 shadow-xl shadow-black/25 backdrop-blur-xl transition-all duration-300 ${accent.borderHover} hover:bg-[#20222a]`}
 
               >
 
-                <h3 className="text-xl font-bold">
+                <h3 className="text-xl font-bold text-white">
 
                   {step.title}
 
                 </h3>
 
-                <p className="mt-3 leading-7 text-slate-500 dark:text-gray-400">
+                <p className="mt-3 leading-7 text-slate-400">
 
                   {step.description}
 

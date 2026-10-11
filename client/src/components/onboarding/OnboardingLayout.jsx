@@ -14,18 +14,18 @@ export default function OnboardingLayout({ currentStep, children }) {
   const progressPercentage = ((currentStep) / STEPS.length) * 100;
 
   return (
-    <div className="relative flex min-h-screen flex-col bg-slate-50 dark:bg-[#060816] text-slate-900 dark:text-white overflow-hidden">
+    <div className="relative flex min-h-screen flex-col bg-slate-50 dark:bg-[#121316] text-slate-900 dark:text-white overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 -z-50 overflow-hidden pointer-events-none">
         <motion.div
           animate={{ x: [-60, 40, -60], y: [-30, 50, -30] }}
           transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -left-32 top-24 h-[520px] w-[520px] rounded-full bg-violet-700/10 blur-[180px]"
+          className="absolute -left-32 top-24 h-[520px] w-[520px] rounded-full bg-[#ffd159]/10 blur-[180px]"
         />
         <motion.div
           animate={{ x: [40, -40, 40], y: [20, -40, 20] }}
           transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute right-[-180px] top-0 h-[620px] w-[620px] rounded-full bg-fuchsia-700/5 blur-[200px]"
+          className="absolute right-[-180px] top-0 h-[620px] w-[620px] rounded-full bg-[#4ee4cb]/5 blur-[200px]"
         />
       </div>
 
@@ -58,14 +58,14 @@ export default function OnboardingLayout({ currentStep, children }) {
         <div className="flex w-full flex-col gap-6 md:w-72 lg:w-80 shrink-0">
           
           {/* Progress Container */}
-          <div className="rounded-[24px] border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
+          <div className="rounded-[24px] border border-white/[0.08] bg-[#1c1e24] p-6 shadow-xl shadow-black/25 backdrop-blur-md">
             <div className="mb-4 flex items-center justify-between text-base font-medium">
-              <span className="text-violet-300">Onboarding Progress</span>
-              <span className="text-slate-500 dark:text-gray-400">Step {currentStep} of 5</span>
+              <span className="text-white font-semibold">Onboarding Progress</span>
+              <span className="text-slate-400">Step {currentStep} of 5</span>
             </div>
-            <div className="h-2 w-full rounded-full bg-slate-200 dark:bg-white/10">
+            <div className="h-2 w-full rounded-full bg-[#242730]">
               <motion.div
-                className="h-full rounded-full bg-violet-500 shadow-[0_0_15px_rgba(139,92,246,0.6)]"
+                className="h-full rounded-full bg-gradient-to-r from-[#ffd159] to-[#fed656] shadow-[0_0_15px_rgba(255,209,89,0.5)]"
                 initial={{ width: 0 }}
                 animate={{ width: `${progressPercentage}%` }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -83,7 +83,7 @@ export default function OnboardingLayout({ currentStep, children }) {
                   <div key={step.id} className="relative flex min-h-[64px] group">
                     {/* Dashed Line */}
                     {!isLast && (
-                      <div className="absolute left-[15px] top-8 bottom-[-8px] w-px border-l-2 border-dashed border-slate-200 dark:border-white/10 group-last:hidden" />
+                      <div className="absolute left-[15px] top-8 bottom-[-8px] w-px border-l-2 border-dashed border-white/[0.08] group-last:hidden" />
                     )}
 
                     {/* Step Number / Checkmark */}
@@ -91,8 +91,8 @@ export default function OnboardingLayout({ currentStep, children }) {
                       <div
                         className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold transition-colors duration-300 ${
                           isActive || isCompleted
-                            ? "bg-violet-600 text-slate-900 dark:text-white shadow-[0_0_15px_rgba(139,92,246,0.4)]"
-                            : "bg-slate-100 dark:bg-white/5 text-slate-400 dark:text-gray-500"
+                            ? "bg-[#ffd159] text-slate-950 font-bold shadow-[0_0_15px_rgba(255,209,89,0.4)]"
+                            : "bg-[#242730] text-slate-500 border border-white/[0.08]"
                         }`}
                       >
                         {isCompleted ? <Check className="h-4 w-4" /> : step.id}
@@ -103,25 +103,25 @@ export default function OnboardingLayout({ currentStep, children }) {
                     <div className="pb-6 w-full -mt-2">
                       <div
                         className={`flex items-center gap-4 rounded-xl p-4 transition-colors duration-300 ${
-                          isActive ? "bg-violet-500/10 border border-violet-500/20" : "bg-transparent"
+                          isActive ? "bg-[#ffd159]/10 border border-[#ffd159]/20" : "bg-transparent"
                         }`}
                       >
                         <div
                           className={`flex h-10 w-10 items-center justify-center rounded-lg transition-colors duration-300 ${
                             isActive
-                              ? "bg-violet-500/20 text-violet-300"
+                              ? "bg-[#ffd159]/20 text-[#ffd159]"
                               : isCompleted
-                              ? "text-violet-400"
-                              : "text-slate-400 dark:text-gray-500"
+                              ? "text-[#ffd159]"
+                              : "text-slate-500"
                           }`}
                         >
                           <step.icon className="h-5 w-5" />
                         </div>
                         <div>
-                          <h4 className={`text-base font-bold ${isActive || isCompleted ? "text-slate-900 dark:text-white" : "text-slate-500 dark:text-gray-400"}`}>
+                          <h4 className={`text-base font-bold ${isActive || isCompleted ? "text-white" : "text-slate-400"}`}>
                             {step.title}
                           </h4>
-                          <p className={`text-sm ${isActive ? "text-slate-600 dark:text-gray-300" : "text-gray-600"}`}>
+                          <p className={`text-sm ${isActive ? "text-slate-300" : "text-slate-500"}`}>
                             {step.desc}
                           </p>
                         </div>
@@ -136,7 +136,7 @@ export default function OnboardingLayout({ currentStep, children }) {
 
         {/* Content Area */}
         <div className="flex-1 flex flex-col">
-          <div className="rounded-[32px] border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 shadow-[0_20px_60px_rgba(0,0,0,.35)] backdrop-blur-md md:p-10 flex-1">
+          <div className="rounded-[32px] border border-white/[0.08] bg-[#1c1e24] p-6 shadow-2xl shadow-black/35 backdrop-blur-md md:p-10 flex-1">
             {children}
           </div>
         </div>

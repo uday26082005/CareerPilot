@@ -60,15 +60,15 @@ export default function SkillRadarChart({ radarData = [], matchedSkills = [], mi
             <Radar
               name="Your Skills"
               dataKey="A"
-              stroke="#8b5cf6"
-              fill="#8b5cf6"
+              stroke="#ffd159"
+              fill="#ffd159"
               fillOpacity={0.4}
             />
             <Radar
               name="Role Benchmark"
               dataKey="B"
-              stroke="#3b82f6"
-              fill="#3b82f6"
+              stroke="#4ee4cb"
+              fill="#4ee4cb"
               fillOpacity={0.15}
             />
             
@@ -81,14 +81,14 @@ export default function SkillRadarChart({ radarData = [], matchedSkills = [], mi
                 if (active && payload && payload.length) {
                   const data = payload[0].payload;
                   return (
-                    <div className="rounded-lg bg-slate-900 border border-white/10 p-2.5 text-xs text-white shadow-xl">
-                      <span className="font-bold text-violet-300 block mb-1">{data.subject}</span>
+                    <div className="rounded-xl bg-[#1c1e24] border border-white/10 p-2.5 text-xs text-white shadow-xl">
+                      <span className="font-bold text-[#ffd159] block mb-1">{data.subject}</span>
                       <div className="flex flex-col gap-0.5 text-slate-300">
                         <span>Your Coverage: <strong className="text-white">{data.A}%</strong></span>
                         {data.detectedCount !== undefined && (
-                          <span>Competencies: <strong className="text-emerald-400">{data.detectedCount}</strong> / {data.totalCount} detected</span>
+                          <span>Competencies: <strong className="text-[#4ee4cb]">{data.detectedCount}</strong> / {data.totalCount} detected</span>
                         )}
-                        <span>Role Expectation: <strong className="text-blue-400">100%</strong></span>
+                        <span>Role Expectation: <strong className="text-[#4ee4cb]">100%</strong></span>
                       </div>
                     </div>
                   );

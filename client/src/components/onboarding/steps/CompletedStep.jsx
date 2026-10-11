@@ -12,8 +12,8 @@ export default function CompletedStep() {
       className="flex h-full flex-col items-center py-6"
     >
       <div className="text-center mb-8">
-        <h1 className="mb-2 text-3xl font-black">You're All Set! 🎉</h1>
-        <p className="text-sm text-slate-500 dark:text-gray-400 max-w-sm mx-auto">
+        <h1 className="mb-2 text-3xl font-black text-white">You're All Set! 🎉</h1>
+        <p className="text-sm text-slate-400 max-w-sm mx-auto">
           Your onboarding is complete. You're ready to start your personalized career journey.
         </p>
       </div>
@@ -24,27 +24,27 @@ export default function CompletedStep() {
         <motion.div
           animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="absolute inset-0 rounded-full bg-violet-500/20 blur-xl"
+          className="absolute inset-0 rounded-full bg-[#ffd159]/20 blur-xl"
         />
         <motion.div
           animate={{ scale: [1, 1.5, 1], opacity: [0.1, 0.3, 0.1] }}
           transition={{ duration: 2.5, repeat: Infinity, delay: 0.2 }}
-          className="absolute inset-[-20px] rounded-full border border-violet-500/30"
+          className="absolute inset-[-20px] rounded-full border border-[#ffd159]/30"
         />
         <motion.div
           animate={{ scale: [1, 1.8, 1], opacity: [0.05, 0.15, 0.05] }}
           transition={{ duration: 3, repeat: Infinity, delay: 0.4 }}
-          className="absolute inset-[-40px] rounded-full border border-violet-500/20"
+          className="absolute inset-[-40px] rounded-full border border-[#ffd159]/20"
         />
         
         {/* Checkmark icon */}
-        <div className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-purple-600 shadow-[0_0_40px_rgba(139,92,246,0.6)]">
+        <div className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-[#ffd159] to-[#fed656] text-slate-950 shadow-[0_0_40px_rgba(255,209,89,0.5)]">
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", bounce: 0.6, delay: 0.2 }}
           >
-            <Check className="h-12 w-12 text-slate-900 dark:text-white" strokeWidth={3} />
+            <Check className="h-12 w-12 text-slate-950" strokeWidth={3} />
           </motion.div>
         </div>
       </div>
@@ -53,13 +53,13 @@ export default function CompletedStep() {
 
         <motion.button
           onClick={() => navigate("/dashboard")}
-          whileHover={{ scale: 1.02 }}
+          whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.98 }}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-4 font-bold text-slate-900 dark:text-white shadow-[0_0_30px_rgba(139,92,246,.3)] transition-all hover:shadow-[0_0_40px_rgba(139,92,246,.5)]"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] py-3.5 text-sm font-bold text-slate-950 shadow-md shadow-amber-500/10 transition-all hover:brightness-105 active:scale-95"
         >
           Go to Dashboard <ArrowRight className="h-5 w-5" />
         </motion.button>
-        <p className="mt-4 text-center text-xs text-slate-400 dark:text-gray-500">Takes less than 2 minutes to explore</p>
+        <p className="mt-4 text-center text-xs text-slate-400">Takes less than 2 minutes to explore</p>
       </div>
     </motion.div>
   );

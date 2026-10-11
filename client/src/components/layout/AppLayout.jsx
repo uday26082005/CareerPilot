@@ -63,8 +63,8 @@ export default function AppLayout({ children }) {
   return (
     <div className="relative flex h-screen w-full bg-slate-50 dark:bg-[#121316] text-slate-900 dark:text-white overflow-hidden print:h-auto print:overflow-visible">
       {/* Ambient Background Glows for Glassmorphism effect */}
-      <div className="absolute top-[-10%] left-[-5%] w-96 h-96 bg-violet-600/10 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-blue-600/5 blur-[120px] pointer-events-none" />
+      <div className="absolute top-[-10%] left-[-5%] w-96 h-96 bg-[#ffd159]/5 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-[#4ee4cb]/5 blur-[120px] pointer-events-none" />
 
       {/* Sidebar */}
       <aside className={`relative z-10 flex h-full flex-col border-r border-slate-200 dark:border-white/[0.06] bg-white/80 dark:bg-[#16171c] backdrop-blur-2xl shadow-xl dark:shadow-none transition-all duration-300 ease-in-out overflow-hidden print:hidden ${isSidebarOpen ? 'w-64' : 'w-20'}`}>
@@ -73,7 +73,7 @@ export default function AppLayout({ children }) {
           <div className="flex h-20 items-center px-5">
             <Link to="/" className="group flex items-center gap-3 transition-transform duration-300 hover:scale-105" title={!isSidebarOpen ? "CareerPilot AI" : ""}>
               <img src="/logo.jpg" alt="CareerPilot Logo" className="h-9 w-9 shrink-0 rounded-xl mix-blend-lighten transition-transform duration-300 group-hover:scale-105" />
-              <h1 className={`text-xl font-extrabold tracking-tight text-slate-900 dark:text-white transition-opacity duration-300 group-hover:text-violet-100 ${isSidebarOpen ? 'opacity-100' : 'opacity-0'}`}>
+              <h1 className={`text-xl font-extrabold tracking-tight text-slate-900 dark:text-white transition-opacity duration-300 group-hover:text-[#ffd159] ${isSidebarOpen ? 'opacity-100' : 'opacity-0'}`}>
                 CareerPilot<span className="text-[#ffd159]"> AI</span>
               </h1>
             </Link>
@@ -89,12 +89,12 @@ export default function AppLayout({ children }) {
                   to={link.path}
                   className={`group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 hover:translate-x-1 ${
                     isActive 
-                      ? "bg-violet-100 text-violet-600 dark:bg-[#22252e] dark:text-white shadow-none dark:shadow-sm border border-violet-200 dark:border-white/10" 
+                      ? "bg-slate-200 text-slate-900 dark:bg-[#242730] dark:text-[#ffd159] shadow-none dark:shadow-sm border border-slate-300 dark:border-[#ffd159]/25" 
                       : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/[0.04] hover:text-slate-900 dark:hover:text-white"
                   }`}
                   title={!isSidebarOpen ? link.name : ""}
                 >
-                  <link.icon className={`h-5 w-5 shrink-0 transition-transform duration-300 group-hover:scale-110 ${isActive ? "text-violet-500 dark:text-white" : ""}`} />
+                  <link.icon className={`h-5 w-5 shrink-0 transition-transform duration-300 group-hover:scale-110 ${isActive ? "text-slate-900 dark:text-[#ffd159]" : ""}`} />
                   <span className={`whitespace-nowrap transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100' : 'opacity-0'}`}>
                     {link.name}
                   </span>
@@ -159,7 +159,7 @@ export default function AppLayout({ children }) {
             <div className="mx-2 h-8 w-px bg-slate-200 dark:bg-white/[0.08]" />
             <Link to="/profile" className="flex items-center gap-3 rounded-full border border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-[#1c1e24] p-1.5 pr-4 transition-colors hover:bg-slate-200 dark:hover:bg-[#242730]">
               {avatarUrl ? (
-                <img src={avatarUrl} alt="Avatar" className="h-8 w-8 rounded-full object-cover border border-violet-500/20" />
+                <img src={avatarUrl} alt="Avatar" className="h-8 w-8 rounded-full object-cover border border-[#ffd159]/30" />
               ) : (
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#ffd159] to-[#f5b82e] text-sm font-bold text-slate-950 uppercase">
                   {userInitial}

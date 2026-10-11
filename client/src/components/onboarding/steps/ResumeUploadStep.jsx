@@ -85,16 +85,16 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
       className="flex h-full flex-col"
     >
       <div className="mb-8">
-        <h1 className="mb-2 text-4xl font-black">Resume Upload</h1>
-        <p className="text-base text-slate-500 dark:text-gray-400">
+        <h1 className="mb-2 text-3xl md:text-4xl font-black text-white">Resume Upload</h1>
+        <p className="text-base text-slate-400">
           Upload your resume to help us analyze your skills, experience, and qualifications to provide better recommendations.
         </p>
       </div>
 
       <div className="flex-1 flex flex-col gap-6">
         {/* Upload Area */}
-        <div className="group relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-violet-500/30 bg-violet-500/5 py-12 transition-all hover:border-violet-500/50 hover:bg-violet-500/10">
-          <div className="absolute inset-0 -z-10 rounded-2xl bg-violet-600/10 blur-[40px] transition-opacity group-hover:opacity-100 opacity-50" />
+        <div className="group relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[#ffd159]/30 bg-[#ffd159]/5 py-12 transition-all hover:border-[#ffd159]/60 hover:bg-[#ffd159]/10">
+          <div className="absolute inset-0 -z-10 rounded-2xl bg-[#ffd159]/10 blur-[40px] transition-opacity group-hover:opacity-100 opacity-40" />
           
           <input 
             type="file" 
@@ -106,16 +106,16 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
 
           {!file ? (
             <>
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-violet-500/20 text-violet-400 shadow-[0_0_20px_rgba(139,92,246,0.3)]">
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#ffd159]/15 text-[#ffd159] shadow-md shadow-black/20">
                 <CloudUpload className="h-8 w-8" />
               </div>
               
-              <h3 className="mb-2 text-xl font-bold text-slate-900 dark:text-white">Drag & drop your resume here</h3>
+              <h3 className="mb-2 text-xl font-bold text-white">Drag & drop your resume here</h3>
               <p className="mb-4 text-sm font-medium text-slate-400 dark:text-gray-500 uppercase">or</p>
               
               <button 
                 onClick={() => fileInputRef.current?.click()}
-                className="rounded-lg bg-violet-600 px-6 py-2.5 text-base font-semibold text-slate-900 dark:text-white transition-colors hover:bg-violet-500 shadow-lg shadow-violet-500/25"
+                className="rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] px-6 py-2.5 text-sm font-bold text-slate-950 transition-all hover:brightness-105 active:scale-95 shadow-md shadow-amber-500/10"
               >
                 Browse Files
               </button>
@@ -124,10 +124,10 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
             </>
           ) : (
             <div className="flex flex-col items-center">
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/20 text-green-400 shadow-[0_0_20px_rgba(34,197,94,0.3)]">
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#4ee4cb]/15 text-[#4ee4cb] shadow-md shadow-black/20">
                 <FileText className="h-8 w-8" />
               </div>
-              <h3 className="mb-2 text-xl font-bold text-slate-900 dark:text-white">{file.name}</h3>
+              <h3 className="mb-2 text-xl font-bold text-white">{file.name}</h3>
               <p className="mb-6 text-sm text-slate-400 dark:text-gray-500">
                 {(file.size / (1024 * 1024)).toFixed(2)} MB
               </p>
@@ -142,12 +142,12 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
         </div>
 
         {/* Tips Section */}
-        <div className="rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6">
+        <div className="rounded-2xl border border-white/[0.08] bg-[#1c1e24] p-6 shadow-xl shadow-black/25">
           <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-yellow-500/10">
-              <Lightbulb className="h-4 w-4 text-yellow-400" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#ffd159]/15">
+              <Lightbulb className="h-4 w-4 text-[#ffd159]" />
             </div>
-            <h4 className="font-bold text-slate-900 dark:text-white">Tips for a great upload</h4>
+            <h4 className="font-bold text-white">Tips for a great upload</h4>
           </div>
           
           <div className="grid gap-3 sm:grid-cols-2">
@@ -158,18 +158,18 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
               "Keep it concise and relevant"
             ].map((tip, idx) => (
               <div key={idx} className="flex items-start gap-2">
-                <Check className="mt-0.5 h-5 w-5 shrink-0 text-violet-400" />
-                <span className="text-base text-slate-600 dark:text-gray-300">{tip}</span>
+                <Check className="mt-0.5 h-5 w-5 shrink-0 text-[#4ee4cb]" />
+                <span className="text-sm text-slate-300">{tip}</span>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      <div className="mt-8 flex items-center justify-between border-t border-slate-200 dark:border-white/5 pt-6">
+      <div className="mt-8 flex items-center justify-between border-t border-slate-200 dark:border-white/[0.08] pt-6">
         <button
           onClick={onPrev}
-          className="flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-gray-400 transition-colors hover:text-slate-900 dark:text-white"
+          className="flex items-center gap-2 text-sm font-medium text-slate-400 transition-colors hover:text-white"
         >
           <ArrowLeft className="h-4 w-4" /> Back
         </button>
@@ -178,7 +178,7 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
           disabled={analyzing}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-semibold text-slate-900 dark:text-white transition-colors hover:bg-violet-500 disabled:opacity-50"
+          className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] px-6 py-3 font-bold text-sm text-slate-950 shadow-md shadow-amber-500/10 transition-all hover:brightness-105 active:scale-95 disabled:opacity-50"
         >
           {analyzing ? "Analyzing AI..." : "Analyze & Finish"}
           {!analyzing && <ArrowRight className="h-5 w-5" />}

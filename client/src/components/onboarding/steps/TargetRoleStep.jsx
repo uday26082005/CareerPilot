@@ -77,10 +77,10 @@ export default function TargetRoleStep({ onNext, onPrev, isSubmitting }) {
       className="flex h-full flex-col justify-between"
     >
       <div>
-        <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <h2 className="text-2xl md:text-3xl font-black tracking-tight text-white">
           Target Role & Preferences
         </h2>
-        <p className="mt-1 text-sm text-slate-500 dark:text-gray-400">
+        <p className="mt-1 text-sm text-slate-400">
           Tell us about the career path you are aiming for so we can tailor your roadmap.
         </p>
       </div>
@@ -88,7 +88,7 @@ export default function TargetRoleStep({ onNext, onPrev, isSubmitting }) {
       <div className="flex-1 space-y-6">
         {/* Target Role */}
         <div className="space-y-2">
-          <label className="text-sm font-semibold text-slate-900 dark:text-white">What role are you targeting? *</label>
+          <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">What role are you targeting? *</label>
           <ThemedSelect
             value={formData.role}
             onChange={(val) => handleFieldChange("role", val)}
@@ -103,7 +103,7 @@ export default function TargetRoleStep({ onNext, onPrev, isSubmitting }) {
 
         {/* Preferred Industry */}
         <div className="space-y-2">
-          <label className="text-sm font-semibold text-slate-900 dark:text-white">Preferred Industry (Optional)</label>
+          <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Preferred Industry (Optional)</label>
           <ThemedSelect
             value={formData.industry}
             onChange={(val) => handleFieldChange("industry", val)}
@@ -118,7 +118,7 @@ export default function TargetRoleStep({ onNext, onPrev, isSubmitting }) {
 
         {/* Experience Level */}
         <div className="space-y-2">
-          <label className="text-sm font-semibold text-slate-900 dark:text-white">Experience Level *</label>
+          <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Experience Level *</label>
           <ThemedSelect
             value={formData.experience}
             onChange={(val) => handleFieldChange("experience", val)}
@@ -133,7 +133,7 @@ export default function TargetRoleStep({ onNext, onPrev, isSubmitting }) {
 
         {/* Employment Type */}
         <div className="space-y-2">
-          <label className="text-sm font-semibold text-slate-900 dark:text-white">Employment Type (Optional)</label>
+          <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Employment Type (Optional)</label>
           <ThemedSelect
             value={formData.employmentType}
             onChange={(val) => handleFieldChange("employmentType", val)}
@@ -148,7 +148,7 @@ export default function TargetRoleStep({ onNext, onPrev, isSubmitting }) {
 
         {/* Location Preference */}
         <div className="space-y-2">
-          <label className="text-sm font-semibold text-slate-900 dark:text-white">Location Preference (Optional)</label>
+          <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Location Preference (Optional)</label>
           <ThemedSelect
             value={formData.location}
             onChange={(val) => handleFieldChange("location", val)}
@@ -162,19 +162,19 @@ export default function TargetRoleStep({ onNext, onPrev, isSubmitting }) {
         </div>
       </div>
 
-      <div className="mt-8 flex items-center justify-between border-t border-slate-200 dark:border-white/5 pt-6">
+      <div className="mt-8 flex items-center justify-between border-t border-slate-200 dark:border-white/[0.08] pt-6">
         <button
           onClick={onPrev}
-          className="flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-gray-400 transition-colors hover:text-slate-900 dark:text-white"
+          className="flex items-center gap-2 text-sm font-medium text-slate-400 transition-colors hover:text-white"
         >
           <ArrowLeft className="h-4 w-4" /> Back
         </button>
         <motion.button
           onClick={handleNext}
           disabled={isSubmitting}
-          whileHover={{ scale: 1.02 }}
+          whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.98 }}
-          className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-semibold text-slate-900 dark:text-white transition-colors hover:bg-violet-500 disabled:opacity-50"
+          className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] px-6 py-3 font-bold text-sm text-slate-950 shadow-md shadow-amber-500/10 transition-all hover:brightness-105 active:scale-95 disabled:opacity-50"
         >
           {isSubmitting ? "Saving..." : "Continue"} <ArrowRight className="h-5 w-5" />
         </motion.button>

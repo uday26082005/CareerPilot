@@ -31,10 +31,10 @@ export default function CalendarModal({ isOpen, onClose, events }) {
 
   const getEventColor = (type) => {
     switch (type) {
-      case "interview": return "bg-violet-500 text-white";
-      case "review": return "bg-emerald-500 text-white";
-      case "assessment": return "bg-orange-500 text-white";
-      default: return "bg-blue-500 text-white";
+      case "interview": return "bg-[#e29aff] text-slate-950 font-bold";
+      case "review": return "bg-[#4ee4cb] text-slate-950 font-bold";
+      case "assessment": return "bg-[#ffb48a] text-slate-950 font-bold";
+      default: return "bg-[#72c5ff] text-slate-950 font-bold";
     }
   };
 

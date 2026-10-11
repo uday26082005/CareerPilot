@@ -65,9 +65,9 @@ export default function FeaturesSection() {
 
       <div className="absolute inset-0 -z-10">
 
-        <div className="absolute left-0 top-20 h-72 w-72 rounded-full bg-violet-700/8 blur-[130px]" />
+        <div className="absolute left-0 top-20 h-72 w-72 rounded-full bg-[#ffd159]/5 blur-[130px]" />
 
-        <div className="absolute right-0 bottom-0 h-80 w-80 rounded-full bg-fuchsia-700/8 blur-[140px]" />
+        <div className="absolute right-0 bottom-0 h-80 w-80 rounded-full bg-[#4ee4cb]/5 blur-[140px]" />
 
       </div>
 
@@ -90,11 +90,11 @@ export default function FeaturesSection() {
           className="mb-5 flex justify-center"
         >
 
-          <div className="flex items-center gap-2 rounded-full border border-violet-500/25 bg-violet-500/10 px-5 py-2 backdrop-blur-xl">
+          <div className="flex items-center gap-2 rounded-full border border-[#ffd159]/20 bg-[#ffd159]/10 px-5 py-2 backdrop-blur-xl">
 
-            <Sparkles className="h-4 w-4 text-violet-300" />
+            <Sparkles className="h-4 w-4 text-[#ffd159]" />
 
-            <span className="text-sm font-semibold text-violet-300">
+            <span className="text-sm font-semibold text-[#ffd159]">
 
               Powerful AI Features
 
@@ -121,14 +121,14 @@ export default function FeaturesSection() {
           transition={{
             duration: .6,
           }}
-          className="mx-auto max-w-4xl text-center text-4xl font-black leading-tight lg:text-5xl"
+          className="mx-auto max-w-4xl text-center text-4xl font-black leading-tight lg:text-5xl text-white"
         >
 
           Everything You Need
 
           <br />
 
-          <span className="bg-gradient-to-r from-violet-300 via-violet-500 to-fuchsia-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-[#ffd159] via-[#fed656] to-[#f5b82e] bg-clip-text text-transparent">
 
             To Crack Your Dream Job
 
@@ -149,7 +149,7 @@ export default function FeaturesSection() {
           viewport={{
             once: true,
           }}
-          className="mx-auto mt-5 max-w-3xl text-center text-base leading-8 text-slate-500 dark:text-gray-400"
+          className="mx-auto mt-5 max-w-3xl text-center text-base leading-8 text-slate-400"
         >
 
           CareerPilot AI combines resume optimization,

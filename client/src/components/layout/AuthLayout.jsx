@@ -31,38 +31,38 @@ export default function AuthLayout({ backLink, children, aboveCard, belowCard })
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden text-slate-900 dark:text-white">
       {/* Animated Background */}
-      <div className="fixed inset-0 -z-50 overflow-hidden bg-slate-50 dark:bg-[#060816]">
+      <div className="fixed inset-0 -z-50 overflow-hidden bg-slate-50 dark:bg-[#121316]">
         {/* Mouse Hover Glow (Flashlight effect) */}
         <motion.div
           style={{
             x: smoothX,
             y: smoothY,
           }}
-          className="pointer-events-none absolute left-0 top-0 h-[600px] w-[600px] rounded-full bg-violet-500/20 dark:bg-violet-400/15 blur-[120px] will-change-transform"
+          className="pointer-events-none absolute left-0 top-0 h-[600px] w-[600px] rounded-full bg-[#ffd159]/10 blur-[140px] will-change-transform"
         />
         
         {/* Glowing Orbs */}
         <motion.div
           animate={{ x: [-80, 50, -80], y: [-50, 70, -50], scale: [1, 1.2, 1] }}
           transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -left-[10%] top-[10%] h-[600px] w-[600px] rounded-full bg-violet-600/20 blur-[150px]"
+          className="absolute -left-[10%] top-[10%] h-[600px] w-[600px] rounded-full bg-[#ffd159]/10 blur-[160px]"
         />
         <motion.div
           animate={{ x: [80, -60, 80], y: [60, -40, 60], scale: [1.1, 0.9, 1.1] }}
           transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute right-[10%] top-[20%] h-[500px] w-[500px] rounded-full bg-fuchsia-600/15 blur-[120px]"
+          className="absolute right-[10%] top-[20%] h-[500px] w-[500px] rounded-full bg-[#4ee4cb]/5 blur-[140px]"
         />
         <motion.div
           animate={{ x: [-40, 30, -40], y: [90, 10, 90] }}
           transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute left-[30%] bottom-[-10%] h-[400px] w-[400px] rounded-full bg-cyan-600/15 blur-[130px]"
+          className="absolute left-[30%] bottom-[-10%] h-[400px] w-[400px] rounded-full bg-[#ffd159]/5 blur-[140px]"
         />
 
         {/* Floating Particles (Stars) */}
         {PARTICLES.map((p) => (
           <motion.div
             key={p.id}
-            className="absolute h-1.5 w-1.5 rounded-full bg-violet-400/90 dark:bg-white/90 shadow-[0_0_15px_rgba(139,92,246,1)] dark:shadow-[0_0_15px_rgba(255,255,255,1)]"
+            className="absolute h-1.5 w-1.5 rounded-full bg-[#ffd159]/70 dark:bg-white/80 shadow-[0_0_10px_rgba(255,209,89,0.8)]"
             style={{
               top: p.top,
               left: p.left,
@@ -82,7 +82,7 @@ export default function AuthLayout({ backLink, children, aboveCard, belowCard })
         ))}
 
         {/* Radial Gradient overlay to focus center */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(248,250,252,0.8)_80%)] dark:bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(6,8,22,0.9)_100%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(248,250,252,0.8)_80%)] dark:bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(18,19,22,0.85)_100%)] pointer-events-none" />
       </div>
 
       {/* Header */}
@@ -106,7 +106,7 @@ export default function AuthLayout({ backLink, children, aboveCard, belowCard })
         {backLink && (
           <Link
             to={backLink.href}
-            className="flex items-center gap-2 text-sm text-slate-500 dark:text-gray-400 transition hover:text-slate-900 dark:text-white"
+            className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 transition hover:text-[#ffd159]"
           >
             <ArrowLeft className="h-4 w-4" />
             {backLink.text}
@@ -128,8 +128,8 @@ export default function AuthLayout({ backLink, children, aboveCard, belowCard })
           transition={{ duration: 0.7, delay: 0.1 }}
           className="relative w-full max-w-md"
         >
-          <div className="absolute inset-0 -z-10 rounded-[36px] bg-violet-600/20 blur-[100px]" />
-          <div className="rounded-[32px] border border-slate-200 dark:border-white/10 bg-white/[0.04] p-5 md:p-6 shadow-[0_20px_60px_rgba(0,0,0,.35)] backdrop-blur-xl">
+          <div className="absolute inset-0 -z-10 rounded-[36px] bg-[#ffd159]/10 blur-[100px]" />
+          <div className="rounded-[32px] border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1c1e24] p-6 md:p-7 shadow-2xl shadow-black/40 backdrop-blur-xl">
             {children}
           </div>
         </motion.div>

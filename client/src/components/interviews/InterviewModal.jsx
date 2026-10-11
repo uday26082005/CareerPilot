@@ -10,7 +10,7 @@ export default function InterviewModal({ isOpen, onClose, interviewType, difficu
   const [interviewId, setInterviewId] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
-  const [totalQuestions, setTotalQuestions] = useState(5);
+  const [totalQuestions, setTotalQuestions] = useState(15);
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -278,9 +278,21 @@ export default function InterviewModal({ isOpen, onClose, interviewType, difficu
           {!loading && !error && currentQuestion && !isCompleted && (
             <div className="flex flex-col gap-6 h-full">
               {/* Progress */}
-              <div className="flex items-center gap-4">
-                <span className="text-sm font-semibold text-[#ffd159]">Question {currentQuestionNumber} of {totalQuestions}</span>
-                <div className="flex-1 h-2 rounded-full bg-[#242730] border border-white/[0.04]">
+              <div className="flex flex-col gap-2.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-sm font-semibold text-[#ffd159]">Question {currentQuestionNumber} of {totalQuestions}</span>
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-white/[0.06] border border-white/10 text-slate-300 font-medium">
+                      {(currentQuestionNumber - 1) % 3 === 0
+                        ? `Main Question ${Math.floor((currentQuestionNumber - 1) / 3) + 1} of 5`
+                        : `Follow-up ${Math.floor((currentQuestionNumber - 1) / 3) + 1}${(currentQuestionNumber - 1) % 3 === 1 ? 'A' : 'B'}`}
+                    </span>
+                  </div>
+                  <span className="text-xs text-slate-400 font-medium">
+                    {Math.round((currentQuestionNumber / totalQuestions) * 100)}%
+                  </span>
+                </div>
+                <div className="w-full h-2 rounded-full bg-[#242730] border border-white/[0.04] overflow-hidden">
                   <div 
                     className="h-full rounded-full bg-gradient-to-r from-[#ffd159] to-[#fed656] transition-all duration-500" 
                     style={{ width: `${(currentQuestionNumber / totalQuestions) * 100}%` }}

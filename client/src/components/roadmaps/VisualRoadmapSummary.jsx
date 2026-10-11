@@ -40,7 +40,7 @@ const VisualRoadmapSummary = forwardRef(({ roadmap }, ref) => {
           scale: 2,
           useCORS: true,
           logging: false,
-          backgroundColor: '#090d16',
+          backgroundColor: '#121316',
           windowWidth: 1400,
           windowHeight: element.offsetHeight || 1200,
           onclone: (clonedDoc, clonedElement) => {
@@ -97,11 +97,11 @@ const VisualRoadmapSummary = forwardRef(({ roadmap }, ref) => {
 
   const phases = roadmap.phases;
   const colors = [
-    { primary: "#8b5cf6", glow: "rgba(139, 92, 246, 0.4)", text: "#c4b5fd" },
-    { primary: "#3b82f6", glow: "rgba(59, 130, 246, 0.4)", text: "#93c5fd" },
-    { primary: "#10b981", glow: "rgba(16, 185, 129, 0.4)", text: "#6ee7b7" },
-    { primary: "#f59e0b", glow: "rgba(245, 158, 11, 0.4)", text: "#fcd34d" },
-    { primary: "#ec4899", glow: "rgba(236, 72, 153, 0.4)", text: "#f472b6" }
+    { primary: "#ffd159", glow: "rgba(255, 209, 89, 0.4)", text: "#ffd159" },
+    { primary: "#4ee4cb", glow: "rgba(78, 228, 203, 0.4)", text: "#4ee4cb" },
+    { primary: "#e29aff", glow: "rgba(226, 154, 255, 0.4)", text: "#e29aff" },
+    { primary: "#ffb48a", glow: "rgba(255, 180, 138, 0.4)", text: "#ffb48a" },
+    { primary: "#72c5ff", glow: "rgba(114, 197, 255, 0.4)", text: "#72c5ff" }
   ];
 
   const canvasWidth = 1400;
@@ -211,7 +211,7 @@ const VisualRoadmapSummary = forwardRef(({ roadmap }, ref) => {
               <span style={{ display: 'block', fontSize: '11px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: '600', lineHeight: '1.3', marginBottom: '4px' }}>
                 EST. DURATION
               </span>
-              <span style={{ display: 'block', fontSize: '18px', fontWeight: '700', color: '#a78bfa', lineHeight: '1.2' }}>
+              <span style={{ display: 'block', fontSize: '18px', fontWeight: '700', color: '#ffd159', lineHeight: '1.2' }}>
                 {roadmap.estimated_duration || "Self-Paced"}
               </span>
             </div>
@@ -222,13 +222,13 @@ const VisualRoadmapSummary = forwardRef(({ roadmap }, ref) => {
               alignItems: 'center',
               justifyContent: 'center',
               gap: '6px',
-              backgroundColor: 'rgba(16, 185, 129, 0.1)',
-              border: '1px solid rgba(16, 185, 129, 0.25)',
+              backgroundColor: 'rgba(78, 228, 203, 0.1)',
+              border: '1px solid rgba(78, 228, 203, 0.25)',
               borderRadius: '12px',
               padding: '6px 14px',
               fontSize: '12px',
               fontWeight: '600',
-              color: '#34d399',
+              color: '#4ee4cb',
               lineHeight: '1',
               boxSizing: 'border-box'
             }}>
@@ -442,8 +442,8 @@ const VisualRoadmapSummary = forwardRef(({ roadmap }, ref) => {
                     gap: '10px',
                     padding: '12px 18px',
                     borderRadius: '10px',
-                    backgroundColor: 'rgba(139, 92, 246, 0.08)',
-                    border: '1px solid rgba(139, 92, 246, 0.2)',
+                    backgroundColor: 'rgba(255, 209, 89, 0.08)',
+                    border: '1px solid rgba(255, 209, 89, 0.2)',
                     boxSizing: 'border-box'
                   }}>
                     <span style={{
@@ -459,7 +459,7 @@ const VisualRoadmapSummary = forwardRef(({ roadmap }, ref) => {
                       fontSize: '13px',
                       lineHeight: '1.4',
                       fontWeight: '600',
-                      color: '#ddd6fe',
+                      color: '#ffd159',
                       flex: 1,
                       display: 'inline-flex',
                       alignItems: 'center'

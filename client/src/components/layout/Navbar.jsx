@@ -28,9 +28,9 @@ export default function Navbar() {
         <motion.nav
           initial={{ y: -60, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          whileHover={{ boxShadow: "0 10px 40px rgba(139, 92, 246, 0.15)" }}
+          whileHover={{ boxShadow: "0 10px 40px rgba(0, 0, 0, 0.35)" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-white/5 backdrop-blur-2xl shadow-[0_4px_30px_rgba(0,0,0,0.1)] transition-all duration-300 hover:bg-white dark:hover:bg-white/10"
+          className="rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white/90 dark:bg-[#1c1e24]/85 backdrop-blur-2xl shadow-xl shadow-black/25 transition-all duration-300 hover:bg-white dark:hover:bg-[#20222a]/90"
         >
 
           <div className="flex h-16 items-center justify-between px-6">
@@ -66,11 +66,11 @@ export default function Navbar() {
                 <a
                   key={link.name}
                   href={link.href}
-                  className="group relative text-[17px] font-medium text-slate-600 dark:text-gray-300 transition hover:text-slate-900 dark:text-white"
+                  className="group relative text-[17px] font-medium text-slate-600 dark:text-gray-300 transition hover:text-slate-900 dark:hover:text-white"
                 >
                   {link.name}
 
-                  <span className="absolute -bottom-1 left-0 h-[2px] w-0 rounded-full bg-violet-500 transition-all duration-300 group-hover:w-full" />
+                  <span className="absolute -bottom-1 left-0 h-[2px] w-0 rounded-full bg-[#ffd159] transition-all duration-300 group-hover:w-full" />
 
                 </a>
 
@@ -83,7 +83,7 @@ export default function Navbar() {
             <div className="hidden items-center gap-4 md:flex">
               <a
                 href="/login"
-                className="rounded-xl border border-violet-500/40 px-6 py-3 text-[16px] font-semibold text-slate-900 dark:text-white transition-all duration-300 hover:border-violet-400 hover:bg-violet-600 hover:shadow-[0_0_25px_rgba(139,92,246,.45)]"
+                className="rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] px-6 py-2.5 text-sm font-bold text-slate-950 shadow-md shadow-amber-500/10 transition-all duration-200 hover:brightness-105 active:scale-95"
               >
                 Login
               </a>
@@ -127,7 +127,7 @@ export default function Navbar() {
                 className="overflow-hidden md:hidden"
               >
 
-                <div className="space-y-5 border-t border-slate-200 dark:border-white/10 px-6 py-6">
+                <div className="space-y-5 border-t border-slate-200 dark:border-white/[0.08] px-6 py-6">
 
                   {links.map((link) => (
 
@@ -135,7 +135,7 @@ export default function Navbar() {
                       key={link.name}
                       href={link.href}
                       onClick={() => setOpen(false)}
-                      className="block text-slate-600 dark:text-gray-300 transition hover:text-violet-400"
+                      className="block text-slate-600 dark:text-gray-300 transition hover:text-[#ffd159]"
                     >
                       {link.name}
                     </a>
@@ -144,7 +144,7 @@ export default function Navbar() {
 
                   <a
                     href="/login"
-                    className="mt-2 block rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-3 text-center font-semibold text-slate-900 dark:text-white"
+                    className="mt-2 block rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] py-3 text-center text-sm font-bold text-slate-950 shadow-md shadow-amber-500/10 transition-all hover:brightness-105 active:scale-95"
                   >
                     Login
                   </a>

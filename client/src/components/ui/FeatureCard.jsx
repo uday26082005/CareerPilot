@@ -1,11 +1,52 @@
 import { motion } from "framer-motion";
 
+const ACCENT_STYLES = [
+  {
+    iconBg: "bg-[#4ee4cb]/15",
+    iconText: "text-[#4ee4cb]",
+    glowBg: "bg-[#4ee4cb]/10",
+    borderHover: "group-hover:border-[#4ee4cb]/30",
+  },
+  {
+    iconBg: "bg-[#ffd159]/15",
+    iconText: "text-[#ffd159]",
+    glowBg: "bg-[#ffd159]/10",
+    borderHover: "group-hover:border-[#ffd159]/30",
+  },
+  {
+    iconBg: "bg-[#e29aff]/15",
+    iconText: "text-[#e29aff]",
+    glowBg: "bg-[#e29aff]/10",
+    borderHover: "group-hover:border-[#e29aff]/30",
+  },
+  {
+    iconBg: "bg-[#ffb48a]/15",
+    iconText: "text-[#ffb48a]",
+    glowBg: "bg-[#ffb48a]/10",
+    borderHover: "group-hover:border-[#ffb48a]/30",
+  },
+  {
+    iconBg: "bg-[#ff94aa]/15",
+    iconText: "text-[#ff94aa]",
+    glowBg: "bg-[#ff94aa]/10",
+    borderHover: "group-hover:border-[#ff94aa]/30",
+  },
+  {
+    iconBg: "bg-[#72c5ff]/15",
+    iconText: "text-[#72c5ff]",
+    glowBg: "bg-[#72c5ff]/10",
+    borderHover: "group-hover:border-[#72c5ff]/30",
+  },
+];
+
 export default function FeatureCard({
   icon: Icon,
   title,
   description,
   index = 0,
 }) {
+  const accent = ACCENT_STYLES[index % ACCENT_STYLES.length];
+
   return (
     <motion.a
       href="/signup"
@@ -28,39 +69,34 @@ export default function FeatureCard({
         y: -12,
         scale: 1.02,
       }}
-      className="group relative overflow-hidden rounded-3xl border border-slate-200 dark:border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl transition-all duration-300 hover:border-violet-500/40 hover:shadow-[0_20px_60px_rgba(139,92,246,.18)]"
+      className="group relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-8 shadow-xl shadow-black/25 backdrop-blur-xl transition-all duration-300 hover:border-white/20 hover:bg-[#20222a]"
     >
       {/* Background Glow */}
-
-      <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-violet-500/10 blur-3xl transition-opacity duration-500 group-hover:opacity-100 opacity-0" />
+      <div className={`absolute -right-16 -top-16 h-40 w-40 rounded-full ${accent.glowBg} blur-3xl transition-opacity duration-500 group-hover:opacity-100 opacity-0`} />
 
       {/* Icon */}
-
       <motion.div
         whileHover={{
           rotate: 10,
           scale: 1.08,
         }}
-        className="mb-7 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-purple-700 shadow-[0_0_30px_rgba(139,92,246,.35)]"
+        className={`mb-7 flex h-16 w-16 items-center justify-center rounded-2xl ${accent.iconBg} ${accent.iconText} shadow-md shadow-black/20`}
       >
-        <Icon className="h-8 w-8 text-slate-900 dark:text-white" />
+        <Icon className="h-8 w-8" />
       </motion.div>
 
       {/* Title */}
-
-      <h3 className="mb-4 text-2xl font-bold tracking-tight">
+      <h3 className="mb-4 text-2xl font-bold tracking-tight text-white">
         {title}
       </h3>
 
       {/* Description */}
-
-      <p className="leading-8 text-slate-500 dark:text-gray-400">
+      <p className="leading-relaxed text-slate-400">
         {description}
       </p>
 
       {/* Border */}
-
-      <div className="absolute inset-0 rounded-3xl border border-transparent transition-all duration-300 group-hover:border-violet-500/20" />
+      <div className={`absolute inset-0 rounded-3xl border border-transparent transition-all duration-300 ${accent.borderHover}`} />
     </motion.a>
   );
 }
