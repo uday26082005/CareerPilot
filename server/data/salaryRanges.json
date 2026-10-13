@@ -4,6 +4,46 @@
     "mid": "₹10 - 20 LPA",
     "senior": "₹25 - 45 LPA"
   },
+  "Software Development Engineer": {
+    "entry": "₹6 - 14 LPA",
+    "mid": "₹15 - 30 LPA",
+    "senior": "₹32 - 60 LPA"
+  },
+  "Software Developement Engineer": {
+    "entry": "₹6 - 14 LPA",
+    "mid": "₹15 - 30 LPA",
+    "senior": "₹32 - 60 LPA"
+  },
+  "System Reliability Engineer": {
+    "entry": "₹6 - 12 LPA",
+    "mid": "₹14 - 26 LPA",
+    "senior": "₹28 - 55 LPA"
+  },
+  "Site Reliability Engineer": {
+    "entry": "₹6 - 12 LPA",
+    "mid": "₹14 - 26 LPA",
+    "senior": "₹28 - 55 LPA"
+  },
+  "Data Engineer": {
+    "entry": "₹5 - 11 LPA",
+    "mid": "₹12 - 24 LPA",
+    "senior": "₹26 - 52 LPA"
+  },
+  "Game Developer": {
+    "entry": "₹4 - 9 LPA",
+    "mid": "₹10 - 20 LPA",
+    "senior": "₹22 - 45 LPA"
+  },
+  "Robotics Engineer": {
+    "entry": "₹5 - 12 LPA",
+    "mid": "₹12 - 25 LPA",
+    "senior": "₹28 - 50 LPA"
+  },
+  "Database Administrator": {
+    "entry": "₹3.5 - 7 LPA",
+    "mid": "₹8 - 16 LPA",
+    "senior": "₹18 - 35 LPA"
+  },
   "Frontend Developer": {
     "entry": "₹3.5 - 7 LPA",
     "mid": "₹8 - 18 LPA",
@@ -93,11 +133,6 @@
     "entry": "₹3 - 6 LPA",
     "mid": "₹7 - 14 LPA",
     "senior": "₹16 - 28 LPA"
-  },
-  "Database Administrator": {
-    "entry": "₹3.5 - 7 LPA",
-    "mid": "₹8 - 16 LPA",
-    "senior": "₹18 - 35 LPA"
   },
   "Blockchain Developer": {
     "entry": "₹6 - 12 LPA",

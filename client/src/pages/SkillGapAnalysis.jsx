@@ -71,8 +71,8 @@ export default function SkillGapAnalysis() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Skill Gap Analysis</h1>
-          <p className="mt-1 text-sm text-slate-400">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Skill Gap Analysis</h1>
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
             Compare your skills with role taxonomy and live industry demand to discover growth opportunities.
           </p>
         </div>
@@ -80,7 +80,7 @@ export default function SkillGapAnalysis() {
           <button 
             onClick={handleAnalyze} 
             disabled={isAnalyzing} 
-            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] px-5 py-2.5 text-sm font-bold text-slate-950 transition-all hover:brightness-105 active:scale-95 shadow-md shadow-amber-500/10 disabled:opacity-50"
+            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 dark:from-[#ffd159] dark:to-[#fed656] px-5 py-2.5 text-sm font-bold text-slate-950 transition-all hover:brightness-105 active:scale-95 shadow-md shadow-amber-500/10 disabled:opacity-50"
           >
             <RefreshCcw className={`h-4 w-4 text-slate-950 ${isAnalyzing ? "animate-spin" : ""}`} /> 
             {isAnalyzing ? "Analyzing..." : "Generate Analysis"}
@@ -89,16 +89,16 @@ export default function SkillGapAnalysis() {
       </div>
 
       {feedback && (
-        <p aria-live="polite" className={`text-sm ${feedback.type === "success" ? "text-[#4ee4cb]" : "text-[#ff94aa]"}`}>
+        <p aria-live="polite" className={`text-sm ${feedback.type === "success" ? "text-teal-600 dark:text-[#4ee4cb]" : "text-rose-600 dark:text-[#ff94aa]"}`}>
           {feedback.message}
         </p>
       )}
 
       {!analysis && !isAnalyzing && (
-        <div className="flex h-64 items-center justify-center rounded-3xl border border-white/[0.08] bg-[#1c1e24] shadow-xl shadow-black/25">
+        <div className="flex h-64 items-center justify-center rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-white/[0.08] dark:bg-[#1c1e24] dark:shadow-xl dark:shadow-black/25">
           <div className="text-center">
-            <h3 className="mb-2 text-lg font-bold text-white">No Analysis Found</h3>
-            <p className="text-sm text-slate-400 mb-4">Click the button above to generate your first skill gap analysis.</p>
+            <h3 className="mb-2 text-lg font-bold text-slate-900 dark:text-white">No Analysis Found</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">Click the button above to generate your first skill gap analysis.</p>
           </div>
         </div>
       )}
@@ -107,44 +107,44 @@ export default function SkillGapAnalysis() {
         <>
           {/* Market Intelligence Banner */}
           {analysis.analysis_json?.market_intelligence && (
-            <div className="rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-6 shadow-xl shadow-black/25">
+            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-white/[0.08] dark:bg-[#1c1e24] dark:shadow-xl dark:shadow-black/25">
               <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#4ee4cb]/10 text-[#4ee4cb] border border-[#4ee4cb]/20">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-50 text-teal-600 border border-teal-200 dark:bg-[#4ee4cb]/10 dark:text-[#4ee4cb] dark:border-[#4ee4cb]/20">
                     <Globe className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                       Live 2026 Industry Market Intelligence
                     </h3>
-                    <p className="text-xs text-slate-400">
-                      Skills are dynamically extracted from current hiring standards and live postings for <span className="text-[#ffd159] font-semibold">{analysis.role_name}</span>.
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      Skills are dynamically extracted from current hiring standards and live postings for <span className="text-amber-700 dark:text-[#ffd159] font-semibold">{analysis.role_name}</span>.
                     </p>
                   </div>
                 </div>
                 {analysis.analysis_json.market_intelligence.extracted_at && (
-                  <span className="text-xs text-slate-400">
+                  <span className="text-xs text-slate-500 dark:text-slate-400">
                     Updated {new Date(analysis.analysis_json.market_intelligence.extracted_at).toLocaleDateString()}
                   </span>
                 )}
               </div>
 
               {analysis.analysis_json.market_intelligence.market_demand_summary && (
-                <p className="text-sm text-slate-300 leading-relaxed bg-[#242730] border border-white/[0.06] rounded-2xl p-4 mb-3.5">
+                <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed bg-slate-50 border border-slate-200 dark:bg-[#242730] dark:border-white/[0.06] rounded-2xl p-4 mb-3.5">
                   {analysis.analysis_json.market_intelligence.market_demand_summary}
                 </p>
               )}
 
               {analysis.analysis_json.market_intelligence.trending_technologies?.length > 0 && (
                 <div className="flex flex-wrap items-center gap-2 pt-1">
-                  <span className="text-xs font-semibold text-slate-400 flex items-center gap-1">
-                    <TrendingUp className="h-3.5 w-3.5 text-[#ffd159]" />
+                  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                    <TrendingUp className="h-3.5 w-3.5 text-amber-500 dark:text-[#ffd159]" />
                     Market Focus:
                   </span>
                   {analysis.analysis_json.market_intelligence.trending_technologies.map((tech, idx) => (
                     <span 
                       key={idx}
-                      className="rounded-lg bg-[#242730] border border-white/[0.08] px-3 py-1 text-xs font-medium text-[#ffd159]"
+                      className="rounded-lg bg-slate-100 border border-slate-200 px-3 py-1 text-xs font-medium text-amber-700 dark:bg-[#242730] dark:border-white/[0.08] dark:text-[#ffd159]"
                     >
                       {tech}
                     </span>

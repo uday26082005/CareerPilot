@@ -103,7 +103,7 @@ export default function Roadmap() {
   if (isLoading) {
     return (
       <div className="flex h-64 items-center justify-center">
-        <RefreshCcw className="h-8 w-8 animate-spin text-[#ffd159]" />
+        <RefreshCcw className="h-8 w-8 animate-spin text-amber-500 dark:text-[#ffd159]" />
       </div>
     );
   }
@@ -111,16 +111,16 @@ export default function Roadmap() {
   if (!roadmap) {
     return (
       <div className="flex flex-col gap-6 pb-6 w-full max-w-7xl mx-auto">
-        <div className="flex h-64 flex-col items-center justify-center rounded-3xl border border-white/[0.08] bg-[#1c1e24] shadow-xl shadow-black/25 p-8">
-          <h3 className="mb-2 text-xl font-bold text-white">No Roadmap Found</h3>
-          <p className="text-sm text-slate-400 mb-6 text-center max-w-md">
+        <div className="flex h-64 flex-col items-center justify-center rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-white/[0.08] dark:bg-[#1c1e24] dark:shadow-xl dark:shadow-black/25 p-8">
+          <h3 className="mb-2 text-xl font-bold text-slate-900 dark:text-white">No Roadmap Found</h3>
+          <p className="text-sm text-slate-600 dark:text-slate-400 mb-6 text-center max-w-md">
             Generate your personalized AI career roadmap based on your profile, resume, and skill gaps.
           </p>
-          {error && <p className="text-rose-400 mb-4 text-sm">{error}</p>}
+          {error && <p className="text-rose-500 mb-4 text-sm">{error}</p>}
           <button 
             onClick={() => generateRoadmap(false)}
             disabled={isGenerating}
-            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] px-6 py-3 text-sm font-bold text-slate-950 transition-all hover:brightness-105 active:scale-95 shadow-md shadow-amber-500/10 disabled:opacity-50"
+            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 dark:from-[#ffd159] dark:to-[#fed656] px-6 py-3 text-sm font-bold text-slate-950 transition-all hover:brightness-105 active:scale-95 shadow-md shadow-amber-500/10 disabled:opacity-50"
           >
             {isGenerating ? (
               <><RefreshCcw className="h-4 w-4 animate-spin text-slate-950" /> Generating AI Roadmap...</>
@@ -139,18 +139,18 @@ export default function Roadmap() {
       {/* Header */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
             Your Personalized Roadmap
           </h1>
-          <p className="mt-1 text-sm text-slate-400">
-            Step-by-step plan to get you job-ready as a <span className="text-[#ffd159] font-medium">{roadmap.target_role}</span>
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+            Step-by-step plan to get you job-ready as a <span className="text-amber-700 dark:text-[#ffd159] font-medium">{roadmap.target_role}</span>
           </p>
         </div>
         <div className="flex items-center gap-3">
           <button 
             onClick={() => generateRoadmap(true)}
             disabled={isGenerating}
-            className="flex items-center gap-2 rounded-xl border border-white/10 bg-[#242730] px-4 py-2.5 text-sm font-semibold text-slate-300 transition-colors hover:bg-[#2b2f3a] hover:text-white disabled:opacity-50"
+            className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-[#242730] px-4 py-2.5 text-sm font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-[#2b2f3a] dark:hover:text-white transition-colors disabled:opacity-50 shadow-sm"
           >
             <RefreshCcw className={`h-4 w-4 ${isGenerating ? 'animate-spin' : ''}`} /> 
             {isGenerating ? "Regenerating..." : "Regenerate"}
@@ -175,7 +175,7 @@ export default function Roadmap() {
               }
             }}
             disabled={isDownloading}
-            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] px-5 py-2.5 text-sm font-bold text-slate-950 transition-all hover:brightness-105 active:scale-95 disabled:opacity-50 print:hidden shadow-md shadow-amber-500/10"
+            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 dark:from-[#ffd159] dark:to-[#fed656] px-5 py-2.5 text-sm font-bold text-slate-950 transition-all hover:brightness-105 active:scale-95 disabled:opacity-50 print:hidden shadow-md shadow-amber-500/10"
           >
             <Download className={`h-4 w-4 ${isDownloading ? 'animate-bounce' : ''}`} /> 
             {isDownloading ? "Generating PNG..." : "Download PNG"}

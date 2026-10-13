@@ -45,9 +45,9 @@ export default function ForgotPassword() {
       transition={{ delay: 0.3, duration: 0.6 }}
       className="text-center mt-3"
     >
-      <p className="text-sm text-slate-400">
+      <p className="text-sm text-slate-600 dark:text-slate-400">
         Remember your password?{" "}
-        <Link to="/login" className="font-semibold text-[#ffd159] hover:underline">
+        <Link to="/login" className="font-semibold text-amber-600 hover:text-amber-700 dark:text-[#ffd159] hover:underline">
           Back to Login
         </Link>
       </p>
@@ -57,20 +57,29 @@ export default function ForgotPassword() {
   return (
     <AuthLayout aboveCard={aboveCard} belowCard={belowCard}>
       <div className="mb-6 flex items-center gap-4">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/[0.08] bg-[#ffd159]/15 shadow-md shadow-black/20">
-          <Mail className="h-6 w-6 text-[#ffd159]" />
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-amber-200 dark:border-white/[0.08] bg-amber-50 dark:bg-[#ffd159]/15 shadow-sm dark:shadow-md dark:shadow-black/20">
+          <Mail className="h-6 w-6 text-amber-600 dark:text-[#ffd159]" />
         </div>
         <div>
-          <h3 className="text-xl font-extrabold text-white">Forgot Password?</h3>
-          <p className="text-sm text-slate-400">Enter your email and we'll send you a reset link</p>
+          <h3 className="text-xl font-extrabold text-slate-900 dark:text-white">Forgot Password?</h3>
+          <p className="text-sm text-slate-600 dark:text-slate-400">Enter your email and we'll send you a reset link</p>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form 
+        onSubmit={handleSubmit} 
+        method="POST" 
+        action="/forgot-password" 
+        autoComplete="on" 
+        className="space-y-4"
+      >
         <FormInput
           label="Registered Email Address"
           icon={Mail}
+          id="forgotEmail"
+          name="email"
           type="email"
+          autoComplete="username"
           placeholder="name@example.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}

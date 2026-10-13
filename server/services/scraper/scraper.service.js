@@ -9,10 +9,10 @@ const { AppError } = require('../../middleware/error/AppError');
 // To satisfy the exact prompt, we'll write an HTML scraper pattern using Cheerio for a generic job site format.
 
 const ROLES_TO_SCRAPE = [
-  "Frontend Developer", "Backend Developer", "Full Stack Developer", "Mobile App Developer", 
-  "Data Scientist", "Machine Learning Engineer", "DevOps Engineer", "Cloud Engineer", 
-  "Cybersecurity Analyst", "UI/UX Designer", "Product Manager", "QA Engineer", 
-  "Database Administrator", "Blockchain Developer", "Systems Architect"
+  "Frontend Developer", "Backend Developer", "Full Stack Developer", "Software Development Engineer",
+  "Data Scientist", "Data Engineer", "Machine Learning Engineer", "DevOps Engineer", "System Reliability Engineer",
+  "Cloud Engineer", "Cybersecurity Analyst", "Game Developer", "Robotics Engineer", "UI/UX Designer",
+  "Product Manager", "QA Engineer", "Database Administrator", "Mobile App Developer", "Blockchain Developer"
 ];
 
 // Fallback manual salary definitions for when scraping fails or for demo purposes
@@ -27,18 +27,22 @@ const generateMockJob = (role) => {
     "Frontend Developer": [4, 18],
     "Backend Developer": [5, 22],
     "Full Stack Developer": [6, 25],
+    "Software Development Engineer": [6, 32],
     "Mobile App Developer": [5, 20],
     "Data Scientist": [8, 30],
+    "Data Engineer": [5, 26],
     "Machine Learning Engineer": [10, 35],
     "DevOps Engineer": [8, 25],
+    "System Reliability Engineer": [6, 28],
     "Cloud Engineer": [7, 24],
     "Cybersecurity Analyst": [6, 20],
+    "Game Developer": [4, 22],
+    "Robotics Engineer": [5, 25],
     "UI/UX Designer": [4, 16],
     "Product Manager": [10, 35],
     "QA Engineer": [4, 14],
     "Database Administrator": [5, 18],
-    "Blockchain Developer": [8, 30],
-    "Systems Architect": [20, 50]
+    "Blockchain Developer": [8, 30]
   }[role] || [4, 15];
 
   // Add random jitter to make it realistic

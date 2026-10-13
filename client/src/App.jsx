@@ -20,6 +20,7 @@ import ProfileSummary from "./pages/ProfileSummary";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import AppLayout from "./components/layout/AppLayout";
 import { AuthProvider } from "./contexts/AuthContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 function AppContent() {
   const navigate = useNavigate();
@@ -66,9 +67,11 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

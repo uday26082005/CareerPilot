@@ -103,13 +103,13 @@ once:true
 
 className="mb-5 flex justify-center">
 
-<div className="flex items-center gap-2 rounded-full border border-[#ffd159]/20 bg-[#ffd159]/10 px-5 py-2 backdrop-blur-xl">
+<div className="flex items-center gap-2 rounded-full border border-amber-300 dark:border-[#ffd159]/20 bg-amber-50 dark:bg-[#ffd159]/10 px-5 py-2 backdrop-blur-xl">
 
 <Sparkles
 size={16}
-className="text-[#ffd159]"/>
+className="text-amber-600 dark:text-[#ffd159]"/>
 
-<span className="text-sm font-semibold text-[#ffd159]">
+<span className="text-sm font-semibold text-amber-700 dark:text-[#ffd159]">
 
 Simple Process
 
@@ -137,7 +137,7 @@ viewport={{
 once:true
 }}
 
-className="mx-auto max-w-4xl text-center text-4xl font-black leading-tight lg:text-5xl text-white">
+className="mx-auto max-w-4xl text-center text-4xl font-black leading-tight lg:text-5xl text-slate-900 dark:text-white">
 
 Your Journey
 
@@ -169,7 +169,7 @@ viewport={{
 once:true
 }}
 
-className="mx-auto mt-5 max-w-3xl text-center text-base leading-8 text-slate-400">
+className="mx-auto mt-5 max-w-3xl text-center text-base leading-8 text-slate-600 dark:text-slate-400">
 
 CareerPilot guides you from resume analysis to interview preparation
 through an intelligent AI-powered workflow.
@@ -181,7 +181,7 @@ through an intelligent AI-powered workflow.
 <div className="relative mx-auto mt-16 max-w-5xl">
 
 {/* Line */}
-<div className="absolute left-8 top-0 hidden h-[calc(100%-80px)] w-[2px] rounded-full bg-gradient-to-b from-[#ffd159]/40 via-white/10 to-transparent md:block"/>
+<div className="absolute left-8 top-0 hidden h-[calc(100%-80px)] w-[2px] rounded-full bg-gradient-to-b from-[#ffd159]/40 via-slate-300 dark:via-white/10 to-transparent md:block"/>
 
 <div className="space-y-8">
 
@@ -220,7 +220,7 @@ delay:index*.08
 className="relative flex flex-col gap-5 md:flex-row">
                 {/* Icon */}
 
-              <div className={`relative z-10 flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl ${accent.iconBg} ${accent.iconText} border border-white/[0.08] shadow-md shadow-black/20 backdrop-blur-md`}>
+              <div className={`relative z-10 flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl ${accent.iconBg} ${accent.iconText} border border-slate-200 dark:border-white/[0.08] shadow-md shadow-black/5 dark:shadow-black/20 backdrop-blur-md`}>
 
                 <Icon className="h-7 w-7" />
 
@@ -241,17 +241,17 @@ className="relative flex flex-col gap-5 md:flex-row">
                   scale: 1.01,
                 }}
 
-                className={`flex-1 rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-6 shadow-xl shadow-black/25 backdrop-blur-xl transition-all duration-300 ${accent.borderHover} hover:bg-[#20222a]`}
+                className={`flex-1 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-white/[0.08] dark:bg-[#1c1e24] dark:shadow-xl dark:shadow-black/25 backdrop-blur-xl transition-all duration-300 ${accent.borderHover} hover:bg-slate-50/50 dark:hover:bg-[#20222a]`}
 
               >
 
-                <h3 className="text-xl font-bold text-white">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">
 
                   {step.title}
 
                 </h3>
 
-                <p className="mt-3 leading-7 text-slate-400">
+                <p className="mt-3 leading-7 text-slate-600 dark:text-slate-400">
 
                   {step.description}
 

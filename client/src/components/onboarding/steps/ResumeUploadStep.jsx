@@ -85,15 +85,15 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
       className="flex h-full flex-col"
     >
       <div className="mb-8">
-        <h1 className="mb-2 text-3xl md:text-4xl font-black text-white">Resume Upload</h1>
-        <p className="text-base text-slate-400">
+        <h1 className="mb-2 text-3xl md:text-4xl font-black text-slate-900 dark:text-white">Resume Upload</h1>
+        <p className="text-base text-slate-600 dark:text-slate-400">
           Upload your resume to help us analyze your skills, experience, and qualifications to provide better recommendations.
         </p>
       </div>
 
       <div className="flex-1 flex flex-col gap-6">
         {/* Upload Area */}
-        <div className="group relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[#ffd159]/30 bg-[#ffd159]/5 py-12 transition-all hover:border-[#ffd159]/60 hover:bg-[#ffd159]/10">
+        <div className="group relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-amber-300 dark:border-[#ffd159]/30 bg-amber-50/50 dark:bg-[#ffd159]/5 py-12 transition-all hover:border-amber-400 dark:hover:border-[#ffd159]/60 hover:bg-amber-50 dark:hover:bg-[#ffd159]/10">
           <div className="absolute inset-0 -z-10 rounded-2xl bg-[#ffd159]/10 blur-[40px] transition-opacity group-hover:opacity-100 opacity-40" />
           
           <input 
@@ -106,11 +106,11 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
 
           {!file ? (
             <>
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#ffd159]/15 text-[#ffd159] shadow-md shadow-black/20">
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 dark:bg-[#ffd159]/15 text-amber-600 dark:text-[#ffd159] shadow-sm dark:shadow-md dark:shadow-black/20">
                 <CloudUpload className="h-8 w-8" />
               </div>
               
-              <h3 className="mb-2 text-xl font-bold text-white">Drag & drop your resume here</h3>
+              <h3 className="mb-2 text-xl font-bold text-slate-900 dark:text-white">Drag & drop your resume here</h3>
               <p className="mb-4 text-sm font-medium text-slate-400 dark:text-gray-500 uppercase">or</p>
               
               <button 
@@ -124,16 +124,16 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
             </>
           ) : (
             <div className="flex flex-col items-center">
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#4ee4cb]/15 text-[#4ee4cb] shadow-md shadow-black/20">
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-teal-100 dark:bg-[#4ee4cb]/15 text-teal-600 dark:text-[#4ee4cb] shadow-sm dark:shadow-md dark:shadow-black/20">
                 <FileText className="h-8 w-8" />
               </div>
-              <h3 className="mb-2 text-xl font-bold text-white">{file.name}</h3>
-              <p className="mb-6 text-sm text-slate-400 dark:text-gray-500">
+              <h3 className="mb-2 text-xl font-bold text-slate-900 dark:text-white">{file.name}</h3>
+              <p className="mb-6 text-sm text-slate-500 dark:text-gray-500">
                 {(file.size / (1024 * 1024)).toFixed(2)} MB
               </p>
               <button 
                 onClick={handleRemoveFile}
-                className="flex items-center gap-2 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm text-red-400 transition-colors hover:bg-red-500/20"
+                className="flex items-center gap-2 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm text-red-500 dark:text-red-400 transition-colors hover:bg-red-500/20"
               >
                 <X className="h-4 w-4" /> Remove File
               </button>
@@ -142,12 +142,12 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
         </div>
 
         {/* Tips Section */}
-        <div className="rounded-2xl border border-white/[0.08] bg-[#1c1e24] p-6 shadow-xl shadow-black/25">
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 dark:border-white/[0.08] dark:bg-[#1c1e24] p-6 shadow-sm dark:shadow-xl dark:shadow-black/25">
           <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#ffd159]/15">
-              <Lightbulb className="h-4 w-4 text-[#ffd159]" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100 dark:bg-[#ffd159]/15">
+              <Lightbulb className="h-4 w-4 text-amber-600 dark:text-[#ffd159]" />
             </div>
-            <h4 className="font-bold text-white">Tips for a great upload</h4>
+            <h4 className="font-bold text-slate-900 dark:text-white">Tips for a great upload</h4>
           </div>
           
           <div className="grid gap-3 sm:grid-cols-2">
@@ -158,8 +158,8 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
               "Keep it concise and relevant"
             ].map((tip, idx) => (
               <div key={idx} className="flex items-start gap-2">
-                <Check className="mt-0.5 h-5 w-5 shrink-0 text-[#4ee4cb]" />
-                <span className="text-sm text-slate-300">{tip}</span>
+                <Check className="mt-0.5 h-5 w-5 shrink-0 text-teal-600 dark:text-[#4ee4cb]" />
+                <span className="text-sm text-slate-700 dark:text-slate-300">{tip}</span>
               </div>
             ))}
           </div>
@@ -169,7 +169,7 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
       <div className="mt-8 flex items-center justify-between border-t border-slate-200 dark:border-white/[0.08] pt-6">
         <button
           onClick={onPrev}
-          className="flex items-center gap-2 text-sm font-medium text-slate-400 transition-colors hover:text-white"
+          className="flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400 transition-colors hover:text-slate-900 dark:hover:text-white"
         >
           <ArrowLeft className="h-4 w-4" /> Back
         </button>

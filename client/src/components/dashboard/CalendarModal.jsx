@@ -40,20 +40,20 @@ export default function CalendarModal({ isOpen, onClose, events }) {
 
   return createPortal(
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 backdrop-blur-md p-4 transition-all">
-      <div className="relative w-full max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-[#1c1e24] p-6 shadow-2xl backdrop-blur-2xl flex flex-col max-h-[90vh]">
+      <div className="relative w-full max-w-4xl overflow-hidden rounded-3xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#1c1e24] p-6 shadow-2xl backdrop-blur-2xl flex flex-col max-h-[90vh]">
         
         {/* Header */}
         <div className="flex items-center justify-between mb-6 shrink-0">
           <div className="flex items-center gap-4">
-            <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-              <Calendar className="h-6 w-6 text-[#ffd159]" /> 
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <Calendar className="h-6 w-6 text-amber-500 dark:text-[#ffd159]" /> 
               {currentMonthName} {year}
             </h2>
             <div className="flex items-center gap-2 ml-4">
-              <button onClick={prevMonth} className="rounded-full bg-[#242730] p-2 text-slate-300 hover:bg-[#2b2f3a] hover:text-white transition-colors">
+              <button onClick={prevMonth} className="rounded-full bg-slate-100 dark:bg-[#242730] p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-[#2b2f3a] hover:text-slate-900 dark:hover:text-white transition-colors">
                 <ChevronLeft className="h-4 w-4" />
               </button>
-              <button onClick={nextMonth} className="rounded-full bg-[#242730] p-2 text-slate-300 hover:bg-[#2b2f3a] hover:text-white transition-colors">
+              <button onClick={nextMonth} className="rounded-full bg-slate-100 dark:bg-[#242730] p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-[#2b2f3a] hover:text-slate-900 dark:hover:text-white transition-colors">
                 <ChevronRight className="h-4 w-4" />
               </button>
             </div>
@@ -61,7 +61,7 @@ export default function CalendarModal({ isOpen, onClose, events }) {
 
           <button 
             onClick={onClose}
-            className="rounded-full bg-[#242730] p-2 text-slate-400 hover:bg-[#2b2f3a] hover:text-white transition-colors"
+            className="rounded-full bg-slate-100 dark:bg-[#242730] p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-[#2b2f3a] hover:text-slate-900 dark:hover:text-white transition-colors"
           >
             <X className="h-4 w-4" />
           </button>
@@ -69,7 +69,7 @@ export default function CalendarModal({ isOpen, onClose, events }) {
         
         {/* Calendar Grid */}
         <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
-          <div className="grid grid-cols-7 gap-3 text-center text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+          <div className="grid grid-cols-7 gap-3 text-center text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3">
             {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map(d => (
               <div key={d} className="hidden sm:block">{d}</div>
             ))}
@@ -95,11 +95,11 @@ export default function CalendarModal({ isOpen, onClose, events }) {
                   key={day} 
                   className={`min-h-24 p-2 rounded-xl border transition-all flex flex-col
                     ${isToday 
-                      ? 'border-[#ffd159] bg-[#ffd159]/10 shadow-sm shadow-amber-500/10' 
-                      : 'border-white/[0.06] bg-[#242730] hover:bg-[#2b2f3a] hover:border-white/10'}
+                      ? 'border-amber-500 bg-amber-500/10 shadow-sm shadow-amber-500/10 dark:border-[#ffd159] dark:bg-[#ffd159]/10' 
+                      : 'border-slate-200 dark:border-white/[0.06] bg-slate-50 dark:bg-[#242730] hover:bg-slate-100 dark:hover:bg-[#2b2f3a] hover:border-slate-300 dark:hover:border-white/10'}
                   `}
                 >
-                  <div className={`text-right text-sm font-semibold mb-1 ${isToday ? 'text-[#ffd159]' : 'text-slate-300'}`}>
+                  <div className={`text-right text-sm font-semibold mb-1 ${isToday ? 'text-amber-600 dark:text-[#ffd159]' : 'text-slate-700 dark:text-slate-300'}`}>
                     {day}
                   </div>
                   

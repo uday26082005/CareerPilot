@@ -29,7 +29,7 @@ export default function StatCard({
       case "sky":
         return "bg-gradient-to-br from-[#72c5ff] via-[#5cb7fa] to-[#46a7f5] text-slate-950 shadow-lg shadow-blue-500/15 border border-blue-300/40 hover:shadow-blue-500/25";
       default:
-        return "bg-[#1c1e24] border border-white/[0.08] text-white shadow-xl shadow-black/25 hover:bg-[#22252c] hover:border-white/15";
+        return "bg-white dark:bg-[#1c1e24] border border-slate-200 dark:border-white/[0.08] text-slate-900 dark:text-white shadow-sm dark:shadow-xl dark:shadow-black/25 hover:bg-slate-50 dark:hover:bg-[#22252c] hover:border-slate-300 dark:hover:border-white/15";
     }
   };
 
@@ -38,14 +38,14 @@ export default function StatCard({
       {/* Top Header: Title & Icon */}
       <div className="flex items-center justify-between gap-3">
         <h3 className={`text-xs font-bold uppercase tracking-wider truncate ${
-          isCandyCard ? "text-slate-900/80" : "text-slate-400"
+          isCandyCard ? "text-slate-900/80" : "text-slate-500 dark:text-slate-400"
         }`}>
           {title}
         </h3>
         <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-transform ${
           isCandyCard 
             ? "bg-black/15 text-slate-950 shadow-inner" 
-            : iconBgColor || "bg-white/[0.06] border border-white/10"
+            : iconBgColor || "bg-slate-100 dark:bg-white/[0.06] border border-slate-200 dark:border-white/10"
         }`}>
           <Icon className={`h-4.5 w-4.5 ${isCandyCard ? "text-slate-950" : iconColor}`} />
         </div>
@@ -54,7 +54,7 @@ export default function StatCard({
       {/* Middle: Prominent Metric Value */}
       <div className="my-1.5 flex items-baseline">
         <span className={`text-2xl font-black tracking-tight leading-none truncate ${
-          isCandyCard ? "text-slate-950" : "text-white"
+          isCandyCard ? "text-slate-950" : "text-slate-900 dark:text-white"
         }`}>
           {value}
         </span>
@@ -66,7 +66,7 @@ export default function StatCard({
           className={`text-xs font-semibold truncate max-w-full ${
             isCandyCard 
               ? "text-slate-950 bg-black/10 px-2.5 py-1 rounded-full" 
-              : `bg-white/[0.06] px-2.5 py-1 rounded-full border border-white/[0.06] ${subtitleColor}`
+              : `bg-slate-100 dark:bg-white/[0.06] px-2.5 py-1 rounded-full border border-slate-200 dark:border-white/[0.06] ${subtitleColor}`
           }`}
           title={typeof subtitle === "string" ? subtitle : undefined}
         >

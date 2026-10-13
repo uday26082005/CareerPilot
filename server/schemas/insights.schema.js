@@ -9,9 +9,12 @@ const otherMatchSchema = z.object({
 const companySchema = z.object({
   name: z.string(),
   domain: z.string().optional().nullable(),
-  demand: z.string(), // e.g., "High", "Medium"
+  title: z.string().optional().nullable(),
+  location: z.string().optional().nullable(),
+  url: z.string().optional().nullable(),
+  demand: z.string(), // e.g., "High", "Top Match", "Skill Matched"
   demandColor: z.string(), // e.g., "text-emerald-400", "text-orange-400"
-  salary: z.string(), // e.g., "₹18 - 45 LPA"
+  salary: z.string().optional().nullable(), // e.g., "₹18 - 45 LPA" or null
   isText: z.boolean().optional().nullable(),
   textFallback: z.string().optional().nullable(),
   textColor: z.string().optional().nullable(),
@@ -20,7 +23,7 @@ const companySchema = z.object({
 
 const takeawaySchema = z.object({
   title: z.string(),
-  desc: z.string(),
+  desc: z.string().optional().default(""),
   iconName: z.string(), // e.g., "Target", "ShieldCheck", "Briefcase", "ArrowUpRight"
   iconColor: z.string() // e.g., "text-violet-400 bg-violet-500/10"
 });
@@ -33,6 +36,8 @@ const careerInsightsSchema = z.object({
   salary_entry: z.string(),
   salary_mid: z.string(),
   salary_senior: z.string(),
+  salary_source: z.string().optional().nullable(),
+  salary_updated: z.string().optional().nullable(),
   top_companies: z.array(companySchema),
   key_takeaways: z.array(takeawaySchema),
   ai_advice: z.string(),

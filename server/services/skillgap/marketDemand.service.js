@@ -2,23 +2,28 @@ const axios = require("axios");
 const { z } = require("zod");
 const aiService = require("../ai/groq.service");
 
-// The 15 standard supported roles (roles are fixed/hardcoded, but all skills are extracted dynamically)
+// The standard supported tech and engineering roles
 const SUPPORTED_ROLES = [
   "Frontend Developer",
   "Backend Developer",
   "Full Stack Developer",
+  "Software Development Engineer",
   "Data Scientist",
+  "Data Engineer",
   "Product Manager",
   "UI/UX Designer",
   "DevOps Engineer",
+  "System Reliability Engineer",
   "Mobile App Developer",
+  "Game Developer",
   "Data Analyst",
   "Machine Learning Engineer",
   "Cybersecurity Analyst",
   "Cloud Architect",
   "Quality Assurance Engineer",
   "Business Analyst",
-  "Systems Administrator"
+  "Database Administrator",
+  "Robotics Engineer"
 ];
 
 // Mapping roles to web search/api tags for live market posting ingestion
@@ -26,18 +31,23 @@ const ROLE_WEB_TAG_MAP = {
   "Frontend Developer": "frontend",
   "Backend Developer": "backend",
   "Full Stack Developer": "fullstack",
+  "Software Development Engineer": "software",
   "Data Scientist": "data",
+  "Data Engineer": "data",
   "Product Manager": "product",
   "UI/UX Designer": "design",
   "DevOps Engineer": "devops",
+  "System Reliability Engineer": "sre",
   "Mobile App Developer": "mobile",
+  "Game Developer": "gamedev",
   "Data Analyst": "data",
   "Machine Learning Engineer": "ai",
   "Cybersecurity Analyst": "security",
   "Cloud Architect": "cloud",
   "Quality Assurance Engineer": "qa",
   "Business Analyst": "analyst",
-  "Systems Administrator": "sysadmin"
+  "Database Administrator": "database",
+  "Robotics Engineer": "robotics"
 };
 
 // Zod Schema for dynamically extracted market skills - approx 25 skills (20 to 30)

@@ -1,12 +1,13 @@
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Legend, Tooltip } from "recharts";
+import { useTheme } from "../../contexts/ThemeContext";
 
-const CustomTick = ({ payload, x, y, cy, textAnchor }) => {
+const CustomTick = ({ payload, x, y, cy, textAnchor, isDark }) => {
   const text = payload.value || "";
   const lines = text.length > 14 ? text.replace(/-/g, '- ').split(' ') : [text];
   
   return (
     <g>
-      <text x={x} y={y} dy={y > cy + 10 ? 10 : 0} textAnchor={textAnchor} fill="#9ca3af" fontSize={11}>
+      <text x={x} y={y} dy={y > cy + 10 ? 10 : 0} textAnchor={textAnchor} fill={isDark ? "#9ca3af" : "#334155"} fontSize={11} fontWeight={isDark ? "normal" : "500"}>
         {lines.map((line, index) => (
           <tspan x={x} dy={index === 0 ? 0 : 13} key={index}>
             {line}
@@ -18,6 +19,7 @@ const CustomTick = ({ payload, x, y, cy, textAnchor }) => {
 };
 
 export default function SkillRadarChart({ radarData = [], matchedSkills = [], missingSkills = [] }) {
+  const { isDark } = useTheme();
   // Use meaningful domain pillars if provided
   let chartData;
 
@@ -36,7 +38,7 @@ export default function SkillRadarChart({ radarData = [], matchedSkills = [], mi
   }
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
+    <div className="flex h-full flex-col rounded-2xl border border-slate-200/80 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 shadow-xs hover:shadow-sm transition-all backdrop-blur-md">
       <div className="mb-2">
         <h3 className="text-base font-semibold text-slate-900 dark:text-white">Role Domain Competency</h3>
         <p className="text-xs text-slate-500 dark:text-gray-400">
@@ -53,27 +55,27 @@ export default function SkillRadarChart({ radarData = [], matchedSkills = [], mi
             data={chartData.length > 0 ? chartData : [{ subject: 'No Data', A: 0, B: 100, fullMark: 100 }]} 
             margin={{ top: 20, right: 30, bottom: 20, left: 30 }}
           >
-            <PolarGrid stroke="#ffffff20" />
-            <PolarAngleAxis dataKey="subject" tick={<CustomTick />} />
+            <PolarGrid stroke={isDark ? "#ffffff20" : "#e2e8f0"} />
+            <PolarAngleAxis dataKey="subject" tick={<CustomTick isDark={isDark} />} />
             <PolarRadiusAxis domain={[0, 100]} tick={false} axisLine={false} />
             
             <Radar
               name="Your Skills"
               dataKey="A"
-              stroke="#ffd159"
-              fill="#ffd159"
-              fillOpacity={0.4}
+              stroke={isDark ? "#ffd159" : "#f59e0b"}
+              fill={isDark ? "#ffd159" : "#f59e0b"}
+              fillOpacity={isDark ? 0.4 : 0.35}
             />
             <Radar
               name="Role Benchmark"
               dataKey="B"
-              stroke="#4ee4cb"
-              fill="#4ee4cb"
+              stroke={isDark ? "#4ee4cb" : "#0d9488"}
+              fill={isDark ? "#4ee4cb" : "#0d9488"}
               fillOpacity={0.15}
             />
             
             <Legend 
-              wrapperStyle={{ fontSize: '12px', paddingTop: '10px', color: '#9ca3af' }} 
+              wrapperStyle={{ fontSize: '12px', paddingTop: '10px', color: isDark ? '#9ca3af' : '#475569' }} 
               iconType="plainline"
             />
             <Tooltip
@@ -81,14 +83,14 @@ export default function SkillRadarChart({ radarData = [], matchedSkills = [], mi
                 if (active && payload && payload.length) {
                   const data = payload[0].payload;
                   return (
-                    <div className="rounded-xl bg-[#1c1e24] border border-white/10 p-2.5 text-xs text-white shadow-xl">
-                      <span className="font-bold text-[#ffd159] block mb-1">{data.subject}</span>
-                      <div className="flex flex-col gap-0.5 text-slate-300">
-                        <span>Your Coverage: <strong className="text-white">{data.A}%</strong></span>
+                    <div className="rounded-xl bg-white dark:bg-[#1c1e24] border border-slate-200 dark:border-white/10 p-2.5 text-xs text-slate-900 dark:text-white shadow-xl">
+                      <span className="font-bold text-amber-600 dark:text-[#ffd159] block mb-1">{data.subject}</span>
+                      <div className="flex flex-col gap-0.5 text-slate-600 dark:text-slate-300">
+                        <span>Your Coverage: <strong className="text-slate-900 dark:text-white">{data.A}%</strong></span>
                         {data.detectedCount !== undefined && (
-                          <span>Competencies: <strong className="text-[#4ee4cb]">{data.detectedCount}</strong> / {data.totalCount} detected</span>
+                          <span>Competencies: <strong className="text-teal-600 dark:text-[#4ee4cb]">{data.detectedCount}</strong> / {data.totalCount} detected</span>
                         )}
-                        <span>Role Expectation: <strong className="text-[#4ee4cb]">100%</strong></span>
+                        <span>Role Expectation: <strong className="text-teal-600 dark:text-[#4ee4cb]">100%</strong></span>
                       </div>
                     </div>
                   );

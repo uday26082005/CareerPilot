@@ -69,28 +69,28 @@ export default function ScheduleEventModal({ isOpen, onClose, onEventCreated }) 
 
   return createPortal(
     <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/75 backdrop-blur-md p-4">
-      <div className="relative w-full max-w-md overflow-visible rounded-3xl border border-white/10 bg-[#1c1e24] p-6 shadow-2xl text-white">
+      <div className="relative w-full max-w-md overflow-visible rounded-3xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#1c1e24] p-6 shadow-2xl text-slate-900 dark:text-white">
         <div className="flex items-center justify-between mb-6 shrink-0">
-          <h2 className="text-xl font-bold text-white flex items-center gap-2">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
             Schedule Custom Event
           </h2>
           <button 
             onClick={onClose}
-            className="rounded-full bg-[#242730] p-2 text-slate-400 hover:bg-[#2b2f3a] hover:text-white transition-colors"
+            className="rounded-full bg-slate-100 dark:bg-[#242730] p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-[#2b2f3a] hover:text-slate-900 dark:hover:text-white transition-colors"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
         {error && (
-          <div className="mb-4 rounded-lg bg-red-500/15 border border-red-500/30 p-3 text-sm text-red-400 font-medium">
+          <div className="mb-4 rounded-lg bg-red-500/15 border border-red-500/30 p-3 text-sm text-red-600 dark:text-red-400 font-medium">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="mb-1 block text-sm font-medium text-slate-300">Event Title</label>
+            <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">Event Title</label>
             <div className="relative">
               <FileText className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
               <input 
@@ -100,13 +100,13 @@ export default function ScheduleEventModal({ isOpen, onClose, onEventCreated }) 
                 onChange={handleChange}
                 required
                 placeholder="e.g., Google Mock Interview"
-                className="w-full rounded-xl border border-white/10 bg-[#242730] py-2.5 pl-10 pr-4 text-sm text-white placeholder-slate-500 focus:border-[#ffd159] focus:outline-none focus:ring-1 focus:ring-[#ffd159]"
+                className="w-full rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#242730] py-2.5 pl-10 pr-4 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:border-amber-500 dark:focus:border-[#ffd159] focus:outline-none focus:ring-1 focus:ring-amber-500 dark:ring-[#ffd159]"
               />
             </div>
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-slate-300">Event Type</label>
+            <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">Event Type</label>
             <ThemedSelect
               value={formData.type}
               onChange={(val) => setFormData((prev) => ({ ...prev, type: val }))}
@@ -125,7 +125,7 @@ export default function ScheduleEventModal({ isOpen, onClose, onEventCreated }) 
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-300">Date</label>
+              <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">Date</label>
               <div className="relative">
                 <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <input 
@@ -135,13 +135,13 @@ export default function ScheduleEventModal({ isOpen, onClose, onEventCreated }) 
                   onChange={handleChange}
                   required
                   min={new Date().toISOString().split("T")[0]}
-                  className="w-full rounded-xl border border-white/10 bg-[#242730] py-2.5 pl-10 pr-4 text-sm text-white focus:border-[#ffd159] focus:outline-none focus:ring-1 focus:ring-[#ffd159] [color-scheme:dark]"
+                  className="w-full rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#242730] py-2.5 pl-10 pr-4 text-sm text-slate-900 dark:text-white focus:border-amber-500 dark:focus:border-[#ffd159] focus:outline-none focus:ring-1 focus:ring-amber-500 dark:ring-[#ffd159] dark:[color-scheme:dark] [color-scheme:light]"
                 />
               </div>
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-300">Time</label>
+              <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">Time</label>
               <div className="relative">
                 <Clock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <input 
@@ -150,7 +150,7 @@ export default function ScheduleEventModal({ isOpen, onClose, onEventCreated }) 
                   value={formData.time}
                   onChange={handleChange}
                   required
-                  className="w-full rounded-xl border border-white/10 bg-[#242730] py-2.5 pl-10 pr-4 text-sm text-white focus:border-[#ffd159] focus:outline-none focus:ring-1 focus:ring-[#ffd159] [color-scheme:dark]"
+                  className="w-full rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#242730] py-2.5 pl-10 pr-4 text-sm text-slate-900 dark:text-white focus:border-amber-500 dark:focus:border-[#ffd159] focus:outline-none focus:ring-1 focus:ring-amber-500 dark:ring-[#ffd159] dark:[color-scheme:dark] [color-scheme:light]"
                 />
               </div>
             </div>

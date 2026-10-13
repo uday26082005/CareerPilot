@@ -52,8 +52,10 @@ VALUES
   ('Game Developer (Unreal)', '["Unreal Engine", "C++", "Blueprints", "3D Math", "Game Physics", "Animation", "Git", "Performance Optimization", "Shaders", "Multiplayer Networking"]'::jsonb),
   ('Embedded Systems Engineer', '["C", "C++", "Microcontrollers", "RTOS", "Hardware Debugging", "Assembly", "IoT", "Linux Kernel", "Git", "Circuit Design Basics"]'::jsonb),
   ('Web3 Engineer', '["Web3.js / Ethers.js", "React", "TypeScript", "Solidity", "Smart Contracts", "Node.js", "Decentralized Apps (dApps)", "Cryptography", "Git", "IPFS"]'::jsonb),
-  ('Salesforce Developer', '["Apex", "Lightning Web Components (LWC)", "Visualforce", "SOQL/SOSL", "Salesforce CRM", "JavaScript", "REST/SOAP APIs", "Git", "Salesforce Admin Basics", "Data Migration"]'::jsonb),
-  ('Systems Administrator', '["Linux/Unix", "Windows Server", "Active Directory", "Networking (TCP/IP, DNS)", "Bash/PowerShell", "Virtualization (VMware)", "Cloud (AWS/Azure)", "Security Basics", "Backup/Recovery", "Hardware Troubleshooting"]'::jsonb),
+  ('Database Administrator', '["PostgreSQL", "MySQL", "Oracle Database", "Query Optimization", "Indexing Strategy", "High Availability & Replication", "Backup & Recovery", "Database Security", "AWS RDS", "Performance Tuning"]'::jsonb),
+  ('Robotics Engineer', '["ROS", "ROS 2", "C++", "Python", "Kinematics & Dynamics", "Control Systems (PID)", "Computer Vision (OpenCV)", "Sensor Fusion (LiDAR/IMU)", "SLAM", "Embedded Systems (RTOS)"]'::jsonb),
+  ('Software Development Engineer', '["Java/C++/Python", "Data Structures", "Algorithms", "System Design (HLD/LLD)", "Object-Oriented Design", "Distributed Systems", "REST APIs", "SQL", "Git", "Unit Testing"]'::jsonb),
+  ('System Reliability Engineer', '["Linux Administration", "Kubernetes", "Docker", "Terraform", "Prometheus & Grafana", "SLIs/SLOs/SLAs", "Incident Management", "CI/CD", "TCP/IP & Networking", "Python/Bash"]'::jsonb),
   ('Tech Lead', '["System Design", "Agile Methodology", "Mentorship", "Code Review", "Project Management", "Architecture", "Communication", "Software Engineering", "Cloud Computing", "CI/CD"]'::jsonb)
   
 ON CONFLICT (role_name) DO NOTHING;

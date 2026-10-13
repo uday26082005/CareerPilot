@@ -36,7 +36,7 @@ export default function SocialAuthButtons() {
           onClick={() => handleOAuth(b.provider)}
           whileHover={{ y: -3, scale: 1.04 }}
           whileTap={{ scale: 0.95 }}
-          className="flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-[#242730] backdrop-blur-xl shadow-md shadow-black/20 transition-all hover:border-white/20 hover:bg-slate-200 dark:hover:bg-[#2b2f3a]"
+          className="flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-slate-50 hover:bg-slate-100 hover:border-slate-300 dark:bg-[#242730] dark:hover:bg-[#2b2f3a] dark:hover:border-white/20 backdrop-blur-xl shadow-sm dark:shadow-md dark:shadow-black/20 transition-all"
         >
           {b.icon}
         </motion.button>

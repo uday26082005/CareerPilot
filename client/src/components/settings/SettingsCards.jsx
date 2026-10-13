@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { Pencil, Shield, Loader2, Camera, X, Settings, AlertTriangle, Trash2 } from "lucide-react";
+import { Pencil, Shield, Loader2, Camera, X, Settings, AlertTriangle, Trash2, Sun, Moon } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { useTheme } from "../../contexts/ThemeContext";
 import { supabase } from "../../lib/supabase";
 import axios from "axios";
 import toast from "react-hot-toast";
 import ThemedSelect from "../ui/ThemedSelect";
+import AvatarPickerModal from "./AvatarPickerModal";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
@@ -37,6 +39,7 @@ export function ProfileSection() {
   const [bio, setBio] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [isAvatarPickerOpen, setIsAvatarPickerOpen] = useState(false);
   const [pendingUpload, setPendingUpload] = useState(null);
 
   // Fetch profile from backend
@@ -94,6 +97,52 @@ export function ProfileSection() {
       toast.success("Profile photo loaded (original resolution)!");
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleSaveAvatar = async (selectedUrl, uploadData) => {
+    if (!session?.access_token) return;
+    try {
+      let finalAvatarUrl = selectedUrl;
+
+      if (uploadData) {
+        const uploadRes = await axios.post(`${API_BASE_URL}/profile/avatar`, {
+          base64Data: uploadData.base64Data,
+          contentType: uploadData.contentType
+        }, {
+          headers: { Authorization: `Bearer ${session.access_token}` }
+        });
+
+        if (uploadRes.data?.success) {
+          finalAvatarUrl = uploadRes.data.publicUrl;
+        }
+      }
+
+      // Update Supabase Auth user metadata
+      await supabase.auth.updateUser({
+        data: {
+          avatar_url: finalAvatarUrl
+        }
+      });
+
+      // Update backend profile record
+      await axios.put(`${API_BASE_URL}/profile`, {
+        avatarUrl: finalAvatarUrl
+      }, {
+        headers: { Authorization: `Bearer ${session.access_token}` }
+      });
+
+      setAvatarUrl(finalAvatarUrl);
+      setPendingUpload(null);
+      toast.success("Profile photo updated successfully!");
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+    } catch (err) {
+      console.error("Failed to update avatar:", err);
+      toast.error("Failed to update profile photo");
+      throw err;
+    }
   };
 
   const handleSave = async () => {
@@ -159,72 +208,85 @@ export function ProfileSection() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-12 rounded-3xl border border-white/[0.08] bg-[#1c1e24] shadow-xl shadow-black/25">
-        <Loader2 className="h-6 w-6 text-[#ffd159] animate-spin" />
+      <div className="flex items-center justify-center py-12 rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-white/[0.08] dark:bg-[#1c1e24] dark:shadow-xl dark:shadow-black/25">
+        <Loader2 className="h-6 w-6 text-amber-500 dark:text-[#ffd159] animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-6 sm:p-8 shadow-xl shadow-black/25">
+    <div className="flex flex-col rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm dark:border-white/[0.08] dark:bg-[#1c1e24] dark:shadow-xl dark:shadow-black/25">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="relative group">
-            {avatarUrl ? (
-              <img 
-                src={avatarUrl} 
-                alt="Avatar" 
-                onClick={() => !isEditing && setIsPreviewOpen(true)}
-                className={`h-16 w-16 rounded-full object-cover border border-white/10 ring-4 ring-[#242730] ${!isEditing ? 'cursor-pointer hover:border-[#ffd159]/80 transition-colors' : ''}`} 
-              />
-            ) : (
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#ffd159] to-[#fed656] text-2xl font-bold text-slate-950 uppercase ring-4 ring-[#242730]">
-                {(name || "U").charAt(0).toUpperCase()}
+            <button
+              type="button"
+              onClick={() => setIsAvatarPickerOpen(true)}
+              className="relative flex h-16 w-16 rounded-full overflow-hidden cursor-pointer focus:outline-none ring-4 ring-slate-100 dark:ring-[#242730] hover:ring-amber-500/50 dark:hover:ring-[#ffd159]/50 transition-all duration-200"
+              title="Click to choose avatar or upload photo"
+            >
+              {avatarUrl ? (
+                <img 
+                  src={avatarUrl} 
+                  alt="Avatar" 
+                  className="h-full w-full object-cover border border-slate-200 dark:border-white/10" 
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-amber-400 to-amber-300 dark:from-[#ffd159] dark:to-[#fed656] text-2xl font-bold text-slate-950 uppercase">
+                  {(name || "U").charAt(0).toUpperCase()}
+                </div>
+              )}
+              {/* Camera Icon Overlay on hover */}
+              <div className="absolute inset-0 flex items-center justify-center bg-black/55 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 backdrop-blur-[1px]">
+                <Camera className="h-5 w-5 text-white drop-shadow-md" />
               </div>
-            )}
-            {isEditing && (
-              <label className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-full cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity">
-                <Camera className="h-5 w-5 text-white" />
-                <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
-              </label>
-            )}
+            </button>
+            {/* Small camera badge icon on bottom right */}
+            <button 
+              type="button"
+              onClick={() => setIsAvatarPickerOpen(true)}
+              className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-amber-500 dark:bg-[#ffd159] text-slate-950 shadow-sm cursor-pointer hover:scale-110 transition-transform"
+              title="Change avatar"
+            >
+              <Camera className="h-3 w-3 stroke-[2.5]" />
+            </button>
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white capitalize">{name || "Set up your profile"}</h2>
-            <p className="text-sm text-slate-400">{email}</p>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white capitalize">{name || "Set up your profile"}</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">{email}</p>
           </div>
         </div>
         <button 
           onClick={() => { if (isEditing) { setIsEditing(false); } else { setIsEditing(true); } }}
-          className="flex items-center gap-2 rounded-xl border border-white/[0.08] bg-[#242730] px-4 py-2 text-xs font-bold text-slate-200 transition-colors hover:bg-[#2b2f3a] hover:text-white"
+          className="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-bold text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:border-white/[0.08] dark:bg-[#242730] dark:text-slate-200 dark:hover:bg-[#2b2f3a] dark:hover:text-white"
         >
           <Pencil className="h-3 w-3" /> {isEditing ? "Cancel" : "Edit Profile"}
         </button>
       </div>
 
       {isEditing && (
-        <div className="mt-6 border-t border-white/[0.08] pt-6 grid md:grid-cols-2 gap-4">
+        <div className="mt-6 border-t border-slate-200 dark:border-white/[0.08] pt-6 grid md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Full Name</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Full Name</label>
             <input 
               type="text" 
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-xl border border-white/[0.08] bg-[#242730] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-[#ffd159] focus:outline-none focus:ring-1 focus:ring-[#ffd159]"
+              className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-white/[0.08] dark:bg-[#242730] dark:text-white dark:placeholder:text-slate-500 dark:focus:border-[#ffd159] dark:focus:ring-[#ffd159]"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Email Address</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Email Address</label>
             <input 
               type="email" 
               value={email}
               disabled
-              className="w-full rounded-xl border border-white/[0.04] bg-[#242730]/60 px-4 py-2.5 text-sm text-slate-500 opacity-60 cursor-not-allowed"
+              className="w-full rounded-xl border border-slate-200 bg-slate-100 px-4 py-2.5 text-sm text-slate-400 opacity-60 cursor-not-allowed dark:border-white/[0.04] dark:bg-[#242730]/60 dark:text-slate-500"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Experience Level</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Experience Level</label>
             <ThemedSelect
               value={experienceLevel}
               onChange={setExperienceLevel}
@@ -239,24 +301,24 @@ export function ProfileSection() {
           </div>
 
           <div className="md:col-span-2">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Skills</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Skills</label>
             <input 
               type="text" 
               value={skills}
               onChange={(e) => setSkills(e.target.value)}
               placeholder="e.g. React, Node.js, UI/UX Design"
-              className="w-full rounded-xl border border-white/[0.08] bg-[#242730] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-[#ffd159] focus:outline-none focus:ring-1 focus:ring-[#ffd159]"
+              className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-white/[0.08] dark:bg-[#242730] dark:text-white dark:placeholder:text-slate-500 dark:focus:border-[#ffd159] dark:focus:ring-[#ffd159]"
             />
           </div>
           
           <div className="md:col-span-2">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Bio</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Bio</label>
             <textarea 
               rows={3}
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               placeholder="A short bio about yourself..."
-              className="w-full rounded-xl border border-white/[0.08] bg-[#242730] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-[#ffd159] focus:outline-none focus:ring-1 focus:ring-[#ffd159] resize-none"
+              className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-white/[0.08] dark:bg-[#242730] dark:text-white dark:placeholder:text-slate-500 dark:focus:border-[#ffd159] dark:focus:ring-[#ffd159] resize-none"
             />
           </div>
 
@@ -264,7 +326,7 @@ export function ProfileSection() {
             <button 
               onClick={handleSave}
               disabled={isSaving}
-              className="rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] px-6 py-2.5 text-sm font-bold text-slate-950 transition-all hover:brightness-105 active:scale-95 shadow-md shadow-amber-500/10 disabled:opacity-50 flex items-center gap-2"
+              className="rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 dark:from-[#ffd159] dark:to-[#fed656] px-6 py-2.5 text-sm font-bold text-slate-950 transition-all hover:brightness-105 active:scale-95 shadow-md shadow-amber-500/10 disabled:opacity-50 flex items-center gap-2"
             >
               {isSaving && <Loader2 className="h-4 w-4 animate-spin text-slate-950" />}
               {isSaving ? "Saving..." : "Save Changes"}
@@ -273,53 +335,36 @@ export function ProfileSection() {
         </div>
       )}
 
-      {isPreviewOpen && avatarUrl && (
-        <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
-          onClick={() => setIsPreviewOpen(false)}
-        >
-          <div className="relative max-w-xl w-full flex flex-col items-center">
-            <button 
-              className="absolute -top-12 right-0 p-2 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full transition-colors"
-              onClick={() => setIsPreviewOpen(false)}
-            >
-              <X className="h-6 w-6" />
-            </button>
-            <img 
-              src={avatarUrl?.replace(/=s\d+-c/i, '=s1000-c')} 
-              alt="Avatar Full Preview" 
-              className="max-h-[70vh] max-w-full rounded-2xl object-contain border border-white/10 shadow-2xl"
-              onClick={(e) => e.stopPropagation()} 
-            />
-          </div>
-        </div>
-      )}
+      <AvatarPickerModal
+        isOpen={isAvatarPickerOpen}
+        onClose={() => setIsAvatarPickerOpen(false)}
+        currentAvatarUrl={avatarUrl}
+        userName={name}
+        onSaveAvatar={handleSaveAvatar}
+      />
     </div>
   );
 }
 
-
-
-
 export function SecuritySettings() {
   return (
-    <div className="flex flex-col rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-6 sm:p-8 shadow-xl shadow-black/25">
+    <div className="flex flex-col rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm dark:border-white/[0.08] dark:bg-[#1c1e24] dark:shadow-xl dark:shadow-black/25">
       <div className="flex items-center gap-3 mb-6">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#72c5ff]/10 text-[#72c5ff] border border-[#72c5ff]/20">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-50 text-sky-600 border border-sky-200 dark:bg-[#72c5ff]/10 dark:text-[#72c5ff] dark:border-[#72c5ff]/20">
           <Shield className="h-5 w-5" />
         </div>
         <div>
-          <h3 className="text-lg font-bold text-white">Privacy & Security</h3>
-          <p className="text-sm text-slate-400">Keep your account secure</p>
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white">Privacy & Security</h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Keep your account secure</p>
         </div>
       </div>
       <div className="flex-1 flex items-end">
-        <div className="flex items-center justify-between w-full border-t border-white/[0.08] pt-6">
+        <div className="flex items-center justify-between w-full border-t border-slate-200 dark:border-white/[0.08] pt-6">
           <div>
-            <h4 className="text-base font-bold text-white">Change Password</h4>
-            <p className="text-sm text-slate-400">Update your password regularly</p>
+            <h4 className="text-base font-bold text-slate-900 dark:text-white">Change Password</h4>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Update your password regularly</p>
           </div>
-          <Link to="/reset-password" className="rounded-xl border border-white/[0.08] bg-[#242730] px-6 py-2.5 text-sm font-bold text-slate-200 transition-colors hover:bg-[#2b2f3a] hover:text-white">
+          <Link to="/reset-password" className="rounded-xl border border-slate-200 bg-slate-50 px-6 py-2.5 text-sm font-bold text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:border-white/[0.08] dark:bg-[#242730] dark:text-slate-200 dark:hover:bg-[#2b2f3a] dark:hover:text-white shadow-sm">
             Change
           </Link>
         </div>
@@ -332,22 +377,28 @@ const ROLES = [
   "Frontend Developer",
   "Backend Developer",
   "Full Stack Developer",
+  "Software Development Engineer",
   "Data Scientist",
-  "Product Manager",
-  "UI/UX Designer",
+  "Data Engineer",
+  "Machine Learning Engineer",
   "DevOps Engineer",
+  "System Reliability Engineer",
+  "Cloud Architect",
+  "Database Administrator",
+  "Cybersecurity Analyst",
+  "Game Developer",
+  "Robotics Engineer",
   "Mobile App Developer",
   "Data Analyst",
-  "Machine Learning Engineer",
-  "Cybersecurity Analyst",
-  "Cloud Architect",
   "Quality Assurance Engineer",
-  "Business Analyst",
-  "Systems Administrator"
+  "UI/UX Designer",
+  "Product Manager",
+  "Business Analyst"
 ];
 
 export function ApplicationDefaults() {
   const { session } = useAuth();
+  const { theme, setTheme } = useTheme();
   const [difficulty, setDifficulty] = useState("easy");
   const [targetRole, setTargetRole] = useState("");
   const [isSaving, setIsSaving] = useState(false);
@@ -385,22 +436,41 @@ export function ApplicationDefaults() {
   };
 
   return (
-    <div className="flex flex-col rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-6 sm:p-8 shadow-xl shadow-black/25">
+    <div className="flex flex-col rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm dark:border-white/[0.08] dark:bg-[#1c1e24] dark:shadow-xl dark:shadow-black/25">
       <div className="flex items-center gap-3 mb-6">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#ffd159]/10 text-[#ffd159] border border-[#ffd159]/20">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600 border border-amber-200 dark:bg-[#ffd159]/10 dark:text-[#ffd159] dark:border-[#ffd159]/20">
           <Settings className="h-5 w-5" />
         </div>
         <div>
-          <h3 className="text-lg font-bold text-white">Application Defaults</h3>
-          <p className="text-sm text-slate-400">Configure default settings for your practice and AI tools</p>
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white">Application Defaults</h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Configure default settings for your practice and AI tools</p>
         </div>
       </div>
-      <div className="space-y-6 flex-1 flex flex-col justify-end border-t border-white/[0.08] pt-6">
+      <div className="space-y-6 flex-1 flex flex-col justify-end border-t border-slate-200 dark:border-white/[0.08] pt-6">
         
+        {/* Theme Preference */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
           <div>
-            <h4 className="text-base font-bold text-white">Default Difficulty</h4>
-            <p className="text-sm text-slate-400">Default difficulty for practice interviews</p>
+            <h4 className="text-base font-bold text-slate-900 dark:text-white">Theme Preference</h4>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Choose between White Mode and Dark Mode</p>
+          </div>
+          <ThemedSelect 
+            value={theme}
+            onChange={(val) => setTheme(val)}
+            options={[
+              { value: "dark", label: "Dark Mode" },
+              { value: "light", label: "White Mode" },
+            ]}
+            className="w-36"
+            align="right"
+          />
+        </div>
+
+        {/* Default Difficulty */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
+          <div>
+            <h4 className="text-base font-bold text-slate-900 dark:text-white">Default Difficulty</h4>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Default difficulty for practice interviews</p>
           </div>
           <ThemedSelect 
             value={difficulty}
@@ -424,10 +494,11 @@ export function ApplicationDefaults() {
           />
         </div>
 
+        {/* Target Job Role */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
           <div>
-            <h4 className="text-base font-bold text-white">Target Job Role</h4>
-            <p className="text-sm text-slate-400">Default role context for AI tools</p>
+            <h4 className="text-base font-bold text-slate-900 dark:text-white">Target Job Role</h4>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Default role context for AI tools</p>
           </div>
           <div className="flex items-center gap-2">
             <ThemedSelect 
@@ -441,7 +512,7 @@ export function ApplicationDefaults() {
             <button 
               onClick={() => handleSave('targetRole', targetRole)}
               disabled={isSaving || !targetRole}
-              className="rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] px-6 py-2.5 text-sm font-bold text-slate-950 transition-all hover:brightness-105 active:scale-95 shadow-md shadow-amber-500/10 disabled:opacity-50 cursor-pointer"
+              className="rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 dark:from-[#ffd159] dark:to-[#fed656] px-6 py-2.5 text-sm font-bold text-slate-950 transition-all hover:brightness-105 active:scale-95 shadow-md shadow-amber-500/10 disabled:opacity-50 cursor-pointer"
             >
               Save
             </button>
@@ -477,27 +548,27 @@ export function AccountManagement() {
 
   return (
     <>
-      <div className="flex flex-col rounded-3xl border border-red-500/20 bg-[#1c1e24] p-6 sm:p-8 shadow-xl shadow-black/25">
+      <div className="flex flex-col rounded-3xl border border-red-500/20 bg-white dark:bg-[#1c1e24] p-6 sm:p-8 shadow-sm dark:shadow-xl dark:shadow-black/25">
         <div className="flex items-center gap-3 mb-6">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10 text-red-400 border border-red-500/20">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10 text-red-500 dark:text-red-400 border border-red-500/20">
             <AlertTriangle className="h-5 w-5" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white">Account Management</h3>
-            <p className="text-sm text-slate-400">Manage your data and account status</p>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">Account Management</h3>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Manage your data and account status</p>
           </div>
         </div>
-        <div className="space-y-6 flex-1 flex flex-col justify-end border-t border-white/[0.08] pt-6">
+        <div className="space-y-6 flex-1 flex flex-col justify-end border-t border-slate-200 dark:border-white/[0.08] pt-6">
           
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
             <div>
-              <h4 className="text-base font-bold text-red-400">Delete Account</h4>
-              <p className="text-sm text-slate-400">Permanently delete your account and all data</p>
+              <h4 className="text-base font-bold text-red-600 dark:text-red-400">Delete Account</h4>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Permanently delete your account and all data</p>
             </div>
             <button 
               onClick={() => setShowDeleteModal(true)}
               disabled={isDeleting}
-              className="flex items-center justify-center gap-2 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 px-6 py-2.5 text-sm font-bold transition-all hover:bg-red-500 hover:text-white active:scale-95 disabled:opacity-50"
+              className="flex items-center justify-center gap-2 rounded-xl bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 px-6 py-2.5 text-sm font-bold transition-all hover:bg-red-500 hover:text-white active:scale-95 disabled:opacity-50"
             >
               {isDeleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
               {isDeleting ? "Deleting..." : "Delete"}
@@ -508,28 +579,28 @@ export function AccountManagement() {
 
       {showDeleteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
-          <div className="bg-[#1c1e24] rounded-3xl p-6 sm:p-8 max-w-md w-full border border-white/10 shadow-2xl">
-            <div className="flex items-center gap-3 mb-4 text-red-400">
+          <div className="bg-white dark:bg-[#1c1e24] rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-200 dark:border-white/10 shadow-2xl">
+            <div className="flex items-center gap-3 mb-4 text-red-500 dark:text-red-400">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10 border border-red-500/20">
                 <AlertTriangle className="h-5 w-5" />
               </div>
-              <h3 className="text-xl font-bold text-white">Delete Account</h3>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white">Delete Account</h3>
             </div>
-            <p className="text-slate-300 text-sm mb-6 leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-300 text-sm mb-6 leading-relaxed">
               Are you ABSOLUTELY sure you want to delete your account? This action cannot be undone and will permanently delete all your data, including resumes and practice history.
             </p>
             <div className="flex items-center justify-end gap-3">
               <button 
                 onClick={() => setShowDeleteModal(false)}
                 disabled={isDeleting}
-                className="px-5 py-2.5 rounded-xl text-sm font-bold text-slate-300 bg-[#242730] hover:bg-[#2b2f3a] hover:text-white border border-white/[0.08] transition-colors disabled:opacity-50"
+                className="px-5 py-2.5 rounded-xl text-sm font-bold text-slate-700 dark:text-slate-300 bg-slate-100 hover:bg-slate-200 hover:text-slate-900 dark:bg-[#242730] dark:hover:bg-[#2b2f3a] dark:hover:text-white border border-slate-200 dark:border-white/[0.08] transition-colors disabled:opacity-50"
               >
                 Cancel
               </button>
               <button 
                 onClick={confirmDelete}
                 disabled={isDeleting}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-500 text-white text-sm font-bold hover:bg-red-600 active:scale-95 transition-all disabled:opacity-50"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-600 dark:bg-red-500 text-white text-sm font-bold hover:bg-red-700 dark:hover:bg-red-600 active:scale-95 transition-all disabled:opacity-50"
               >
                 {isDeleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
                 Yes, Delete My Account

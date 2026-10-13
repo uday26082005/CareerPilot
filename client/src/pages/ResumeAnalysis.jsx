@@ -139,8 +139,8 @@ export default function ResumeAnalysis() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">AI Resume Analysis</h1>
-          <p className="mt-1 text-sm text-slate-400">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">AI Resume Analysis</h1>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             Get AI-powered insights to improve your resume and stand out to recruiters.
           </p>
         </div>
@@ -148,9 +148,9 @@ export default function ResumeAnalysis() {
           <button 
             onClick={handleReanalyze} 
             disabled={isAnalyzing} 
-            className="flex items-center gap-2 rounded-xl border border-white/10 bg-[#1c1e24] px-4 py-2.5 text-sm font-semibold text-white transition-all hover:bg-[#242730] hover:border-white/20 active:scale-95 disabled:opacity-50 shadow-sm"
+            className="flex items-center gap-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#1c1e24] px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-white transition-all hover:bg-slate-50 dark:hover:bg-[#242730] hover:border-slate-300 dark:hover:border-white/20 active:scale-95 disabled:opacity-50 shadow-sm"
           >
-            <RefreshCcw className={`h-4 w-4 ${isAnalyzing ? "animate-spin text-[#ffd159]" : "text-slate-300"}`} /> 
+            <RefreshCcw className={`h-4 w-4 ${isAnalyzing ? "animate-spin text-amber-500 dark:text-[#ffd159]" : "text-slate-500 dark:text-slate-300"}`} /> 
             {isAnalyzing ? "Analyzing..." : "Re-analyze"}
           </button>
           <button 
@@ -165,7 +165,7 @@ export default function ResumeAnalysis() {
       </div>
 
       {feedback && (
-        <p aria-live="polite" className={`text-sm font-medium ${feedback.type === "success" ? "text-[#4ee4cb]" : "text-rose-400"}`}>
+        <p aria-live="polite" className={`text-sm font-medium ${feedback.type === "success" ? "text-teal-600 dark:text-[#4ee4cb]" : "text-rose-500 dark:text-rose-400"}`}>
           {feedback.message}
         </p>
       )}

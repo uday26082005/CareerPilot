@@ -39,7 +39,7 @@ export default function Hero() {
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-                            className="mt-0 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.15] tracking-tight text-white"
+                            className="mt-0 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.15] tracking-tight text-slate-900 dark:text-white"
                         >
                             Build Your <br />
                             Dream Career <br />
@@ -52,7 +52,7 @@ export default function Hero() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.7, delay: 0.35, ease: "easeOut" }}
-                            className="mt-3 text-base sm:text-lg leading-relaxed text-slate-400"
+                            className="mt-3 text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-400"
                         >
                             CareerPilot AI analyzes your resume, identifies missing skills, creates a personalized learning roadmap, and conducts AI mock interviews to get you placement ready.
                         </motion.p>
@@ -74,7 +74,7 @@ export default function Hero() {
 
                             <a
                                 href="#features"
-                                className="inline-flex items-center justify-center rounded-2xl border border-white/[0.08] bg-[#242730] px-8 py-4 font-bold text-slate-200 backdrop-blur-xl transition-all hover:bg-[#2b2f3a] hover:text-white hover:border-white/20 active:scale-95 w-full sm:w-auto"
+                                className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-8 py-4 font-bold text-slate-700 shadow-sm backdrop-blur-xl transition-all hover:bg-slate-50 hover:text-slate-900 dark:border-white/[0.08] dark:bg-[#242730] dark:text-slate-200 dark:hover:bg-[#2b2f3a] dark:hover:text-white dark:hover:border-white/20 active:scale-95 w-full sm:w-auto"
                             >
                                 Explore Features
                             </a>
@@ -90,12 +90,12 @@ export default function Hero() {
                             {features.map(({ icon: Icon, text, bg, textCol, border }) => (
                                 <div
                                     key={text}
-                                    className={`flex items-center gap-3 rounded-2xl border border-white/[0.08] bg-[#1c1e24] px-4 py-3 shadow-md shadow-black/20 backdrop-blur-md transition-all ${border} hover:bg-[#20222a]`}
+                                    className={`flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-white/[0.08] dark:bg-[#1c1e24] dark:shadow-md dark:shadow-black/20 backdrop-blur-md transition-all ${border} hover:bg-slate-50 dark:hover:bg-[#20222a]`}
                                 >
                                     <div className={`rounded-xl ${bg} p-2 ${textCol}`}>
                                         <Icon className="h-5 w-5" />
                                     </div>
-                                    <span className="text-sm font-semibold text-slate-200">
+                                    <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                                         {text}
                                     </span>
                                 </div>
@@ -118,8 +118,8 @@ export default function Hero() {
                             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                             src={heroImageDark}
                             alt="AI Career Mentor"
-                            className="relative z-10 w-full max-w-[420px] object-cover rounded-3xl shadow-2xl shadow-black/50 border border-white/[0.08] mix-blend-screen"
-                            style={{ filter: 'brightness(1.1) contrast(1.1)' }}
+                            className="relative z-10 w-full max-w-[420px] object-cover rounded-3xl shadow-xl dark:shadow-2xl dark:shadow-black/50 border border-slate-200 dark:border-white/[0.08] dark:mix-blend-screen"
+                            style={{ filter: 'brightness(1.05) contrast(1.05)' }}
                         />
                     </motion.div>
                 </div>

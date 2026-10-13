@@ -1,23 +1,29 @@
-import { User, Mail, Briefcase, Globe, X, Loader2 } from "lucide-react";
+import { User, Mail, Briefcase, Globe, X, Loader2, Camera } from "lucide-react";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
+import AvatarPickerModal from "../components/settings/AvatarPickerModal";
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 const SKILL_COLORS = [
-  "bg-[#4ee4cb]/10 text-[#4ee4cb] border-[#4ee4cb]/20",
-  "bg-[#ffd159]/10 text-[#ffd159] border-[#ffd159]/20",
-  "bg-[#e29aff]/10 text-[#e29aff] border-[#e29aff]/20",
-  "bg-[#ffb48a]/10 text-[#ffb48a] border-[#ffb48a]/20",
-  "bg-[#72c5ff]/10 text-[#72c5ff] border-[#72c5ff]/20",
-  "bg-[#ff94aa]/10 text-[#ff94aa] border-[#ff94aa]/20",
+  "bg-teal-50 text-teal-700 border-teal-200 dark:bg-[#4ee4cb]/10 dark:text-[#4ee4cb] dark:border-[#4ee4cb]/20",
+  "bg-amber-50 text-amber-700 border-amber-200 dark:bg-[#ffd159]/10 dark:text-[#ffd159] dark:border-[#ffd159]/20",
+  "bg-purple-50 text-purple-700 border-purple-200 dark:bg-[#e29aff]/10 dark:text-[#e29aff] dark:border-[#e29aff]/20",
+  "bg-orange-50 text-orange-700 border-orange-200 dark:bg-[#ffb48a]/10 dark:text-[#ffb48a] dark:border-[#ffb48a]/20",
+  "bg-sky-50 text-sky-700 border-sky-200 dark:bg-[#72c5ff]/10 dark:text-[#72c5ff] dark:border-[#72c5ff]/20",
+  "bg-rose-50 text-rose-700 border-rose-200 dark:bg-[#ff94aa]/10 dark:text-[#ff94aa] dark:border-[#ff94aa]/20",
 ];
 
 export default function ProfileSummary() {
-  const { user } = useAuth();
+  const { user, session } = useAuth();
   const [profile, setProfile] = useState(null);
   const [resume, setResume] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [isAvatarPickerOpen, setIsAvatarPickerOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,11 +43,52 @@ export default function ProfileSummary() {
     fetchData();
   }, [user]);
 
+  const handleSaveAvatar = async (selectedUrl, uploadData) => {
+    if (!session?.access_token) return;
+    try {
+      let finalAvatarUrl = selectedUrl;
+
+      if (uploadData) {
+        const uploadRes = await axios.post(`${API_BASE_URL}/profile/avatar`, {
+          base64Data: uploadData.base64Data,
+          contentType: uploadData.contentType
+        }, {
+          headers: { Authorization: `Bearer ${session.access_token}` }
+        });
+
+        if (uploadRes.data?.success) {
+          finalAvatarUrl = uploadRes.data.publicUrl;
+        }
+      }
+
+      await supabase.auth.updateUser({
+        data: { avatar_url: finalAvatarUrl }
+      });
+
+      await axios.put(`${API_BASE_URL}/profile`, {
+        avatarUrl: finalAvatarUrl
+      }, {
+        headers: { Authorization: `Bearer ${session.access_token}` }
+      });
+
+      setProfile(prev => ({ ...prev, avatar_url: finalAvatarUrl }));
+      toast.success("Profile photo updated successfully!");
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+    } catch (err) {
+      console.error("Failed to update avatar:", err);
+      toast.error("Failed to update profile photo");
+      throw err;
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex h-[60vh] flex-col items-center justify-center gap-3">
-        <Loader2 className="h-8 w-8 animate-spin text-[#ffd159]" />
-        <p className="text-sm text-slate-400">Loading your profile...</p>
+        <Loader2 className="h-8 w-8 animate-spin text-amber-500 dark:text-[#ffd159]" />
+        <p className="text-sm text-slate-500 dark:text-slate-400">Loading your profile...</p>
       </div>
     );
   }
@@ -71,10 +118,10 @@ export default function ProfileSummary() {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
             Profile Summary
           </h1>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
             A comprehensive overview of your professional profile and career preferences.
           </p>
         </div>
@@ -84,38 +131,57 @@ export default function ProfileSummary() {
         {/* Left Column: Basic Info & Bio */}
         <div className="md:col-span-2 space-y-6">
           {/* Main Info Card */}
-          <div className="rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-6 sm:p-8 shadow-xl shadow-black/25">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm dark:border-white/[0.08] dark:bg-[#1c1e24] dark:shadow-xl dark:shadow-black/25">
             <div className="flex items-center gap-5 mb-6">
-              {profileData.avatarUrl ? (
-                <img 
-                  src={profileData.avatarUrl} 
-                  alt="Avatar" 
-                  onClick={() => setIsPreviewOpen(true)}
-                  className="h-20 w-20 rounded-full object-cover border border-white/10 ring-4 ring-[#242730] shadow-lg cursor-pointer hover:border-[#ffd159]/80 transition-colors" 
-                />
-              ) : (
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#ffd159] to-[#fed656] text-3xl font-bold text-slate-950 ring-4 ring-[#242730] shadow-lg uppercase">
-                  {profileData.fullName.charAt(0)}
-                </div>
-              )}
+              <div className="relative group">
+                <button
+                  type="button"
+                  onClick={() => setIsAvatarPickerOpen(true)}
+                  className="relative flex h-20 w-20 rounded-full overflow-hidden cursor-pointer focus:outline-none ring-4 ring-slate-100 dark:ring-[#242730] shadow-md hover:ring-amber-500/50 dark:hover:ring-[#ffd159]/50 transition-all duration-200"
+                  title="Click to choose avatar or upload photo"
+                >
+                  {profileData.avatarUrl ? (
+                    <img 
+                      src={profileData.avatarUrl} 
+                      alt="Avatar" 
+                      className="h-full w-full object-cover border border-slate-200 dark:border-white/10" 
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#ffd159] to-[#fed656] text-3xl font-bold text-slate-950 uppercase">
+                      {profileData.fullName.charAt(0)}
+                    </div>
+                  )}
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/55 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 backdrop-blur-[1px]">
+                    <Camera className="h-6 w-6 text-white drop-shadow-md" />
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsAvatarPickerOpen(true)}
+                  className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-amber-500 dark:bg-[#ffd159] text-slate-950 shadow-sm cursor-pointer hover:scale-110 transition-transform"
+                  title="Change avatar"
+                >
+                  <Camera className="h-3 w-3 stroke-[2.5]" />
+                </button>
+              </div>
               <div>
-                <h2 className="text-2xl font-bold text-white capitalize">{profileData.fullName}</h2>
-                <div className="flex items-center gap-2 text-sm text-slate-400 mt-1">
-                  <Mail className="h-4 w-4 text-slate-500" /> {profileData.email}
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white capitalize">{profileData.fullName}</h2>
+                <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 mt-1">
+                  <Mail className="h-4 w-4 text-slate-400 dark:text-slate-500" /> {profileData.email}
                 </div>
               </div>
             </div>
 
-            <div className="space-y-6 pt-6 border-t border-white/[0.08]">
+            <div className="space-y-6 pt-6 border-t border-slate-200 dark:border-white/[0.08]">
               <div>
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">About Me</h3>
-                <p className="text-sm leading-relaxed text-slate-300">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">About Me</h3>
+                <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
                   {profileData.bio}
                 </p>
               </div>
               
               <div>
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Key Skills</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3">Key Skills</h3>
                 <div className="flex flex-wrap gap-2">
                   {profileData.skills.length > 0 ? (
                     profileData.skills.map((skill, idx) => (
@@ -127,7 +193,7 @@ export default function ProfileSummary() {
                       </span>
                     ))
                   ) : (
-                    <p className="text-sm text-slate-500">Upload a resume or add skills in Settings to see your key skills here.</p>
+                    <p className="text-sm text-slate-500 dark:text-slate-500">Upload a resume or add skills in Settings to see your key skills here.</p>
                   )}
                 </div>
               </div>
@@ -135,31 +201,31 @@ export default function ProfileSummary() {
           </div>
 
           {/* Social Links Card */}
-          <div className="rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-6 sm:p-8 shadow-xl shadow-black/25">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm dark:border-white/[0.08] dark:bg-[#1c1e24] dark:shadow-xl dark:shadow-black/25">
             <div className="flex items-center gap-3 mb-6">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#72c5ff]/10 text-[#72c5ff] border border-[#72c5ff]/20">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-50 text-sky-600 border border-sky-200 dark:bg-[#72c5ff]/10 dark:text-[#72c5ff] dark:border-[#72c5ff]/20">
                 <User className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-white">Connected Accounts</h3>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">Connected Accounts</h3>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               {profileData.githubUrl && (
-                <div className="rounded-2xl border border-white/[0.06] bg-[#242730] p-4 space-y-1">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">GitHub</span>
-                  <p className="text-sm font-semibold text-white flex items-center gap-2">
-                    <Globe className="h-4 w-4 text-slate-400" /> 
-                    <a href={profileData.githubUrl} target="_blank" rel="noreferrer" className="text-[#ffd159] hover:underline truncate">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-1 dark:border-white/[0.06] dark:bg-[#242730]">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">GitHub</span>
+                  <p className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                    <Globe className="h-4 w-4 text-slate-400 dark:text-slate-400" /> 
+                    <a href={profileData.githubUrl} target="_blank" rel="noreferrer" className="text-amber-600 hover:text-amber-700 dark:text-[#ffd159] hover:underline truncate">
                       {profileData.githubUrl.replace('https://github.com/', '')}
                     </a>
                   </p>
                 </div>
               )}
               {profileData.linkedinUrl && (
-                <div className="rounded-2xl border border-white/[0.06] bg-[#242730] p-4 space-y-1">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">LinkedIn</span>
-                  <p className="text-sm font-semibold text-white flex items-center gap-2">
-                    <Globe className="h-4 w-4 text-slate-400" /> 
-                    <a href={profileData.linkedinUrl} target="_blank" rel="noreferrer" className="text-[#ffd159] hover:underline truncate">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-1 dark:border-white/[0.06] dark:bg-[#242730]">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">LinkedIn</span>
+                  <p className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                    <Globe className="h-4 w-4 text-slate-400 dark:text-slate-400" /> 
+                    <a href={profileData.linkedinUrl} target="_blank" rel="noreferrer" className="text-amber-600 hover:text-amber-700 dark:text-[#ffd159] hover:underline truncate">
                       {profileData.linkedinUrl.replace('https://linkedin.com/in/', '')}
                     </a>
                   </p>
@@ -174,28 +240,28 @@ export default function ProfileSummary() {
 
         {/* Right Column: Target Role & Preferences */}
         <div className="space-y-6">
-          <div className="rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-6 sm:p-8 shadow-xl shadow-black/25">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm dark:border-white/[0.08] dark:bg-[#1c1e24] dark:shadow-xl dark:shadow-black/25">
             <div className="flex items-center gap-3 mb-6">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#ffd159]/10 text-[#ffd159] border border-[#ffd159]/20">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600 border border-amber-200 dark:bg-[#ffd159]/10 dark:text-[#ffd159] dark:border-[#ffd159]/20">
                 <Briefcase className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-white">Career Goals</h3>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">Career Goals</h3>
             </div>
             
             <div className="space-y-4">
-              <div className="rounded-2xl border border-white/[0.06] bg-[#242730] p-4 space-y-1">
-                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Target Role</span>
-                <p className="text-sm font-bold text-white capitalize">{profileData.targetRole}</p>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-1 dark:border-white/[0.06] dark:bg-[#242730]">
+                <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Target Role</span>
+                <p className="text-sm font-bold text-slate-900 dark:text-white capitalize">{profileData.targetRole}</p>
               </div>
               
-              <div className="rounded-2xl border border-white/[0.06] bg-[#242730] p-4 space-y-1">
-                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Current Role</span>
-                <p className="text-sm font-bold text-white capitalize">{profileData.currentRole}</p>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-1 dark:border-white/[0.06] dark:bg-[#242730]">
+                <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Current Role</span>
+                <p className="text-sm font-bold text-slate-900 dark:text-white capitalize">{profileData.currentRole}</p>
               </div>
 
-              <div className="rounded-2xl border border-white/[0.06] bg-[#242730] p-4 space-y-1">
-                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Experience Level</span>
-                <p className="text-sm font-bold text-white">{profileData.experience}</p>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-1 dark:border-white/[0.06] dark:bg-[#242730]">
+                <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Experience Level</span>
+                <p className="text-sm font-bold text-slate-900 dark:text-white">{profileData.experience}</p>
               </div>
             </div>
           </div>
@@ -203,27 +269,13 @@ export default function ProfileSummary() {
 
       </div>
 
-      {isPreviewOpen && profileData.avatarUrl && (
-        <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
-          onClick={() => setIsPreviewOpen(false)}
-        >
-          <div className="relative max-w-xl w-full flex flex-col items-center">
-            <button 
-              className="absolute -top-12 right-0 p-2 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full transition-colors animate-pulse"
-              onClick={() => setIsPreviewOpen(false)}
-            >
-              <X className="h-6 w-6" />
-            </button>
-            <img 
-              src={profileData.avatarUrl?.replace(/=s\d+-c/i, '=s1000-c')} 
-              alt="Avatar Full Preview" 
-              className="max-h-[70vh] max-w-full rounded-3xl object-contain border border-white/10 shadow-2xl"
-              onClick={(e) => e.stopPropagation()} 
-            />
-          </div>
-        </div>
-      )}
+      <AvatarPickerModal
+        isOpen={isAvatarPickerOpen}
+        onClose={() => setIsAvatarPickerOpen(false)}
+        currentAvatarUrl={profileData.avatarUrl}
+        userName={profileData.fullName}
+        onSaveAvatar={handleSaveAvatar}
+      />
     </div>
   );
 }

@@ -6,14 +6,14 @@ export default function ATSCompatibility({ score: scoreProp, status, tips }) {
   const label = status || (score >= 80 ? "High Match" : score >= 60 ? "Moderate Match" : "Needs Work");
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-white/[0.08] bg-[#1c1e24] p-6 shadow-xl shadow-black/25">
-      <h3 className="mb-4 text-xs font-bold uppercase tracking-wider text-slate-400">ATS Compatibility</h3>
+    <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1c1e24] p-6 shadow-sm dark:shadow-xl dark:shadow-black/25">
+      <h3 className="mb-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">ATS Compatibility</h3>
       
       <div className="flex items-center gap-6">
         {/* Circular Gauge */}
         <div className="relative flex h-28 w-28 items-center justify-center shrink-0">
           <svg className="h-full w-full -rotate-90 transform" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="45" fill="transparent" stroke="rgba(255, 255, 255, 0.06)" strokeWidth="8" />
+            <circle cx="50" cy="50" r="45" fill="transparent" stroke="currentColor" className="text-slate-100 dark:text-white/[0.06]" strokeWidth="8" />
             <circle
               cx="50"
               cy="50"
@@ -35,23 +35,23 @@ export default function ATSCompatibility({ score: scoreProp, status, tips }) {
           </svg>
           
           <div className="absolute flex flex-col items-center justify-center">
-            <span className="text-3xl font-black text-white">{score}%</span>
+            <span className="text-3xl font-black text-slate-900 dark:text-white">{score}%</span>
           </div>
         </div>
 
         {/* Text Details */}
         <div>
-          <h2 className={`text-xl font-bold mb-1.5 ${score >= 80 ? "text-[#4ee4cb]" : score >= 60 ? "text-[#ffd159]" : "text-[#ff94aa]"}`}>
+          <h2 className={`text-xl font-bold mb-1.5 ${score >= 80 ? "text-teal-600 dark:text-[#4ee4cb]" : score >= 60 ? "text-amber-600 dark:text-[#ffd159]" : "text-rose-500 dark:text-[#ff94aa]"}`}>
             {label}
           </h2>
           {tips && tips.length > 0 ? (
-            <ul className="text-xs text-slate-300 leading-relaxed list-disc pl-3 space-y-1">
+            <ul className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed list-disc pl-3 space-y-1">
               {tips.map((tip, idx) => (
-                <li key={idx} className="marker:text-[#ffd159]">{tip}</li>
+                <li key={idx} className="marker:text-amber-500 dark:marker:text-[#ffd159]">{tip}</li>
               ))}
             </ul>
           ) : (
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
               No specific ATS tips provided.
             </p>
           )}

@@ -96,5 +96,47 @@
     {"name": "NVIDIA", "domain": "nvidia.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹28 - 55 LPA"},
     {"name": "Amazon", "domain": "amazon.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹22 - 48 LPA"},
     {"name": "Flipkart", "domain": "flipkart.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹18 - 35 LPA"}
+  ],
+  "Software Development Engineer": [
+    {"name": "Amazon", "domain": "amazon.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹20 - 48 LPA"},
+    {"name": "Microsoft", "domain": "microsoft.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹22 - 45 LPA"},
+    {"name": "Google", "domain": "google.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹25 - 55 LPA"},
+    {"name": "Atlassian", "domain": "atlassian.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹22 - 44 LPA"},
+    {"name": "Flipkart", "domain": "flipkart.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹16 - 36 LPA"}
+  ],
+  "System Reliability Engineer": [
+    {"name": "Google", "domain": "google.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹22 - 50 LPA"},
+    {"name": "Uber", "domain": "uber.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹20 - 45 LPA"},
+    {"name": "Cloudflare", "domain": "cloudflare.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹18 - 42 LPA"},
+    {"name": "Razorpay", "domain": "razorpay.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹14 - 30 LPA"},
+    {"name": "PhonePe", "domain": "phonepe.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹15 - 32 LPA"}
+  ],
+  "Data Engineer": [
+    {"name": "Amazon", "domain": "amazon.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹18 - 42 LPA"},
+    {"name": "Snowflake", "domain": "snowflake.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹22 - 48 LPA"},
+    {"name": "Walmart Labs", "domain": "walmart.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹16 - 38 LPA"},
+    {"name": "Swiggy", "domain": "swiggy.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹14 - 30 LPA"},
+    {"name": "Flipkart", "domain": "flipkart.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹15 - 35 LPA"}
+  ],
+  "Database Administrator": [
+    {"name": "Oracle", "domain": "oracle.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹12 - 28 LPA"},
+    {"name": "IBM", "domain": "ibm.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹10 - 25 LPA"},
+    {"name": "TCS", "domain": "tcs.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹6 - 18 LPA"},
+    {"name": "Infosys", "domain": "infosys.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹6 - 16 LPA"},
+    {"name": "Accenture", "domain": "accenture.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹8 - 20 LPA"}
+  ],
+  "Game Developer": [
+    {"name": "Ubisoft", "domain": "ubisoft.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹12 - 32 LPA"},
+    {"name": "Electronic Arts", "domain": "ea.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹14 - 35 LPA"},
+    {"name": "Rockstar Games", "domain": "rockstargames.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹15 - 38 LPA"},
+    {"name": "Krafton", "domain": "krafton.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹12 - 30 LPA"},
+    {"name": "Dream11", "domain": "dream11.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹10 - 26 LPA"}
+  ],
+  "Robotics Engineer": [
+    {"name": "GreyOrange", "domain": "greyorange.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹12 - 30 LPA"},
+    {"name": "Addverb", "domain": "addverb.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹10 - 28 LPA"},
+    {"name": "Tesla", "domain": "tesla.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹22 - 50 LPA"},
+    {"name": "Ather Energy", "domain": "atherenergy.com", "demand": "Medium", "demandColor": "text-amber-400", "salary": "₹10 - 24 LPA"},
+    {"name": "Ola Electric", "domain": "olaelectric.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹10 - 25 LPA"}
   ]
 }

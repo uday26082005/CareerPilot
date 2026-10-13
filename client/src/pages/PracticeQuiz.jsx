@@ -16,12 +16,12 @@ const DEFAULT_TOPICS = [
 ];
 
 const TOPIC_COLOR_THEMES = [
-  { text: "text-[#4ee4cb]", bg: "bg-[#4ee4cb]/10", border: "border-[#4ee4cb]/20", hoverBorder: "hover:border-[#4ee4cb]/40" },
-  { text: "text-[#ffd159]", bg: "bg-[#ffd159]/10", border: "border-[#ffd159]/20", hoverBorder: "hover:border-[#ffd159]/40" },
-  { text: "text-[#e29aff]", bg: "bg-[#e29aff]/10", border: "border-[#e29aff]/20", hoverBorder: "hover:border-[#e29aff]/40" },
-  { text: "text-[#ffb48a]", bg: "bg-[#ffb48a]/10", border: "border-[#ffb48a]/20", hoverBorder: "hover:border-[#ffb48a]/40" },
-  { text: "text-[#ff94aa]", bg: "bg-[#ff94aa]/10", border: "border-[#ff94aa]/20", hoverBorder: "hover:border-[#ff94aa]/40" },
-  { text: "text-[#72c5ff]", bg: "bg-[#72c5ff]/10", border: "border-[#72c5ff]/20", hoverBorder: "hover:border-[#72c5ff]/40" },
+  { text: "text-teal-600 dark:text-[#4ee4cb]", bg: "bg-teal-50 dark:bg-[#4ee4cb]/10", border: "border-teal-200 dark:border-[#4ee4cb]/20", hoverBorder: "hover:border-teal-400 dark:hover:border-[#4ee4cb]/40" },
+  { text: "text-amber-600 dark:text-[#ffd159]", bg: "bg-amber-50 dark:bg-[#ffd159]/10", border: "border-amber-200 dark:border-[#ffd159]/20", hoverBorder: "hover:border-amber-400 dark:hover:border-[#ffd159]/40" },
+  { text: "text-purple-600 dark:text-[#e29aff]", bg: "bg-purple-50 dark:bg-[#e29aff]/10", border: "border-purple-200 dark:border-[#e29aff]/20", hoverBorder: "hover:border-purple-400 dark:hover:border-[#e29aff]/40" },
+  { text: "text-orange-600 dark:text-[#ffb48a]", bg: "bg-orange-50 dark:bg-[#ffb48a]/10", border: "border-orange-200 dark:border-[#ffb48a]/20", hoverBorder: "hover:border-orange-400 dark:hover:border-[#ffb48a]/40" },
+  { text: "text-rose-600 dark:text-[#ff94aa]", bg: "bg-rose-50 dark:bg-[#ff94aa]/10", border: "border-rose-200 dark:border-[#ff94aa]/20", hoverBorder: "hover:border-rose-400 dark:hover:border-[#ff94aa]/40" },
+  { text: "text-blue-600 dark:text-[#72c5ff]", bg: "bg-blue-50 dark:bg-[#72c5ff]/10", border: "border-blue-200 dark:border-[#72c5ff]/20", hoverBorder: "hover:border-blue-400 dark:hover:border-[#72c5ff]/40" },
 ];
 
 const getTopicsForRole = (role) => {
@@ -319,11 +319,11 @@ export default function PracticeQuiz() {
     return (
       <div className="flex flex-col gap-6 pb-6 w-full max-w-7xl mx-auto">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Practice Arena</h1>
-          <p className="mt-1 text-sm text-slate-400">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Practice Arena</h1>
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
             Select a topic below to start a 10-question practice quiz. Challenge yourself and see where you stand!
           </p>
-          {error && <p className="mt-2 text-sm text-[#ff94aa]">{error}</p>}
+          {error && <p className="mt-2 text-sm text-rose-600 dark:text-[#ff94aa]">{error}</p>}
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -334,16 +334,16 @@ export default function PracticeQuiz() {
                 key={topic.id}
                 onClick={() => startPractice(topic.id)}
                 disabled={loading}
-                className="group flex flex-col items-center text-center p-8 rounded-3xl border border-white/[0.08] bg-[#1c1e24] shadow-xl shadow-black/25 transition-all hover:-translate-y-1 hover:border-white/20 hover:bg-[#20222a] disabled:opacity-60 disabled:cursor-not-allowed"
+                className="group flex flex-col items-center text-center p-8 rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-white/[0.08] dark:bg-[#1c1e24] dark:shadow-xl dark:shadow-black/25 transition-all hover:-translate-y-1 hover:border-slate-300 hover:bg-slate-50/80 dark:hover:border-white/20 dark:hover:bg-[#20222a] disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 <div className={`flex h-16 w-16 items-center justify-center rounded-2xl ${color.bg} ${color.text} border ${color.border} mb-6 group-hover:scale-110 transition-transform`}>
                   <topic.icon className="h-8 w-8" />
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">{topic.name}</h3>
-                <p className="text-sm text-slate-400 mb-6">{topic.desc}</p>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{topic.name}</h3>
+                <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">{topic.desc}</p>
 
-                <div className="mt-auto flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#ffd159] group-hover:text-[#fed656]">
-                  {loading ? "Preparing Practice" : "Start Quiz"} {loading ? <Loader2 className="h-4 w-4 animate-spin text-[#ffd159]" /> : <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />}
+                <div className="mt-auto flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-600 group-hover:text-amber-700 dark:text-[#ffd159] dark:group-hover:text-[#fed656]">
+                  {loading ? "Preparing Practice" : "Start Quiz"} {loading ? <Loader2 className="h-4 w-4 animate-spin text-amber-500 dark:text-[#ffd159]" /> : <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />}
                 </div>
               </button>
             );
@@ -365,27 +365,27 @@ export default function PracticeQuiz() {
       <div className="max-w-4xl mx-auto py-8">
         <button
           onClick={handleReturnToTopics}
-          className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-white mb-6 transition-colors"
+          className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white mb-6 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" /> Back to Topics
         </button>
 
-        <div className="rounded-3xl border border-white/[0.08] bg-[#1c1e24] shadow-2xl overflow-hidden flex flex-col min-h-[600px]">
-          <div className="p-8 border-b border-white/[0.08]">
+        <div className="rounded-3xl border border-slate-200 bg-white dark:border-white/[0.08] dark:bg-[#1c1e24] shadow-xl dark:shadow-2xl overflow-hidden flex flex-col min-h-[600px]">
+          <div className="p-8 border-b border-slate-200 dark:border-white/[0.08]">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${color.bg} ${color.text} border ${color.border}`}>
                   {topic && <topic.icon className="h-5 w-5" />}
                 </div>
-                <h2 className="text-xl font-bold text-white">{topic && topic.name}</h2>
+                <h2 className="text-xl font-bold text-slate-900 dark:text-white">{topic && topic.name}</h2>
               </div>
-              <span className="text-xs font-bold px-4 py-1.5 rounded-full bg-[#242730] border border-white/[0.08] text-slate-300">
+              <span className="text-xs font-bold px-4 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-slate-700 dark:bg-[#242730] dark:border-white/[0.08] dark:text-slate-300">
                 Question {questionNumber} of {totalQuestions}
               </span>
             </div>
-            <div className="h-2 w-full bg-[#242730] rounded-full overflow-hidden">
+            <div className="h-2 w-full bg-slate-100 dark:bg-[#242730] rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-[#ffd159] to-[#fed656] rounded-full transition-all duration-300"
+                className="h-full bg-gradient-to-r from-amber-500 to-amber-400 dark:from-[#ffd159] dark:to-[#fed656] rounded-full transition-all duration-300"
                 style={{ width: ((questionNumber / totalQuestions) * 100) + "%" }}
               />
             </div>
@@ -394,43 +394,43 @@ export default function PracticeQuiz() {
           <div className="p-8 flex-1 flex flex-col">
             {loading && (
               <div className="flex flex-1 flex-col items-center justify-center gap-4">
-                <Loader2 className="h-8 w-8 animate-spin text-[#ffd159]" />
-                <p className="text-slate-400 text-sm">Creating your personalized question...</p>
+                <Loader2 className="h-8 w-8 animate-spin text-amber-500 dark:text-[#ffd159]" />
+                <p className="text-slate-500 dark:text-slate-400 text-sm">Creating your personalized question...</p>
               </div>
             )}
 
             {!loading && error && (
-              <div className="mb-6 rounded-2xl border border-[#ff94aa]/30 bg-[#ff94aa]/10 p-4 text-sm text-[#ff94aa]">
+              <div className="mb-6 rounded-2xl border border-red-500/30 bg-red-50 dark:bg-[#ff94aa]/10 p-4 text-sm text-rose-700 dark:text-[#ff94aa]">
                 {error}
               </div>
             )}
 
             {!loading && currentQuestion && (
               <>
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-8 leading-relaxed">
+                <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-8 leading-relaxed">
                   {currentQuestion.question}
                 </h3>
 
                 {hasOptions ? (
                   <div className="space-y-4">
                     {currentQuestion.options.map((option, index) => {
-                      let stateClass = "border-white/[0.08] bg-[#242730] text-slate-200 hover:border-white/20 hover:bg-[#2b2f3a] hover:text-white";
+                      let stateClass = "border-slate-200 bg-slate-50 text-slate-800 hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900 dark:border-white/[0.08] dark:bg-[#242730] dark:text-slate-200 dark:hover:border-white/20 dark:hover:bg-[#2b2f3a] dark:hover:text-white";
                       let icon = null;
                       const isSelected = selectedAnswer === option;
 
                       if (evaluation) {
                         if (isSelected) {
                           stateClass = evaluation.correct
-                            ? "border-[#4ee4cb] bg-[#4ee4cb]/10 text-[#4ee4cb] shadow-[0_0_15px_rgba(78,228,203,0.15)]"
-                            : "border-[#ff94aa] bg-[#ff94aa]/10 text-[#ff94aa]";
+                            ? "border-teal-500 bg-teal-50 text-teal-800 dark:border-[#4ee4cb] dark:bg-[#4ee4cb]/10 dark:text-[#4ee4cb] shadow-sm"
+                            : "border-rose-500 bg-rose-50 text-rose-800 dark:border-[#ff94aa] dark:bg-[#ff94aa]/10 dark:text-[#ff94aa]";
                           icon = evaluation.correct
-                            ? <CheckCircle2 className="h-5 w-5 text-[#4ee4cb]" />
-                            : <XCircle className="h-5 w-5 text-[#ff94aa]" />;
+                            ? <CheckCircle2 className="h-5 w-5 text-teal-600 dark:text-[#4ee4cb]" />
+                            : <XCircle className="h-5 w-5 text-rose-600 dark:text-[#ff94aa]" />;
                         } else {
-                          stateClass = "border-white/[0.04] bg-[#242730] text-slate-500 opacity-40";
+                          stateClass = "border-slate-200 bg-slate-50/50 text-slate-400 opacity-40 dark:border-white/[0.04] dark:bg-[#242730] dark:text-slate-500";
                         }
                       } else if (isSelected) {
-                        stateClass = "border-2 border-[#ffd159] bg-[#2a2c33] text-white shadow-md shadow-amber-500/10";
+                        stateClass = "border-2 border-amber-500 bg-amber-50/50 text-slate-900 shadow-sm dark:border-[#ffd159] dark:bg-[#2a2c33] dark:text-white";
                       }
 
                       return (
@@ -452,14 +452,14 @@ export default function PracticeQuiz() {
                     onChange={(event) => setTextAnswer(event.target.value)}
                     disabled={Boolean(evaluation) || submitting}
                     placeholder="Type your answer here..."
-                    className="min-h-[200px] w-full rounded-2xl border border-white/10 bg-[#242730] p-5 text-base font-medium text-white placeholder:text-slate-500 focus:border-[#ffd159] focus:outline-none focus:ring-1 focus:ring-[#ffd159] resize-none"
+                    className="min-h-[200px] w-full rounded-2xl border border-slate-200 bg-slate-50 p-5 text-base font-medium text-slate-900 placeholder:text-slate-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-white/10 dark:bg-[#242730] dark:text-white dark:placeholder:text-slate-500 dark:focus:border-[#ffd159] dark:focus:ring-[#ffd159] resize-none"
                   />
                 )}
 
                 {evaluation && (
-                  <div className="mt-6 rounded-2xl border border-white/[0.08] bg-[#242730] p-5 text-sm">
-                    <p className={`font-semibold ${evaluation.correct ? "text-[#4ee4cb]" : "text-[#ff94aa]"}`}>{evaluation.feedback}</p>
-                    <p className="mt-1 text-slate-300">{evaluation.explanation}</p>
+                  <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5 text-sm dark:border-white/[0.08] dark:bg-[#242730]">
+                    <p className={`font-semibold ${evaluation.correct ? "text-teal-700 dark:text-[#4ee4cb]" : "text-rose-700 dark:text-[#ff94aa]"}`}>{evaluation.feedback}</p>
+                    <p className="mt-1 text-slate-600 dark:text-slate-300">{evaluation.explanation}</p>
                   </div>
                 )}
 
@@ -467,7 +467,7 @@ export default function PracticeQuiz() {
                   <button
                     onClick={handleSkipQuestion}
                     disabled={answerReady || Boolean(evaluation) || submitting}
-                    className={"text-xs font-bold uppercase tracking-wider transition-colors " + (answerReady || evaluation || submitting ? "text-slate-600 cursor-not-allowed" : "text-slate-400 hover:text-white")}
+                    className={"text-xs font-bold uppercase tracking-wider transition-colors " + (answerReady || evaluation || submitting ? "text-slate-300 dark:text-slate-600 cursor-not-allowed" : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white")}
                   >
                     Skip Question
                   </button>
@@ -476,8 +476,8 @@ export default function PracticeQuiz() {
                     onClick={handleNextQuestion}
                     disabled={(!answerReady && !evaluation) || submitting}
                     className={"px-8 py-3 rounded-xl text-sm font-bold transition-all " + (answerReady || evaluation
-                      ? "bg-gradient-to-r from-[#ffd159] to-[#fed656] text-slate-950 hover:brightness-105 active:scale-95 shadow-md shadow-amber-500/10 hover:-translate-y-0.5"
-                      : "bg-[#242730] text-slate-500 cursor-not-allowed border border-white/[0.04]")}
+                      ? "bg-gradient-to-r from-amber-500 to-amber-400 dark:from-[#ffd159] dark:to-[#fed656] text-slate-950 hover:brightness-105 active:scale-95 shadow-md shadow-amber-500/10 hover:-translate-y-0.5"
+                      : "bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200 dark:bg-[#242730] dark:text-slate-500 dark:border-white/[0.04]")}
                   >
                     {submitting ? "Checking..." : evaluation ? (pendingQuestion ? "Next Question" : "View Results") : "Check Answer"}
                   </button>
@@ -501,30 +501,30 @@ export default function PracticeQuiz() {
 
     return (
       <div className="max-w-3xl mx-auto py-16 flex flex-col items-center justify-center text-center">
-        <div className="w-full rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-12 shadow-2xl relative overflow-hidden">
+        <div className="w-full rounded-3xl border border-slate-200 bg-white dark:border-white/[0.08] dark:bg-[#1c1e24] p-12 shadow-xl dark:shadow-2xl relative overflow-hidden">
           {percentage >= 80 ? (
-            <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-64 h-64 bg-[#4ee4cb]/10 blur-[80px] rounded-full pointer-events-none" />
+            <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-64 h-64 bg-teal-500/10 dark:bg-[#4ee4cb]/10 blur-[80px] rounded-full pointer-events-none" />
           ) : (
-            <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-64 h-64 bg-[#ffd159]/10 blur-[80px] rounded-full pointer-events-none" />
+            <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-64 h-64 bg-amber-500/10 dark:bg-[#ffd159]/10 blur-[80px] rounded-full pointer-events-none" />
           )}
 
           <div className="flex justify-center mb-8 relative z-10">
-            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#ffd159]/10 text-[#ffd159] border border-[#ffd159]/20 ring-8 ring-[#242730]">
+            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-amber-500/10 text-amber-600 dark:bg-[#ffd159]/10 dark:text-[#ffd159] border border-amber-500/20 dark:border-[#ffd159]/20 ring-8 ring-slate-100 dark:ring-[#242730]">
               <Trophy className="h-10 w-10" />
             </div>
           </div>
 
-          <h2 className="text-3xl font-black text-white mb-2 relative z-10">{resultMessage}</h2>
-          <p className="text-slate-400 mb-10 relative z-10">
-            {report && report.summary ? report.summary : <>You completed the <span className="font-bold text-white">{topic && topic.name}</span> practice quiz.</>}
+          <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-2 relative z-10">{resultMessage}</h2>
+          <p className="text-slate-600 dark:text-slate-400 mb-10 relative z-10">
+            {report && report.summary ? report.summary : <>You completed the <span className="font-bold text-slate-900 dark:text-white">{topic && topic.name}</span> practice quiz.</>}
           </p>
 
           <div className="flex justify-center mb-12 relative z-10">
             <div className="flex flex-col items-center">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Final Score</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Final Score</span>
               <div className="flex items-baseline gap-2">
-                <span className={`text-6xl font-black ${percentage >= 80 ? "text-[#4ee4cb]" : percentage >= 50 ? "text-[#ffd159]" : "text-[#ff94aa]"}`}>{score}</span>
-                <span className="text-2xl font-bold text-slate-500">/ 10</span>
+                <span className={`text-6xl font-black ${percentage >= 80 ? "text-teal-600 dark:text-[#4ee4cb]" : percentage >= 50 ? "text-amber-600 dark:text-[#ffd159]" : "text-rose-600 dark:text-[#ff94aa]"}`}>{score}</span>
+                <span className="text-2xl font-bold text-slate-400 dark:text-slate-500">/ 10</span>
               </div>
             </div>
           </div>
@@ -532,13 +532,13 @@ export default function PracticeQuiz() {
           <div className="flex items-center justify-center gap-4 relative z-10">
             <button
               onClick={handleReturnToTopics}
-              className="px-6 py-3 rounded-xl font-bold text-sm bg-[#242730] text-slate-200 hover:bg-[#2b2f3a] hover:text-white border border-white/[0.08] transition-colors"
+              className="px-6 py-3 rounded-xl font-bold text-sm bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 border border-slate-200 dark:bg-[#242730] dark:text-slate-200 dark:hover:bg-[#2b2f3a] dark:hover:text-white dark:border-white/[0.08] transition-colors shadow-sm"
             >
               Back to Topics
             </button>
             <button
               onClick={() => startPractice(activeTopic)}
-              className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-[#ffd159] to-[#fed656] text-slate-950 hover:brightness-105 active:scale-95 shadow-md shadow-amber-500/10 transition-all hover:-translate-y-0.5"
+              className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-amber-500 to-amber-400 dark:from-[#ffd159] dark:to-[#fed656] text-slate-950 hover:brightness-105 active:scale-95 shadow-md shadow-amber-500/10 transition-all hover:-translate-y-0.5"
             >
               <RefreshCw className="h-4 w-4" /> Retake Quiz
             </button>

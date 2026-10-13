@@ -83,16 +83,16 @@ export default function SkillMetrics({
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       
       {/* Card 1: Role Skill Coverage */}
-      <div className="flex flex-col justify-between rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-5 shadow-xl shadow-black/25">
-        <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
-          <Layers className="h-4 w-4 text-[#4ee4cb]" />
+      <div className="flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-white/[0.08] dark:bg-[#1c1e24] dark:shadow-xl dark:shadow-black/25">
+        <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+          <Layers className="h-4 w-4 text-teal-600 dark:text-[#4ee4cb]" />
           Role Skill Coverage
         </h3>
 
         <div className="flex items-center gap-3.5 mt-3">
           <div className="relative flex h-20 w-20 items-center justify-center shrink-0">
             <svg className="h-full w-full -rotate-90 transform" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="38" fill="transparent" stroke="#242730" strokeWidth="8" />
+              <circle cx="50" cy="50" r="38" fill="transparent" stroke="currentColor" className="text-slate-200 dark:text-[#242730]" strokeWidth="8" />
               <circle
                 cx="50"
                 cy="50"
@@ -107,43 +107,43 @@ export default function SkillMetrics({
               />
               <defs>
                 <linearGradient id="coverageGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#4ee4cb" />
-                  <stop offset="100%" stopColor="#72c5ff" />
+                  <stop offset="0%" stopColor="#0d9488" />
+                  <stop offset="100%" stopColor="#0284c7" />
                 </linearGradient>
               </defs>
             </svg>
             <div className="absolute flex flex-col items-center justify-center">
-              <span className="text-xl font-black text-white tracking-tight">{coverageScore}%</span>
+              <span className="text-xl font-black text-slate-900 dark:text-white tracking-tight">{coverageScore}%</span>
             </div>
           </div>
           <div className="flex flex-col justify-center">
             <span className={`text-xs font-bold leading-tight ${
-              coverageScore >= 75 ? "text-[#4ee4cb]" :
-              coverageScore >= 50 ? "text-[#72c5ff]" :
-              coverageScore >= 30 ? "text-[#ffd159]" :
-              "text-[#ff94aa]"
+              coverageScore >= 75 ? "text-teal-600 dark:text-[#4ee4cb]" :
+              coverageScore >= 50 ? "text-sky-600 dark:text-[#72c5ff]" :
+              coverageScore >= 30 ? "text-amber-600 dark:text-[#ffd159]" :
+              "text-rose-600 dark:text-[#ff94aa]"
             }`}>
               {coverageScore >= 75 ? "Strong\nCoverage" :
                coverageScore >= 50 ? "Solid\nCoverage" :
                coverageScore >= 30 ? "Growing\nCoverage" :
                "Early\nStage"}
             </span>
-            <span className="text-[11px] text-slate-400 mt-1">Weighted Competencies</span>
+            <span className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Weighted Competencies</span>
           </div>
         </div>
       </div>
 
       {/* Card 2: Market Demand Match (Market Alignment) */}
-      <div className="flex flex-col justify-between rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-5 shadow-xl shadow-black/25">
-        <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
-          <Flame className="h-4 w-4 text-[#ffd159]" />
+      <div className="flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-white/[0.08] dark:bg-[#1c1e24] dark:shadow-xl dark:shadow-black/25">
+        <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+          <Flame className="h-4 w-4 text-amber-500 dark:text-[#ffd159]" />
           Market Demand Match
         </h3>
 
         <div className="flex items-center gap-3.5 mt-3">
           <div className="relative flex h-20 w-20 items-center justify-center shrink-0">
             <svg className="h-full w-full -rotate-90 transform" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="38" fill="transparent" stroke="#242730" strokeWidth="8" />
+              <circle cx="50" cy="50" r="38" fill="transparent" stroke="currentColor" className="text-slate-200 dark:text-[#242730]" strokeWidth="8" />
               <circle
                 cx="50"
                 cy="50"
@@ -158,59 +158,59 @@ export default function SkillMetrics({
               />
               <defs>
                 <linearGradient id="marketGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#ffd159" />
-                  <stop offset="100%" stopColor="#ffb48a" />
+                  <stop offset="0%" stopColor="#d97706" />
+                  <stop offset="100%" stopColor="#ea580c" />
                 </linearGradient>
               </defs>
             </svg>
             <div className="absolute flex flex-col items-center justify-center">
-              <span className="text-xl font-black text-white tracking-tight">{marketScore}%</span>
+              <span className="text-xl font-black text-slate-900 dark:text-white tracking-tight">{marketScore}%</span>
             </div>
           </div>
           <div className="flex flex-col justify-center">
             <span className={`text-xs font-bold leading-tight ${
-              marketScore >= 70 ? "text-[#4ee4cb]" :
-              marketScore >= 40 ? "text-[#ffd159]" :
-              "text-[#ff94aa]"
+              marketScore >= 70 ? "text-teal-600 dark:text-[#4ee4cb]" :
+              marketScore >= 40 ? "text-amber-600 dark:text-[#ffd159]" :
+              "text-rose-600 dark:text-[#ff94aa]"
             }`}>
               {marketScore >= 70 ? "High Market\nAlignment" :
                marketScore >= 40 ? "Moderate\nAlignment" :
                "Market\nGap"}
             </span>
-            <span className="text-[11px] text-slate-400 mt-1">Live Hiring Posts</span>
+            <span className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Live Hiring Posts</span>
           </div>
         </div>
       </div>
 
       {/* Card 3: Role Universe */}
-      <div className="flex flex-col justify-between rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-5 shadow-xl shadow-black/25">
-        <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
-          <Briefcase className="h-4 w-4 text-[#e29aff]" />
+      <div className="flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-white/[0.08] dark:bg-[#1c1e24] dark:shadow-xl dark:shadow-black/25">
+        <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+          <Briefcase className="h-4 w-4 text-purple-600 dark:text-[#e29aff]" />
           Role Universe
         </h3>
 
         <div className="mt-3">
-          <span className="text-2xl sm:text-3xl font-black text-white block tracking-tight">
+          <span className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white block tracking-tight">
             {displayRoleTotal}
           </span>
-          <span className="text-xs text-slate-400 mt-1 block">
+          <span className="text-xs text-slate-500 dark:text-slate-400 mt-1 block">
             role-relevant skills defined for {targetRole}
           </span>
         </div>
       </div>
 
       {/* Card 4: Market Universe */}
-      <div className="flex flex-col justify-between rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-5 shadow-xl shadow-black/25">
-        <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
-          <Flame className="h-4 w-4 text-[#ffb48a]" />
+      <div className="flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-white/[0.08] dark:bg-[#1c1e24] dark:shadow-xl dark:shadow-black/25">
+        <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+          <Flame className="h-4 w-4 text-orange-600 dark:text-[#ffb48a]" />
           Market Universe
         </h3>
 
         <div className="mt-3">
-          <span className="text-2xl sm:text-3xl font-black text-white block tracking-tight">
+          <span className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white block tracking-tight">
             {displayMarketTotal}
           </span>
-          <span className="text-xs text-slate-400 mt-1 block">
+          <span className="text-xs text-slate-500 dark:text-slate-400 mt-1 block">
             current-demand skills in active listings
           </span>
         </div>

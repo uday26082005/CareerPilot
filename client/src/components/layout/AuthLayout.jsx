@@ -1,7 +1,8 @@
 import { useEffect } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Sun, Moon } from "lucide-react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const PARTICLES = Array.from({ length: 20 }, (_, i) => ({
   id: i,
@@ -12,6 +13,7 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => ({
 }));
 
 export default function AuthLayout({ backLink, children, aboveCard, belowCard }) {
+  const { theme, toggleTheme } = useTheme();
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -96,22 +98,33 @@ export default function AuthLayout({ backLink, children, aboveCard, belowCard })
           <motion.div
             whileHover={{ rotate: 10, scale: 1.08 }}
             className="flex h-10 w-10 shrink-0 items-center justify-center">
-            <img src="/logo.jpg" alt="CareerPilot Logo" className="h-9 w-9 rounded-xl mix-blend-lighten" />
+            <img src="/logo.png" alt="CareerPilot Logo" className="h-9 w-9 object-contain drop-shadow-sm" />
           </motion.div>
-          <h1 className="text-2xl font-extrabold tracking-tight">
-            CareerPilot<span className="text-[#ffd159]"> AI</span>
+          <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+            CareerPilot<span className="text-amber-500 dark:text-[#ffd159]"> AI</span>
           </h1>
         </Link>
 
-        {backLink && (
-          <Link
-            to={backLink.href}
-            className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 transition hover:text-[#ffd159]"
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white/80 text-slate-700 shadow-sm transition hover:bg-slate-100 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10"
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            aria-label="Toggle theme"
           >
-            <ArrowLeft className="h-4 w-4" />
-            {backLink.text}
-          </Link>
-        )}
+            {theme === 'dark' ? <Sun className="h-4 w-4 text-amber-400" /> : <Moon className="h-4 w-4 text-slate-600" />}
+          </button>
+          {backLink && (
+            <Link
+              to={backLink.href}
+              className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 transition hover:text-amber-600 dark:hover:text-[#ffd159]"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              {backLink.text}
+            </Link>
+          )}
+        </div>
       </motion.header>
 
       {/* Main Content */}
@@ -129,7 +142,7 @@ export default function AuthLayout({ backLink, children, aboveCard, belowCard })
           className="relative w-full max-w-md"
         >
           <div className="absolute inset-0 -z-10 rounded-[36px] bg-[#ffd159]/10 blur-[100px]" />
-          <div className="rounded-[32px] border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1c1e24] p-6 md:p-7 shadow-2xl shadow-black/40 backdrop-blur-xl">
+          <div className="rounded-[32px] border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1c1e24] p-6 md:p-7 shadow-xl shadow-slate-200/50 dark:shadow-2xl dark:shadow-black/40 backdrop-blur-xl">
             {children}
           </div>
         </motion.div>

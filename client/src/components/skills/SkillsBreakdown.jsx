@@ -62,18 +62,18 @@ export default function SkillsBreakdown({
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       {/* Box 1: Detected Skills */}
-      <div className="flex flex-col rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-6 shadow-xl shadow-black/25">
+      <div className="flex flex-col rounded-3xl border border-slate-200/80 bg-white p-6 shadow-xs hover:shadow-sm transition-all dark:border-white/[0.08] dark:bg-[#1c1e24] dark:shadow-xl dark:shadow-black/25">
         <div className="flex items-center justify-between gap-3 mb-4">
           <div>
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-[#4ee4cb]" />
+            <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-[#0D9488] dark:text-[#4ee4cb]" />
               Detected Skills
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Verified competencies found in your resume
             </p>
           </div>
-          <span className="rounded-full bg-[#4ee4cb]/10 px-3 py-1 text-xs font-semibold text-[#4ee4cb] border border-[#4ee4cb]/20">
+          <span className="rounded-full bg-[#F0FDFA] px-3 py-1 text-xs font-semibold text-[#0D9488] border border-teal-200 dark:bg-[#4ee4cb]/10 dark:text-[#4ee4cb] dark:border-[#4ee4cb]/20">
             {totalDetectedCount} Detected
           </span>
         </div>
@@ -84,8 +84,8 @@ export default function SkillsBreakdown({
             onClick={() => setDetectedFilter("core")}
             className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
               detectedFilter === "core" 
-                ? "bg-[#4ee4cb]/20 text-[#4ee4cb] border border-[#4ee4cb]/40 font-bold" 
-                : "bg-[#242730] text-slate-400 hover:text-white border border-white/[0.06]"
+                ? "bg-[#F0FDFA] text-[#0D9488] border border-teal-300 font-bold dark:bg-[#4ee4cb]/20 dark:text-[#4ee4cb] dark:border-[#4ee4cb]/40 shadow-2xs" 
+                : "bg-slate-50 text-slate-600 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-100 dark:bg-[#242730] dark:text-slate-400 dark:hover:text-white dark:border-white/[0.06]"
             }`}
           >
             Core ({coreDetected.length})
@@ -94,8 +94,8 @@ export default function SkillsBreakdown({
             onClick={() => setDetectedFilter("important")}
             className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
               detectedFilter === "important" 
-                ? "bg-[#ffd159]/20 text-[#ffd159] border border-[#ffd159]/40 font-bold" 
-                : "bg-[#242730] text-slate-400 hover:text-white border border-white/[0.06]"
+                ? "bg-[#FFF7E6] text-[#D97706] border border-[#FDE7B0] font-bold dark:bg-[#ffd159]/20 dark:text-[#ffd159] dark:border-[#ffd159]/40 shadow-2xs" 
+                : "bg-slate-50 text-slate-600 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-100 dark:bg-[#242730] dark:text-slate-400 dark:hover:text-white dark:border-white/[0.06]"
             }`}
           >
             Important ({importantDetected.length})
@@ -104,8 +104,8 @@ export default function SkillsBreakdown({
             onClick={() => setDetectedFilter("supporting")}
             className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
               detectedFilter === "supporting" 
-                ? "bg-[#e29aff]/20 text-[#e29aff] border border-[#e29aff]/40 font-bold" 
-                : "bg-[#242730] text-slate-400 hover:text-white border border-white/[0.06]"
+                ? "bg-[#F5F3FF] text-[#7C3AED] border border-purple-300 font-bold dark:bg-[#e29aff]/20 dark:text-[#e29aff] dark:border-[#e29aff]/40 shadow-2xs" 
+                : "bg-slate-50 text-slate-600 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-100 dark:bg-[#242730] dark:text-slate-400 dark:hover:text-white dark:border-white/[0.06]"
             }`}
           >
             Supporting ({supportingDetected.length})
@@ -114,8 +114,8 @@ export default function SkillsBreakdown({
             onClick={() => setDetectedFilter("market")}
             className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
               detectedFilter === "market" 
-                ? "bg-[#ffb48a]/20 text-[#ffb48a] border border-[#ffb48a]/40 font-bold" 
-                : "bg-[#242730] text-slate-400 hover:text-white border border-white/[0.06]"
+                ? "bg-[#FFF7ED] text-[#EA580C] border border-orange-300 font-bold dark:bg-[#ffb48a]/20 dark:text-[#ffb48a] dark:border-[#ffb48a]/40 shadow-2xs" 
+                : "bg-slate-50 text-slate-600 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-100 dark:bg-[#242730] dark:text-slate-400 dark:hover:text-white dark:border-white/[0.06]"
             }`}
           >
             Market ({marketDetected.length})
@@ -127,23 +127,23 @@ export default function SkillsBreakdown({
           {detectedFilter === "core" && (
             <div>
               <div className="flex items-center justify-between gap-2 mb-2">
-                <span className="text-xs font-bold text-[#4ee4cb] flex items-center gap-1.5">
+                <span className="text-xs font-bold text-[#0D9488] dark:text-[#4ee4cb] flex items-center gap-1.5">
                   <CheckCircle2 className="h-3.5 w-3.5" /> Core Competencies Detected
                 </span>
-                <span className="rounded-full bg-[#4ee4cb]/10 px-2.5 py-0.5 text-[11px] font-semibold text-[#4ee4cb]">
+                <span className="rounded-full bg-[#F0FDFA] text-[#0D9488] border border-teal-200 dark:bg-[#4ee4cb]/10 dark:text-[#4ee4cb] px-2.5 py-0.5 text-[11px] font-semibold">
                   {coreDetected.length}
                 </span>
               </div>
               {coreDetected.length > 0 ? (
-                <div className="flex flex-wrap gap-1.5 pl-5">
+                <div className="flex flex-wrap gap-2 pl-5">
                   {coreDetected.map((skill, i) => (
                     <span
                       key={i}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-[#4ee4cb]/20 bg-[#4ee4cb]/5 px-2.5 py-1 text-xs font-medium text-[#4ee4cb]"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-teal-200 bg-[#F0FDFA] text-teal-900 shadow-2xs dark:border-[#4ee4cb]/20 dark:bg-[#4ee4cb]/5 dark:text-[#4ee4cb] px-2.5 py-1 text-xs font-medium"
                     >
-                      <span>{skill.name}</span>
+                      <span className="font-semibold text-teal-950 dark:text-white">{skill.name}</span>
                       {skill.category && (
-                        <span className="text-[10px] text-[#4ee4cb]/70 font-mono">
+                        <span className="text-[10px] text-teal-800 dark:text-[#4ee4cb]/70 font-mono bg-teal-100/70 dark:bg-transparent px-1.5 py-0.5 rounded">
                           {skill.category}
                         </span>
                       )}
@@ -160,23 +160,23 @@ export default function SkillsBreakdown({
           {detectedFilter === "important" && (
             <div>
               <div className="flex items-center justify-between gap-2 mb-2">
-                <span className="text-xs font-bold text-[#ffd159] flex items-center gap-1.5">
+                <span className="text-xs font-bold text-[#D97706] dark:text-[#ffd159] flex items-center gap-1.5">
                   <ShieldCheck className="h-3.5 w-3.5" /> Important Production Skills Detected
                 </span>
-                <span className="rounded-full bg-[#ffd159]/10 px-2.5 py-0.5 text-[11px] font-semibold text-[#ffd159]">
+                <span className="rounded-full bg-[#FFF7E6] text-[#D97706] border border-[#FDE7B0] dark:bg-[#ffd159]/10 dark:text-[#ffd159] px-2.5 py-0.5 text-[11px] font-semibold">
                   {importantDetected.length}
                 </span>
               </div>
               {importantDetected.length > 0 ? (
-                <div className="flex flex-wrap gap-1.5 pl-5">
+                <div className="flex flex-wrap gap-2 pl-5">
                   {importantDetected.map((skill, i) => (
                     <span
                       key={i}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-[#ffd159]/20 bg-[#ffd159]/5 px-2.5 py-1 text-xs font-medium text-[#ffd159]"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-[#FDE7B0] bg-[#FFF7E6] text-amber-900 shadow-2xs dark:border-[#ffd159]/20 dark:bg-[#ffd159]/5 dark:text-[#ffd159] px-2.5 py-1 text-xs font-medium"
                     >
-                      <span>{skill.name}</span>
+                      <span className="font-semibold text-amber-950 dark:text-white">{skill.name}</span>
                       {skill.category && (
-                        <span className="text-[10px] text-[#ffd159]/70 font-mono">
+                        <span className="text-[10px] text-amber-800 dark:text-[#ffd159]/70 font-mono bg-amber-100/70 dark:bg-transparent px-1.5 py-0.5 rounded">
                           {skill.category}
                         </span>
                       )}
@@ -193,21 +193,21 @@ export default function SkillsBreakdown({
           {detectedFilter === "supporting" && (
             <div>
               <div className="flex items-center justify-between gap-2 mb-2">
-                <span className="text-xs font-bold text-[#e29aff] flex items-center gap-1.5">
-                  <Sparkles className="h-3.5 w-3.5 text-[#e29aff]" /> Supporting & Extended Skills Detected
+                <span className="text-xs font-bold text-[#7C3AED] dark:text-[#e29aff] flex items-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5 text-[#7C3AED] dark:text-[#e29aff]" /> Supporting & Extended Skills Detected
                 </span>
-                <span className="rounded-full bg-[#e29aff]/10 px-2.5 py-0.5 text-[11px] font-semibold text-[#e29aff]">
+                <span className="rounded-full bg-[#F5F3FF] text-[#7C3AED] border border-purple-200 dark:bg-[#e29aff]/10 dark:text-[#e29aff] px-2.5 py-0.5 text-[11px] font-semibold">
                   {supportingDetected.length}
                 </span>
               </div>
               {supportingDetected.length > 0 ? (
-                <div className="flex flex-wrap gap-1.5 pl-5">
+                <div className="flex flex-wrap gap-2 pl-5">
                   {supportingDetected.map((skill, i) => (
                     <span
                       key={i}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-[#e29aff]/20 bg-[#e29aff]/5 px-2.5 py-1 text-xs font-medium text-[#e29aff]"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-purple-200 bg-[#F5F3FF] text-purple-900 shadow-2xs dark:border-[#e29aff]/20 dark:bg-[#e29aff]/5 dark:text-[#e29aff] px-2.5 py-1 text-xs font-medium"
                     >
-                      <span>{skill.name}</span>
+                      <span className="font-semibold text-purple-950 dark:text-white">{skill.name}</span>
                     </span>
                   ))}
                 </div>
@@ -221,22 +221,22 @@ export default function SkillsBreakdown({
           {detectedFilter === "market" && (
             <div>
               <div className="flex items-center justify-between gap-2 mb-2">
-                <span className="text-xs font-bold text-[#ffb48a] flex items-center gap-1.5">
-                  <Flame className="h-3.5 w-3.5 text-[#ffb48a]" /> Current Market Demand Detected
+                <span className="text-xs font-bold text-[#EA580C] dark:text-[#ffb48a] flex items-center gap-1.5">
+                  <Flame className="h-3.5 w-3.5 text-[#EA580C] dark:text-[#ffb48a]" /> Current Market Demand Detected
                 </span>
-                <span className="rounded-full bg-[#ffb48a]/10 px-2.5 py-0.5 text-[11px] font-semibold text-[#ffb48a]">
+                <span className="rounded-full bg-[#FFF7ED] text-[#EA580C] border border-orange-200 dark:bg-[#ffb48a]/10 dark:text-[#ffb48a] px-2.5 py-0.5 text-[11px] font-semibold">
                   {marketDetected.length}
                 </span>
               </div>
               {marketDetected.length > 0 ? (
-                <div className="flex flex-wrap gap-1.5 pl-5">
+                <div className="flex flex-wrap gap-2 pl-5">
                   {marketDetected.map((skill, i) => (
                     <span
                       key={i}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-[#ffb48a]/20 bg-[#ffb48a]/5 px-2.5 py-1 text-xs font-medium text-[#ffb48a]"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-orange-200 bg-[#FFF7ED] text-orange-900 shadow-2xs dark:border-[#ffb48a]/20 dark:bg-[#ffb48a]/5 dark:text-[#ffb48a] px-2.5 py-1 text-xs font-medium"
                     >
-                      <span>{skill.name}</span>
-                      {skill.isTrending && <span className="text-[10px] text-[#ffd159]">🔥</span>}
+                      <span className="font-semibold text-orange-950 dark:text-white">{skill.name}</span>
+                      {skill.isTrending && <span className="text-[10px] text-amber-500 dark:text-[#ffd159]">🔥</span>}
                     </span>
                   ))}
                 </div>
@@ -249,18 +249,18 @@ export default function SkillsBreakdown({
       </div>
 
       {/* Box 2: Not Detected Skills (Role Gaps) */}
-      <div className="flex flex-col rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-6 shadow-xl shadow-black/25">
+      <div className="flex flex-col rounded-3xl border border-slate-200/80 bg-white p-6 shadow-xs hover:shadow-sm transition-all dark:border-white/[0.08] dark:bg-[#1c1e24] dark:shadow-xl dark:shadow-black/25">
         <div className="flex items-center justify-between gap-3 mb-4">
           <div>
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <AlertCircle className="h-4 w-4 text-[#ffd159]" />
+            <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <AlertCircle className="h-4 w-4 text-[#D97706] dark:text-[#ffd159]" />
               Not Detected Skills
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Role and market skills to build for this profile
             </p>
           </div>
-          <span className="rounded-full bg-[#ffd159]/10 px-3 py-1 text-xs font-semibold text-[#ffd159] border border-[#ffd159]/20">
+          <span className="rounded-full bg-[#FFF7E6] px-3 py-1 text-xs font-semibold text-[#D97706] border border-[#FDE7B0] dark:bg-[#ffd159]/10 dark:text-[#ffd159] dark:border-[#ffd159]/20">
             {totalGapsCount} Not Detected
           </span>
         </div>
@@ -271,8 +271,8 @@ export default function SkillsBreakdown({
             onClick={() => setGapFilter("core")}
             className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
               gapFilter === "core" 
-                ? "bg-[#ff94aa]/20 text-[#ff94aa] border border-[#ff94aa]/40 font-bold" 
-                : "bg-[#242730] text-slate-400 hover:text-white border border-white/[0.06]"
+                ? "bg-[#FFF1F2] text-[#B91C1C] border border-rose-300 font-bold dark:bg-[#ff94aa]/20 dark:text-[#ff94aa] dark:border-[#ff94aa]/40 shadow-2xs" 
+                : "bg-slate-50 text-slate-600 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-100 dark:bg-[#242730] dark:text-slate-400 dark:hover:text-white dark:border-white/[0.06]"
             }`}
           >
             Core Gaps ({coreGaps.length})
@@ -281,8 +281,8 @@ export default function SkillsBreakdown({
             onClick={() => setGapFilter("important")}
             className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
               gapFilter === "important" 
-                ? "bg-[#ffd159]/20 text-[#ffd159] border border-[#ffd159]/40 font-bold" 
-                : "bg-[#242730] text-slate-400 hover:text-white border border-white/[0.06]"
+                ? "bg-[#FFF7E6] text-[#D97706] border border-[#FDE7B0] font-bold dark:bg-[#ffd159]/20 dark:text-[#ffd159] dark:border-[#ffd159]/40 shadow-2xs" 
+                : "bg-slate-50 text-slate-600 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-100 dark:bg-[#242730] dark:text-slate-400 dark:hover:text-white dark:border-white/[0.06]"
             }`}
           >
             Important Gaps ({importantGaps.length})
@@ -291,8 +291,8 @@ export default function SkillsBreakdown({
             onClick={() => setGapFilter("supporting")}
             className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
               gapFilter === "supporting" 
-                ? "bg-[#e29aff]/20 text-[#e29aff] border border-[#e29aff]/40 font-bold" 
-                : "bg-[#242730] text-slate-400 hover:text-white border border-white/[0.06]"
+                ? "bg-[#F5F3FF] text-[#7C3AED] border border-purple-300 font-bold dark:bg-[#e29aff]/20 dark:text-[#e29aff] dark:border-[#e29aff]/40 shadow-2xs" 
+                : "bg-slate-50 text-slate-600 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-100 dark:bg-[#242730] dark:text-slate-400 dark:hover:text-white dark:border-white/[0.06]"
             }`}
           >
             Supporting Gaps ({supportingGaps.length})
@@ -301,8 +301,8 @@ export default function SkillsBreakdown({
             onClick={() => setGapFilter("market")}
             className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
               gapFilter === "market" 
-                ? "bg-[#ffb48a]/20 text-[#ffb48a] border border-[#ffb48a]/40 font-bold" 
-                : "bg-[#242730] text-slate-400 hover:text-white border border-white/[0.06]"
+                ? "bg-[#FFF7ED] text-[#EA580C] border border-orange-300 font-bold dark:bg-[#ffb48a]/20 dark:text-[#ffb48a] dark:border-[#ffb48a]/40 shadow-2xs" 
+                : "bg-slate-50 text-slate-600 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-100 dark:bg-[#242730] dark:text-slate-400 dark:hover:text-white dark:border-white/[0.06]"
             }`}
           >
             Market Gaps ({marketGaps.length})
@@ -314,23 +314,23 @@ export default function SkillsBreakdown({
           {gapFilter === "core" && (
             <div>
               <div className="flex items-center justify-between gap-2 mb-1.5">
-                <span className="text-xs font-bold text-[#ff94aa] flex items-center gap-1.5">
-                  <AlertCircle className="h-3.5 w-3.5 text-[#ff94aa]" /> Core Role Gaps (High Relevance)
+                <span className="text-xs font-bold text-[#B91C1C] dark:text-[#ff94aa] flex items-center gap-1.5">
+                  <AlertCircle className="h-3.5 w-3.5 text-[#B91C1C] dark:text-[#ff94aa]" /> Core Role Gaps (High Relevance)
                 </span>
-                <span className="text-[10px] text-[#ff94aa] bg-[#ff94aa]/10 px-2 py-0.5 rounded-full font-semibold">
+                <span className="text-[10px] text-[#B91C1C] bg-[#FFF1F2] border border-rose-200 dark:text-[#ff94aa] dark:bg-[#ff94aa]/10 px-2 py-0.5 rounded-full font-semibold">
                   Priority Focus
                 </span>
               </div>
               {coreGaps.length > 0 ? (
-                <div className="flex flex-wrap gap-1.5 pl-5">
+                <div className="flex flex-wrap gap-2 pl-5">
                   {coreGaps.map((skill, i) => (
                     <span
                       key={i}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-[#ff94aa]/20 bg-[#ff94aa]/5 px-2.5 py-1 text-xs font-medium text-[#ff94aa]"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-rose-200 bg-[#FFF1F2] text-rose-900 shadow-2xs dark:border-[#ff94aa]/20 dark:bg-[#ff94aa]/5 dark:text-[#ff94aa] px-2.5 py-1 text-xs font-medium"
                     >
-                      <span>{skill.name}</span>
+                      <span className="font-semibold text-rose-950 dark:text-white">{skill.name}</span>
                       {skill.category && (
-                        <span className="text-[10px] text-[#ff94aa]/70 font-mono">
+                        <span className="text-[10px] text-rose-800 dark:text-[#ff94aa]/70 font-mono bg-rose-100/70 dark:bg-transparent px-1.5 py-0.5 rounded">
                           {skill.category}
                         </span>
                       )}
@@ -338,7 +338,7 @@ export default function SkillsBreakdown({
                   ))}
                 </div>
               ) : (
-                <p className="text-xs text-[#4ee4cb] italic pl-5">All core competencies detected!</p>
+                <p className="text-xs text-[#0D9488] dark:text-[#4ee4cb] italic pl-5">All core competencies detected!</p>
               )}
             </div>
           )}
@@ -347,23 +347,23 @@ export default function SkillsBreakdown({
           {gapFilter === "important" && (
             <div>
               <div className="flex items-center justify-between gap-2 mb-1.5">
-                <span className="text-xs font-bold text-[#ffd159] flex items-center gap-1.5">
-                  <AlertCircle className="h-3.5 w-3.5 text-[#ffd159]" /> Important Role Gaps
+                <span className="text-xs font-bold text-[#D97706] dark:text-[#ffd159] flex items-center gap-1.5">
+                  <AlertCircle className="h-3.5 w-3.5 text-[#D97706] dark:text-[#ffd159]" /> Important Role Gaps
                 </span>
-                <span className="text-[10px] text-[#ffd159] bg-[#ffd159]/10 px-2 py-0.5 rounded-full font-semibold">
+                <span className="text-[10px] text-[#D97706] bg-[#FFF7E6] border border-[#FDE7B0] dark:text-[#ffd159] dark:bg-[#ffd159]/10 px-2 py-0.5 rounded-full font-semibold">
                   Production Level
                 </span>
               </div>
               {importantGaps.length > 0 ? (
-                <div className="flex flex-wrap gap-1.5 pl-5">
+                <div className="flex flex-wrap gap-2 pl-5">
                   {importantGaps.map((skill, i) => (
                     <span
                       key={i}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-[#ffd159]/20 bg-[#ffd159]/5 px-2.5 py-1 text-xs font-medium text-[#ffd159]"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-[#FDE7B0] bg-[#FFF7E6] text-amber-900 shadow-2xs dark:border-[#ffd159]/20 dark:bg-[#ffd159]/5 dark:text-[#ffd159] px-2.5 py-1 text-xs font-medium"
                     >
-                      <span>{skill.name}</span>
+                      <span className="font-semibold text-amber-950 dark:text-white">{skill.name}</span>
                       {skill.category && (
-                        <span className="text-[10px] text-[#ffd159]/70 font-mono">
+                        <span className="text-[10px] text-amber-800 dark:text-[#ffd159]/70 font-mono bg-amber-100/70 dark:bg-transparent px-1.5 py-0.5 rounded">
                           {skill.category}
                         </span>
                       )}
@@ -371,7 +371,7 @@ export default function SkillsBreakdown({
                   ))}
                 </div>
               ) : (
-                <p className="text-xs text-[#4ee4cb] italic pl-5">All important production skills detected!</p>
+                <p className="text-xs text-[#0D9488] dark:text-[#4ee4cb] italic pl-5">All important production skills detected!</p>
               )}
             </div>
           )}
@@ -380,26 +380,26 @@ export default function SkillsBreakdown({
           {gapFilter === "supporting" && (
             <div>
               <div className="flex items-center justify-between gap-2 mb-1.5">
-                <span className="text-xs font-bold text-[#e29aff] flex items-center gap-1.5">
-                  <Layers className="h-3.5 w-3.5 text-[#e29aff]" /> Supporting & Extended Tools
+                <span className="text-xs font-bold text-[#7C3AED] dark:text-[#e29aff] flex items-center gap-1.5">
+                  <Layers className="h-3.5 w-3.5 text-[#7C3AED] dark:text-[#e29aff]" /> Supporting & Extended Tools
                 </span>
-                <span className="text-[10px] text-[#e29aff] bg-[#e29aff]/10 px-2 py-0.5 rounded-full font-semibold">
+                <span className="text-[10px] text-[#7C3AED] bg-[#F5F3FF] border border-purple-200 dark:text-[#e29aff] dark:bg-[#e29aff]/10 px-2 py-0.5 rounded-full font-semibold">
                   Optional
                 </span>
               </div>
               {supportingGaps.length > 0 ? (
-                <div className="flex flex-wrap gap-1.5 pl-5">
+                <div className="flex flex-wrap gap-2 pl-5">
                   {supportingGaps.map((skill, i) => (
                     <span
                       key={i}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-[#e29aff]/20 bg-[#e29aff]/5 px-2.5 py-1 text-xs font-medium text-[#e29aff]"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-purple-200 bg-[#F5F3FF] text-purple-900 shadow-2xs dark:border-[#e29aff]/20 dark:bg-[#e29aff]/5 dark:text-[#e29aff] px-2.5 py-1 text-xs font-medium"
                     >
-                      <span>{skill.name}</span>
+                      <span className="font-semibold text-purple-950 dark:text-white">{skill.name}</span>
                     </span>
                   ))}
                 </div>
               ) : (
-                <p className="text-xs text-[#4ee4cb] italic pl-5">All supporting tools detected!</p>
+                <p className="text-xs text-[#0D9488] dark:text-[#4ee4cb] italic pl-5">All supporting tools detected!</p>
               )}
             </div>
           )}
@@ -408,27 +408,27 @@ export default function SkillsBreakdown({
           {gapFilter === "market" && (
             <div>
               <div className="flex items-center justify-between gap-2 mb-1.5">
-                <span className="text-xs font-bold text-[#ffb48a] flex items-center gap-1.5">
-                  <Flame className="h-3.5 w-3.5 text-[#ffb48a]" /> Current Market Demand Gaps
+                <span className="text-xs font-bold text-[#EA580C] dark:text-[#ffb48a] flex items-center gap-1.5">
+                  <Flame className="h-3.5 w-3.5 text-[#EA580C] dark:text-[#ffb48a]" /> Current Market Demand Gaps
                 </span>
-                <span className="text-[10px] text-[#ffb48a] bg-[#ffb48a]/10 px-2 py-0.5 rounded-full font-semibold">
+                <span className="text-[10px] text-[#EA580C] bg-[#FFF7ED] border border-orange-200 dark:text-[#ffb48a] dark:bg-[#ffb48a]/10 px-2 py-0.5 rounded-full font-semibold">
                   2026 Hiring
                 </span>
               </div>
               {marketGaps.length > 0 ? (
-                <div className="flex flex-wrap gap-1.5 pl-5">
+                <div className="flex flex-wrap gap-2 pl-5">
                   {marketGaps.map((skill, i) => (
                     <span
                       key={i}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-[#ffb48a]/20 bg-[#ffb48a]/5 px-2.5 py-1 text-xs font-medium text-[#ffb48a]"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-orange-200 bg-[#FFF7ED] text-orange-900 shadow-2xs dark:border-[#ffb48a]/20 dark:bg-[#ffb48a]/5 dark:text-[#ffb48a] px-2.5 py-1 text-xs font-medium"
                     >
-                      <span>{skill.name}</span>
-                      {skill.isTrending && <span className="text-[10px] text-[#ffd159]">🔥</span>}
+                      <span className="font-semibold text-orange-950 dark:text-white">{skill.name}</span>
+                      {skill.isTrending && <span className="text-[10px] text-amber-500 dark:text-[#ffd159]">🔥</span>}
                     </span>
                   ))}
                 </div>
               ) : (
-                <p className="text-xs text-[#4ee4cb] italic pl-5">All market demand skills detected!</p>
+                <p className="text-xs text-[#0D9488] dark:text-[#4ee4cb] italic pl-5">All market demand skills detected!</p>
               )}
             </div>
           )}

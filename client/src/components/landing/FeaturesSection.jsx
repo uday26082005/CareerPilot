@@ -90,11 +90,11 @@ export default function FeaturesSection() {
           className="mb-5 flex justify-center"
         >
 
-          <div className="flex items-center gap-2 rounded-full border border-[#ffd159]/20 bg-[#ffd159]/10 px-5 py-2 backdrop-blur-xl">
+          <div className="flex items-center gap-2 rounded-full border border-amber-300 dark:border-[#ffd159]/20 bg-amber-50 dark:bg-[#ffd159]/10 px-5 py-2 backdrop-blur-xl">
 
-            <Sparkles className="h-4 w-4 text-[#ffd159]" />
+            <Sparkles className="h-4 w-4 text-amber-600 dark:text-[#ffd159]" />
 
-            <span className="text-sm font-semibold text-[#ffd159]">
+            <span className="text-sm font-semibold text-amber-700 dark:text-[#ffd159]">
 
               Powerful AI Features
 
@@ -121,7 +121,7 @@ export default function FeaturesSection() {
           transition={{
             duration: .6,
           }}
-          className="mx-auto max-w-4xl text-center text-4xl font-black leading-tight lg:text-5xl text-white"
+          className="mx-auto max-w-4xl text-center text-4xl font-black leading-tight lg:text-5xl text-slate-900 dark:text-white"
         >
 
           Everything You Need
@@ -149,7 +149,7 @@ export default function FeaturesSection() {
           viewport={{
             once: true,
           }}
-          className="mx-auto mt-5 max-w-3xl text-center text-base leading-8 text-slate-400"
+          className="mx-auto mt-5 max-w-3xl text-center text-base leading-8 text-slate-600 dark:text-slate-400"
         >
 
           CareerPilot AI combines resume optimization,

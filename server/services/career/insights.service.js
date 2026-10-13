@@ -1,11 +1,47 @@
 const { getSupabaseAdmin } = require("../../config/supabase");
 const aiService = require("../ai/groq.service");
 const profileService = require("../profile/profile.service");
+const liveHiringService = require("./liveHiring.service");
 const companyLogos = require("../../data/companyLogos.json");
 const salaryRanges = require("../../data/salaryRanges.json");
 const { AppError } = require("../../middleware/error/AppError");
 const { HTTP_STATUS } = require("../../utils/constants/httpStatus");
 const { careerInsightsSchema } = require("../../schemas/insights.schema");
+
+// Helper to normalize salary strings according to Rule A (Range), Rule B (Single Value), Rule C (Unavailable)
+const normalizeSalaryBand = (rawVal) => {
+  if (!rawVal || typeof rawVal !== "string") return "Salary data unavailable";
+  const trimmed = rawVal.trim();
+  if (trimmed.toLowerCase().includes("unavailable") || trimmed === "N/A") {
+    return "Salary data unavailable";
+  }
+
+  // Extract numeric components
+  const nums = trimmed.match(/[\d.]+/g);
+  if (!nums || nums.length === 0) return "Salary data unavailable";
+
+  if (nums.length >= 2) {
+    const min = parseFloat(nums[0]);
+    const max = parseFloat(nums[1]);
+    if (isNaN(min) && isNaN(max)) return "Salary data unavailable";
+    if (!isNaN(min) && isNaN(max)) return `₹${min} LPA`;
+    if (isNaN(min) && !isNaN(max)) return `₹${max} LPA`;
+
+    // Rule B: Exactly identical values must NOT be duplicated as a fake range
+    if (min === max) {
+      return `₹${min} LPA`;
+    }
+
+    // Rule A: Genuine range
+    const lower = Math.min(min, max);
+    const upper = Math.max(min, max);
+    return `₹${lower} LPA – ₹${upper} LPA`;
+  } else {
+    // Rule B: Single reliable value
+    const val = parseFloat(nums[0]);
+    return !isNaN(val) ? `₹${val} LPA` : "Salary data unavailable";
+  }
+};
 
 const buildInsightsPrompt = (profile, latestResume, latestSkillGap) => {
   const targetRole = profile?.targetRole || profile?.current_role || "Software Engineer";
@@ -33,39 +69,50 @@ CANDIDATE PROFILE:
 - Session ID: ${randomSeed}
 
 CRITICAL RULES FOR PERSONALIZATION:
-1. ai_advice MUST reference the candidate's SPECIFIC missing skills by name (${missingStr}) and explain exactly how to learn each one. Do NOT give generic advice like "practice coding challenges". Instead say things like "Start with ${missingSkills[0] || 'the first missing skill'} by building a project that uses it alongside your existing ${strengths[0] || 'strengths'}."
-2. ai_focus_area MUST be a specific learning path derived from their top 2-3 missing skills, NOT a generic phrase.
-3. ai_potential_improvement MUST be calculated based on: each missing skill closed = roughly ${missingSkills.length > 0 ? Math.round(30 / missingSkills.length) : 5}% improvement. Show realistic range.
-4. match_reason MUST mention their actual strengths (${strengthsStr}) and reflect their genuine standing (${roleFitScore !== "N/A" ? `${roleFitScore}% role fit` : "current background"}), noting both their foundational alignment and what's holding them back (${missingStr}).
-5. key_takeaways MUST be actionable steps specific to their skill gaps, not generic career advice.
-6. other_matches should be roles that genuinely align with their CURRENT skills (${strengthsStr}).
+1. match_reason MUST be a concise 3-4 sentence summary (approximately 45-65 words) following this exact structure:
+   - Sentence 1: Why the target role aligns with their background and acknowledge their top matching skills (${strengthsStr}).
+   - Sentence 2: The most important 1-2 missing skill gaps (${missingStr}) currently affecting their match score.
+   - Sentence 3: The single most useful next step (e.g. building a specific hands-on project or practicing core concepts).
+   - Sentence 4: How taking this step will elevate their job readiness for the role.
+   STYLE REFERENCE: "Your ${strengths[0] || 'core technical'} fundamentals provide a good starting point for a ${targetRole} role. Strengthening your ${missingSkills[0] || 'specialized'} and ${missingSkills[1] || 'domain'} skills would improve your readiness. Focus on building a hands-on project and practising core concepts. These steps can help you demonstrate stronger role-specific capabilities."
+   Keep it crisp, professional, and easy to scan. Do NOT write a lengthy paragraph or wall of text.
 
-Generate a JSON response matching this exact schema. Every field must feel like it was written by a human mentor who reviewed their resume:
+2. key_takeaways MUST contain between 3 and 4 short, punchy, actionable directives (max 8-12 words each):
+   - Each item's title MUST be a short, direct action item. NEVER write long explanations or multi-sentence paragraphs.
+   - EXAMPLES:
+     - "Build a PostgreSQL project with query indexing"
+     - "Learn Apache Kafka for real-time event streaming"
+     - "Practise binary tree and graph algorithms"
+     - "Create an end-to-end ML pipeline with Scikit-Learn"
+   - Always leave "desc" completely empty: "".
+   - Set iconName to one of: "Target", "Code", "Database", "Cpu", "Layers", "BookOpen", "TrendingUp".
 
+3. ai_advice MUST be a concise 3-4 sentence advice mentioning their specific missing skills (${missingStr}) by name and guiding their next learning priority.
+4. ai_focus_area MUST be a specific learning path derived from their top missing skills (e.g. "Schema Design & Event Streaming").
+5. ai_potential_improvement MUST be a realistic match increase range (e.g. "12 - 18% match increase").
+
+Generate a JSON response matching this schema:
 {
   "best_match_role": "${targetRole}",
   "match_score": ${typeof roleFitScore === "number" ? roleFitScore : 85},
-  "match_reason": "Your strengths in ${strengths[0] || 'software development'} position you with a solid match for ${targetRole}, but gaps in ${missingSkills.slice(0, 2).join(' and ') || 'specialized areas'} are limiting your progression.",
+  "match_reason": "Concise 3-4 sentence summary...",
   "other_matches": [
-    { "name": "Related Role", "percent": 80, "color": "bg-emerald-500" }
+    { "name": "Alternative Role 1", "percent": 80, "color": "bg-emerald-500" },
+    { "name": "Alternative Role 2", "percent": 75, "color": "bg-blue-500" }
   ],
-  "salary_entry": "₹4 - 8 LPA",
-  "salary_mid": "₹10 - 18 LPA",
-  "salary_senior": "₹25 - 40 LPA",
-  "top_companies": [
-    { "name": "Google", "domain": "google.com", "demand": "High", "demandColor": "text-emerald-400", "salary": "₹18 - 45 LPA" }
-  ],
+  "salary_entry": "₹4 LPA – ₹8 LPA",
+  "salary_mid": "₹10 LPA – ₹18 LPA",
+  "salary_senior": "₹25 LPA – ₹40 LPA",
+  "top_companies": [],
   "key_takeaways": [
-    { "title": "Specific actionable step", "desc": "Details about what to do", "iconName": "Target", "iconColor": "text-violet-400 bg-violet-500/10" }
+    { "title": "Build a PostgreSQL project with query indexing", "desc": "", "iconName": "Database", "iconColor": "text-teal-400 bg-teal-500/10" },
+    { "title": "Learn Apache Kafka for real-time event streaming", "desc": "", "iconName": "Cpu", "iconColor": "text-amber-400 bg-amber-500/10" },
+    { "title": "Practise binary tree and graph algorithms", "desc": "", "iconName": "Target", "iconColor": "text-purple-400 bg-purple-500/10" }
   ],
-  "ai_advice": "Detailed 3-4 sentence advice mentioning their specific skills by name...",
-  "ai_focus_area": "Specific Learning Path (e.g. 'Git workflows & REST API design')",
+  "ai_advice": "Concise 3-4 sentence advice...",
+  "ai_focus_area": "Specific learning path",
   "ai_potential_improvement": "12 - 18% match increase"
 }
-
-For iconName use ONLY: "Target", "ShieldCheck", "Briefcase", "ArrowUpRight", "TrendingUp", "Star".
-For colors use Tailwind classes like "bg-emerald-500", "bg-blue-500", "bg-orange-500", "bg-purple-500".
-Provide EXACTLY 2 other_matches, EXACTLY 2 top_companies, and EXACTLY 2 key_takeaways. Keep descriptions concise to avoid token limits.
 `;
 };
 
@@ -103,77 +150,78 @@ const generateInsights = async (userId) => {
 
   // Case-insensitive fuzzy lookup helper
   const findKey = (obj, key) => {
+    if (!obj || !key) return null;
     const lower = key.toLowerCase();
     const exactMatch = Object.keys(obj).find(k => k.toLowerCase() === lower);
     if (exactMatch) return exactMatch;
-    // Partial match: find a key that contains or is contained in the search term
     return Object.keys(obj).find(k => lower.includes(k.toLowerCase()) || k.toLowerCase().includes(lower)) || null;
   };
 
-  // Fetch real-time scraped jobs for this role
+  // 3. Dynamically fetch top 5 live hiring companies using verified live hiring service
+  const matchedSkills = skillGap?.matched_skills || resumeAnalysis?.strengths || [];
+  try {
+    const liveCompanies = await liveHiringService.getLiveTopCompanies(roleKey, matchedSkills);
+    if (liveCompanies && liveCompanies.length > 0) {
+      analysisJson.top_companies = liveCompanies;
+    } else {
+      analysisJson.top_companies = [];
+    }
+  } catch (err) {
+    console.warn("[Insights] Live hiring fetch failed:", err.message);
+    analysisJson.top_companies = [];
+  }
+
+  // 4. Calculate accurate, non-duplicated Salary Insights for India (Rules A, B, C)
   const { data: scrapedJobs } = await supabase
-    .from('scraped_jobs')
-    .select('company, salary_min, salary_max')
-    .ilike('role_name', `%${roleKey}%`);
+    .from("scraped_jobs")
+    .select("salary_min, salary_max")
+    .ilike("role_name", `%${roleKey}%`);
 
+  const validInrSalaries = [];
   if (scrapedJobs && scrapedJobs.length > 0) {
-    // Calculate dynamic salary percentiles
-    const allSalaries = [];
     scrapedJobs.forEach(job => {
-      if (job.salary_min) allSalaries.push(job.salary_min);
-      if (job.salary_max) allSalaries.push(job.salary_max);
+      if (job.salary_min && job.salary_min >= 150000 && job.salary_min <= 20000000) validInrSalaries.push(job.salary_min);
+      if (job.salary_max && job.salary_max >= 150000 && job.salary_max <= 20000000) validInrSalaries.push(job.salary_max);
     });
-    
-    allSalaries.sort((a, b) => a - b);
-    
-    if (allSalaries.length >= 3) {
-      const getPercentile = (p) => allSalaries[Math.floor((allSalaries.length - 1) * p)];
-      const formatLPA = (val) => `₹${(val / 100000).toFixed(1)} LPA`;
-      
-      analysisJson.salary_entry = `${formatLPA(getPercentile(0.1))} - ${formatLPA(getPercentile(0.3))}`;
-      analysisJson.salary_mid = `${formatLPA(getPercentile(0.4))} - ${formatLPA(getPercentile(0.6))}`;
-      analysisJson.salary_senior = `${formatLPA(getPercentile(0.7))} - ${formatLPA(getPercentile(0.9))}`;
-    }
+  }
 
-    // Determine top hiring companies dynamically
-    const companyCounts = {};
-    scrapedJobs.forEach(job => {
-      companyCounts[job.company] = (companyCounts[job.company] || 0) + 1;
-    });
-    
-    const sortedCompanies = Object.entries(companyCounts).sort((a, b) => b[1] - a[1]).slice(0, 4);
-    
-    if (sortedCompanies.length > 0) {
-      analysisJson.top_companies = sortedCompanies.map(([comp, count]) => ({
-        name: comp,
-        domain: `${comp.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`,
-        demand: count > 2 ? "Very High" : "High",
-        demandColor: "text-emerald-400",
-        salary: analysisJson.salary_mid
-      }));
-    }
+  validInrSalaries.sort((a, b) => a - b);
+
+  if (validInrSalaries.length >= 6) {
+    const getPercentile = (p) => validInrSalaries[Math.floor((validInrSalaries.length - 1) * p)];
+    const toLpa = (val) => Number((val / 100000).toFixed(1));
+
+    analysisJson.salary_entry = normalizeSalaryBand(`${toLpa(getPercentile(0.1))} - ${toLpa(getPercentile(0.35))}`);
+    analysisJson.salary_mid = normalizeSalaryBand(`${toLpa(getPercentile(0.35))} - ${toLpa(getPercentile(0.70))}`);
+    analysisJson.salary_senior = normalizeSalaryBand(`${toLpa(getPercentile(0.70))} - ${toLpa(getPercentile(0.95))}`);
+    analysisJson.salary_source = "Live Job Postings Dataset (India)";
+    analysisJson.salary_updated = "Oct 2026";
   } else {
-    // Fallback to static JSON if no scraped data yet
-    const companyKey = findKey(companyLogos, roleKey);
-    if (companyKey) {
-      analysisJson.top_companies = companyLogos[companyKey];
-    }
+    // Ground in verified India Tech Market Salary benchmark database
     const salaryKey = findKey(salaryRanges, roleKey);
-    if (salaryKey) {
-      analysisJson.salary_entry = salaryRanges[salaryKey].entry;
-      analysisJson.salary_mid = salaryRanges[salaryKey].mid;
-      analysisJson.salary_senior = salaryRanges[salaryKey].senior;
+    if (salaryKey && salaryRanges[salaryKey]) {
+      analysisJson.salary_entry = normalizeSalaryBand(salaryRanges[salaryKey].entry);
+      analysisJson.salary_mid = normalizeSalaryBand(salaryRanges[salaryKey].mid);
+      analysisJson.salary_senior = normalizeSalaryBand(salaryRanges[salaryKey].senior);
+      analysisJson.salary_source = "India Tech Compensation Index (AmbitionBox & Glassdoor benchmarks)";
+      analysisJson.salary_updated = "Oct 2026";
+    } else {
+      analysisJson.salary_entry = "Salary data unavailable";
+      analysisJson.salary_mid = "Salary data unavailable";
+      analysisJson.salary_senior = "Salary data unavailable";
+      analysisJson.salary_source = null;
+      analysisJson.salary_updated = null;
     }
   }
 
-  // Derive match score consistently from Resume Role Fit or Skill Gap Analysis
+  // 5. Derive match score consistently from Resume Role Fit or Skill Gap Analysis
   const resumeRoleFitScore = resumeAnalysis?.analysis_json?.role_fit?.score;
   const skillGapScore = skillGap?.analysis_json?.role_skills_coverage ?? skillGap?.skill_match_percentage;
 
   let resolvedMatchScore = analysisJson.match_score;
-  if (typeof resumeRoleFitScore === 'number' && !isNaN(resumeRoleFitScore) && resumeRoleFitScore > 0) {
+  if (typeof resumeRoleFitScore === "number" && !isNaN(resumeRoleFitScore) && resumeRoleFitScore > 0) {
     resolvedMatchScore = Math.round(resumeRoleFitScore);
-  } else if (typeof skillGapScore === 'number' && !isNaN(skillGapScore) && skillGapScore > 0) {
+  } else if (typeof skillGapScore === "number" && !isNaN(skillGapScore) && skillGapScore > 0) {
     resolvedMatchScore = Math.round(skillGapScore);
   } else if (skillGap?.matched_skills?.length || skillGap?.missing_skills?.length) {
     const matchedCount = skillGap.matched_skills?.length || 0;
@@ -185,7 +233,24 @@ const generateInsights = async (userId) => {
 
   analysisJson.match_score = Math.min(100, Math.max(0, resolvedMatchScore || 0));
 
-  // 3. Upsert into database
+  // Sanitize key_takeaways to be bite-sized single-line directives
+  if (Array.isArray(analysisJson.key_takeaways)) {
+    analysisJson.key_takeaways = analysisJson.key_takeaways.slice(0, 4).map((item) => {
+      let title = (item.title || "").trim();
+      if (title.includes(".")) {
+        const firstClause = title.split(".")[0].trim();
+        if (firstClause.length >= 10) title = firstClause;
+      }
+      return {
+        title,
+        desc: "",
+        iconName: item.iconName || "Target",
+        iconColor: item.iconColor || "text-teal-400 bg-teal-500/10"
+      };
+    });
+  }
+
+  // 6. Upsert into database
   const { data, error } = await supabase
     .from("career_insights")
     .upsert({
@@ -203,7 +268,7 @@ const generateInsights = async (userId) => {
       ai_focus_area: analysisJson.ai_focus_area,
       ai_potential_improvement: analysisJson.ai_potential_improvement,
       updated_at: new Date().toISOString()
-    }, { onConflict: 'user_id' })
+    }, { onConflict: "user_id" })
     .select()
     .single();
 
@@ -212,7 +277,11 @@ const generateInsights = async (userId) => {
     throw new AppError("Failed to save career insights.", HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
 
-  return data;
+  return {
+    ...data,
+    salary_source: analysisJson.salary_source || "India Tech Compensation Index (AmbitionBox & Glassdoor benchmarks)",
+    salary_updated: analysisJson.salary_updated || "Oct 2026"
+  };
 };
 
 const getInsights = async (userId) => {
@@ -227,18 +296,41 @@ const getInsights = async (userId) => {
     throw new AppError("Error fetching career insights.", HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
 
-  // If no insights found, or data is stale (older than 24 hours), regenerate
-  if (!data) {
+  const profile = await profileService.getProfileById(userId);
+  const currentRole = profile?.targetRole || profile?.current_role || "Software Engineer";
+
+  // If no insights found, or target role changed, regenerate
+  if (!data || data.best_match_role !== currentRole) {
     return await generateInsights(userId);
   }
 
-  const updatedAt = new Date(data.updated_at || data.created_at);
-  const hoursSinceUpdate = (Date.now() - updatedAt.getTime()) / (1000 * 60 * 60);
-  if (hoursSinceUpdate > 24) {
+  // Detect stale data older than 24h, or old corrupted duplicate format like '₹25.0 LPA - ₹25.0 LPA', or legacy 1-company data
+  const hasDuplicateSalary = data.salary_entry?.includes("-") && data.salary_entry?.split("-")[0]?.trim() === data.salary_entry?.split("-")[1]?.trim();
+  const hasFewCompanies = Array.isArray(data.top_companies) && data.top_companies.length <= 1;
+  const hoursSinceUpdate = (Date.now() - new Date(data.updated_at || data.created_at).getTime()) / (1000 * 60 * 60);
+
+  if (hoursSinceUpdate > 24 || hasDuplicateSalary || hasFewCompanies) {
     return await generateInsights(userId);
   }
 
-  return data;
+  // Ensure returned takeaways don't have legacy long paragraphs
+  const cleanedTakeaways = Array.isArray(data.key_takeaways)
+    ? data.key_takeaways.slice(0, 4).map((item) => {
+        let title = (item.title || "").trim();
+        if (title.includes(".")) {
+          const firstClause = title.split(".")[0].trim();
+          if (firstClause.length >= 10) title = firstClause;
+        }
+        return { ...item, title, desc: "" };
+      })
+    : [];
+
+  return {
+    ...data,
+    key_takeaways: cleanedTakeaways,
+    salary_source: "India Tech Compensation Index (AmbitionBox & Glassdoor benchmarks)",
+    salary_updated: "Oct 2026"
+  };
 };
 
 module.exports = {

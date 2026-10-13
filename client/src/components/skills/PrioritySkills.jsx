@@ -21,14 +21,14 @@ export default function PrioritySkills({
   }
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 backdrop-blur-md">
+    <div className="flex h-full flex-col rounded-2xl border border-slate-200/80 dark:border-white/5 bg-white dark:bg-white/[0.02] p-6 shadow-xs hover:shadow-sm transition-all backdrop-blur-md">
       <div>
         <div className="flex items-center justify-between mb-1">
           <h3 className="text-base font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-            <Flame className="h-4 w-4 text-amber-400" />
+            <Flame className="h-4 w-4 text-[#D97706] dark:text-amber-400" />
             Current Market-Demand Skills
           </h3>
-          <span className="text-[10px] text-amber-400 font-semibold bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+          <span className="text-[10px] text-[#D97706] font-semibold bg-[#FFF7E6] px-2.5 py-0.5 rounded-full border border-[#FDE7B0] dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20">
             Market Layer
           </span>
         </div>
@@ -47,11 +47,11 @@ export default function PrioritySkills({
             return (
               <div 
                 key={idx} 
-                className="flex items-center justify-between gap-3 p-2.5 rounded-xl border border-slate-200 dark:border-white/5 bg-slate-50/50 dark:bg-white/[0.015]"
+                className="flex items-center justify-between gap-3 p-2.5 rounded-xl border border-slate-200/80 dark:border-white/5 bg-slate-50 hover:bg-slate-100/80 transition-colors shadow-2xs dark:bg-white/[0.015]"
               >
                 {/* Left: Icon & Skill Name */}
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#FFF7E6] text-[#D97706] border border-[#FDE7B0] dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20 text-xs">
                     {skill.isTrending ? "🔥" : "⚡"}
                   </div>
                   <div className="min-w-0">
@@ -59,12 +59,12 @@ export default function PrioritySkills({
                       {skill.name}
                     </span>
                     <div className="flex items-center gap-1.5 mt-0.5">
-                      <span className="text-[10px] text-slate-400">
-                        Demand: <strong className={marketDemand === "Very High" ? "text-amber-400" : "text-slate-300"}>{marketDemand}</strong>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                        Demand: <strong className={marketDemand === "Very High" ? "text-amber-600 dark:text-amber-400" : "text-slate-700 dark:text-slate-300"}>{marketDemand}</strong>
                       </span>
-                      <span className="text-slate-600">•</span>
-                      <span className="text-[10px] text-slate-400">
-                        Role: <strong className={roleRelevance === "Core" || roleRelevance === "High" ? "text-emerald-400" : "text-blue-400"}>{roleRelevance}</strong>
+                      <span className="text-slate-300 dark:text-slate-600">•</span>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                        Role: <strong className={roleRelevance === "Core" || roleRelevance === "High" ? "text-emerald-600 dark:text-emerald-400" : "text-blue-600 dark:text-blue-400"}>{roleRelevance}</strong>
                       </span>
                     </div>
                   </div>
@@ -74,17 +74,17 @@ export default function PrioritySkills({
                 <div className="shrink-0">
                   <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold ${
                     isDetected
-                      ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                      : "bg-slate-800 text-slate-400 border border-slate-700"
+                      ? "bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20"
+                      : "bg-slate-100 text-slate-500 border border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700"
                   }`}>
                     {isDetected ? (
                       <>
-                        <CheckCircle2 className="h-3 w-3 text-emerald-400" />
+                        <CheckCircle2 className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
                         Detected
                       </>
                     ) : (
                       <>
-                        <AlertCircle className="h-3 w-3 text-amber-400/80" />
+                        <AlertCircle className="h-3 w-3 text-amber-600 dark:text-amber-400/80" />
                         Not Detected
                       </>
                     )}

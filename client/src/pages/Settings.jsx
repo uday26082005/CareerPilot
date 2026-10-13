@@ -11,8 +11,8 @@ export default function Settings() {
       
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-white tracking-tight mb-1">Settings</h1>
-        <p className="text-sm text-slate-400">
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight mb-1">Settings</h1>
+        <p className="text-sm text-slate-600 dark:text-slate-400">
           Manage your account preferences and application settings
         </p>
       </div>

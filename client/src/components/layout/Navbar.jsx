@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
+import { useTheme } from "../../contexts/ThemeContext";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   const links = [
     {
@@ -28,9 +30,9 @@ export default function Navbar() {
         <motion.nav
           initial={{ y: -60, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          whileHover={{ boxShadow: "0 10px 40px rgba(0, 0, 0, 0.35)" }}
+          whileHover={{ boxShadow: "0 10px 40px rgba(0, 0, 0, 0.15)" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white/90 dark:bg-[#1c1e24]/85 backdrop-blur-2xl shadow-xl shadow-black/25 transition-all duration-300 hover:bg-white dark:hover:bg-[#20222a]/90"
+          className="rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white/90 dark:bg-[#1c1e24]/85 backdrop-blur-2xl shadow-xl shadow-black/5 dark:shadow-black/25 transition-all duration-300 hover:bg-white dark:hover:bg-[#20222a]/90"
         >
 
           <div className="flex h-16 items-center justify-between px-6">
@@ -43,14 +45,14 @@ export default function Navbar() {
                 whileHover={{ rotate: 10, scale: 1.08 }}
                 transition={{ duration: 0.2 }}
                 className="flex h-10 w-10 shrink-0 items-center justify-center">
-                <img src="/logo.jpg" alt="CareerPilot Logo" className="h-9 w-9 rounded-xl mix-blend-lighten" />
+                <img src="/logo.png" alt="CareerPilot Logo" className="h-9 w-9 object-contain drop-shadow-sm" />
               </motion.div>
 
               <div>
 
-                <h1 className="text-2xl font-extrabold tracking-tight">
+                <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                   CareerPilot
-                  <span className="text-[#ffd159]"> AI</span>
+                  <span className="text-amber-500 dark:text-[#ffd159]"> AI</span>
                 </h1>
 
               </div>
@@ -81,6 +83,16 @@ export default function Navbar() {
             {/* Right Side */}
 
             <div className="hidden items-center gap-4 md:flex">
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-slate-100 text-slate-700 transition hover:bg-slate-200 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10"
+                title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                aria-label="Toggle theme"
+              >
+                {theme === 'dark' ? <Sun className="h-4 w-4 text-amber-400" /> : <Moon className="h-4 w-4 text-slate-600" />}
+              </button>
+
               <a
                 href="/login"
                 className="rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] px-6 py-2.5 text-sm font-bold text-slate-950 shadow-md shadow-amber-500/10 transition-all duration-200 hover:brightness-105 active:scale-95"
@@ -92,6 +104,14 @@ export default function Navbar() {
             {/* Mobile Button */}
 
             <div className="flex items-center gap-3 md:hidden">
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-slate-200"
+                aria-label="Toggle theme"
+              >
+                {theme === 'dark' ? <Sun className="h-4 w-4 text-amber-400" /> : <Moon className="h-4 w-4 text-slate-600" />}
+              </button>
               <button
                 onClick={() => setOpen(!open)}
                 className="text-slate-900 dark:text-white"

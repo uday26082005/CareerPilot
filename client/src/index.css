@@ -14,17 +14,86 @@ img {
   display: inline-block;
 }
 
-html{
-  scroll-behavior:smooth;
+html {
+  scroll-behavior: smooth;
   font-size: 17px;
+  color-scheme: light;
 }
 
-body{
-  margin:0;
-  font-family:'Outfit',sans-serif;
-  background:#121316;
-  color:white;
-  overflow-x:hidden;
+html.dark,
+.dark {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: 'Outfit', sans-serif;
+  background: #fafcff;
+  color: #0f172a;
+  overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+html.dark body,
+.dark body {
+  background: #121316;
+  color: white;
+}
+
+/* ==========================================================================
+   Autofill Styling (Prevents Chrome/WebKit white autofill background in forms)
+   ========================================================================== */
+
+/* Light mode autofill */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #f8fafc inset !important;
+  box-shadow: 0 0 0 1000px #f8fafc inset !important;
+  -webkit-text-fill-color: #0f172a !important;
+  caret-color: #0f172a !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  box-shadow: 0 0 0 1000px #ffffff inset !important;
+}
+
+/* Dark mode autofill */
+html.dark input:-webkit-autofill,
+html.dark input:-webkit-autofill:hover, 
+html.dark input:-webkit-autofill:focus, 
+html.dark input:-webkit-autofill:active,
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover, 
+.dark input:-webkit-autofill:focus, 
+.dark input:-webkit-autofill:active,
+html.dark textarea:-webkit-autofill,
+.dark textarea:-webkit-autofill,
+html.dark select:-webkit-autofill,
+.dark select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #242730 inset !important;
+  box-shadow: 0 0 0 1000px #242730 inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+html.dark input:-webkit-autofill:focus,
+.dark input:-webkit-autofill:focus,
+html.dark textarea:-webkit-autofill:focus,
+.dark textarea:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #2b2f3a inset !important;
+  box-shadow: 0 0 0 1000px #2b2f3a inset !important;
 }
 
 *{
@@ -32,6 +101,12 @@ body{
 }
 
 ::selection{
+  background:#f59e0b;
+  color:#ffffff;
+}
+
+html.dark ::selection,
+.dark ::selection{
   background:#ffd159;
   color:#020617;
 }
@@ -43,17 +118,30 @@ body{
 }
 
 ::-webkit-scrollbar-track{
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(15, 23, 42, 0.03);
   backdrop-filter: blur(10px);
 }
 
+.dark ::-webkit-scrollbar-track{
+  background: rgba(255, 255, 255, 0.02);
+}
+
 ::-webkit-scrollbar-thumb{
-  background: rgba(255, 209, 89, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(245, 158, 11, 0.35);
+  border: 1px solid rgba(15, 23, 42, 0.05);
   border-radius: 20px;
 }
 
+.dark ::-webkit-scrollbar-thumb{
+  background: rgba(255, 209, 89, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
 ::-webkit-scrollbar-thumb:hover{
+  background: rgba(245, 158, 11, 0.6);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover{
   background: rgba(255, 209, 89, 0.5);
 }
 
@@ -64,11 +152,19 @@ body::before{
   position:fixed;
   inset:0;
   background:
+  radial-gradient(circle at 20% 20%,rgba(245,158,11,.035),transparent 30%),
+  radial-gradient(circle at 80% 10%,rgba(13,148,136,.03),transparent 30%),
+  radial-gradient(circle at 50% 80%,rgba(245,158,11,.025),transparent 40%);
+  pointer-events:none;
+  z-index:-1;
+}
+
+html.dark body::before,
+.dark body::before{
+  background:
   radial-gradient(circle at 20% 20%,rgba(255,209,89,.035),transparent 30%),
   radial-gradient(circle at 80% 10%,rgba(78,228,203,.03),transparent 30%),
   radial-gradient(circle at 50% 80%,rgba(255,209,89,.025),transparent 40%);
-  pointer-events:none;
-  z-index:-1;
 }
 
 /* Themed Select Dropdowns */
@@ -77,33 +173,57 @@ select {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background-color: #1c1e24;
-  color: #e2e8f0;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #ffffff;
+  color: #0f172a;
+  border: 1px solid #e2e8f0;
   border-radius: 0.75rem;
   padding: 0.5rem 2.5rem 0.5rem 0.875rem;
   font-family: 'Outfit', sans-serif;
   font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23ffd159' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23d97706' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 1rem;
 }
 
 select:hover {
+  border-color: rgba(217, 119, 6, 0.4);
+  background-color: #f8fafc;
+}
+
+select:focus {
+  outline: none;
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+}
+
+select option {
+  background-color: #ffffff;
+  color: #0f172a;
+  padding: 0.5rem;
+}
+
+.dark select {
+  background-color: #1c1e24;
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23ffd159' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+.dark select:hover {
   border-color: rgba(255, 209, 89, 0.4);
   background-color: #22252c;
 }
 
-select:focus {
+.dark select:focus {
   outline: none;
   border-color: #ffd159;
   box-shadow: 0 0 0 3px rgba(255, 209, 89, 0.15);
 }
 
-select option {
+.dark select option {
   background-color: #1c1e24;
   color: #e2e8f0;
   padding: 0.5rem;

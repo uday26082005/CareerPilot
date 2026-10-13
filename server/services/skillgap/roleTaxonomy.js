@@ -1,6 +1,6 @@
 /**
  * Comprehensive Role Skill Taxonomy for CareerPilot
- * Defines the broader skill universe for all 15 supported engineering & tech roles.
+ * Defines the broader skill universe for supported engineering & tech roles.
  * Each role contains categorized skills with relevance tiers (Core vs Secondary).
  */
 
@@ -652,45 +652,253 @@ const ROLE_TAXONOMY = {
     }
   },
 
-  "Systems Administrator": {
+  "Software Development Engineer": {
     categories: {
-      "Operating Systems": [
-        { name: "Linux", isCore: true },
-        { name: "Windows Server", isCore: true },
-        { name: "Active Directory (AD)", isCore: true },
-        { name: "Group Policy (GPO)", isCore: true }
+      "Core Programming Languages": [
+        { name: "Java", isCore: true },
+        { name: "C++", isCore: true },
+        { name: "Python", isCore: true },
+        { name: "Go", isCore: false },
+        { name: "TypeScript", isCore: false }
       ],
-      "Scripting & Automation": [
-        { name: "Bash", isCore: true },
-        { name: "PowerShell", isCore: true },
-        { name: "Python", isCore: false }
+      "Data Structures & Algorithms": [
+        { name: "Arrays & Strings", isCore: true },
+        { name: "Trees & Graphs", isCore: true },
+        { name: "Dynamic Programming", isCore: true },
+        { name: "Sorting & Searching", isCore: true },
+        { name: "Time & Space Complexity", isCore: true },
+        { name: "Hash Tables & Heaps", isCore: true }
       ],
-      "Networking & Protocols": [
-        { name: "TCP/IP & Subnetting", isCore: true },
-        { name: "DNS & DHCP", isCore: true },
-        { name: "VPN & Firewalls", isCore: true },
-        { name: "SSH & SSL/TLS", isCore: true }
+      "Software Design & Architecture": [
+        { name: "Object-Oriented Design (OOD)", isCore: true },
+        { name: "System Design (HLD & LLD)", isCore: true },
+        { name: "Design Patterns", isCore: true },
+        { name: "Microservices Architecture", isCore: true },
+        { name: "Distributed Systems", isCore: true },
+        { name: "Concurrency & Multithreading", isCore: true }
       ],
-      "Virtualization & Storage": [
-        { name: "VMware vSphere / ESXi", isCore: true },
-        { name: "Hyper-V", isCore: false },
-        { name: "Storage Management (SAN/NAS/RAID)", isCore: true },
-        { name: "Backup & Disaster Recovery", isCore: true }
+      "APIs, Databases & Backend": [
+        { name: "REST APIs", isCore: true },
+        { name: "gRPC", isCore: false },
+        { name: "Relational Databases (SQL)", isCore: true },
+        { name: "NoSQL Databases", isCore: false },
+        { name: "Caching (Redis/Memcached)", isCore: true },
+        { name: "Message Queues (Kafka/RabbitMQ)", isCore: false }
       ],
-      "Monitoring & Cloud": [
-        { name: "Server Monitoring (Zabbix/Nagios)", isCore: true },
-        { name: "Microsoft 365 / Entra ID", isCore: true },
-        { name: "AWS Basics", isCore: false },
-        { name: "Patch Management", isCore: true }
+      "Engineering Practices & DevOps": [
+        { name: "Git & Version Control", isCore: true },
+        { name: "Unit Testing & TDD", isCore: true },
+        { name: "CI/CD Pipelines", isCore: true },
+        { name: "Docker", isCore: true },
+        { name: "Cloud Platforms (AWS/GCP/Azure)", isCore: true },
+        { name: "Code Review & Refactoring", isCore: true }
+      ]
+    }
+  },
+
+  "System Reliability Engineer": {
+    categories: {
+      "Operating Systems & Internals": [
+        { name: "Linux Administration", isCore: true },
+        { name: "Kernel & OS Internals", isCore: true },
+        { name: "Shell Scripting (Bash)", isCore: true },
+        { name: "Python", isCore: true },
+        { name: "Go", isCore: false }
+      ],
+      "Cloud & Infrastructure as Code": [
+        { name: "Kubernetes (K8s)", isCore: true },
+        { name: "Docker & Containerization", isCore: true },
+        { name: "Terraform", isCore: true },
+        { name: "Ansible", isCore: false },
+        { name: "AWS / GCP / Azure", isCore: true },
+        { name: "Helm", isCore: false }
+      ],
+      "Observability & Monitoring": [
+        { name: "Prometheus", isCore: true },
+        { name: "Grafana", isCore: true },
+        { name: "Distributed Tracing (OpenTelemetry/Jaeger)", isCore: true },
+        { name: "ELK Stack / Datadog", isCore: true },
+        { name: "Log Aggregation & Analysis", isCore: true }
+      ],
+      "Reliability Engineering & Operations": [
+        { name: "SLIs, SLOs & SLAs", isCore: true },
+        { name: "Incident Management & Postmortems", isCore: true },
+        { name: "Chaos Engineering", isCore: false },
+        { name: "Disaster Recovery & High Availability", isCore: true },
+        { name: "Capacity Planning", isCore: true }
+      ],
+      "Networking & Security": [
+        { name: "TCP/IP & Networking Protocols", isCore: true },
+        { name: "DNS, Load Balancing & CDN", isCore: true },
+        { name: "TLS/SSL & Certificates", isCore: true },
+        { name: "Network Security & Firewalls", isCore: true }
+      ]
+    }
+  },
+
+  "Game Developer": {
+    categories: {
+      "Game Programming Languages": [
+        { name: "C++", isCore: true },
+        { name: "C#", isCore: true },
+        { name: "Lua / Python", isCore: false },
+        { name: "HLSL / GLSL (Shaders)", isCore: true }
+      ],
+      "Game Engines": [
+        { name: "Unity", isCore: true },
+        { name: "Unreal Engine 5", isCore: true },
+        { name: "Godot", isCore: false },
+        { name: "Custom Engine Architecture", isCore: false }
+      ],
+      "Math & Physics": [
+        { name: "3D Vector & Matrix Math", isCore: true },
+        { name: "Quaternions & Rotations", isCore: true },
+        { name: "Collision Detection & Physics Engines", isCore: true },
+        { name: "Rigid Body Dynamics", isCore: false }
+      ],
+      "Graphics & Rendering": [
+        { name: "Shader Programming", isCore: true },
+        { name: "Rendering Pipelines (Forward/Deferred)", isCore: true },
+        { name: "DirectX / Vulkan / OpenGL", isCore: false },
+        { name: "Lighting & Post-Processing", isCore: false },
+        { name: "Particle Systems & VFX", isCore: false }
+      ],
+      "Gameplay & Systems Architecture": [
+        { name: "Gameplay Mechanics & Controls", isCore: true },
+        { name: "Game AI & Pathfinding (A*, NavMesh)", isCore: true },
+        { name: "Entity-Component-System (ECS)", isCore: true },
+        { name: "Animation State Machines", isCore: true },
+        { name: "Multiplayer Networking & Replication", isCore: false },
+        { name: "Profiling & Memory Optimization", isCore: true }
+      ]
+    }
+  },
+
+  "Database Administrator": {
+    categories: {
+      "RDBMS & Core SQL": [
+        { name: "PostgreSQL", isCore: true },
+        { name: "MySQL", isCore: true },
+        { name: "Oracle Database", isCore: true },
+        { name: "Microsoft SQL Server", isCore: true },
+        { name: "Advanced SQL & PL/SQL", isCore: true }
+      ],
+      "Database Performance & Tuning": [
+        { name: "Query Optimization & Execution Plans", isCore: true },
+        { name: "Index Tuning & Strategy", isCore: true },
+        { name: "Memory & Buffer Cache Management", isCore: true },
+        { name: "Concurrency & Lock Troubleshooting", isCore: true },
+        { name: "Partitioning & Sharding", isCore: true }
+      ],
+      "High Availability & Disaster Recovery": [
+        { name: "Database Replication (Master-Slave/Multi-Master)", isCore: true },
+        { name: "Clustering & Failover", isCore: true },
+        { name: "Backup Strategies & Point-in-Time Recovery", isCore: true },
+        { name: "Disaster Recovery Planning", isCore: true }
+      ],
+      "Security & Compliance": [
+        { name: "Database Security & Access Control", isCore: true },
+        { name: "Data Encryption (At Rest & In Transit)", isCore: true },
+        { name: "Audit Logging & Compliance", isCore: true },
+        { name: "Patch Management & Upgrades", isCore: true }
+      ],
+      "Cloud Databases & NoSQL": [
+        { name: "AWS RDS / Aurora", isCore: true },
+        { name: "MongoDB", isCore: false },
+        { name: "Redis", isCore: false },
+        { name: "Database Migration Tools", isCore: true },
+        { name: "Database Monitoring & Alerting", isCore: true }
+      ]
+    }
+  },
+
+  "Robotics Engineer": {
+    categories: {
+      "Core Robotics Software": [
+        { name: "ROS (Robot Operating System)", isCore: true },
+        { name: "ROS 2", isCore: true },
+        { name: "C++", isCore: true },
+        { name: "Python", isCore: true },
+        { name: "Linux / Embedded Linux", isCore: true }
+      ],
+      "Kinematics, Dynamics & Control": [
+        { name: "Forward & Inverse Kinematics", isCore: true },
+        { name: "PID & Feedback Control Systems", isCore: true },
+        { name: "Trajectory & Motion Planning", isCore: true },
+        { name: "State Estimation (Kalman Filters / EKF)", isCore: true }
+      ],
+      "Perception & Computer Vision": [
+        { name: "Computer Vision (OpenCV)", isCore: true },
+        { name: "LiDAR & Point Cloud Processing (PCL)", isCore: true },
+        { name: "Sensor Fusion (IMU, Camera, LiDAR)", isCore: true },
+        { name: "SLAM (Simultaneous Localization & Mapping)", isCore: true }
+      ],
+      "Embedded & Hardware Interfaces": [
+        { name: "Microcontrollers (STM32, Arduino, ESP32)", isCore: true },
+        { name: "CAN Bus, I2C, SPI & UART", isCore: true },
+        { name: "Actuators & Motor Controllers", isCore: false },
+        { name: "Real-Time Operating Systems (RTOS)", isCore: true }
+      ],
+      "Simulation & Tooling": [
+        { name: "Gazebo / Isaac Sim", isCore: true },
+        { name: "URDF & Robot Modeling", isCore: true },
+        { name: "RViz", isCore: true },
+        { name: "Git", isCore: true }
+      ]
+    }
+  },
+
+  "Data Engineer": {
+    categories: {
+      "Languages & Fundamentals": [
+        { name: "Python", isCore: true },
+        { name: "SQL", isCore: true },
+        { name: "Scala / Java", isCore: false },
+        { name: "Data Structures & Algorithms", isCore: true },
+        { name: "Linux & Shell Scripting", isCore: true }
+      ],
+      "Big Data & Distributed Processing": [
+        { name: "Apache Spark", isCore: true },
+        { name: "PySpark", isCore: true },
+        { name: "Apache Hadoop / HDFS", isCore: false },
+        { name: "Apache Flink", isCore: false },
+        { name: "MapReduce Concepts", isCore: false }
+      ],
+      "Data Pipelines & Orchestration": [
+        { name: "Apache Airflow", isCore: true },
+        { name: "dbt (data build tool)", isCore: true },
+        { name: "Prefect / Dagster", isCore: false },
+        { name: "ETL / ELT Architecture", isCore: true },
+        { name: "Data Quality & Validation (Great Expectations)", isCore: false }
+      ],
+      "Data Warehousing & Lakehouses": [
+        { name: "Snowflake", isCore: true },
+        { name: "Google BigQuery", isCore: true },
+        { name: "AWS Redshift", isCore: false },
+        { name: "Delta Lake / Apache Iceberg", isCore: true },
+        { name: "Dimensional Data Modeling (Star/Snowflake Schema)", isCore: true }
+      ],
+      "Streaming, Cloud & Infrastructure": [
+        { name: "Apache Kafka", isCore: true },
+        { name: "Cloud Storage (AWS S3 / GCP GCS)", isCore: true },
+        { name: "Docker", isCore: true },
+        { name: "Kubernetes", isCore: false },
+        { name: "Git & CI/CD", isCore: true }
       ]
     }
   }
 };
 
 const ROLE_ALIASES = {
-  "software engineer": "Full Stack Developer",
-  "software developer": "Full Stack Developer",
-  "swe": "Full Stack Developer",
+  "software engineer": "Software Development Engineer",
+  "software developer": "Software Development Engineer",
+  "software development engineer": "Software Development Engineer",
+  "software developement engineer": "Software Development Engineer",
+  "sde": "Software Development Engineer",
+  "sde 1": "Software Development Engineer",
+  "sde 2": "Software Development Engineer",
+  "sde 3": "Software Development Engineer",
+  "swe": "Software Development Engineer",
   "web developer": "Full Stack Developer",
   "frontend": "Frontend Developer",
   "backend": "Backend Developer",
@@ -703,7 +911,19 @@ const ROLE_ALIASES = {
   "mobile developer": "Mobile App Developer",
   "ios developer": "Mobile App Developer",
   "android developer": "Mobile App Developer",
-  "sysadmin": "Systems Administrator"
+  "system reliability engineer": "System Reliability Engineer",
+  "site reliability engineer": "System Reliability Engineer",
+  "sre": "System Reliability Engineer",
+  "game developer": "Game Developer",
+  "game dev": "Game Developer",
+  "game designer": "Game Developer",
+  "database administrator": "Database Administrator",
+  "dba": "Database Administrator",
+  "database engineer": "Database Administrator",
+  "robotics engineer": "Robotics Engineer",
+  "robotics": "Robotics Engineer",
+  "data engineer": "Data Engineer",
+  "de": "Data Engineer"
 };
 
 /**

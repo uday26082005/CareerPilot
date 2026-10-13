@@ -87,13 +87,13 @@ export default function ResetPassword() {
       transition={{ delay: 0.1, duration: 0.6 }}
       className="text-center"
     >
-      <div className="mx-auto mb-2 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/[0.08] bg-[#ffd159]/15 shadow-lg shadow-black/20">
-        <Lock className="h-6 w-6 text-[#ffd159]" />
+      <div className="mx-auto mb-2 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-200 dark:border-white/[0.08] bg-amber-50 dark:bg-[#ffd159]/15 shadow-sm dark:shadow-lg dark:shadow-black/20">
+        <Lock className="h-6 w-6 text-amber-600 dark:text-[#ffd159]" />
       </div>
-      <h1 className="text-2xl font-black text-white md:text-3xl">
+      <h1 className="text-2xl font-black text-slate-900 dark:text-white md:text-3xl">
         Reset Your <span className="text-[#ffd159]">Password</span>
       </h1>
-      <p className="mt-1 text-sm text-slate-400">
+      <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
         Enter and confirm your new password below
       </p>
     </motion.div>
@@ -106,9 +106,9 @@ export default function ResetPassword() {
       transition={{ delay: 0.3, duration: 0.6 }}
       className="text-center mt-3"
     >
-      <p className="text-sm text-slate-400">
+      <p className="text-sm text-slate-600 dark:text-slate-400">
         Remember your old password?{" "}
-        <Link to="/login" className="font-semibold text-[#ffd159] hover:underline">
+        <Link to="/login" className="font-semibold text-amber-600 hover:text-amber-700 dark:text-[#ffd159] hover:underline">
           Back to Login
         </Link>
       </p>
@@ -118,22 +118,30 @@ export default function ResetPassword() {
   const checkItem = (text, checked) => (
     <div className="flex items-center gap-2 text-xs">
       {checked ? (
-        <CheckCircle className="h-3.5 w-3.5 text-[#4ee4cb] shrink-0" />
+        <CheckCircle className="h-3.5 w-3.5 text-teal-600 dark:text-[#4ee4cb] shrink-0" />
       ) : (
-        <Circle className="h-3.5 w-3.5 text-slate-500 shrink-0" />
+        <Circle className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500 shrink-0" />
       )}
-      <span className={checked ? "text-slate-200 font-medium" : "text-slate-400"}>{text}</span>
+      <span className={checked ? "text-slate-800 dark:text-slate-200 font-medium" : "text-slate-500 dark:text-slate-400"}>{text}</span>
     </div>
   );
 
   return (
     <AuthLayout backLink={{ text: "Back to Login", href: "/login" }} aboveCard={aboveCard} belowCard={belowCard}>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form 
+        onSubmit={handleSubmit} 
+        method="POST" 
+        action="/reset-password" 
+        autoComplete="on" 
+        className="space-y-4"
+      >
         
         <div>
           <PasswordInput
             label="New Password"
+            id="newPassword"
             name="password"
+            autoComplete="new-password"
             placeholder="Enter your new password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -142,8 +150,8 @@ export default function ResetPassword() {
 
           <div className="mt-2.5">
             <div className="mb-2 flex items-center justify-between text-xs">
-              <span className="text-slate-400 font-medium">Password strength:</span>
-              <span className={`font-bold ${password.length === 0 ? "text-slate-500" : strengthColor}`}>
+              <span className="text-slate-500 dark:text-slate-400 font-medium">Password strength:</span>
+              <span className={`font-bold ${password.length === 0 ? "text-slate-400 dark:text-slate-500" : strengthColor}`}>
                 {password.length === 0 ? "None" : strengthLabel}
               </span>
             </div>
@@ -152,14 +160,14 @@ export default function ResetPassword() {
                 <div
                   key={index}
                   className={`h-1.5 flex-1 rounded-full transition-colors duration-300 ${
-                    index <= filledBars ? barColor : "bg-[#242730] border border-white/[0.06]"
+                    index <= filledBars ? barColor : "bg-slate-200 dark:bg-[#242730] border border-slate-300 dark:border-white/[0.06]"
                   }`}
                 />
               ))}
             </div>
           </div>
 
-          <div className="mt-3.5 rounded-2xl border border-white/[0.08] bg-[#242730]/70 p-3.5 grid grid-cols-2 gap-x-3 gap-y-2">
+          <div className="mt-3.5 rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#242730]/70 p-3.5 grid grid-cols-2 gap-x-3 gap-y-2">
             {checkItem("At least 8 characters", checks.length)}
             {checkItem("One uppercase letter", checks.uppercase)}
             {checkItem("One lowercase letter", checks.lowercase)}
@@ -170,7 +178,9 @@ export default function ResetPassword() {
 
         <PasswordInput
           label="Confirm New Password"
+          id="confirmNewPassword"
           name="confirmPassword"
+          autoComplete="new-password"
           placeholder="Confirm your new password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}

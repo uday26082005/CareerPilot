@@ -69,7 +69,7 @@ export default function FeatureCard({
         y: -12,
         scale: 1.02,
       }}
-      className="group relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#1c1e24] p-8 shadow-xl shadow-black/25 backdrop-blur-xl transition-all duration-300 hover:border-white/20 hover:bg-[#20222a]"
+      className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 shadow-sm dark:border-white/[0.08] dark:bg-[#1c1e24] dark:shadow-xl dark:shadow-black/25 backdrop-blur-xl transition-all duration-300 hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50/50 dark:hover:bg-[#20222a]"
     >
       {/* Background Glow */}
       <div className={`absolute -right-16 -top-16 h-40 w-40 rounded-full ${accent.glowBg} blur-3xl transition-opacity duration-500 group-hover:opacity-100 opacity-0`} />
@@ -80,18 +80,18 @@ export default function FeatureCard({
           rotate: 10,
           scale: 1.08,
         }}
-        className={`mb-7 flex h-16 w-16 items-center justify-center rounded-2xl ${accent.iconBg} ${accent.iconText} shadow-md shadow-black/20`}
+        className={`mb-7 flex h-16 w-16 items-center justify-center rounded-2xl ${accent.iconBg} ${accent.iconText} shadow-md shadow-black/10 dark:shadow-black/20`}
       >
         <Icon className="h-8 w-8" />
       </motion.div>
 
       {/* Title */}
-      <h3 className="mb-4 text-2xl font-bold tracking-tight text-white">
+      <h3 className="mb-4 text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
         {title}
       </h3>
 
       {/* Description */}
-      <p className="leading-relaxed text-slate-400">
+      <p className="leading-relaxed text-slate-600 dark:text-slate-400">
         {description}
       </p>
 

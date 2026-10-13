@@ -209,7 +209,7 @@ export default function Dashboard() {
           {dynamicRecommendations.length > 0 ? (
             <AIRecommendations recommendations={dynamicRecommendations} />
           ) : (
-            <div className="rounded-2xl border border-white/[0.08] bg-[#1c1e24] p-6 h-full flex items-center justify-center text-slate-400 shadow-xl shadow-black/25">
+            <div className="rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1c1e24] p-6 h-full flex items-center justify-center text-slate-500 dark:text-slate-400 shadow-sm dark:shadow-xl dark:shadow-black/25">
               No AI recommendations available.
             </div>
           )}

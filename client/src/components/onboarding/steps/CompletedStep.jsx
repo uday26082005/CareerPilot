@@ -12,8 +12,8 @@ export default function CompletedStep() {
       className="flex h-full flex-col items-center py-6"
     >
       <div className="text-center mb-8">
-        <h1 className="mb-2 text-3xl font-black text-white">You're All Set! 🎉</h1>
-        <p className="text-sm text-slate-400 max-w-sm mx-auto">
+        <h1 className="mb-2 text-3xl font-black text-slate-900 dark:text-white">You're All Set! 🎉</h1>
+        <p className="text-sm text-slate-600 dark:text-slate-400 max-w-sm mx-auto">
           Your onboarding is complete. You're ready to start your personalized career journey.
         </p>
       </div>
@@ -59,7 +59,7 @@ export default function CompletedStep() {
         >
           Go to Dashboard <ArrowRight className="h-5 w-5" />
         </motion.button>
-        <p className="mt-4 text-center text-xs text-slate-400">Takes less than 2 minutes to explore</p>
+        <p className="mt-4 text-center text-xs text-slate-500 dark:text-slate-400">Takes less than 2 minutes to explore</p>
       </div>
     </motion.div>
   );
