@@ -56,6 +56,10 @@ export default function Login() {
         localStorage.removeItem("careerpilot_remember_email");
       }
 
+      // Ensure fresh login starts with a new chat in AskAI
+      sessionStorage.removeItem("careerpilot_active_advisor_conv");
+      localStorage.removeItem("careerpilot_active_advisor_conv");
+
       // Prompt Google Password Manager via Credential Management API
       if (typeof window !== "undefined" && window.PasswordCredential && navigator.credentials?.store) {
         try {

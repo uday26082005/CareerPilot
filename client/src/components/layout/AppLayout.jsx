@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, Navigate } from "react-router-dom";
 import {
   Home, FileText, Mic, BarChart2, Map, PieChart, 
-  Sparkles, LogOut, Settings, TrendingUp,
+  Bot, LogOut, Settings, TrendingUp,
   Maximize, Minimize, Menu, Target, Sun, Moon
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
@@ -17,7 +17,7 @@ const SIDEBAR_LINKS = [
   { name: "Career Insights", path: "/career-insights", icon: PieChart },
   { name: "Analytics", path: "/analytics", icon: TrendingUp },
   { name: "Practice", path: "/practice", icon: Target },
-  { name: "AskAI", path: "/ask-ai", icon: Sparkles },
+  { name: "AskAI", path: "/ask-ai", icon: Bot },
 ];
 
 export default function AppLayout({ children }) {

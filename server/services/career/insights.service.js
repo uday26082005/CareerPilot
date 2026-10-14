@@ -159,17 +159,40 @@ const generateInsights = async (userId) => {
 
   // 3. Dynamically fetch top 5 live hiring companies using verified live hiring service
   const matchedSkills = skillGap?.matched_skills || resumeAnalysis?.strengths || [];
+  let topCompanies = [];
   try {
     const liveCompanies = await liveHiringService.getLiveTopCompanies(roleKey, matchedSkills);
     if (liveCompanies && liveCompanies.length > 0) {
-      analysisJson.top_companies = liveCompanies;
-    } else {
-      analysisJson.top_companies = [];
+      topCompanies = liveCompanies;
     }
   } catch (err) {
     console.warn("[Insights] Live hiring fetch failed:", err.message);
-    analysisJson.top_companies = [];
   }
+
+  // Fallback to curated companyLogos.json if live data returned fewer than 5 companies
+  if (topCompanies.length < 5) {
+    const logoKey = findKey(companyLogos, roleKey);
+    const fallbackCompanies = logoKey ? companyLogos[logoKey] : [];
+    const existingNames = new Set(topCompanies.map(c => c.name.toLowerCase()));
+    for (const fc of fallbackCompanies) {
+      if (topCompanies.length >= 5) break;
+      if (existingNames.has(fc.name.toLowerCase())) continue;
+      topCompanies.push({
+        name: fc.name,
+        domain: fc.domain,
+        title: `${roleKey} Roles`,
+        location: "India",
+        demand: fc.demand === "High" ? "Top Match" : "High Match",
+        demandColor: fc.demandColor || "text-emerald-500",
+        url: `https://www.google.com/search?q=${encodeURIComponent(fc.name + " " + roleKey + " jobs India")}`,
+        salary: fc.salary || null,
+        score: 15
+      });
+      existingNames.add(fc.name.toLowerCase());
+    }
+  }
+
+  analysisJson.top_companies = topCompanies;
 
   // 4. Calculate accurate, non-duplicated Salary Insights for India (Rules A, B, C)
   const { data: scrapedJobs } = await supabase

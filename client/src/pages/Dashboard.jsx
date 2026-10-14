@@ -1,4 +1,4 @@
-import { ClipboardList, Target, Briefcase, FileText, CheckCircle, Activity } from "lucide-react";
+import { FileText, BarChart2, PieChart, Map, Mic, Target } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import axios from "axios";
@@ -120,7 +120,7 @@ export default function Dashboard() {
           value={resume?.overall_score || "N/A"}
           subtitle={`ATS: ${resume?.ats_score || "N/A"}/100`}
           subtitleColor={resume?.overall_score > 80 ? "text-emerald-400" : "text-yellow-400"}
-          icon={ClipboardList}
+          icon={FileText}
           iconBgColor="bg-[#4ee4cb]/10"
           iconColor="text-[#4ee4cb]"
           chartData={[]}
@@ -132,7 +132,7 @@ export default function Dashboard() {
           value={`${skill_gap?.skill_match || 0}%`}
           subtitle={`${skill_gap?.missing_skills || 0} Missing Skills`}
           subtitleColor="text-blue-400"
-          icon={Target}
+          icon={BarChart2}
           iconBgColor="bg-blue-500/10"
           iconColor="text-blue-400"
           chartData={[]}
@@ -141,15 +141,17 @@ export default function Dashboard() {
         />
         <StatCard 
           title="Target Role"
-          value={<span className="capitalize">{profile?.target_role || "Not Set"}</span>}
+          value={profile?.target_role || "Not Set"}
+          valueClassName="capitalize"
           subtitle={`${getExperienceLabel(profile?.years_experience)} Level`}
           subtitleColor="text-fuchsia-400"
-          icon={Briefcase}
+          icon={PieChart}
           iconBgColor="bg-[#e29aff]/10"
           iconColor="text-[#e29aff]"
           chartData={[]}
           chartColor="#e29aff"
           themeVariant="lavender"
+          allowWrap={true}
         />
       </div>
 
@@ -160,7 +162,7 @@ export default function Dashboard() {
           value={`${roadmap?.completion || 0}%`}
           subtitle={`${roadmap?.completed_tasks}/${roadmap?.completed_tasks + roadmap?.pending_tasks} Tasks Completed`}
           subtitleColor="text-emerald-400"
-          icon={CheckCircle}
+          icon={Map}
           iconBgColor="bg-emerald-500/15 border border-emerald-500/30"
           iconColor="text-emerald-400"
           chartData={[]}
@@ -172,7 +174,7 @@ export default function Dashboard() {
           value={interviews?.taken || 0}
           subtitle={`Avg Score: ${interviews?.average_score || 0} | Best: ${interviews?.best_score || 0}`}
           subtitleColor="text-amber-400"
-          icon={FileText}
+          icon={Mic}
           iconBgColor="bg-amber-500/15 border border-amber-500/30"
           iconColor="text-amber-400"
           chartData={[]}
@@ -184,7 +186,7 @@ export default function Dashboard() {
           value={practice?.sessions || 0}
           subtitle={`Accuracy: ${practice?.accuracy || 0}% · Best: ${practice?.best_category || "General"}`}
           subtitleColor="text-cyan-400"
-          icon={Activity}
+          icon={Target}
           iconBgColor="bg-[#72c5ff]/10"
           iconColor="text-[#72c5ff]"
           chartData={[]}

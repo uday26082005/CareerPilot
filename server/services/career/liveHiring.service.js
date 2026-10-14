@@ -6,7 +6,6 @@ const CACHE_TTL_MS = 2 * 60 * 60 * 1000;
 
 // High-profile tech employers with verified public Greenhouse ATS endpoints hiring in India / globally
 const TECH_EMPLOYERS = [
-  { name: "InMobi", domain: "inmobi.com", apiUrl: "https://boards-api.greenhouse.io/v1/boards/inmobi/jobs" },
   { name: "MongoDB", domain: "mongodb.com", apiUrl: "https://boards-api.greenhouse.io/v1/boards/mongodb/jobs" },
   { name: "Elastic", domain: "elastic.co", apiUrl: "https://boards-api.greenhouse.io/v1/boards/elastic/jobs" },
   { name: "Datadog", domain: "datadoghq.com", apiUrl: "https://boards-api.greenhouse.io/v1/boards/datadog/jobs" },
@@ -14,9 +13,44 @@ const TECH_EMPLOYERS = [
   { name: "Coursera", domain: "coursera.org", apiUrl: "https://boards-api.greenhouse.io/v1/boards/coursera/jobs" },
   { name: "Rubrik", domain: "rubrik.com", apiUrl: "https://boards-api.greenhouse.io/v1/boards/rubrik/jobs" },
   { name: "GitLab", domain: "gitlab.com", apiUrl: "https://boards-api.greenhouse.io/v1/boards/gitlab/jobs" },
-  { name: "Affirm", domain: "affirm.com", apiUrl: "https://boards-api.greenhouse.io/v1/boards/affirm/jobs" },
-  { name: "Coinbase", domain: "coinbase.com", apiUrl: "https://boards-api.greenhouse.io/v1/boards/coinbase/jobs" }
+  { name: "Coinbase", domain: "coinbase.com", apiUrl: "https://boards-api.greenhouse.io/v1/boards/coinbase/jobs" },
+  { name: "Twilio", domain: "twilio.com", apiUrl: "https://boards-api.greenhouse.io/v1/boards/twilio/jobs" },
+  { name: "InMobi", domain: "inmobi.com", apiUrl: "https://boards-api.greenhouse.io/v1/boards/inmobi/jobs" },
+  { name: "Stripe", domain: "stripe.com", apiUrl: "https://boards-api.greenhouse.io/v1/boards/stripe/jobs" },
+  { name: "Figma", domain: "figma.com", apiUrl: "https://boards-api.greenhouse.io/v1/boards/figma/jobs" },
+  { name: "Notion", domain: "notion.so", apiUrl: "https://boards-api.greenhouse.io/v1/boards/notion/jobs" },
+  { name: "HashiCorp", domain: "hashicorp.com", apiUrl: "https://boards-api.greenhouse.io/v1/boards/hashicorp/jobs" },
+  { name: "Affirm", domain: "affirm.com", apiUrl: "https://boards-api.greenhouse.io/v1/boards/affirm/jobs" }
 ];
+
+// Popularity tiers for well-known companies — used to boost ranking of recognizable employers
+// Tier 3 = globally famous (FAANG-level), Tier 2 = well-known tech, Tier 1 = recognized
+const COMPANY_POPULARITY = {
+  // Tier 3 — Globally iconic
+  "google": 30, "microsoft": 30, "amazon": 30, "apple": 30, "meta": 30,
+  "netflix": 30, "nvidia": 30, "adobe": 30, "salesforce": 30, "oracle": 30,
+  "ibm": 30, "intel": 30, "samsung": 30, "tesla": 30, "uber": 30,
+  // Tier 2 — Well-known tech companies
+  "stripe": 20, "cloudflare": 20, "datadog": 20, "mongodb": 20, "gitlab": 20,
+  "twilio": 20, "elastic": 20, "coinbase": 20, "rubrik": 20, "figma": 20,
+  "notion": 20, "hashicorp": 20, "snowflake": 20, "confluent": 20, "vercel": 20,
+  "atlassian": 20, "github": 20, "docker": 20, "slack": 20, "zoom": 20,
+  "shopify": 20, "paypal": 20, "square": 20, "block": 20, "lyft": 20,
+  "airbnb": 20, "pinterest": 20, "dropbox": 20, "linkedin": 20, "twitter": 20,
+  "spotify": 20, "coursera": 20, "affirm": 20, "robinhood": 20,
+  // Tier 2 — Well-known Indian tech companies
+  "flipkart": 20, "razorpay": 20, "phonepe": 20, "cred": 20, "zerodha": 20,
+  "swiggy": 20, "zomato": 20, "ola": 20, "paytm": 20, "meesho": 20,
+  "freshworks": 20, "zoho": 20, "inmobi": 20, "dream11": 20, "myntra": 20,
+  "postman": 20, "browserstack": 20, "hasura": 20, "chargebee": 20,
+  // Tier 2 — Large services/consulting
+  "tcs": 20, "infosys": 20, "wipro": 20, "hcl": 20, "cognizant": 20,
+  "accenture": 20, "deloitte": 20, "capgemini": 20,
+  // Tier 1 — Recognized companies
+  "epam": 10, "thoughtworks": 10, "vmware": 10, "redhat": 10,
+  "sap": 10, "cisco": 10, "dell": 10, "hp": 10, "lenovo": 10,
+  "qualcomm": 10, "amd": 10, "arm": 10, "siemens": 10
+};
 
 /**
  * Normalizes role search keywords
@@ -200,6 +234,10 @@ const getLiveTopCompanies = async (targetRole, candidateSkills = []) => {
         relevanceScore += 1;
       }
     }
+
+    // Company popularity boost — well-known companies rank above obscure ones
+    const popularityBoost = COMPANY_POPULARITY[companyNorm] || COMPANY_POPULARITY[companyNorm.replace(/[^a-z0-9]/g, "")] || 0;
+    relevanceScore += popularityBoost;
 
     let demandText = "High Match";
     if (relevanceScore >= 8) demandText = "Top Match";

@@ -14,6 +14,7 @@ import toast from 'react-hot-toast';
 import ConfirmModal from '../components/ui/ConfirmModal';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+// Stored in sessionStorage so a fresh login starts a clean new chat, while navigating between pages preserves the active chat
 const ACTIVE_CONV_STORAGE_KEY = "careerpilot_active_advisor_conv";
 const DEFAULT_GREETING = { 
   role: "assistant", 
@@ -286,7 +287,7 @@ export default function AskAI() {
       const data = await res.json();
       if (data.success && data.data?.messages) {
         setConversationId(id);
-        localStorage.setItem(ACTIVE_CONV_STORAGE_KEY, id);
+        sessionStorage.setItem(ACTIVE_CONV_STORAGE_KEY, id);
         // Prepend friendly assistant greeting so layout remains consistent
         setMessages([DEFAULT_GREETING, ...data.data.messages]);
         setIsHistoryOpen(false);
@@ -304,7 +305,7 @@ export default function AskAI() {
   // Start fresh new conversation
   const handleNewChat = () => {
     setConversationId(null);
-    localStorage.removeItem(ACTIVE_CONV_STORAGE_KEY);
+    sessionStorage.removeItem(ACTIVE_CONV_STORAGE_KEY);
     setMessages([DEFAULT_GREETING]);
     setQuestion("");
     setIsHistoryOpen(false);
@@ -398,11 +399,16 @@ export default function AskAI() {
     }
   };
 
-  // Initial load: fetch history and restore active conversation if any
+  // Initial load: fetch history and restore active session conversation if user navigated from another page
   useEffect(() => {
+    // Clean up any legacy localStorage entry from previous versions
+    try {
+      localStorage.removeItem(ACTIVE_CONV_STORAGE_KEY);
+    } catch {}
+
     if (session?.access_token) {
       fetchConversations().then((loadedConvs) => {
-        const savedConvId = localStorage.getItem(ACTIVE_CONV_STORAGE_KEY);
+        const savedConvId = sessionStorage.getItem(ACTIVE_CONV_STORAGE_KEY);
         if (savedConvId && loadedConvs && loadedConvs.some(c => c.id === savedConvId)) {
           loadConversation(savedConvId);
         }
@@ -445,7 +451,7 @@ export default function AskAI() {
         // Save active conversation ID and update history list
         if (data.data.conversationId) {
           setConversationId(data.data.conversationId);
-          localStorage.setItem(ACTIVE_CONV_STORAGE_KEY, data.data.conversationId);
+          sessionStorage.setItem(ACTIVE_CONV_STORAGE_KEY, data.data.conversationId);
           fetchConversations();
         }
       } else {

@@ -10,9 +10,38 @@ export default function StatCard({
   iconColor,
   chartData,
   chartColor,
-  themeVariant = "dark"
+  themeVariant = "dark",
+  allowWrap = false,
+  valueClassName = ""
 }) {
   const isCandyCard = themeVariant !== "dark";
+
+  const getRawText = (val) => {
+    if (typeof val === "string") return val;
+    if (typeof val === "number") return String(val);
+    if (val && typeof val === "object" && val.props) {
+      return getRawText(val.props.children);
+    }
+    return "";
+  };
+
+  const rawString = getRawText(value);
+  const strLen = rawString.length;
+  const isMultiWordOrLong = strLen > 14 || (rawString.includes(" ") && strLen > 8);
+  const shouldWrap = allowWrap || isMultiWordOrLong;
+
+  const getMetricSizeClass = () => {
+    if (!shouldWrap) {
+      return "text-2xl leading-none truncate";
+    }
+    if (strLen > 24) {
+      return "text-base sm:text-lg lg:text-xl leading-snug break-words [overflow-wrap:anywhere]";
+    }
+    if (strLen > 14) {
+      return "text-lg sm:text-xl lg:text-2xl leading-snug break-words [overflow-wrap:anywhere]";
+    }
+    return "text-xl sm:text-2xl leading-tight break-words [overflow-wrap:anywhere]";
+  };
 
   const getContainerStyle = () => {
     switch (themeVariant) {
@@ -34,7 +63,7 @@ export default function StatCard({
   };
 
   return (
-    <div className={`flex flex-col justify-between rounded-2xl p-5 min-h-[148px] transition-all duration-300 backdrop-blur-md ${getContainerStyle()}`}>
+    <div className={`flex flex-col justify-between h-full rounded-2xl p-5 min-h-[148px] transition-all duration-300 backdrop-blur-md ${getContainerStyle()}`}>
       {/* Top Header: Title & Icon */}
       <div className="flex items-center justify-between gap-3">
         <h3 className={`text-xs font-bold uppercase tracking-wider truncate ${
@@ -52,12 +81,15 @@ export default function StatCard({
       </div>
 
       {/* Middle: Prominent Metric Value */}
-      <div className="my-1.5 flex items-baseline">
-        <span className={`text-2xl font-black tracking-tight leading-none truncate ${
-          isCandyCard ? "text-slate-950" : "text-slate-900 dark:text-white"
-        }`}>
+      <div className="my-1.5 min-w-0 flex-1 flex items-center">
+        <div 
+          className={`font-black tracking-tight ${
+            isCandyCard ? "text-slate-950" : "text-slate-900 dark:text-white"
+          } ${getMetricSizeClass()} ${valueClassName}`}
+          title={rawString || undefined}
+        >
           {value}
-        </span>
+        </div>
       </div>
 
       {/* Bottom: Subtitle Pill Badge */}
