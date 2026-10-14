@@ -161,8 +161,8 @@ export default function AppLayout({ children }) {
                 <button 
                   onClick={toggleTheme} 
                   className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 hover:bg-slate-100 border border-slate-200/80 text-slate-700 hover:text-slate-900 shadow-2xs dark:bg-[#1c1e24] dark:border-white/[0.08] dark:text-slate-300 dark:hover:bg-[#242730] dark:hover:text-white transition-colors cursor-pointer"
-                  title={isDark ? "Switch to White Mode" : "Switch to Dark Mode"}
-                  aria-label={isDark ? "Switch to White Mode" : "Switch to Dark Mode"}
+                  title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                  aria-label={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
                 >
                   {isDark ? (
                     <Sun className="h-5 w-5 text-[#ffd159] transition-transform duration-200 hover:rotate-45" />

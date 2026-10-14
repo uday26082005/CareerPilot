@@ -47,7 +47,7 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
     }
 
     setAnalyzing(true);
-    const toastId = toast.loading("Analyzing your resume with Gemini AI...");
+    const toastId = toast.loading("Analyzing your resume...");
     
     try {
       const formData = new FormData();
@@ -57,7 +57,7 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
         headers: { Authorization: `Bearer ${session?.access_token}` }
       });
 
-      console.log("Gemini AI Analysis Result:", response.data.data);
+      console.log("Resume Analysis Result:", response.data.data);
       
       toast.success("Resume analyzed successfully!", { id: toastId });
       
@@ -180,7 +180,7 @@ export default function ResumeUploadStep({ onNext, onPrev }) {
           whileTap={{ scale: 0.98 }}
           className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#ffd159] to-[#fed656] px-6 py-3 font-bold text-sm text-slate-950 shadow-md shadow-amber-500/10 transition-all hover:brightness-105 active:scale-95 disabled:opacity-50"
         >
-          {analyzing ? "Analyzing AI..." : "Analyze & Finish"}
+          {analyzing ? "Analyzing..." : "Analyze & Finish"}
           {!analyzing && <ArrowRight className="h-5 w-5" />}
         </motion.button>
       </div>

@@ -108,7 +108,11 @@ export default function MockInterviews() {
 
       {/* Middle Row: Interview Types */}
       <div>
-        <InterviewTypes activeType={selectedType} setActiveType={setSelectedType} />
+        <InterviewTypes 
+          activeType={selectedType} 
+          setActiveType={setSelectedType} 
+          targetRole={session?.user?.user_metadata?.target_role}
+        />
         {selectedType === "Company-specific" && (
           <div className="mt-4 flex flex-col gap-3 p-5 rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1c1e24] shadow-sm dark:shadow-xl dark:shadow-black/25">
             <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Target Company Name</label>

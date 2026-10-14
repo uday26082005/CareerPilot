@@ -452,14 +452,14 @@ export function ApplicationDefaults() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
           <div>
             <h4 className="text-base font-bold text-slate-900 dark:text-white">Theme Preference</h4>
-            <p className="text-sm text-slate-500 dark:text-slate-400">Choose between White Mode and Dark Mode</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Choose between Light Mode and Dark Mode</p>
           </div>
           <ThemedSelect 
             value={theme}
             onChange={(val) => setTheme(val)}
             options={[
               { value: "dark", label: "Dark Mode" },
-              { value: "light", label: "White Mode" },
+              { value: "light", label: "Light Mode" },
             ]}
             className="w-36"
             align="right"

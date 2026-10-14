@@ -1,14 +1,10 @@
-import { Check, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Check } from "lucide-react";
 
 export default function RoadmapWidget({ steps }) {
   return (
     <div className="flex h-full flex-col rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1c1e24] p-6 shadow-sm dark:shadow-xl dark:shadow-black/25">
       <div className="mb-5 flex items-center justify-between">
-        <h3 className="text-lg font-bold text-slate-900 dark:text-white tracking-wide">Recommended Roadmap</h3>
-        <Link to="/roadmaps" className="flex items-center gap-2 text-sm font-semibold text-teal-600 dark:text-[#4ee4cb] transition-colors hover:text-teal-700 dark:hover:text-[#36e2b6]">
-          View Full Roadmap <ArrowRight className="h-4 w-4" />
-        </Link>
+        <h3 className="text-lg font-bold text-slate-900 dark:text-white tracking-wide">Recommended Path</h3>
       </div>
 
       <div className="flex-1 flex items-center justify-between px-4 pb-4">

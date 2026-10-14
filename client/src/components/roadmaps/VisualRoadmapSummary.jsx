@@ -389,11 +389,6 @@ const VisualRoadmapSummary = forwardRef(({ roadmap }, ref) => {
                           <span style={{ fontSize: '14px', fontWeight: '600', color: '#f1f5f9', display: 'block', lineHeight: '1.4' }}>
                             • {task.title}
                           </span>
-                          {task.description && (
-                            <span style={{ fontSize: '12px', color: '#94a3b8', display: 'block', marginTop: '3px', lineHeight: '1.45' }}>
-                              {task.description}
-                            </span>
-                          )}
                           {task.resource?.title && (
                             <span style={{
                               fontSize: '11px',

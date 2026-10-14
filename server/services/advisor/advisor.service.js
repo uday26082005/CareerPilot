@@ -1,4 +1,4 @@
-const { getGroqClient, groqModel } = require("../../config/groq");
+const { getGroqClient, getGroqClients, groqModel } = require("../../config/groq");
 const { getSupabaseAdmin } = require("../../config/supabase");
 const { AppError } = require("../../middleware/error/AppError");
 
@@ -10,13 +10,12 @@ const generateTitle = (text) => {
 };
 
 const generateChatResponse = async (messages) => {
-  try {
-    const client = getGroqClient();
+  const clients = getGroqClients();
 
-    // Inject system prompt to set the persona and strict formatting guidelines
-    const systemPrompt = {
-      role: "system",
-      content: `You are CareerPilot AI, an expert Senior Technical Career Coach and Software Architect. 
+  // Inject system prompt to set the persona and strict formatting guidelines
+  const systemPrompt = {
+    role: "system",
+    content: `You are CareerPilot AI, an expert Senior Technical Career Coach and Software Architect. 
 Your goal is to help software engineers navigate their careers, prepare for interviews, improve their resumes, and master technical skills like system design, DSA, and modern web frameworks.
 Be concise, encouraging, and highly technical when appropriate.
 
@@ -24,22 +23,33 @@ Format your responses neatly using GitHub Flavored Markdown:
 - Use clear section headings (##, ###) and structured bullet points.
 - When creating tables (such as action plans, comparisons, or schedules), format them strictly as valid multi-line Markdown tables with each row on its own separate line, preceded and followed by blank lines. Never squash table rows into a single line.
 - Provide code snippets in fenced code blocks with the programming language tag (e.g., \`\`\`javascript, \`\`\`python).`
-    };
+  };
 
-    const apiMessages = [systemPrompt, ...messages];
+  const apiMessages = [systemPrompt, ...messages];
+  let lastError;
 
-    const response = await client.chat.completions.create({
-      model: groqModel,
-      messages: apiMessages,
-      temperature: 0.7,
-      max_tokens: 1024,
-    });
+  for (let cIdx = 0; cIdx < clients.length; cIdx++) {
+    const { name, client } = clients[cIdx];
+    try {
+      const response = await client.chat.completions.create({
+        model: groqModel,
+        messages: apiMessages,
+        temperature: 0.7,
+        max_tokens: 1024,
+      });
 
-    return response.choices[0].message.content;
-  } catch (error) {
-    console.error("Groq Chat Error:", error);
-    throw new AppError("Failed to generate AI response.", 500);
+      return response.choices[0].message.content;
+    } catch (error) {
+      lastError = error;
+      console.warn(`[Groq Multi-API] Chat completion on ${name} failed: ${error.message}.`);
+      if (cIdx < clients.length - 1) {
+        console.warn(`Redirecting to next API tier (${clients[cIdx + 1].name})...`);
+      }
+    }
   }
+
+  console.error("Groq Chat Error across all API tiers:", lastError);
+  throw new AppError("Failed to generate AI response across all available APIs.", 500);
 };
 
 const getConversations = async (userId) => {

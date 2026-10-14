@@ -3,8 +3,107 @@ import { Maximize2, Minimize2, CheckCircle2, CircleDashed, Circle, ChevronDown, 
 import html2pdf from 'html2pdf.js';
 import ThemedSelect from "../ui/ThemedSelect";
 
+export const getReliableResourceUrl = (url, resourceTitle = "", taskTitle = "") => {
+  const combined = `${resourceTitle} ${taskTitle} ${url || ""}`.toLowerCase();
+
+  if (combined.includes("python for everybody") || combined.includes("py4e")) {
+    return "https://www.py4e.com/";
+  }
+  if (combined.includes("langchain")) {
+    return "https://python.langchain.com/";
+  }
+  if (combined.includes("llamaindex") || combined.includes("llama-index")) {
+    return "https://docs.llamaindex.ai/";
+  }
+  if (combined.includes("pinecone")) {
+    return "https://docs.pinecone.io/";
+  }
+  if (combined.includes("weaviate")) {
+    return "https://weaviate.io/developers/weaviate";
+  }
+  if (combined.includes("copilot")) {
+    return "https://docs.github.com/en/copilot";
+  }
+  if (combined.includes("hugging face") || combined.includes("huggingface")) {
+    return "https://huggingface.co/docs";
+  }
+  if (combined.includes("pytorch")) {
+    return "https://pytorch.org/tutorials/";
+  }
+  if (combined.includes("tensorflow")) {
+    return "https://www.tensorflow.org/tutorials";
+  }
+  if (combined.includes("system design primer")) {
+    return "https://github.com/donnemartin/system-design-primer";
+  }
+  if (combined.includes("docker")) {
+    return "https://docs.docker.com/get-started/";
+  }
+  if (combined.includes("kubernetes") || combined.includes("k8s")) {
+    return "https://kubernetes.io/docs/home/";
+  }
+  if (combined.includes("react")) {
+    return "https://react.dev/learn";
+  }
+  if (combined.includes("next.js") || combined.includes("nextjs")) {
+    return "https://nextjs.org/docs";
+  }
+  if (combined.includes("postgresql") || combined.includes("postgres")) {
+    return "https://www.postgresql.org/docs/";
+  }
+  if (combined.includes("mongodb")) {
+    return "https://www.mongodb.com/docs/";
+  }
+  if (combined.includes("redis")) {
+    return "https://redis.io/docs/";
+  }
+  if (combined.includes("kafka")) {
+    return "https://kafka.apache.org/documentation/";
+  }
+  if (combined.includes("spark")) {
+    return "https://spark.apache.org/docs/latest/";
+  }
+
+  // Handle YouTube links: redirect to search if it's a playlist or watch URL that may be hallucinated
+  if (url && (url.includes("youtube.com") || url.includes("youtu.be"))) {
+    if (url.includes("playlist?list=") || url.includes("watch?v=")) {
+      const searchTopic = resourceTitle || taskTitle || "tutorial";
+      return `https://www.youtube.com/results?search_query=${encodeURIComponent(searchTopic)}`;
+    }
+    return url;
+  }
+
+  // If a valid HTTP/HTTPS URL exists
+  if (url && (url.startsWith("http://") || url.startsWith("https://"))) {
+    if (url.includes("langchain.com")) return "https://python.langchain.com/";
+    if (url.includes("github.com/features/copilot")) return "https://docs.github.com/en/copilot";
+    return url;
+  }
+
+  const query = resourceTitle || taskTitle || "programming tutorial";
+  return `https://www.google.com/search?q=${encodeURIComponent(query + " documentation tutorial")}`;
+};
+
 const LearningRoadmap = forwardRef(({ roadmap, onTaskStatusChange }, ref) => {
   const [expandedPhases, setExpandedPhases] = useState([]);
+  const [projectStatuses, setProjectStatuses] = useState(() => {
+    try {
+      const saved = localStorage.getItem(`careerpilot_proj_status_${roadmap?.id || 'active'}`);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  const handleProjectStatusChange = (projectId, status) => {
+    setProjectStatuses(prev => {
+      const updated = { ...prev, [projectId]: status };
+      try {
+        localStorage.setItem(`careerpilot_proj_status_${roadmap?.id || 'active'}`, JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+  };
 
   useEffect(() => {
     if (roadmap?.phases?.length > 0) {
@@ -97,14 +196,25 @@ const LearningRoadmap = forwardRef(({ roadmap, onTaskStatusChange }, ref) => {
           let completedTasks = 0;
           let totalTasks = phase.tasks?.length || 0;
           phase.tasks?.forEach(t => { if (t.status === 'Completed') completedTasks++; });
+
+          let totalProjects = phase.projects?.length || 0;
+          let completedProjects = 0;
+          phase.projects?.forEach((proj, pIdx) => {
+            const pKey = `${phase.phase_number || idx}_${proj.title || pIdx}`;
+            if (projectStatuses[pKey] === 'Completed') completedProjects++;
+          });
+
+          const totalItems = totalTasks + totalProjects;
+          const completedItems = completedTasks + completedProjects;
+          const progress = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+          const isPhaseFullyCompleted = totalItems > 0 && completedItems === totalItems;
           
-          const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
           let statusText = "Pending";
           let StatusIcon = Circle;
           let statusColor = "text-slate-500 border-slate-200 bg-slate-100 dark:text-slate-400 dark:border-white/10 dark:bg-white/5";
           let progressColor = "text-slate-400 dark:text-slate-500";
           
-          if (progress === 100 && totalTasks > 0) {
+          if (progress === 100 && totalItems > 0) {
             statusText = "Completed";
             StatusIcon = CheckCircle2;
             statusColor = "text-teal-700 border-teal-200 bg-teal-50 dark:text-[#4ee4cb] dark:border-[#4ee4cb]/30 dark:bg-[#4ee4cb]/5";
@@ -165,7 +275,7 @@ const LearningRoadmap = forwardRef(({ roadmap, onTaskStatusChange }, ref) => {
                       <StatusIcon className={`h-5 w-5 ${progressColor}`} />
                       <span className="text-lg font-bold text-slate-900 dark:text-white">{progress}%</span>
                     </div>
-                    <span className="text-xs text-slate-500 dark:text-slate-400">{completedTasks} / {totalTasks} Tasks</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400">{completedItems} / {totalItems} Completed</span>
                     <button 
                       onClick={() => togglePhase(idx)}
                       className="mt-4 text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors cursor-pointer p-1"
@@ -198,13 +308,12 @@ const LearningRoadmap = forwardRef(({ roadmap, onTaskStatusChange }, ref) => {
                             <span className={`text-sm font-semibold ${task.status === 'Completed' ? 'text-slate-400 line-through dark:text-slate-500' : 'text-slate-800 dark:text-slate-200'} print:text-black`}>
                               {task.title}
                             </span>
-                            <span className="text-xs text-slate-500 dark:text-slate-400 mb-2">{task.description}</span>
                             {task.resource && (
                               <a 
-                                href={task.resource.url} 
+                                href={getReliableResourceUrl(task.resource.url, task.resource.title, task.title)} 
                                 target="_blank" 
                                 rel="noopener noreferrer" 
-                                className="w-fit flex items-center gap-1.5 text-[11px] font-bold bg-teal-50 text-teal-700 border border-teal-200 hover:bg-teal-100 dark:bg-[#4ee4cb]/10 dark:text-[#4ee4cb] dark:border-[#4ee4cb]/20 dark:hover:bg-[#4ee4cb]/20 px-2.5 py-1 rounded-md transition-colors"
+                                className="w-fit flex items-center gap-1.5 text-[11px] font-bold bg-teal-50 text-teal-700 border border-teal-200 hover:bg-teal-100 dark:bg-[#4ee4cb]/10 dark:text-[#4ee4cb] dark:border-[#4ee4cb]/20 dark:hover:bg-[#4ee4cb]/20 px-2.5 py-1 rounded-md transition-colors mt-2"
                               >
                                 <ExternalLink className="h-3 w-3" />
                                 {task.resource.title}
@@ -221,21 +330,50 @@ const LearningRoadmap = forwardRef(({ roadmap, onTaskStatusChange }, ref) => {
 
                   {/* Projects row */}
                   {phase.projects && phase.projects.length > 0 && (
-                    <div className="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-white p-4 mt-2 shadow-sm dark:border-white/[0.06] dark:bg-[#1c1e24]">
+                    <div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 mt-2 shadow-sm dark:border-white/[0.06] dark:bg-[#1c1e24]">
                       <h4 className="text-sm font-bold flex items-center gap-2 text-slate-900 dark:text-white">
                         <Code className="h-4 w-4 text-amber-500 dark:text-[#ffd159]" /> Suggested Projects
                       </h4>
-                      <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-2 list-disc pl-5 marker:text-amber-500 dark:marker:text-[#ffd159]">
-                        {phase.projects.map((proj, pIdx) => (
-                          <li key={pIdx}><strong className="text-slate-800 dark:text-slate-200 font-semibold">{proj.title}</strong>: {proj.description}</li>
-                        ))}
-                      </ul>
+                      <div className="flex flex-col gap-3">
+                        {phase.projects.map((proj, pIdx) => {
+                          const pKey = `${phase.phase_number || idx}_${proj.title || pIdx}`;
+                          const projStatus = projectStatuses[pKey] || "Pending";
+                          return (
+                            <div key={pIdx} className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 hover:border-slate-300 dark:bg-[#242730] dark:border-white/[0.06] dark:hover:border-white/15 transition-colors shadow-xs">
+                              <div className="flex items-center gap-4 flex-1">
+                                <ThemedSelect
+                                  value={projStatus}
+                                  onChange={(val) => handleProjectStatusChange(pKey, val)}
+                                  options={[
+                                    { value: "Pending", label: "Pending" },
+                                    { value: "In Progress", label: "In Progress" },
+                                    { value: "Completed", label: "Completed" }
+                                  ]}
+                                  className="w-36 print:hidden"
+                                  align="left"
+                                />
+                                <div className="flex flex-col flex-1">
+                                  <span className={`text-sm font-semibold ${projStatus === 'Completed' ? 'text-slate-400 line-through dark:text-slate-500' : 'text-slate-800 dark:text-slate-200'} print:text-black`}>
+                                    {proj.title}
+                                  </span>
+                                  {proj.description && (
+                                    <span className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                                      {proj.description}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   )}
 
-                  {phase.milestone && (
-                    <div className="mt-2 text-sm text-center font-bold text-amber-700 bg-amber-50 border border-amber-200 dark:text-[#ffd159] dark:bg-[#ffd159]/10 dark:border-[#ffd159]/20 p-3 rounded-xl">
-                      Milestone: {phase.milestone}
+                  {/* Milestone message ONLY rendered after completing all sub topics AND the project */}
+                  {phase.milestone && isPhaseFullyCompleted && (
+                    <div className="mt-2 text-sm text-center font-bold text-amber-700 bg-amber-50 border border-amber-200 dark:text-[#ffd159] dark:bg-[#ffd159]/10 dark:border-[#ffd159]/20 p-3.5 rounded-xl animate-fade-in shadow-xs">
+                      🎉 Milestone: {phase.milestone}
                     </div>
                   )}
                   

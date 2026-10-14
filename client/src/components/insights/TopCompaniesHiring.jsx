@@ -90,16 +90,16 @@ export default function TopCompaniesHiring({ data }) {
           </p>
         </div>
       ) : (
-        <div className="flex-1 grid grid-cols-2 sm:grid-cols-5 divide-y sm:divide-y-0 sm:divide-x divide-slate-200 dark:divide-white/[0.08]">
+        <div className="flex-1 grid grid-cols-2 sm:grid-cols-5 gap-2">
           {COMPANIES.map((company, idx) => (
             <div
               key={idx}
-              className="flex flex-col items-center justify-center px-2 py-3 text-center h-full"
+              className="flex flex-col items-center justify-center px-1.5 py-3 text-center h-full"
             >
               <CompanyLogo company={company} />
 
               <h4
-                className="text-xs font-bold text-slate-900 dark:text-white truncate w-full"
+                className="text-xs font-bold text-slate-900 dark:text-white w-full leading-tight"
                 title={company.name}
               >
                 {company.name}
@@ -107,7 +107,7 @@ export default function TopCompaniesHiring({ data }) {
 
               {company.title && (
                 <span
-                  className="text-[11px] font-medium text-slate-600 dark:text-slate-400 truncate w-full mt-0.5"
+                  className="text-[11px] font-medium text-slate-600 dark:text-slate-400 w-full mt-1 leading-snug break-words"
                   title={company.title}
                 >
                   {company.title}
@@ -116,11 +116,11 @@ export default function TopCompaniesHiring({ data }) {
 
               {company.location && (
                 <span
-                  className="text-[10px] text-slate-400 dark:text-slate-500 flex items-center justify-center gap-0.5 truncate w-full mt-0.5"
+                  className="text-[10px] text-slate-400 dark:text-slate-500 flex items-center justify-center gap-0.5 w-full mt-1 flex-wrap leading-tight"
                   title={company.location}
                 >
                   <MapPin className="h-2.5 w-2.5 shrink-0" />
-                  <span className="truncate">{company.location}</span>
+                  <span>{company.location}</span>
                 </span>
               )}
 

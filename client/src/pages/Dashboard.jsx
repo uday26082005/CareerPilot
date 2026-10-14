@@ -39,11 +39,16 @@ export default function Dashboard() {
         })
       ]);
       
-      const data = dashRes.data;
-      if (!data.profile || !data.profile.target_role) {
+      const data = dashRes.data?.data || dashRes.data;
+      const targetRole = data?.profile?.target_role || data?.profile?.targetRole || session?.user?.user_metadata?.target_role;
+      if (!data?.profile || !targetRole) {
         console.log("Incomplete profile found, redirecting to onboarding...");
         navigate("/onboarding");
         return;
+      }
+
+      if (data.profile && !data.profile.target_role && targetRole) {
+        data.profile.target_role = targetRole;
       }
       
       setDashboardData(data);
@@ -70,7 +75,8 @@ export default function Dashboard() {
     return <div className="flex h-[60vh] items-center justify-center text-red-500">{error}</div>;
   }
 
-  if (!dashboardData || !dashboardData.profile?.target_role) {
+  const userTargetRole = dashboardData?.profile?.target_role || dashboardData?.profile?.targetRole || session?.user?.user_metadata?.target_role;
+  if (!dashboardData || !userTargetRole) {
     return <Navigate to="/onboarding" replace />;
   }
 

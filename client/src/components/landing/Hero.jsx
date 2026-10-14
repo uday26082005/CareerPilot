@@ -10,7 +10,9 @@ import {
     ArrowRight,
 } from "lucide-react";
 
+import { useTheme } from "../../contexts/ThemeContext";
 import heroImageDark from "../../assets/hero-crossroads.jpeg";
+import heroImageWhite from "../../assets/hero-crossroads-white.jpeg";
 
 const features = [
     { icon: ScanLine, text: "Resume Analysis", bg: "bg-[#4ee4cb]/15", textCol: "text-[#4ee4cb]", border: "hover:border-[#4ee4cb]/30" },
@@ -22,6 +24,7 @@ const features = [
 ];
 
 export default function Hero() {
+    const { isDark } = useTheme();
     return (
         <section className="relative overflow-hidden pt-[110px] pb-8">
             {/* Background glowing orb for text */}
@@ -116,10 +119,10 @@ export default function Hero() {
                         <motion.img
                             animate={{ y: [-10, 10, -10] }}
                             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                            src={heroImageDark}
+                            src={isDark ? heroImageDark : heroImageWhite}
                             alt="AI Career Mentor"
                             className="relative z-10 w-full max-w-[420px] object-cover rounded-3xl shadow-xl dark:shadow-2xl dark:shadow-black/50 border border-slate-200 dark:border-white/[0.08] dark:mix-blend-screen"
-                            style={{ filter: 'brightness(1.05) contrast(1.05)' }}
+                            style={{ filter: isDark ? 'brightness(1.05) contrast(1.05)' : 'none' }}
                         />
                     </motion.div>
                 </div>

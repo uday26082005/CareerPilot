@@ -497,8 +497,8 @@ export default function AskAI() {
             type="button"
             onClick={toggleTheme}
             className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1c1e24] text-slate-600 dark:text-slate-300 shadow-sm transition-all hover:bg-slate-100 dark:hover:bg-[#242730] dark:hover:text-white active:scale-95"
-            title={isDark ? "Switch to White Mode" : "Switch to Dark Mode"}
-            aria-label={isDark ? "Switch to White Mode" : "Switch to Dark Mode"}
+            title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            aria-label={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
             {isDark ? (
               <Sun className="h-4 w-4 text-[#ffd159] transition-transform duration-200 hover:rotate-45" />

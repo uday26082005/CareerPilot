@@ -2,21 +2,44 @@ const Groq = require("groq-sdk");
 const { env } = require("./env");
 const { AppError } = require("../middleware/error/AppError");
 
-let groqClient;
+const clientPool = new Map();
+
+/**
+ * Returns an array of available Groq API instances in priority order:
+ * 1. Primary API (GROQ_API_KEY)
+ * 2. Secondary API (GROQ_API_KEY_2)
+ * 3. Tertiary API (GROQ_API_KEY_3)
+ */
+const getGroqClients = () => {
+  const keys = [
+    { id: 1, name: "Primary API (Key 1)", key: env.GROQ_API_KEY || process.env.GROQ_API_KEY },
+    { id: 2, name: "Secondary API (Key 2)", key: env.GROQ_API_KEY_2 || process.env.GROQ_API_KEY_2 },
+    { id: 3, name: "Tertiary API (Key 3)", key: env.GROQ_API_KEY_3 || process.env.GROQ_API_KEY_3 },
+  ].filter(item => Boolean(item.key && item.key.trim().length > 0));
+
+  if (keys.length === 0) {
+    throw new AppError("No Groq API keys are configured.", 500);
+  }
+
+  return keys.map(({ id, name, key }) => {
+    if (!clientPool.has(id)) {
+      clientPool.set(id, new Groq({ apiKey: key.trim() }));
+    }
+    return {
+      id,
+      name,
+      client: clientPool.get(id)
+    };
+  });
+};
 
 const getGroqClient = () => {
-  if (!env.GROQ_API_KEY) {
-    throw new AppError("Groq API key is not configured.", 500);
-  }
-
-  if (!groqClient) {
-    groqClient = new Groq({ apiKey: env.GROQ_API_KEY });
-  }
-
-  return groqClient;
+  const all = getGroqClients();
+  return all[0].client;
 };
 
 module.exports = {
   getGroqClient,
-  groqModel: env.GROQ_MODEL,
+  getGroqClients,
+  groqModel: env.GROQ_MODEL || "qwen/qwen3.8-27b",
 };

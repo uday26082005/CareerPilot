@@ -8,6 +8,47 @@ const HTTP_STATUS_NOT_FOUND = 404;
 const HTTP_STATUS_INTERNAL_SERVER_ERROR = 500;
 const HTTP_STATUS_UNPROCESSABLE_ENTITY = 422;
 
+const getReliableResourceUrl = (url, resourceTitle = "", taskTitle = "") => {
+  const combined = `${resourceTitle} ${taskTitle} ${url || ""}`.toLowerCase();
+
+  if (combined.includes("python for everybody") || combined.includes("py4e")) return "https://www.py4e.com/";
+  if (combined.includes("langchain")) return "https://python.langchain.com/";
+  if (combined.includes("llamaindex") || combined.includes("llama-index")) return "https://docs.llamaindex.ai/";
+  if (combined.includes("pinecone")) return "https://docs.pinecone.io/";
+  if (combined.includes("weaviate")) return "https://weaviate.io/developers/weaviate";
+  if (combined.includes("copilot")) return "https://docs.github.com/en/copilot";
+  if (combined.includes("hugging face") || combined.includes("huggingface")) return "https://huggingface.co/docs";
+  if (combined.includes("pytorch")) return "https://pytorch.org/tutorials/";
+  if (combined.includes("tensorflow")) return "https://www.tensorflow.org/tutorials";
+  if (combined.includes("system design primer")) return "https://github.com/donnemartin/system-design-primer";
+  if (combined.includes("docker")) return "https://docs.docker.com/get-started/";
+  if (combined.includes("kubernetes") || combined.includes("k8s")) return "https://kubernetes.io/docs/home/";
+  if (combined.includes("react")) return "https://react.dev/learn";
+  if (combined.includes("next.js") || combined.includes("nextjs")) return "https://nextjs.org/docs";
+  if (combined.includes("postgresql") || combined.includes("postgres")) return "https://www.postgresql.org/docs/";
+  if (combined.includes("mongodb")) return "https://www.mongodb.com/docs/";
+  if (combined.includes("redis")) return "https://redis.io/docs/";
+  if (combined.includes("kafka")) return "https://kafka.apache.org/documentation/";
+  if (combined.includes("spark")) return "https://spark.apache.org/docs/latest/";
+
+  if (url && (url.includes("youtube.com") || url.includes("youtu.be"))) {
+    if (url.includes("playlist?list=") || url.includes("watch?v=")) {
+      const searchTopic = resourceTitle || taskTitle || "tutorial";
+      return `https://www.youtube.com/results?search_query=${encodeURIComponent(searchTopic)}`;
+    }
+    return url;
+  }
+
+  if (url && (url.startsWith("http://") || url.startsWith("https://"))) {
+    if (url.includes("langchain.com")) return "https://python.langchain.com/";
+    if (url.includes("github.com/features/copilot")) return "https://docs.github.com/en/copilot";
+    return url;
+  }
+
+  const query = resourceTitle || taskTitle || "programming tutorial";
+  return `https://www.google.com/search?q=${encodeURIComponent(query + " documentation tutorial")}`;
+};
+
 const buildRoadmapPrompt = (profile, skillGap) => {
   const marketFocus = skillGap.analysis_json?.market_intelligence?.trending_technologies || [];
   const missingSkills = Array.isArray(skillGap.missing_skills) ? skillGap.missing_skills : [];
@@ -134,7 +175,7 @@ const formatRoadmapResponse = (roadmap, tasks) => {
         status: task.status,
         resource: task.resource_title ? {
           title: task.resource_title,
-          url: task.resource_url,
+          url: getReliableResourceUrl(task.resource_url, task.resource_title, task.task_title),
           type: task.resource_type
         } : null
       });
@@ -201,7 +242,7 @@ const _generateAndSaveRoadmap = async (userId, profile, resumeAnalysis, skillGap
           task_description: task.description,
           estimated_hours: task.estimated_hours,
           resource_title: task.resource?.title || null,
-          resource_url: task.resource?.url || null,
+          resource_url: getReliableResourceUrl(task.resource?.url, task.resource?.title, task.title),
           resource_type: task.resource?.type || null,
           status: 'Pending',
           order_index: orderCounter++

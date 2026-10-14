@@ -4,7 +4,7 @@ import {
   BarChart3,
   BookOpen,
   Mic,
-  Code2,
+  Target,
   Bot,
   Sparkles,
 } from "lucide-react";
@@ -41,10 +41,10 @@ const features = [
   },
 
   {
-    icon: Code2,
-    title: "Coding Practice",
+    icon: Target,
+    title: "Practice Arena",
     description:
-      "Solve coding problems with AI hints, complexity analysis and interview-level explanations.",
+      "Test your technical knowledge with topic-based practice quizzes, instant evaluations, detailed explanations, and accuracy tracking.",
   },
 
   {
