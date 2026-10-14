@@ -3,16 +3,23 @@ import { useEffect, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
+import { useTheme } from "../contexts/ThemeContext";
 import StatCard from "../components/dashboard/StatCard";
 import UpcomingEvents from "../components/dashboard/UpcomingEvents";
 import RoadmapWidget from "../components/dashboard/RoadmapWidget";
 import AIRecommendations from "../components/dashboard/AIRecommendations";
+import {
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  Legend
+} from "recharts";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 export default function Dashboard() {
   const { session } = useAuth();
+  const { isDark } = useTheme();
   const [dashboardData, setDashboardData] = useState(null);
+  const [trends, setTrends] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -20,11 +27,19 @@ export default function Dashboard() {
   const fetchDashboardData = async () => {
     if (!session?.access_token) return;
     try {
-      const { data: res } = await axios.get(`${API_BASE_URL}/dashboard`, {
-        headers: { Authorization: `Bearer ${session.access_token}` }
-      });
+      const [dashRes, analyticsRes] = await Promise.all([
+        axios.get(`${API_BASE_URL}/dashboard`, {
+          headers: { Authorization: `Bearer ${session.access_token}` }
+        }),
+        axios.get(`${API_BASE_URL}/analytics/dashboard`, {
+          headers: { Authorization: `Bearer ${session.access_token}` }
+        }).catch((err) => {
+          console.warn("Analytics fetch failed:", err);
+          return null;
+        })
+      ]);
       
-      const data = res.data;
+      const data = dashRes.data;
       if (!data.profile || !data.profile.target_role) {
         console.log("Incomplete profile found, redirecting to onboarding...");
         navigate("/onboarding");
@@ -32,6 +47,9 @@ export default function Dashboard() {
       }
       
       setDashboardData(data);
+      if (analyticsRes?.data?.data?.trends) {
+        setTrends(analyticsRes.data.data.trends);
+      }
     } catch (err) {
       console.error("Error fetching dashboard data", err);
       setError("Failed to load dashboard data. Please try again.");
@@ -215,6 +233,84 @@ export default function Dashboard() {
               No AI recommendations available.
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Performance & Growth Analytics Charts */}
+      <div className="grid lg:grid-cols-2 gap-6">
+        {/* Cumulative Mastered Skills */}
+        <div className="bg-white dark:bg-[#1c1e24] rounded-3xl border border-slate-200 dark:border-white/[0.08] p-6 shadow-sm dark:shadow-xl dark:shadow-black/25">
+          <h3 className="text-xs font-semibold tracking-wider text-slate-500 dark:text-slate-400 uppercase mb-6">Cumulative Skills Mastered</h3>
+          <div className="h-72 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={trends} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="colorTasks" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#0d9488" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#0d9488" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <XAxis dataKey="date_label" stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} />
+                <YAxis stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} tickFormatter={(value) => `${value}`} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDark ? "#ffffff" : "#000000"} opacity={isDark ? 0.06 : 0.06} />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: isDark ? '#1c1e24' : '#ffffff', 
+                    border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0', 
+                    borderRadius: '16px', 
+                    color: isDark ? '#fff' : '#0f172a', 
+                    boxShadow: '0 20px 25px -5px rgba(0,0,0,0.15)' 
+                  }}
+                  itemStyle={{ color: isDark ? '#4ee4cb' : '#0d9488' }}
+                />
+                <Area type="monotone" dataKey="cumulative_tasks" name="Total Roadmap Tasks" stroke={isDark ? "#4ee4cb" : "#0d9488"} strokeWidth={2} fillOpacity={1} fill="url(#colorTasks)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Moving Average of Interview & Practice */}
+        <div className="bg-white dark:bg-[#1c1e24] rounded-3xl border border-slate-200 dark:border-white/[0.08] p-6 shadow-sm dark:shadow-xl dark:shadow-black/25">
+          <h3 className="text-xs font-semibold tracking-wider text-slate-500 dark:text-slate-400 uppercase mb-6">Performance Trends (7-Day Avg)</h3>
+          <div className="h-72 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart 
+                data={(trends || []).map(t => ({
+                  ...t,
+                  moving_avg_interview: t.moving_avg_interview ?? 0,
+                  moving_avg_practice: t.moving_avg_practice ?? 0,
+                }))} 
+                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+              >
+                <defs>
+                  <linearGradient id="colorInterview" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor={isDark ? "#ffd159" : "#f59e0b"} stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor={isDark ? "#ffd159" : "#f59e0b"} stopOpacity={0}/>
+                  </linearGradient>
+                  <linearGradient id="colorPractice" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor={isDark ? "#4ee4cb" : "#0d9488"} stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor={isDark ? "#4ee4cb" : "#0d9488"} stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <XAxis dataKey="date_label" stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} />
+                <YAxis stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} domain={[0, 100]} tickFormatter={(value) => `${value}`} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDark ? "#ffffff" : "#000000"} opacity={isDark ? 0.06 : 0.06} />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: isDark ? '#1c1e24' : '#ffffff', 
+                    border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0', 
+                    borderRadius: '16px', 
+                    color: isDark ? '#fff' : '#0f172a', 
+                    boxShadow: '0 20px 25px -5px rgba(0,0,0,0.15)' 
+                  }}
+                  formatter={(value) => [`${value}%`]}
+                />
+                <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', color: isDark ? '#94a3b8' : '#64748b' }} />
+                <Area type="monotone" dataKey="moving_avg_interview" name="Mock Interviews" stroke={isDark ? "#ffd159" : "#d97706"} strokeWidth={2} fillOpacity={1} fill="url(#colorInterview)" />
+                <Area type="monotone" dataKey="moving_avg_practice" name="Practice Accuracy" stroke={isDark ? "#4ee4cb" : "#0d9488"} strokeWidth={2} fillOpacity={1} fill="url(#colorPractice)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
 

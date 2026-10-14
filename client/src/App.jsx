@@ -1,4 +1,4 @@
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import Landing from "./pages/Landing";
@@ -17,7 +17,6 @@ import Roadmap from "./pages/Roadmap";
 import PracticeQuiz from "./pages/PracticeQuiz";
 import Settings from "./pages/Settings";
 import ProfileSummary from "./pages/ProfileSummary";
-import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import AppLayout from "./components/layout/AppLayout";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -60,7 +59,7 @@ function AppContent() {
       <Route path="/roadmaps" element={<AppLayout><Roadmap /></AppLayout>} />
         <Route path="/settings" element={<AppLayout><Settings /></AppLayout>} />
         <Route path="/profile" element={<AppLayout><ProfileSummary /></AppLayout>} />
-        <Route path="/analytics" element={<AppLayout><AnalyticsDashboard /></AppLayout>} />
+        <Route path="/analytics" element={<Navigate to="/dashboard" replace />} />
       </Routes>
   );
 }
