@@ -30,6 +30,7 @@
 const { getFlatRoleSkills, getRolePillars } = require("./roleTaxonomy");
 const { 
   getCanonicalSkill, 
+  getAliasesForSkill,
   normalizeSkillList, 
   extractSkillsFromText 
 } = require("./skillNormalizer");
@@ -56,28 +57,22 @@ const detectCandidateSkills = (resumeText, keySkills = [], taxonomySkills = []) 
 
 /**
  * Evaluates whether a target skill is satisfied by the candidate's detected skills.
- * Handles exact key lookup, canonical dictionary lookup, and subsumption (e.g. "SQL" satisfies "SQL Data Analysis").
+ * Matches by exact canonical key, normalized skill name, or standardized aliases.
+ * Avoids false-positive substring subsumption (e.g., React must NOT satisfy React Query).
  */
 const isSkillSatisfied = (key, skillName, detectedLookup) => {
-  if (detectedLookup.has(key)) return true;
+  const normKey = (key || "").toLowerCase().trim();
+  if (detectedLookup.has(normKey)) return true;
 
   const canonical = getCanonicalSkill(skillName).toLowerCase().trim();
   if (detectedLookup.has(canonical)) return true;
 
-  // Safe string-based subsumption check for common tech competencies:
-  // e.g., if market skill mentions "sql" ("sql data analysis", "sql queries") and candidate has "sql"
-  // or candidate has "python" and skill is "python for data analysis"
-  const targetLower = ` ${skillName.toLowerCase().replace(/[/,()_-]/g, " ")} `;
-  const keyPadded = ` ${key.toLowerCase().replace(/[/,()_-]/g, " ")} `;
-
-  const candidateSkills = Array.from(detectedLookup);
-  for (const cand of candidateSkills) {
-    if (cand.length >= 3) {
-      const candLower = cand.toLowerCase().trim();
-      const paddedCand = ` ${candLower} `;
-      if (targetLower.includes(paddedCand) || keyPadded.includes(paddedCand)) {
-        return true;
-      }
+  // Check standardized aliases from the canonical skill mapping
+  const aliases = getAliasesForSkill(skillName);
+  for (const alias of aliases) {
+    const normAlias = alias.toLowerCase().trim();
+    if (detectedLookup.has(normAlias)) {
+      return true;
     }
   }
 

@@ -76,7 +76,7 @@ const analyzeSkillGap = async (userId) => {
   // 2. Fetch Latest Resume Analysis
   const { data: resumeAnalysis, error: resumeError } = await supabase
     .from("resume_analysis")
-    .select("id, resume_text, recommended_keywords, analysis_json")
+    .select("id, resume_text, analysis_json")
     .eq("user_id", userId)
     .order("created_at", { ascending: false })
     .limit(1)
@@ -90,19 +90,27 @@ const analyzeSkillGap = async (userId) => {
   const marketData = await marketDemandService.getDynamicMarketSkills(targetRole, supabase);
 
   // 4. Semantic Role Relevance & Broader Taxonomy Evaluation
-  // Evaluates candidate's skills against 50-80+ role skill universe,
-  // separates the ~25 live market demand skills layer,
-  // classifies detected skills across 4 relevance tiers (0.80-1.00 Highly Relevant, 0.60-0.79 Relevant, 0.40-0.59 Somewhat Relevant, 0.00-0.39 Low Relevance),
-  // identifies additional role skills outside the top 25, and labels missing skills as "Not Detected".
-  const candidateKeywords = [
-    ...(resumeAnalysis.recommended_keywords || []),
-    ...(resumeAnalysis.analysis_json?.role_fit?.strengths || [])
-  ];
+  // Evaluates candidate's skills strictly from verified resume text (and explicitly declared profile skills if any).
+  // CRITICAL: Do NOT include recommended_keywords (which are missing skills that ATS advises the candidate to acquire/add).
+  let candidateDeclaredSkills = [];
+  try {
+    const { data: authUser } = await supabase.auth.admin.getUserById(userId);
+    const metaSkills = authUser?.user?.user_metadata?.skills;
+    if (metaSkills) {
+      if (Array.isArray(metaSkills)) {
+        candidateDeclaredSkills = metaSkills;
+      } else if (typeof metaSkills === "string") {
+        candidateDeclaredSkills = metaSkills.split(/[,;\n]+/).map(s => s.trim()).filter(Boolean);
+      }
+    }
+  } catch (_authErr) {
+    // ignore
+  }
 
   const evaluation = evaluateRoleAndMarketSkills(
     targetRole,
     resumeAnalysis.resume_text,
-    candidateKeywords,
+    candidateDeclaredSkills,
     marketData
   );
 

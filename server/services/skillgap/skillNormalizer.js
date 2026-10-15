@@ -32,7 +32,8 @@ const CANONICAL_MAPPINGS = {
   "c-sharp": "C#",
   "c sharp": "C#",
   "golang": "Go",
-  "go": "Go",
+  "go lang": "Go",
+  "go language": "Go",
   "rust": "Rust",
   "php": "PHP",
   "ruby": "Ruby",
@@ -53,11 +54,12 @@ const CANONICAL_MAPPINGS = {
   "sql databases": "SQL",
   "sql data modeling": "SQL",
   "advanced sql": "SQL",
-  "shell": "Bash/Shell Scripting",
-  "bash": "Bash/Shell Scripting",
+  "shell script": "Bash/Shell Scripting",
   "shell scripting": "Bash/Shell Scripting",
+  "bash": "Bash/Shell Scripting",
   "powershell": "PowerShell",
-  "r": "R",
+  "r language": "R",
+  "r programming": "R",
   "scala": "Scala",
 
   // Frontend Frameworks & Libraries
@@ -68,14 +70,12 @@ const CANONICAL_MAPPINGS = {
   "next.js": "Next.js",
   "nextjs": "Next.js",
   "next js": "Next.js",
-  "next": "Next.js",
   "vue": "Vue.js",
   "vue.js": "Vue.js",
   "vuejs": "Vue.js",
   "vue 3": "Vue.js",
   "nuxt.js": "Nuxt.js",
   "nuxtjs": "Nuxt.js",
-  "nuxt": "Nuxt.js",
   "angular": "Angular",
   "angularjs": "Angular",
   "angular 2+": "Angular",
@@ -102,7 +102,6 @@ const CANONICAL_MAPPINGS = {
   "webpack": "Webpack",
 
   // Backend Frameworks & Runtimes
-  "node": "Node.js",
   "nodejs": "Node.js",
   "node.js": "Node.js",
   "node js": "Node.js",
@@ -112,7 +111,6 @@ const CANONICAL_MAPPINGS = {
   "express js": "Express.js",
   "nestjs": "NestJS",
   "nest.js": "NestJS",
-  "nest": "NestJS",
   "django": "Django",
   "django rest": "Django",
   "django rest framework": "Django REST Framework",
@@ -132,7 +130,8 @@ const CANONICAL_MAPPINGS = {
   "rails": "Ruby on Rails",
   "ruby on rails": "Ruby on Rails",
   "laravel": "Laravel",
-  "gin": "Gin",
+  "gin framework": "Gin",
+  "gin-gonic": "Gin",
 
   // Databases & Caching
   "postgres": "PostgreSQL",
@@ -160,7 +159,6 @@ const CANONICAL_MAPPINGS = {
   "mongoose": "Mongoose",
 
   // APIs, Messaging & Architecture
-  "rest": "REST APIs",
   "rest api": "REST APIs",
   "rest apis": "REST APIs",
   "restful": "REST APIs",
