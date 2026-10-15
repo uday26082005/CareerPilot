@@ -9,7 +9,16 @@ const isLocalDevelopmentOrigin = (origin) =>
 
 const corsOptions = {
   origin(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin) || isLocalDevelopmentOrigin(origin)) {
+    const allowedOrigins = getAllowedOrigins();
+    const cleanOrigin = origin ? origin.replace(/\/+$/, "") : "";
+
+    if (
+      !origin ||
+      allowedOrigins.includes("*") ||
+      allowedOrigins.includes(cleanOrigin) ||
+      allowedOrigins.includes(origin) ||
+      isLocalDevelopmentOrigin(origin)
+    ) {
       callback(null, true);
       return;
     }

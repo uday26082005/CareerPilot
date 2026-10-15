@@ -22,13 +22,15 @@ const getGroqClients = () => {
   }
 
   return keys.map(({ id, name, key }) => {
-    if (!clientPool.has(id)) {
-      clientPool.set(id, new Groq({ apiKey: key.trim() }));
+    const trimmedKey = key.trim();
+    const existing = clientPool.get(id);
+    if (!existing || existing.key !== trimmedKey) {
+      clientPool.set(id, { client: new Groq({ apiKey: trimmedKey }), key: trimmedKey });
     }
     return {
       id,
       name,
-      client: clientPool.get(id)
+      client: clientPool.get(id).client
     };
   });
 };

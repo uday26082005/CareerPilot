@@ -9,6 +9,8 @@ import ConnectAccountsStep from "../components/onboarding/steps/ConnectAccountsS
 import TargetRoleStep from "../components/onboarding/steps/TargetRoleStep";
 import CompletedStep from "../components/onboarding/steps/CompletedStep";
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
 export default function Onboarding() {
   const { user, session } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
@@ -25,7 +27,7 @@ export default function Onboarding() {
     const toastId = toast.loading("Saving your profile...");
     
     try {
-      await axios.post("http://localhost:5000/api/profile/save", {
+      await axios.post(`${API_BASE_URL}/profile/save`, {
         userId: user?.id,
         fullName: completeData.fullName,
         currentRole: completeData.experience,

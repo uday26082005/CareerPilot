@@ -1,5 +1,11 @@
 const { getSupabaseAdmin } = require("../config/supabase");
-const supabase = getSupabaseAdmin();
+const supabase = new Proxy({}, {
+  get: (_, prop) => {
+    const client = getSupabaseAdmin();
+    const val = client[prop];
+    return typeof val === "function" ? val.bind(client) : val;
+  }
+});
 const { AppError } = require("../middleware/error/AppError");
 
 const fetchProfileSummary = async (userId) => {

@@ -48,10 +48,10 @@ const validateEmail = asyncHandler(async (req, res) => {
     validateMx: true,
     validateTypo: true,
     validateDisposable: true,
-    validateSMTP: true // Important for checking if mailbox actually exists
+    validateSMTP: false // Cloud hosting providers (Render, Railway, Vercel, AWS) block port 25 outbound SMTP
   });
 
-  if (!valid && validators[reason]) {
+  if (!valid && reason !== "smtp" && validators && validators[reason]) {
     return res.status(400).json({ 
       success: false, 
       message: `Email validation failed: ${validators[reason].reason || reason}`,

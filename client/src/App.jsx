@@ -60,6 +60,8 @@ function AppContent() {
         <Route path="/settings" element={<AppLayout><Settings /></AppLayout>} />
         <Route path="/profile" element={<AppLayout><ProfileSummary /></AppLayout>} />
         <Route path="/analytics" element={<Navigate to="/dashboard" replace />} />
+        {/* Fallback for undefined routes */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
   );
 }

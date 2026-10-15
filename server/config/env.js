@@ -1,7 +1,10 @@
+const path = require("path");
 const dotenv = require("dotenv");
 const { z } = require("zod");
 
+// Support loading from both working directory and server/.env
 dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const numberFromEnv = (fallback) =>
   z.preprocess((value) => {
@@ -39,7 +42,7 @@ const env = parsedEnv.data;
 
 const getAllowedOrigins = () =>
   env.CLIENT_URLS.split(",")
-    .map((origin) => origin.trim())
+    .map((origin) => origin.trim().replace(/\/+$/, ""))
     .filter(Boolean);
 
 module.exports = {
