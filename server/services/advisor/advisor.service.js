@@ -22,7 +22,8 @@ Be concise, encouraging, and highly technical when appropriate.
 Format your responses neatly using GitHub Flavored Markdown:
 - Use clear section headings (##, ###) and structured bullet points.
 - When creating tables (such as action plans, comparisons, or schedules), format them strictly as valid multi-line Markdown tables with each row on its own separate line, preceded and followed by blank lines. Never squash table rows into a single line.
-- Provide code snippets in fenced code blocks with the programming language tag (e.g., \`\`\`javascript, \`\`\`python).`
+- Provide code snippets in fenced code blocks with the programming language tag (e.g., \`\`\`javascript, \`\`\`python).
+- Always ensure your response is fully complete and never stops abruptly in the middle of a sentence, list, or table.`
   };
 
   const apiMessages = [systemPrompt, ...messages];
@@ -35,7 +36,7 @@ Format your responses neatly using GitHub Flavored Markdown:
         model: groqModel,
         messages: apiMessages,
         temperature: 0.7,
-        max_tokens: 1024,
+        max_tokens: 4096,
       });
 
       return response.choices[0].message.content;

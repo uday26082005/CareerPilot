@@ -247,6 +247,7 @@ export default function AskAI() {
 
   const fileInputRef = useRef(null);
   const scrollContainerRef = useRef(null);
+  const queryHandledRef = useRef(null);
 
   // Fetch list of conversations
   const fetchConversations = async () => {
@@ -399,22 +400,27 @@ export default function AskAI() {
     }
   };
 
-  // Initial load: fetch history and restore active session conversation if user navigated from another page
+  // Initial load: fetch history and restore active session conversation ONLY if not launching a new query from URL
   useEffect(() => {
-    // Clean up any legacy localStorage entry from previous versions
     try {
       localStorage.removeItem(ACTIVE_CONV_STORAGE_KEY);
     } catch {}
 
+    const q = new URLSearchParams(location.search).get('q');
+    if (q) return; // Do not restore old chat if a new question was sent via URL!
+
     if (session?.access_token) {
       fetchConversations().then((loadedConvs) => {
+        const currentQ = new URLSearchParams(window.location.search).get('q');
+        if (currentQ) return;
+
         const savedConvId = sessionStorage.getItem(ACTIVE_CONV_STORAGE_KEY);
         if (savedConvId && loadedConvs && loadedConvs.some(c => c.id === savedConvId)) {
           loadConversation(savedConvId);
         }
       });
     }
-  }, [session?.access_token]);
+  }, [session?.access_token, location.search]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -423,10 +429,12 @@ export default function AskAI() {
     }
   };
 
-  const handleSend = async (textToSend = question) => {
-    if (!textToSend.trim()) return;
+  const handleSend = async (textToSend = question, baseMessages = null) => {
+    const text = (typeof textToSend === "string" ? textToSend : question)?.trim();
+    if (!text) return;
 
-    const newMessages = [...messages, { role: "user", content: textToSend }];
+    const currentBase = baseMessages || messages;
+    const newMessages = [...currentBase, { role: "user", content: text }];
     setMessages(newMessages);
     setQuestion("");
     setIsLoading(true);
@@ -440,7 +448,7 @@ export default function AskAI() {
         },
         body: JSON.stringify({
           messages: newMessages.map(m => ({ role: m.role, content: m.content })),
-          conversationId: conversationId || undefined
+          conversationId: baseMessages ? undefined : (conversationId || undefined)
         })
       });
 
@@ -465,13 +473,22 @@ export default function AskAI() {
     }
   };
 
+  // Handle incoming query from Dashboard or other pages
   useEffect(() => {
     const q = new URLSearchParams(location.search).get('q');
-    if (q) {
-      setQuestion(q);
-      setTimeout(() => handleSend(q), 100);
+    if (q && session?.access_token && queryHandledRef.current !== q) {
+      queryHandledRef.current = q;
+      // Start a fresh chat for this recommendation
+      setConversationId(null);
+      sessionStorage.removeItem(ACTIVE_CONV_STORAGE_KEY);
+      
+      const freshMessages = [DEFAULT_GREETING];
+      // Clean query parameter from browser address bar
+      window.history.replaceState(null, "", window.location.pathname);
+      
+      handleSend(q, freshMessages);
     }
-  }, [location.search]);
+  }, [location.search, session?.access_token]);
 
   useEffect(() => {
     if (messages.length > 1 && scrollContainerRef.current) {
