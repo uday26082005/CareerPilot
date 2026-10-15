@@ -23,6 +23,15 @@ app.use(express.urlencoded({ extended: true, limit: env.JSON_BODY_LIMIT }));
 app.use(requestLogger);
 app.use(globalRateLimiter);
 
+// Normalize duplicate slashes in request paths (e.g. //api/resume/analyze -> /api/resume/analyze)
+app.use((req, res, next) => {
+  if (req.url) {
+    const [pathname, search] = req.url.split("?");
+    req.url = pathname.replace(/\/+/g, "/") + (search ? "?" + search : "");
+  }
+  next();
+});
+
 app.get("/", (req, res) => {
   sendSuccess(res, {
     message: "CareerPilot API is active and running.",
