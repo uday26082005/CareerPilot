@@ -192,16 +192,35 @@ const analyzeSkillGap = async (userId) => {
 const getLatestAnalysis = async (userId) => {
   const supabase = getSupabaseAdmin();
 
+  const { data: latestResume } = await supabase
+    .from("resume_analysis")
+    .select("id")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
   const { data, error } = await supabase
     .from("skill_gap_analysis")
     .select("*")
     .eq("user_id", userId)
     .order("created_at", { ascending: false })
     .limit(1)
-    .single();
+    .maybeSingle();
 
   if (error && error.code !== 'PGRST116') { // PGRST116 is not found
     throw new AppError("Failed to fetch latest skill gap analysis.", HTTP_STATUS_INTERNAL_SERVER_ERROR);
+  }
+
+  // If a newer resume exists that doesn't match the latest skill gap analysis,
+  // automatically re-run analyzeSkillGap so SkillGap is instantly in sync with the new resume
+  if (latestResume && data && data.resume_analysis_id !== latestResume.id) {
+    try {
+      return await analyzeSkillGap(userId);
+    } catch (e) {
+      console.warn("Auto-syncing skill gap with new resume failed, returning previous analysis:", e);
+      return data;
+    }
   }
 
   return data || null;

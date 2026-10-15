@@ -224,14 +224,25 @@ const analyzeResume = async (userId, file) => {
     uploaded = true;
 
     const resumeText = await extractResumeText(file.buffer);
-    const profile = await profileService.getProfileById(userId);
-    const targetRole = profile.targetRole?.trim();
+    let targetRole = "";
+    try {
+      const profile = await profileService.getProfileById(userId);
+      targetRole = profile?.targetRole?.trim() || "";
+    } catch (_err) {
+      // Profile record might not exist yet
+    }
 
     if (!targetRole) {
-      throw new AppError(
-        "Set a target role in your profile before analyzing a resume.",
-        HTTP_STATUS.UNPROCESSABLE_ENTITY
-      );
+      try {
+        const { data: userData } = await supabase.auth.admin.getUserById(userId);
+        targetRole = userData?.user?.user_metadata?.target_role?.trim() || "";
+      } catch (_authErr) {
+        // ignore
+      }
+    }
+
+    if (!targetRole) {
+      targetRole = "Software Engineer";
     }
 
     let analysis;
@@ -272,7 +283,57 @@ const getLatestAnalysis = async (userId) => {
     throw new AppError(error.message || "Failed to retrieve the latest resume analysis.", HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
 
-  return formatResumeAnalysis(data);
+  if (data) {
+    return formatResumeAnalysis(data);
+  }
+
+  // Fallback to resumes table if resume_analysis is empty (e.g. initial profile setup)
+  try {
+    const { data: fallbackData } = await supabase
+      .from("resumes")
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (fallbackData) {
+      return {
+        id: fallbackData.id,
+        resumePath: fallbackData.file_url || null,
+        resumeFilename: fallbackData.filename || "Resume (Profile Setup)",
+        overallScore: fallbackData.score || 0,
+        atsScore: fallbackData.score || 0,
+        overallSummary: fallbackData.summary || "",
+        atsStatus: fallbackData.score >= 70 ? "Strong" : "Needs Review",
+        atsTips: fallbackData.improvement_tips || [],
+        sectionScores: {},
+        topStrengths: fallbackData.strong_skills || [],
+        keySuggestions: (fallbackData.improvement_tips || []).map((t) => ({
+          title: "Improvement Tip",
+          description: t,
+          priority: "medium",
+        })),
+        recommendedKeywords: fallbackData.missing_skills || [],
+        roleFit: {
+          targetRole: "Software Engineer",
+          score: fallbackData.score || 0,
+          summary: fallbackData.summary || "Profile setup resume.",
+          strengths: fallbackData.strong_skills || [],
+          weaknesses: fallbackData.missing_skills || [],
+        },
+        targetRole: "Software Engineer",
+        analysisSource: "profile_setup",
+        analysisWarning: null,
+        createdAt: fallbackData.created_at,
+        updatedAt: fallbackData.created_at,
+      };
+    }
+  } catch (_fbErr) {
+    // ignore
+  }
+
+  return null;
 };
 
 const getAnalysisHistory = async (userId, { limit, offset }) => {
@@ -309,11 +370,25 @@ const reanalyzeResume = async (userId) => {
     throw new AppError("No existing resume found to re-analyze. Please upload a new resume.", HTTP_STATUS.NOT_FOUND);
   }
 
-  const profile = await profileService.getProfileById(userId);
-  const targetRole = profile.targetRole?.trim();
+  let targetRole = "";
+  try {
+    const profile = await profileService.getProfileById(userId);
+    targetRole = profile?.targetRole?.trim() || "";
+  } catch (_err) {
+    // Profile record might not exist yet
+  }
 
   if (!targetRole) {
-    throw new AppError("Set a target role in your profile before analyzing a resume.", HTTP_STATUS.UNPROCESSABLE_ENTITY);
+    try {
+      const { data: userData } = await supabase.auth.admin.getUserById(userId);
+      targetRole = userData?.user?.user_metadata?.target_role?.trim() || "";
+    } catch (_authErr) {
+      // ignore
+    }
+  }
+
+  if (!targetRole) {
+    targetRole = "Software Engineer";
   }
 
   const resumeText = latestAnalysis.resume_text;
