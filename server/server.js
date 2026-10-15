@@ -23,6 +23,18 @@ app.use(express.urlencoded({ extended: true, limit: env.JSON_BODY_LIMIT }));
 app.use(requestLogger);
 app.use(globalRateLimiter);
 
+app.get("/", (req, res) => {
+  sendSuccess(res, {
+    message: "CareerPilot API is active and running.",
+    data: {
+      service: "careerpilot-api",
+      status: "online",
+      environment: env.NODE_ENV,
+      healthCheck: "/api/health",
+    },
+  });
+});
+
 app.get("/api/health", (req, res) => {
   sendSuccess(res, {
     message: "CareerPilot API foundation is running.",
